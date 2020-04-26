@@ -3,10 +3,8 @@ import firebase from "./firebase"
 import './App.css';
 
 function App() {
-
-
   return (
-    <main className="App">
+    <main className="App light">
 
     </main>
   );
