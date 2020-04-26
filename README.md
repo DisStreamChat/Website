@@ -1,2 +1,2 @@
 # DisTwitchChat
-distwitchchat.xyz
+[website](distwitchchat.xyz)
