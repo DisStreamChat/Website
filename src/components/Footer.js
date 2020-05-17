@@ -4,7 +4,6 @@ import "./Footer.css"
 import TwitterIcon from '@material-ui/icons/Twitter';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import {Link} from "react-router-dom"
-import FavoriteIcon from '@material-ui/icons/Favorite';
 
 const Footer = () => {
     return (
@@ -26,6 +25,7 @@ const Footer = () => {
                         <span className="column-header">Resources</span>
                         <a href="https://discord.gg/V68x5B" target="_blank" rel="noreferrer noopener">Join The Discord</a>
                         <a href="https://github.com/DisTwitchChat" target="_blank" rel="noreferrer noopener">Get Help on GitHub</a>
+                        <Link to="/faq" target="_blank" rel="noreferrer noopener">FAQ</Link>
                     </div>
                     <div className="column">
                         <span className="column-header">Team</span>
