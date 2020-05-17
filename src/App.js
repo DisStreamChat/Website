@@ -10,19 +10,31 @@ import Bot from './components/Bot/Bot';
 import Apps from "./components/Apps/Main"
 import Footer from './components/Footer';
 
+import { AppContext } from "./contexts/Appcontext"
+
 function App() {
+
+    const [userId, setUserId] = useState("")
+
   return (
-    <div className="App">
-        <Router>
-            <Header/>
-            <Route exact path="/" component={Home}/>
-            <Route path="/bot" component={Bot}/>
-            <Route path="/apps" component={Apps}/>
-            <Route path="/community" component={Community}/>
-            <Route path="/about" component={About}/>
-            <Footer/>
-        </Router>
-    </div>
+    <AppContext.Provider
+        value={{
+            userId,
+            setUserId
+        }}
+    >
+        <div className="App">
+            <Router>
+                <Header/>
+                <Route exact path="/" component={Home}/>
+                <Route path="/bot" component={Bot}/>
+                <Route path="/apps" component={Apps}/>
+                <Route path="/community" component={Community}/>
+                <Route path="/about" component={About}/>
+                <Footer/>
+            </Router>
+        </div>
+    </AppContext.Provider>
   );
 }
 

@@ -32,7 +32,6 @@ const Header = props => {
                     alert(err.message)
                 }
             })()
-            
         }
     }, [])
 
