@@ -13,6 +13,11 @@
 
 .team-picture{
     margin: 0 2rem;
+    transition: .25s ease-in-out;
+}
+
+.team-picture:hover{
+    transform: scale(1.05);
 }
 
 .members{
