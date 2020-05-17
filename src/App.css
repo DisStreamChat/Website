@@ -1,12 +1,13 @@
 :root{
     --distwitchchat-blue: #2D688D;
     --distwitchchat-purple: #462B45;
-    --background-light-gray: #17181B;
-    --background-dark-gray: #24252A;
+    --background-dark-gray: #17181B;
+    --background-light-gray: #24252A;
 }
 
-a{
+a {
     text-decoration: none !important;
+    color: white;
 }
 
 .App{
@@ -14,3 +15,23 @@ a{
     background: linear-gradient(119.36deg, #17181B 21.35%, #24252A 76.56%);
 }
 
+::-webkit-scrollbar {
+   width: 1rem;
+   border-radius: 100px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+ background: #24252A;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--background-dark-gray); 
+  border-radius: 100px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #111; 
+}

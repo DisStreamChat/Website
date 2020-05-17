@@ -8,6 +8,7 @@ import About from "./components/About/About"
 import Community from "./components/Community/Community"
 import Bot from './components/Bot/Bot';
 import Apps from "./components/Apps/Main"
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/apps" component={Apps}/>
             <Route path="/community" component={Community}/>
             <Route path="/about" component={About}/>
+            <Footer/>
         </Router>
     </div>
   );
