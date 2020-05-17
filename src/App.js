@@ -10,8 +10,21 @@ import Bot from './components/Bot/Bot'
 import Apps from "./components/Apps/Main"
 import Footer from './components/Footer'
 import Main from "./components/Users/Main"
+import Team from "./components/Team/Team"
 
 import { AppContext } from "./contexts/Appcontext"
+
+const Invite = () => {
+
+    useEffect(() => {
+        window.location = "https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=0&scope=bot"
+    }, [])
+    return (
+        <>
+        
+        </>
+    )
+} 
 
 function App() {
 
@@ -34,6 +47,8 @@ function App() {
                     <Route path="/community" component={Community}/>
                     <Route path="/about" component={About}/>
                     <Route path="/account/:id" component={Main}/>
+                    <Route path="/invite" component={Invite}/>
+                    <Route path="/members" component={Team}/>
                     <Redirect to="/"/>
                 </Switch>
                 <Footer/>

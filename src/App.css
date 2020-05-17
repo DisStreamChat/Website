@@ -11,9 +11,18 @@ a {
     color: white;
 }
 
+html, body{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 .App{
     min-height: 100vh;
+    width: 100%;
     background: linear-gradient(119.36deg, #17181B 21.35%, #24252A 76.56%);
+    font-family: Montserrat;
+    color: white;
 }
 
 ::-webkit-scrollbar {
@@ -35,4 +44,8 @@ a {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #111; 
+}
+
+.main{
+    height: calc(100vh - var(--header-height))
 }

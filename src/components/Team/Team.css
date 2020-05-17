@@ -1,0 +1,43 @@
+.team-page{
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    flex-direction: column;
+    padding-top: 2rem;
+}
+
+.team-page h1{
+    font-weight: bold;
+    font-size: 48px;
+}
+
+.team-picture{
+    margin: 0 2rem;
+}
+
+.members{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.team-title{
+    font-weight: bold;
+    margin: .5rem 0;
+}
+
+.team-sub-title{
+    margin: 0;
+    opacity: .5;
+    font-weight: normal;
+}
+
+.socials{
+    margin-top: .25rem;
+}
+
+.socials *{
+    margin: .5rem .3rem;
+}

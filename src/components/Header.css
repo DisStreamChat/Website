@@ -16,11 +16,12 @@
 }
 
 .header--left{
-    width: 50%;
+    width: 950px;
 }
 
 .header--right{
-    width: 12%;
+    width: fit-content;
+    padding-right: 2.5rem;
 
 }
 
