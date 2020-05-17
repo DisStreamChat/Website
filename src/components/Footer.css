@@ -50,10 +50,6 @@
     text-decoration: underline !important;
 }
 
-.footer-bottom svg{
-    transform: scale(.75)
-}
-
 .left h3, .left h4{
     font-weight: normal;
 }
