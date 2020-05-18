@@ -8,7 +8,7 @@ const Home = () => {
         <main className="home">
             <div className="header-area">
                 <h1 className="body-header">Integrate your Discord server with Twitch</h1>
-                <h3 className="body-subheader">Chat, Qna’s, Polls, Games and much more easily Integrated with Twitch and Discord!</h3>
+                <h3 className="body-subheader">Chat, QnAs, Polls, Games and much more easily Integrated with Twitch and Discord!</h3>
             </div>
             <div className="buttons">
                 <Link to="/invite" target="_blank" rel="noreferrer noopener" className="discord-button"><img src={`${process.env.PUBLIC_URL}/discord.png`} alt="custom discord logo"></img>Add To Discord</Link>

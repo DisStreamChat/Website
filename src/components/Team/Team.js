@@ -10,8 +10,8 @@ const Team = () => {
         <main className="main team-page">
             <h1 className="team-header">DisTwitchChat's Team</h1>
             <div className="members">
-                <img className="team-picture" src={`${process.env.PUBLIC_URL}/david.png`} width="320" alt=""/>
-                <img className="team-picture" src={`${process.env.PUBLIC_URL}/kobe.png`} width="320" alt=""/>
+                <A href="https://github.com/GypsyDangerous" newTab><img className="team-picture" src={`${process.env.PUBLIC_URL}/david.png`} width="320" alt="" /></A>
+                <A href="https://saintplaysthings.com" newTab><img className="team-picture" src={`${process.env.PUBLIC_URL}/kobe.png`} width="320" alt="" /></A>
                 <h1 className="team-title">David</h1>
                 <h1 className="team-title">Kobe</h1>
                 <h3 className="team-sub-title">Project Lead</h3>

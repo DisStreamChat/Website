@@ -29,8 +29,7 @@
     display: flex;
     justify-content: space-between;
     margin-left: 2rem;
-    width: 70%;
-    
+    width: 70%;   
 }
 
 .nav-bar a {

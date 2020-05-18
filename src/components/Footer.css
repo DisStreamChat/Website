@@ -53,3 +53,7 @@
 .left h3, .left h4{
     font-weight: normal;
 }
+
+.footer h3, .footer h4{
+    margin: .5rem 0
+}
