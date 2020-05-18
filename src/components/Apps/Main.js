@@ -4,9 +4,15 @@ import "./Apps.css"
 
 const Main = () => {
     return (
-        <div>
-            
-        </div>
+        <main className="main">
+            <ul className="application-list">
+                <li className="application-item"></li>
+                <li className="application-item"></li>
+                <li className="application-item"></li>
+                <li className="application-item"></li>
+                <li className="application-item"></li>
+            </ul>
+        </main>
     );
 }
 
