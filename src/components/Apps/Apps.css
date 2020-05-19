@@ -8,16 +8,20 @@
 
 .application-item{
     width: 80%;
-    /* border: solid; */
     height: 300px;
     margin: 1rem;
     background: #0b0c0e;
     border-radius: 1rem;
     box-shadow: 5px 5px 20px -5px rgba(0,0,0,0.75);
-    transition: .15s ease-in-out;
+    transition: .25s ease-in-out;
 }
 
 .application-item:hover{
-    transform: translateY(-.25rem);
+    transform: translate(-.25rem, -.25rem);
     box-shadow: 5px 5px 20px -0px rgba(0,0,0,0.75);
 }
+
+.application--title{
+    margin: 1rem;
+}
+
