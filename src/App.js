@@ -29,26 +29,31 @@ const Invite = () => {
 function App() {
 
     const [userId, setUserId] = useState("")
+    const [dropDownOpen, setDropDownOpen] = useState(false)
 
   return (
     <AppContext.Provider
         value={{
             userId,
-            setUserId
+            setUserId,
+            dropDownOpen,
+            setDropDownOpen
         }}
     >
         <div className="App">
             <Router>
                 <Header/>
                 <Switch>
-                    <Route exact path="/" component={Home}/>
-                    <Route path="/bot" component={Bot}/>
-                    <Route exact path="/apps" component={Apps}/>
-                    <Route path="/community" component={Community}/>
-                    <Route path="/about" component={About}/>
-                    <Route path="/account/:id" component={Main}/>
-                    <Route path="/invite" component={Invite}/>
-                    <Route path="/members" component={Team}/>
+                    <main className={`main ${dropDownOpen && "open"}`}>
+                        <Route exact path="/" component={Home}/>
+                        <Route path="/bot" component={Bot}/>
+                        <Route exact path="/apps" component={Apps}/>
+                        <Route path="/community" component={Community}/>
+                        <Route path="/about" component={About}/>
+                        <Route path="/account/:id" component={Main}/>
+                        <Route path="/invite" component={Invite}/>
+                        <Route path="/members" component={Team}/>
+                    </main>
                     {/* <Route path="/apps/chat_app" component={Team}></Route> */}
                     <Redirect to="/"/>
                 </Switch>

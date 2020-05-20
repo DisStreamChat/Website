@@ -8,7 +8,7 @@ const oauth = new DiscordOauth2();
 const Header = props => {
 
     const {userId} = useContext(AppContext)
-    const [open, setOpen] = useState(false);
+    const {dropDownOpen: open, setDropDownOpen: setOpen} = useContext(AppContext);
 
     useEffect(() => {
         const codeArray = window.location.search.slice(1).split("&").map(item => item.split("=")).filter(item => item[0]==="code")
@@ -49,7 +49,7 @@ const Header = props => {
                 <Link to="/" className="logo">
                     <img src={`${process.env.PUBLIC_URL}/logo.png`} alt=""/>
                 </Link>
-                <nav className="nav-bar">
+                <nav className={`nav-bar ${open && "open"}`}>
                     <Link to="/bot">Discord Bot</Link>
                     <Link to="/apps">Apps</Link>
                     <Link to="/community">Community</Link>

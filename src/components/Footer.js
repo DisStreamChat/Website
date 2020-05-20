@@ -5,10 +5,15 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import {Link} from "react-router-dom"
 import A from "./Shared/A"
+import { useContext } from 'react';
+import { AppContext } from '../contexts/Appcontext';
 
 const Footer = () => {
+
+    const {dropDownOpen} = useContext(AppContext)
+
     return (
-        <footer className="footer">
+        <footer className={`footer ${dropDownOpen && "open"}`}>
             <div className="footer-top">
                 <section className="left">
                     <h3>The best Twitch/Discord Integration</h3>

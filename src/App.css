@@ -47,5 +47,11 @@ html, body{
 }
 
 .main{
-    min-height: calc(100vh - var(--header-height))
+    min-height: calc(100vh - var(--header-height));
+    transition: .25s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: .25s;
 }
