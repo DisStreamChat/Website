@@ -16,6 +16,7 @@
 }
 
 .team-picture{
+    margin: 0 2rem;
     transition: .25s ease-in-out;
 }
 
