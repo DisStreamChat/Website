@@ -144,6 +144,14 @@
     .last-column{
         margin: 0 !important;
     }
+
+    .members{
+        grid-template-columns: 1fr;
+    }
+
+    .team-header{
+        font-size: 30px !important;
+    }
 }
 
 @media screen and (max-width: 500px) {
