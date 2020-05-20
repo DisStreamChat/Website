@@ -11,6 +11,10 @@
     font-size: 48px;
 }
 
+.team-header{
+    text-align: center;
+}
+
 .team-picture{
     margin: 0 2rem;
     transition: .25s ease-in-out;
@@ -26,6 +30,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    margin-bottom: 2rem;
 }
 
 .team-title{

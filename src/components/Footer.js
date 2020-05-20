@@ -5,10 +5,15 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import {Link} from "react-router-dom"
 import A from "./Shared/A"
+import { useContext } from 'react';
+import { AppContext } from '../contexts/Appcontext';
 
 const Footer = () => {
+
+    const {dropDownOpen} = useContext(AppContext)
+
     return (
-        <footer className="footer">
+        <footer className={`footer ${dropDownOpen && "open"}`}>
             <div className="footer-top">
                 <section className="left">
                     <h3>The best Twitch/Discord Integration</h3>
@@ -24,11 +29,11 @@ const Footer = () => {
                     </div>
                     <div className="column">
                         <span className="column-header">Resources</span>
-                        <A href="https://discord.gg/V68x5B" newTab>Join The Discord</A>
+                        <A href="https://discord.gg/sFpMKVX" newTab>Join The Discord</A>
                         <A href="https://github.com/DisTwitchChat" newTab>Get Help on GitHub</A>
                         <Link to="/faq">FAQ</Link>
                     </div>
-                    <div className="column">
+                    <div className="column last-column">
                         <span className="column-header">Team</span>
                         <Link to="/members">Members</Link>
                         <A href="https://github.com/DisTwitchChat/Contributors" newTab>Contributors</A>
