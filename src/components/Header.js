@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import "./Header.css"
 import {Link, withRouter} from "react-router-dom"
 import { AppContext } from '../contexts/Appcontext';
@@ -8,6 +8,7 @@ const oauth = new DiscordOauth2();
 const Header = props => {
 
     const {userId} = useContext(AppContext)
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const codeArray = window.location.search.slice(1).split("&").map(item => item.split("=")).filter(item => item[0]==="code")
@@ -38,7 +39,11 @@ const Header = props => {
     return (
         <header className="header">
             <div className="hamburger-holder">
-
+                <button className="hamburger-button" onClick={() => setOpen(o => !o)}>
+                    <span className={`bar ${open && "open"}`} id="bar-1"></span>
+                    <span className={`bar ${open && "open"}`} id="bar-2"></span>
+                    <span className={`bar ${open && "open"}`} id="bar-3"></span>
+                </button>
             </div>
             <span className="header--left">
                 <Link to="/" className="logo">

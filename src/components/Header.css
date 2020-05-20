@@ -80,6 +80,32 @@
     margin-left: 1rem;
 }
 
+.hamburger-holder .bar{
+    display: block;
+    border: solid white;
+    margin-bottom: 7px;
+    width: 35px;
+    border-radius: 10px;
+    transition: .25s ease-in-out
+}
+
+.bar.open#bar-1{
+    transform: translateY(200%) rotate(45deg)
+}
+.bar.open#bar-2{
+    opacity: 0;
+}
+.bar.open#bar-3{
+    transform: translateY(-200%) rotate(-45deg)
+
+}
+
+.hamburger-button{
+    background: none;
+    outline: none;
+    border: none;
+}
+
 @media screen and (max-width: 1100px) {
     .nav-bar a{
         font-size: 25px;
@@ -98,7 +124,10 @@
     }
 
     .header .hamburger-holder{
-        display: block;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
     .nav-bar{
