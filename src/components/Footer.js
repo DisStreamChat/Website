@@ -24,11 +24,11 @@ const Footer = () => {
                     </div>
                     <div className="column">
                         <span className="column-header">Resources</span>
-                        <A href="https://discord.gg/V68x5B" newTab>Join The Discord</A>
+                        <A href="https://discord.gg/sFpMKVX" newTab>Join The Discord</A>
                         <A href="https://github.com/DisTwitchChat" newTab>Get Help on GitHub</A>
                         <Link to="/faq">FAQ</Link>
                     </div>
-                    <div className="column">
+                    <div className="column last-column">
                         <span className="column-header">Team</span>
                         <Link to="/members">Members</Link>
                         <A href="https://github.com/DisTwitchChat/Contributors" newTab>Contributors</A>

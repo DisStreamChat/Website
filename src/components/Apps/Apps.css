@@ -1,3 +1,7 @@
+/* body{
+    overflow-x: hidden;
+} */
+
 .application-list{
     list-style: none;
     display: flex;
@@ -7,13 +11,14 @@
 }
 
 .application-item{
-    width: 80%;
-    height: 300px;
+    width: calc(80% - 1.5rem);
+    height: calc(300px - 1.5rem);
     margin: 1rem;
     background: #0b0c0e;
     border-radius: 1rem;
     box-shadow: 5px 5px 20px -5px rgba(0,0,0,0.75);
     transition: .25s ease-in-out;
+    padding: 1.5rem;
 }
 
 .application-item:hover{
@@ -22,6 +27,16 @@
 }
 
 .application--title{
-    margin: 1rem;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.application--subtitle{
+    opacity: .75;
+}
+
+.application--image{
+    width: 200px;
 }
 

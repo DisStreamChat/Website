@@ -37,6 +37,9 @@ const Header = props => {
 
     return (
         <header className="header">
+            <div className="hamburger-holder">
+
+            </div>
             <span className="header--left">
                 <Link to="/" className="logo">
                     <img src={`${process.env.PUBLIC_URL}/logo.png`} alt=""/>

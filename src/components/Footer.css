@@ -15,17 +15,26 @@
 .footer-top .right{
     display: flex;
     width: 30%;
+    min-width: fit-content;
     justify-content: space-around;
+    margin-left: 3rem;
 }
 
 .column-header{
     font-weight: bold;
     margin-bottom: 20px;
+    width: fit-content;
 }
 
 .column{
     display: flex;
     flex-direction: column;
+    margin-right: 3rem;
+    /* min-width: fit-content; */
+}
+
+.last-column{
+    margin-right: 0;
 }
 
 .column a{
@@ -50,7 +59,7 @@
     text-decoration: underline !important;
 }
 
-.left h3, .left h4{
+.left h4{
     font-weight: normal;
 }
 
