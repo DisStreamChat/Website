@@ -5,7 +5,7 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 
 const Community = () => {
     return (
-        <main className="community-page">
+        <>
             <div className="header-area">
                 <h1 className="body-header">Join The Community!</h1>
                 <h3 className="body-subheader">Come Say Hi in the discord or contribute to the github!</h3>
@@ -17,7 +17,7 @@ const Community = () => {
                 </a>
                 <a href="https://github.com/DisTwitchChat" target="_blank" rel="noreferrer noopener" className="github-button"><GitHubIcon /><span>Github</span></a>
             </div>
-        </main>
+        </>
     );
 }
 

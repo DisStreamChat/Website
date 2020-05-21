@@ -3,9 +3,9 @@ import "./Bot.css"
 
 const Bot = () => {
     return (
-        <main className="bot-page">
+        <>
             
-        </main>
+        </>
     );
 }
 

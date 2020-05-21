@@ -2,13 +2,7 @@ import React from 'react';
 import "./Home.css"
 
 import {Link} from "react-router-dom"
-import { useContext } from 'react';
-import { AppContext } from '../../contexts/Appcontext';
-
 const Home = () => {
-
-    const {dropDownOpen} = useContext(AppContext)
-
     return (
         <>
             <div className="header-area">

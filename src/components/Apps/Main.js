@@ -7,13 +7,13 @@ import apps from "./Apps.json"
 
 const Main = () => {
     return (
-        <main className="main">
+        <>
             <ul className="application-list">
                 {apps.map(app => (
                     <ApplicationItem {...app}/>
                 ))}
             </ul>
-        </main>
+        </>
     );
 }
 
