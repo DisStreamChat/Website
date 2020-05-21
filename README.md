@@ -7,3 +7,6 @@ Hello and welcome to the GitHub repo for The DisTwitchChat website! This houses 
 
 # Contributing and Installation
 The site welcomes contributions from the community in a variety of ways! For more information see [CONTRIBUTING.md](CONTRIBUTING.md) and [INSTALLATION.md](INSTALLATION.md).
+
+# Credits
+The Design of the website was inspired by [groovy.bot](https://groovy.bot/) and [mee6](https://mee6.xyz/)
