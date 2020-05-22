@@ -55,3 +55,7 @@ html, body{
     flex-direction: column;
     transition: .25s;
 }
+
+hr {
+    width: 80%;
+}

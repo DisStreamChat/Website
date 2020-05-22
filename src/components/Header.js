@@ -69,15 +69,14 @@ const Header = props => {
                     <ClickAwayListener onClickAway={() => setUserDropDown(false)}>
                     <div className="full-user">
                         <button className="user" onClick={() => setUserDropDown(d => !d)}>
-                            <span className="name">{currentUser.name}</span>
+                            <span className="user--name">{currentUser.name}</span>
                             <img className="profile-picture" src={currentUser.profilePicture} alt=""></img>
                         </button>
                         <CSSTransition unmountOnExit in={userDropDown} timeout={200} classNames="user-node">
                             <div className="user-dropdown">
-                                <Link onClick={() => setUserDropDown(false)} to="/my-apps" className="user-item">My Apps</Link>
                                 <Link onClick={() => setUserDropDown(false)} to="/dashboard" className="user-item">Dashboard</Link>
                                 <Link onClick={() => setUserDropDown(false)} to="/my-channels" className="user-item">My Channels</Link>
-                                <div onClick={() => setCurrentUser(null)} className="user-item">Logout</div>
+                                <div onClick={() => setCurrentUser(null)} className="user-item logout">Logout</div>
                             </div>
                         </CSSTransition>
                     </div>
