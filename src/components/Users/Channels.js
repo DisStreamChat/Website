@@ -38,13 +38,11 @@ const Channels = () => {
     useEffectOnce(() => {
         (async () => {
             const users = (await (await firebase.db.collection("Streamers").doc("registered").get()).data()).names
-            console.log(users)
             const modApiUrl = `https://modlookup.3v.fi/api/user-v3/${currentUser.name}`
             const response = await fetch(modApiUrl)
             const json = await response.json()
             const channels = json.channels
             const channelsInfo = await Promise.all(channels.map(async channel => Api.getUserInfo(channel.name)))
-            console.log(channelsInfo)
             setModChannels(channelsInfo.map(channel => {return {...channel, isMember: users.includes(channel.login)}}))
         })()
     })

@@ -11,32 +11,6 @@ const Header = props => {
     const {dropDownOpen: open, setDropDownOpen: setOpen} = useContext(AppContext);
     const [userDropDown, setUserDropDown] = useState(false)
 
-    // useEffect(() => {
-    //     const codeArray = window.location.search.slice(1).split("&").map(item => item.split("=")).filter(item => item[0]==="code")
-    //     console.log(codeArray)
-    //     if (codeArray.length > 0){
-    //         (async () => {
-    //             const code = codeArray[0][1]
-    //             try{
-    //                 const tokenData = await oauth.tokenRequest({
-    //                     clientId: process.env.REACT_APP_DISCORD_ID,
-    //                     clientSecret: process.env.REACT_APP_DISCORD_SECRET,
-
-    //                     code: code,
-    //                     scope: "identify guilds",
-    //                     grantType: "authorization_code",
-
-    //                     redirectUri: "http://localhost:3000/login",
-    //                 })
-    //                 localStorage.setItem("tokenData", JSON.stringify(tokenData))
-    //                 window.location = "/"
-    //             }catch(err){
-    //                 alert(err.message)
-    //             }
-    //         })()
-    //     }
-    // }, [])
-
     useEffect(() => {
         setUserDropDown(d => d && !!currentUser)
     }, [currentUser])
@@ -74,7 +48,7 @@ const Header = props => {
                         </button>
                         <CSSTransition unmountOnExit in={userDropDown} timeout={200} classNames="user-node">
                             <div className="user-dropdown">
-                                <Link onClick={() => setUserDropDown(false)} to="/dashboard" className="user-item">Dashboard</Link>
+                                <Link onClick={() => setUserDropDown(false)} to={`/dashboard/${currentUser.name.toLowerCase()}`} className="user-item">Dashboard</Link>
                                 <Link onClick={() => setUserDropDown(false)} to="/my-channels" className="user-item">My Channels</Link>
                                 <div onClick={() => setCurrentUser(null)} className="user-item logout">Logout</div>
                             </div>

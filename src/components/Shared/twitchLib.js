@@ -19,7 +19,6 @@ class TwitchApi {
         if(this.clientId == undefined || this.authorizationKey == undefined){
             throw new Error("Missing either your clientId or Authorization Key")
         }
-        console.log(username)
         const apiURL = `https://api.twitch.tv/helix/users?login=${username}`
         const response = await this.fetch(apiURL)
         return response.data[0]
