@@ -4,6 +4,7 @@ import firebase from "../../firebase"
 import TwitchApi from "../Shared/twitchLib"
 import {Link} from "react-router-dom"
 import "./Users.css"
+import { useEffectOnce } from 'react-use';
 
 const Api = new TwitchApi({
     clientId: process.env.REACT_APP_TWITCH_CLIENT_ID,
@@ -30,12 +31,11 @@ const Channels = () => {
     const [myChannel, setMyChannel] = useState()
     const [modChannels, setModChannels] = useState([])
 
-    useEffect(() => {
-        const unSubscribe = firebase.db.collection("Streamers").doc(currentUser.id).onSnapshot(snapshot => {
-            setMyChannel({ name: snapshot.data()?.TwitchName, isMember: true, profilePicture: currentUser.profilePicture })
-        });
+    useEffectOnce(() => {
+        setMyChannel({ name: currentUser.name, isMember: true, profilePicture: currentUser.profilePicture })
+    })
 
-        
+    useEffectOnce(() => {
         (async () => {
             const users = (await (await firebase.db.collection("Streamers").doc("registered").get()).data()).names
             console.log(users)
@@ -47,9 +47,7 @@ const Channels = () => {
             console.log(channelsInfo)
             setModChannels(channelsInfo.map(channel => {return {...channel, isMember: users.includes(channel.login)}}))
         })()
-
-        return () => unSubscribe
-    }, [])
+    })
 
     return (
         <div className="my-channels">

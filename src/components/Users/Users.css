@@ -21,7 +21,7 @@
     background: #2a2c30;
     box-shadow: 3px 3px 5px -2px #0b0c0e;
     transition: .25s;
-    animation: fade-in .5s;
+    animation: fade-in .5s ease-in-out forwards;
 }
 
 .channel-item:hover{
@@ -84,10 +84,11 @@
 }
 
 @keyframes fade-in{
-    from{
+    0% {
         transform: translateY(-1rem);
         opacity: 0;
-    }to{
+    }
+    100% {
         transform: translateY(0);
         opacity: 1;
     }
