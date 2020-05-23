@@ -19,7 +19,7 @@ const ChannelItem = props => {
             </div>
             <div className="channel-info">
                 <span className="channel-name">{props.display_name || props.name}</span>
-    <button disabled={!props.isMember} className="to-dashboard">{props.isMember ? <Link to={`/dashboard/${props.login || props.name}`} >Go To Dashboard</Link> : <>Go To Dashboard</>}</button>
+                <button disabled={!props.isMember} className="to-dashboard">{props.isMember ? <Link to={`/dashboard/${(props.login || props.name).toLowerCase()}`} >Go To Dashboard</Link> : <>Go To Dashboard</>}</button>
             </div>
         </div>
     )
@@ -43,12 +43,13 @@ const Channels = () => {
             const json = await response.json()
             const channels = json.channels
             const channelsInfo = await Promise.all(channels.map(async channel => Api.getUserInfo(channel.name)))
-            setModChannels(channelsInfo.map(channel => {return {...channel, isMember: users.includes(channel.login)}}))
+            setModChannels(channelsInfo.map(channel => {return {...channel, modPlatform: "twitch", isMember: users.includes(channel.login.toLowerCase())}}))
         })()
     })
 
     return (
         <div className="my-channels">
+            {/* <h1>My Channels</h1> */}
             <ChannelItem {...myChannel}/>
             <hr/>
             {modChannels.map(channel => (

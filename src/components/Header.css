@@ -328,10 +328,9 @@
 @media screen and (max-width: 500px) {
 	.logo {
 		width: 50px;
+        transform: translateX(-65%);
     }
     
-
-
 	.home {
 		height: calc(100vh - 84px);
 	}
