@@ -23,7 +23,8 @@
 }
 
 .application-item:hover{
-    transform: translate(-.25rem, -.25rem);
+    /* transform: translate(-.25rem, -.25rem); */
+    background: #0f1013;
     box-shadow: 5px 5px 20px -0px rgba(0,0,0,0.75);
 }
 
