@@ -16,14 +16,14 @@
     {
         "title": "QNA Manager",
         "subtitle": "feature filled qna manager",
-        "description": "",
+        "description": "Coming Soon...",
         "pageLink": "qna_app",
         "displayImage": ""
     },
     {
         "title": "Poll",
         "subtitle": "Easy to use Poll and voting system",
-        "description": "",
+        "description": "Coming Soon...",
         "pageLink": "poll",
         "displayImage": ""
     },
@@ -32,6 +32,6 @@
         "subtitle": "feature filled dashboard for managing your apps",
         "description": "",
         "pageLink": "dashboard",
-        "displayImage": ""
+        "displayImage": "Coming Soon..."
     }
 ]
