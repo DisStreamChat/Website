@@ -83,8 +83,9 @@
 
 .hamburger-holder .bar {
 	display: block;
-	border: solid white;
-	margin-bottom: 7px;
+    margin-bottom: 7px;
+    background: white;
+    min-height: 6px;
 	width: 35px;
 	border-radius: 10px;
 	transition: .25s ease-in-out;
@@ -186,6 +187,120 @@
 
 .logout{
     color: rgb(167, 42, 57)
+}
+
+.Modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 215px;
+    /* height: 280px; */
+    padding: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    background: radial-gradient(var(--distwitchchat-blue), #214d69);
+    border-radius: .5rem;
+    border: none;
+    outline: none;
+    font-family: Montserrat;
+    animation: scale-in .25s forwards;
+}
+
+.Modal-Overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #214d6966;
+    animation: fade-background-in .35s forwards
+}
+
+@keyframes fade-background-in {
+    from{
+        background: rgba(0, 0, 0, 0)
+    }to{
+        background: #214d6966;
+    }
+}
+
+.logo-icon{
+    margin-right: .5rem;
+}
+
+.yt-icon{
+    transform: scale(1.125);
+}
+
+.modal-buttons{
+    /* margin-top: 1rem; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-heading{
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 6px 0;
+}
+
+.modal-subheading{
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+.modal-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 28px;
+    margin: .5rem 0;
+    border-radius: 100rem;
+    transition: .125s;
+    height: 24px;
+    width: 70%;
+    cursor: pointer;
+}
+
+.modal-button:hover{
+    filter: brightness(.85)
+}
+
+.modal-button.youtube{
+    background: var(--youtube-background)
+}
+
+.modal-button.twitch{
+    background: var(--twitch-background)
+}
+
+.exit-button{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: none;
+    outline: none;
+    border: none;
+    color: white;
+}
+
+.exit-button:active{
+    transform: scale(.8);
+}
+
+@keyframes scale-in{
+    from{
+        transform: translate(-50%, -50%) scale(0);
+    }to{
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
 
 @media screen and (max-width: 1100px) {
@@ -328,7 +443,7 @@
 @media screen and (max-width: 500px) {
 	.logo {
 		width: 50px;
-        transform: translateX(-65%);
+        /* transform: translateX(-65%); */
     }
     
 	.home {
@@ -339,16 +454,13 @@
 		position: absolute;
 		/* justify-content: center; */
 		top: 100px;
-
+        /* left: 50%; */
+        transform: translateX(0px);
 		height: 0px;
 		overflow: hidden;
 		flex-direction: column;
 		transition: .25s;
 	}
-
-	/* .main.open{
-        transform: translateY(100px);
-    } */
 }
 
 @media screen and (max-width: 420px) {

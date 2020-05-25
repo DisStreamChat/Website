@@ -31,16 +31,7 @@ function App() {
     const [userId, setUserId] = useState("")
     const [dropDownOpen, setDropDownOpen] = useState(false)
     const [currentUser, setCurrentUser] = useState()
-    const [loaded, setLoaded] = useState(false)
-
-    useEffect(() => {
-        setCurrentUser({
-            profilePicture: "https://static-cdn.jtvnw.net/jtv_user_pictures/9e40522b-dca4-4e2e-9aa0-ccfa6550e208-profile_image-300x300.png",
-            name: "Dav1dSnyder404",
-            id: "fvgFceTbjX67vmEYPzeR"
-        })
-        setLoaded(true)
-    }, [])
+    const [loaded, setLoaded] = useState(true)
 
   return (
     <AppContext.Provider
