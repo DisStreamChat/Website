@@ -1,4 +1,5 @@
 # DisTwitchChat
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)   
 Hello and welcome to the GitHub repo for The DisTwitchChat website! This houses all of the content at [distwitchchat.com](https://www.distwitchchat.com). 
 
 # Tech/framework used
