@@ -34,37 +34,41 @@ function App() {
     const [loaded, setLoaded] = useState(true)
 
   return (
-    <AppContext.Provider
-        value={{
-            userId,
-            setUserId,
-            dropDownOpen,
-            setDropDownOpen,
-            currentUser,
-            setCurrentUser
-        }}
-    >
-        {loaded ? <div className="App">
-            <Router>
-                <Header/>
-                <main className={`main ${dropDownOpen && "open"}`}>
-                    <Switch>
-                        <Route exact path="/" component={Home}/>
-                        <Route path="/bot" component={Bot}/>
-                        <Route exact path="/apps" component={Apps}/>
-                        <Route path="/community" component={Community}/>
-                        <Route path="/about" component={About}/>
-                        <Route path="/invite" component={Invite}/>
-                        <Route path="/members" component={Team}/>
-                        <ProtectedRoute path="/dashboard" component={Dashboard}/>
-                        <ProtectedRoute path="/my-channels" component={MyChannels}/>
-                        <Redirect to="/"/>
-                    </Switch>
-                </main>
-                <Footer/>
-            </Router>
-        </div> : <></>}
-    </AppContext.Provider>
+    <Router>
+        <AppContext.Provider
+            value={{
+                userId,
+                setUserId,
+                dropDownOpen,
+                setDropDownOpen,
+                currentUser,
+                setCurrentUser
+            }}
+        >
+            <Switch>
+                <Route path="/overlay" component={Team}></Route>
+                {loaded ? 
+                <div className="App">
+                    <Header/>
+                    <main className={`main ${dropDownOpen && "open"}`}>
+                        <Switch>
+                            <Route exact path="/" component={Home}/>
+                            <Route path="/bot" component={Bot}/>
+                            <Route exact path="/apps" component={Apps}/>
+                            <Route path="/community" component={Community}/>
+                            <Route path="/about" component={About}/>
+                            <Route path="/invite" component={Invite}/>
+                            <Route path="/members" component={Team}/>
+                            <ProtectedRoute path="/dashboard" component={Dashboard}/>
+                            <ProtectedRoute path="/my-channels" component={MyChannels}/>
+                            <Redirect to="/"/>
+                        </Switch>
+                    </main>
+                    <Footer/>
+                </div> : <></>}
+            </Switch>
+        </AppContext.Provider>
+    </Router>
   );
 }
 
