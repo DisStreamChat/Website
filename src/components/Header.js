@@ -10,6 +10,7 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import A from './Shared/A';
 import ClearIcon from '@material-ui/icons/Clear';
 import firebase from "../firebase"
+import HamburgerMenu from "react-hamburger-menu"
 
 Modal.setAppElement('#root');
 
@@ -19,6 +20,36 @@ const Header = props => {
     const {dropDownOpen: open, setDropDownOpen: setOpen} = useContext(AppContext);
     const [userDropDown, setUserDropDown] = useState(false)
     const [loginOpen, setLoginOpen] = useState(false)
+
+    useEffect(() => {
+        const codeArray = window.location.search.slice(1).split("&").map(item => item.split("=")).filter(item => item[0] === "code")
+        console.log(codeArray)
+        if (codeArray.length > 0) {
+            (async () => {
+                const code = codeArray[0][1]
+                const apiURL = `https://id.twitch.tv/oauth2/token?client_id=${process.env.REACT_APP_TWITCH_APP_CLIENT_ID}&client_secret=${process.env.REACT_APP_CLIENT_SECRET}&code=${code}&grant_type=authorization_code&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`
+                console.log(apiURL)
+                try {
+                    const response = await fetch(apiURL, {
+                        method: "POST"
+                    })
+                    const json = await response.json()
+                    console.log(json)
+                    const validationResponse = await fetch("https://id.twitch.tv/oauth2/validate", {
+                        headers: {
+                            Authorization: `OAuth ${json.access_token}`
+                        }
+                    })
+                    const validationJson = await validationResponse.json()
+                    console.log(validationJson)
+                    // localStorage.setItem("tokenData", JSON.stringify())
+                    // window.location = "/"
+                } catch (err) {
+                    alert(err.message)
+                }
+            })()
+        }
+    }, [])
 
     useEffect(() => {
         setUserDropDown(d => d && !!currentUser)
@@ -36,7 +67,6 @@ const Header = props => {
         const provider = new firebase.app.auth.GoogleAuthProvider()
         try{
             const result = await firebase.auth.signInWithPopup(provider)
-            // const user = result.user
             signIn()
             setLoginOpen(false)
         }catch(err){
@@ -57,16 +87,20 @@ const Header = props => {
                 <h1 className="modal-heading">Login to DisTwitchChat</h1>
                 <h2 className="modal-subheading">Connect with:</h2>
                 <div className="modal-buttons">
-                    <A href="https://id.twitch.tv/oauth2/authorize?client_id=ip3igc72c6wu7j00nqghb24duusmbr&redirect_uri=http://localhost:3000&response_type=code&scope=viewing_activity_read" className="modal-button twitch"><img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="20" className="logo-icon" />Twitch</A>
+                    <A href={`https://id.twitch.tv/oauth2/authorize?client_id=ip3igc72c6wu7j00nqghb24duusmbr&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code&scope=openid%20moderation:read`} className="modal-button twitch"><img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="20" className="logo-icon" />Twitch</A>
                     <div className="modal-button youtube" onClick={signInWithGoogle}><YouTubeIcon className="logo-icon yt-icon" />YouTube</div>
                 </div>
             </Modal>
             <div className="hamburger-holder">
-                <button className="hamburger-button" onClick={() => setOpen(o => !o)}>
-                    <span className={`bar ${open && "open"}`} id="bar-1"></span>
-                    <span className={`bar ${open && "open"}`} id="bar-2"></span>
-                    <span className={`bar ${open && "open"}`} id="bar-3"></span>
-                </button>
+                <HamburgerMenu
+                    isOpen={open}
+                    menuClicked={() => setOpen(u => !u)}
+                    strokeWidth={3}
+                    rotate={0}
+                    color='white'
+                    borderRadius={5}
+                    animationDuration={0.5}
+                />
             </div>
             <span className="header--left">
                 <Link to="/" className="logo">
