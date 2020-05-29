@@ -14,7 +14,7 @@ const Home = () => {
 
     useEffect(() => {
         if(currentUser){
-            setName(currentUser.name.split(" ").join("_"))
+            setName(currentUser?.name?.split(" ")?.join("_"))
         }
     }, [currentUser])
 

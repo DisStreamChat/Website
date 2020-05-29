@@ -3,7 +3,6 @@ import React from 'react';
 import "./Team.css"
 import GitHubIcon from '@material-ui/icons/GitHub';
 import TwitterIcon from '@material-ui/icons/Twitter';
-import A from "../Shared/A"
 import Member from './Member';
 
 const Team = () => {

@@ -5,22 +5,17 @@ import { useContext } from 'react';
 import { AppContext } from '../contexts/Appcontext';
 
 const ProtectedRoute = ({ component: RouteComponent, ...rest }) => {
-
-    const {currentUser} = useContext(AppContext)
-
     return (
-        <>
-            <Route
-                {...rest}
-                render={routeProps =>
-                    currentUser ? (
-                        <RouteComponent {...routeProps} />
-                    ) : (
-                            <Redirect to="/" />
-                        )
-                }
-            />
-        </>
+        <Route
+            {...rest}
+            render={routeProps =>
+                firebase.auth.currentUser ? (
+                    <RouteComponent {...routeProps} />
+                ) : (
+                        <Redirect to="/" />
+                    )
+            }
+        />
     );
 }
 

@@ -67,6 +67,7 @@
     color: white;
     transition: .25s;
     font-weight: bold;
+
 }
 
 .to-dashboard:not(:disabled){
@@ -75,7 +76,7 @@
 
 .to-dashboard:hover:not(:disabled){
     /* filter: hue-rotate(90deg); */
-    background: #245370;
+    /* background: #245370; */
     font-weight: bolder;
 }
 
@@ -94,3 +95,7 @@
         opacity: 1;
     }
 }
+
+/* .settings{
+    
+} */

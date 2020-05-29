@@ -68,7 +68,7 @@ function App() {
                             <Route path="/about" component={About}/>
                             <Route path="/invite" component={Invite}/>
                             <Route path="/members" component={Team}/>
-                            <ProtectedRoute path="/dashboard" component={Dashboard}/>
+                            <ProtectedRoute path="/dashboard/:id" component={Dashboard}/>
                             <ProtectedRoute path="/my-channels" component={MyChannels}/>
                             <Redirect to="/"/>
                         </Switch>

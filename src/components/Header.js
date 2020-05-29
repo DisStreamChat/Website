@@ -28,6 +28,7 @@ const Header = props => {
             (async () => {
                 const code = codeArray[0][1]
                 const response = await fetch("https://distwitchchat-backend.herokuapp.com/token?code="+code)
+                // const response = await fetch("http://localhost:3200/token?code="+code)
                 const json = await response.json()
                 if(response.ok){
                     const result = await firebase.auth.signInWithCustomToken(json.token)
@@ -87,11 +88,14 @@ const Header = props => {
     useEffect(() => {
         if(user){
             const unsub = firebase.db.collection("Streamers").doc(user.uid).onSnapshot(snapshot => {
-                const { displayName, profilePicture } = snapshot.data()
-                setCurrentUser({
-                    name: displayName,
-                    profilePicture
-                })
+                const data = snapshot.data()
+                if(data){
+                    const { displayName, profilePicture } = data
+                        setCurrentUser({
+                            name: displayName,
+                            profilePicture
+                        })
+                }
             })
             return unsub
         }
@@ -102,23 +106,50 @@ const Header = props => {
         try{
             const result = await firebase.auth.signInWithPopup(provider)
             const user = result.user
+            console.log(user)
+            const {displayName, photoURL: profilePicture } = user
             firebase.auth.currentUser.updateProfile({
                 displayName: user.displayName
             })
+            setLoginOpen(false)
             try {
                 await firebase.db.collection("Streamers").doc(user.uid).update({
-                    name: user.displayName,
-                    uid: user.uid,
-                    profilePicture: user.photoURL
+                    displayName,
+                    profilePicture,
                 })
             } catch (err) {
                 await firebase.db.collection("Streamers").doc(user.uid).set({
-                    name: user.displayName,
+                    displayName,
                     uid: user.uid,
-                    profilePicture: user.photoURL,
+                    profilePicture,
+                    ModChannels: [],
+                    TwitchName: displayName.toLowerCase(),
+                    appSettings: {
+                        TwitchColor: "",
+                        YoutubeColor: "",
+                        discordColor: "",
+                        displayPlatformColors: false,
+                        displayPlatformIcons: false,
+                        highlightedMessageColor: "",
+                        showHeader: true,
+                        showSourceButton: false
+                    },
+                    discordLinked: false,
+                    guildId: "",
+                    liveChatId: "",
+                    overlaySettings: {
+                        TwitchColor: "",
+                        YoutubeColor: "",
+                        discordColor: "",
+                        displayPlatformColors: false,
+                        displayPlatformIcons: false,
+                        highlightedMessageColor: "",
+                    },
+                    twitchAuthenticated: true,
+                    youtubeAuthenticated: false
                 })
             }
-            setLoginOpen(false)
+            
         }catch(err){
             console.log(err.message)
         }
@@ -176,9 +207,9 @@ const Header = props => {
                         </button>
                         <CSSTransition unmountOnExit in={userDropDown} timeout={200} classNames="user-node">
                             <div className="user-dropdown">
-                                <Link onClick={() => setUserDropDown(false)} to={`/dashboard/${currentUser.name.toLowerCase()}`} className="user-item">Dashboard</Link>
+                                <Link onClick={() => setUserDropDown(false)} to={`/dashboard/${firebase.auth.currentUser.uid}`} className="user-item">Dashboard</Link>
                                 <Link onClick={() => setUserDropDown(false)} to="/my-channels" className="user-item">My Channels</Link>
-                                <div onClick={() => setCurrentUser(null)} className="user-item logout">Logout</div>
+                                <div onClick={async () => {await firebase.logout(); setCurrentUser(null)}} className="user-item logout">Logout</div>
                             </div>
                         </CSSTransition>
                     </div>
