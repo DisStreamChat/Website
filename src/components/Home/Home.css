@@ -80,3 +80,7 @@
 .dashboard-button{
     background: linear-gradient(283deg, rgb(249, 175, 21), rgb(249, 85, 21));
 }
+
+.dashboard-link{
+    text-shadow: 3px 4px 4px rgba(0, 0, 0, 0.5);
+}

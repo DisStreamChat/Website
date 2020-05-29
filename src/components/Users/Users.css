@@ -63,7 +63,7 @@
     border-radius: .25rem;
     border: none;
     outline: none;
-    background: var(--distwitchchat-blue);
+    /* background: var(--distwitchchat-blue); */
     color: white;
     transition: .25s;
     font-weight: bold;
@@ -80,6 +80,7 @@
 }
 
 .to-dashboard:disabled{
+    background: var(--distwitchchat-blue);
     filter: grayscale(1)
 }
 

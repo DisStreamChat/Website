@@ -22,30 +22,57 @@ const Header = props => {
     const [loginOpen, setLoginOpen] = useState(false)
 
     useEffect(() => {
+        
         const codeArray = window.location.search.slice(1).split("&").map(item => item.split("=")).filter(item => item[0] === "code")
-        console.log(codeArray)
         if (codeArray.length > 0) {
             (async () => {
                 const code = codeArray[0][1]
-                const apiURL = `https://id.twitch.tv/oauth2/token?client_id=${process.env.REACT_APP_TWITCH_APP_CLIENT_ID}&client_secret=${process.env.REACT_APP_CLIENT_SECRET}&code=${code}&grant_type=authorization_code&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`
-                console.log(apiURL)
-                try {
-                    const response = await fetch(apiURL, {
-                        method: "POST"
-                    })
-                    const json = await response.json()
-                    console.log(json)
-                    const validationResponse = await fetch("https://id.twitch.tv/oauth2/validate", {
-                        headers: {
-                            Authorization: `OAuth ${json.access_token}`
-                        }
-                    })
-                    const validationJson = await validationResponse.json()
-                    console.log(validationJson)
-                    // localStorage.setItem("tokenData", JSON.stringify())
-                    // window.location = "/"
-                } catch (err) {
-                    alert(err.message)
+                const response = await fetch("https://distwitchchat-backend.herokuapp.com/token?code="+code)
+                const json = await response.json()
+                if(response.ok){
+                    const result = await firebase.auth.signInWithCustomToken(json.token)
+                    const uid = result.user.uid
+                    const {displayName, profilePicture, ModChannels} = json
+                    try {
+                        await firebase.db.collection("Streamers").doc(uid).update({
+                            displayName,
+                            profilePicture,
+                            ModChannels
+                        })
+                    } catch (err) {
+                        await firebase.db.collection("Streamers").doc(uid).set({
+                            displayName,
+                            uid,
+                            profilePicture, 
+                            ModChannels,
+                            TwitchName: displayName.toLowerCase(),
+                            appSettings: {
+                                TwitchColor: "",
+                                YoutubeColor: "",
+                                discordColor: "",
+                                displayPlatformColors: false,
+                                displayPlatformIcons: false,
+                                highlightedMessageColor: "",
+                                showHeader: true,
+                                showSourceButton: false
+                            },
+                            discordLinked: false,
+                            guildId: "",
+                            liveChatId: "",
+                            overlaySettings: {
+                                TwitchColor: "",
+                                YoutubeColor: "",
+                                discordColor: "",
+                                displayPlatformColors: false,
+                                displayPlatformIcons: false,
+                                highlightedMessageColor: "",
+                            },
+                            twitchAuthenticated: true,
+                            youtubeAuthenticated: false
+                        })
+                    }
+                    window.location = "/"
+
                 }
             })()
         }
@@ -55,24 +82,47 @@ const Header = props => {
         setUserDropDown(d => d && !!currentUser)
     }, [currentUser])
 
-    const signIn = useCallback(() => {
-        setCurrentUser({
-            profilePicture: "https://static-cdn.jtvnw.net/jtv_user_pictures/9e40522b-dca4-4e2e-9aa0-ccfa6550e208-profile_image-300x300.png",
-            name: "Dav1dSnyder404",
-            id: "fvgFceTbjX67vmEYPzeR"
-        })
-    }, [setCurrentUser])
+    const user = firebase.auth.currentUser
+
+    useEffect(() => {
+        if(user){
+            const unsub = firebase.db.collection("Streamers").doc(user.uid).onSnapshot(snapshot => {
+                const { displayName, profilePicture } = snapshot.data()
+                setCurrentUser({
+                    name: displayName,
+                    profilePicture
+                })
+            })
+            return unsub
+        }
+    }, [user, setCurrentUser])
 
     const signInWithGoogle = useCallback(async () => {
         const provider = new firebase.app.auth.GoogleAuthProvider()
         try{
             const result = await firebase.auth.signInWithPopup(provider)
-            signIn()
+            const user = result.user
+            firebase.auth.currentUser.updateProfile({
+                displayName: user.displayName
+            })
+            try {
+                await firebase.db.collection("Streamers").doc(user.uid).update({
+                    name: user.displayName,
+                    uid: user.uid,
+                    profilePicture: user.photoURL
+                })
+            } catch (err) {
+                await firebase.db.collection("Streamers").doc(user.uid).set({
+                    name: user.displayName,
+                    uid: user.uid,
+                    profilePicture: user.photoURL,
+                })
+            }
             setLoginOpen(false)
         }catch(err){
             console.log(err.message)
         }
-    }, [signIn])
+    }, [])
 
 
     return (

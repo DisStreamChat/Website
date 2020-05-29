@@ -13,6 +13,7 @@ import MyChannels from "./components/Users/Channels"
 import Team from "./components/Team/Team"
 import Header from "./components/Header"
 import ProtectedRoute from "./components/ProtectedRoute"
+import Loader from "react-loader"
 
 import { AppContext } from "./contexts/Appcontext"
 
@@ -32,8 +33,16 @@ function App() {
     const [dropDownOpen, setDropDownOpen] = useState(false)
     const [currentUser, setCurrentUser] = useState()
     const [loaded, setLoaded] = useState(true)
+    const [firebaseInit, setFirebaseInit] = useState(false)
 
-  return (
+    useEffect(() => {
+        (async () => {
+            const result = await firebase.isInitialized();
+            setFirebaseInit(result)
+        })()
+    }, [])
+
+    return firebaseInit !== false ? (
     <Router>
         <AppContext.Provider
             value={{
@@ -69,7 +78,28 @@ function App() {
             </Switch>
         </AppContext.Provider>
     </Router>
-  );
+  ) : <main className="App">
+      <Loader
+      loaded={false}
+      lines={15}
+      length={0}
+      width={15}
+      radius={35}
+      corners={1}
+      rotate={0}
+      direction={1}
+      color={"#fff"}
+      speed={1}
+      trail={60}
+      shadow={true}
+      hwaccel={true}
+      className="spinner"
+      zIndex={2e9}
+      top="50%"
+      left="50%"
+      scale={3.0}
+      loadedClassName="loadedContent"
+  /></main>
 }
 
 export default App;

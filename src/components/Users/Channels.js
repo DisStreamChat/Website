@@ -19,7 +19,7 @@ const ChannelItem = props => {
             </div>
             <div className="channel-info">
                 <span className="channel-name">{props.display_name || props.name}</span>
-                <button disabled={!props.isMember} className="to-dashboard">{props.isMember ? <Link to={`/dashboard/${(props.login || props.name).toLowerCase()}`} >{!props.moderator ? "Go To Dashboard" : "Go To ModView"}</Link> : <>This channel doesn't use DisTwitchChat</>}</button>
+                <button disabled={!props.isMember} className="to-dashboard dashboard-button">{props.isMember ? <Link className="dashboard-link" to={`/dashboard/${(props.login || props.name).toLowerCase()}`} >{!props.moderator ? "Go To Dashboard" : "Go To ModView"}</Link> : <>This channel doesn't use DisTwitchChat</>}</button>
             </div>
         </div>
     )
@@ -38,12 +38,8 @@ const Channels = () => {
     useEffectOnce(() => {
         (async () => {
             const users = (await (await firebase.db.collection("Streamers").doc("registered").get()).data()).names
-            const modApiUrl = `https://modlookup.3v.fi/api/user-v3/${currentUser.name}`
-            const response = await fetch(modApiUrl)
-            const json = await response.json()
-            const channels = json.channels
-            const channelsInfo = await Promise.all(channels.map(async channel => Api.getUserInfo(channel.name)))
-            setModChannels(channelsInfo.map(channel => {return {...channel, modPlatform: "twitch", isMember: true}}))
+            const channelsInfo = (await firebase.db.collection("Streamers").doc(firebase.auth.currentUser.uid).get()).data().ModChannels
+            setModChannels(channelsInfo.map(channel => {return {...channel, modPlatform: "twitch", isMember: false}}))
         })()
     })
 

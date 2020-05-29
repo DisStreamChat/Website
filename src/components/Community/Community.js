@@ -11,7 +11,7 @@ const Community = () => {
                 <h3 className="body-subheader">Come Say Hi in the discord or contribute to the github!</h3>
             </div>
             <div className="community buttons">
-                <a href="https://discord.gg/sFpMKVX" target="_blank" rel="noreferrer noopener" className="discord-button">
+                <a href="https://distwitchchat-backend.herokuapp.com/discord" target="_blank" rel="noreferrer noopener" className="discord-button">
                     <img src={`${process.env.PUBLIC_URL}/discord.png`} alt="custom discord logo"></img>
                     Join The Discord
                 </a>
