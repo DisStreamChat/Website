@@ -166,7 +166,6 @@ const Header = props => {
             <span className="header--right">
                 {!currentUser ? 
                     <button className="login-button" onClick={() => setLoginOpen(true)}>
-                        {/* <a href={`https://discord.com/api/oauth2/authorize?client_id=${process.env.REACT_APP_DISCORD_ID}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin&response_type=code&scope=identify%20guilds`}>Login</a> */}
                         Login
                     </button> : 
                     <ClickAwayListener onClickAway={() => setUserDropDown(false)}>

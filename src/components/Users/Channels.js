@@ -1,15 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../contexts/Appcontext';
 import firebase from "../../firebase"
-import TwitchApi from "../Shared/twitchLib"
 import {Link} from "react-router-dom"
 import "./Users.css"
 import { useEffectOnce } from 'react-use';
-
-const Api = new TwitchApi({
-    clientId: process.env.REACT_APP_TWITCH_CLIENT_ID,
-    authorizationKey: process.env.REACT_APP_TWITCH_ACCESS_TOKEN
-})
 
 const ChannelItem = props => {
     return (
