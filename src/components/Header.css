@@ -189,36 +189,36 @@
     color: rgb(167, 42, 57)
 }
 
-.Modal{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 215px;
-    /* height: 280px; */
-    padding: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    color: white;
-    background: radial-gradient(var(--distwitchchat-blue), #214d69);
-    border-radius: .5rem;
-    border: none;
-    outline: none;
-    font-family: Montserrat;
-    animation: scale-in .25s forwards;
-}
+    .Modal{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 215px;
+        /* height: 280px; */
+        padding: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: white;
+        background: radial-gradient(var(--distwitchchat-blue), #214d69);
+        border-radius: .5rem;
+        border: none;
+        outline: none;
+        font-family: Montserrat;
+        animation: scale-in .25s forwards;
+    }
 
-.Modal-Overlay{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #214d6966;
-    animation: fade-background-in .35s forwards
-}
+    .Modal-Overlay{
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #214d6966;
+        animation: fade-background-in .35s forwards
+    }
 
 @keyframes fade-background-in {
     from{
