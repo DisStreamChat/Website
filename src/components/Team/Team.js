@@ -3,7 +3,6 @@ import React from 'react';
 import "./Team.css"
 import GitHubIcon from '@material-ui/icons/GitHub';
 import TwitterIcon from '@material-ui/icons/Twitter';
-import A from "../Shared/A"
 import Member from './Member';
 
 const Team = () => {
@@ -32,6 +31,7 @@ const Team = () => {
                         { link: "https://www.twitch.tv/saintplaysthings/", icon: <img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="24"></img> }
                     ]}
                 ></Member>
+                
             </div>
         </main>
     );

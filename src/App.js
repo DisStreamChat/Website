@@ -8,9 +8,12 @@ import Community from "./components/Community/Community"
 import Bot from "./components/Bot/Bot"
 import Apps from "./components/Apps/Main"
 import Footer from "./components/Footer"
-import Main from "./components/Users/Main"
+import Dashboard from "./components/Users/Dashboard"
+import MyChannels from "./components/Users/Channels"
 import Team from "./components/Team/Team"
 import Header from "./components/Header"
+import ProtectedRoute from "./components/ProtectedRoute"
+import Loader from "react-loader"
 
 import { AppContext } from "./contexts/Appcontext"
 
@@ -20,9 +23,7 @@ const Invite = () => {
         window.location = "https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=0&scope=bot"
     }, [])
     return (
-        <>
-        
-        </>
+        <></>
     )
 } 
 
@@ -30,38 +31,75 @@ function App() {
 
     const [userId, setUserId] = useState("")
     const [dropDownOpen, setDropDownOpen] = useState(false)
+    const [currentUser, setCurrentUser] = useState()
+    const [loaded, setLoaded] = useState(true)
+    const [firebaseInit, setFirebaseInit] = useState(false)
 
-  return (
-    <AppContext.Provider
-        value={{
-            userId,
-            setUserId,
-            dropDownOpen,
-            setDropDownOpen
-        }}
-    >
-        <div className="App">
-            <Router>
-                <Header/>
-                <Switch>
+    useEffect(() => {
+        (async () => {
+            const result = await firebase.isInitialized();
+            setFirebaseInit(result)
+        })()
+    }, [])
+
+    return firebaseInit !== false ? (
+    <Router>
+        <AppContext.Provider
+            value={{
+                userId,
+                setUserId,
+                dropDownOpen,
+                setDropDownOpen,
+                currentUser,
+                setCurrentUser
+            }}
+        >
+            <Switch>
+                <Route path="/overlay" component={Team}></Route>
+                {loaded ? 
+                <div className="App">
+                    <Header/>
                     <main className={`main ${dropDownOpen && "open"}`}>
-                        <Route exact path="/" component={Home}/>
-                        <Route path="/bot" component={Bot}/>
-                        <Route exact path="/apps" component={Apps}/>
-                        <Route path="/community" component={Community}/>
-                        <Route path="/about" component={About}/>
-                        <Route path="/account/:id" component={Main}/>
-                        <Route path="/invite" component={Invite}/>
-                        <Route path="/members" component={Team}/>
+                        <Switch>
+                            <Route exact path="/" component={Home}/>
+                            <Route path="/bot" component={Bot}/>
+                            <Route exact path="/apps" component={Apps}/>
+                            <Route path="/community" component={Community}/>
+                            <Route path="/about" component={About}/>
+                            <Route path="/invite" component={Invite}/>
+                            <Route path="/members" component={Team}/>
+                            <ProtectedRoute path="/dashboard/:id" component={Dashboard}/>
+                            <ProtectedRoute path="/my-channels" component={MyChannels}/>
+                            <Redirect to="/"/>
+                        </Switch>
                     </main>
-                    {/* <Route path="/apps/chat_app" component={Team}></Route> */}
-                    <Redirect to="/"/>
-                </Switch>
-                <Footer/>
-            </Router>
-        </div>
-    </AppContext.Provider>
-  );
+                    <Footer/>
+                </div> : <></>}
+            </Switch>
+        </AppContext.Provider>
+    </Router>
+  ) : <main className="App">
+      <Loader
+      loaded={false}
+      lines={15}
+      length={0}
+      width={15}
+      radius={35}
+      corners={1}
+      rotate={0}
+      direction={1}
+      color={"#fff"}
+      speed={1}
+      trail={60}
+      shadow={true}
+      hwaccel={true}
+      className="spinner"
+      zIndex={2e9}
+      top="50%"
+      left="50%"
+      scale={3.0}
+      loadedClassName="loadedContent"
+  /></main>
 }
 
 export default App;
