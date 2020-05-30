@@ -85,7 +85,7 @@ const Header = props => {
 
     const user = firebase.auth.currentUser
 
-    useEffect(() => {
+    useEffect(() => { 
         if(user){
             const unsub = firebase.db.collection("Streamers").doc(user.uid).onSnapshot(snapshot => {
                 const data = snapshot.data()
