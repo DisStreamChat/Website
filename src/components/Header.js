@@ -183,7 +183,7 @@ const Header = props => {
                     animationDuration={0.5}
                 />
             </div>
-            <span className="header--left">
+            <span className="header--left"> 
                 <Link to="/" className="logo">
                     <img src={`${process.env.PUBLIC_URL}/logo.png`} alt=""/>
                 </Link>
