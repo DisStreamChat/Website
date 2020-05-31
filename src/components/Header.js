@@ -26,18 +26,14 @@ const Header = props => {
         const codeArray = window.location.search.slice(1).split("&").map(item => item.split("=")).filter(item => item[0] === "code")
         if (codeArray.length > 0) {
             (async () => {
-                try{
-                    const code = codeArray[0][1]
-                    const response = await fetch("https://distwitchchat-backend.herokuapp.com/token?code=" + code)
-                    // const response = await fetch("http://localhost:3200/token?code="+code)
-                    const json = await response.json()
-
-                    // don't do anything if the response isn't ok
-                    if (!response.ok) return
-
+                const code = codeArray[0][1]
+                const response = await fetch("https://distwitchchat-backend.herokuapp.com/token?code="+code)
+                // const response = await fetch("http://localhost:3200/token?code="+code)
+                const json = await response.json()
+                if(response.ok){
                     const result = await firebase.auth.signInWithCustomToken(json.token)
                     const uid = result.user.uid
-                    const { displayName, profilePicture, ModChannels } = json
+                    const {displayName, profilePicture, ModChannels} = json
                     try {
                         await firebase.db.collection("Streamers").doc(uid).update({
                             displayName,
@@ -48,10 +44,9 @@ const Header = props => {
                         await firebase.db.collection("Streamers").doc(uid).set({
                             displayName,
                             uid,
-                            profilePicture,
+                            profilePicture, 
                             ModChannels,
                             TwitchName: displayName.toLowerCase(),
-                            name: displayName.toLowerCase(),
                             appSettings: {
                                 TwitchColor: "",
                                 YoutubeColor: "",
@@ -78,9 +73,7 @@ const Header = props => {
                         })
                     }
                     window.location = "/"
-                    
-                }catch(err){
-                    console.log(err)
+
                 }
             })()
         }
