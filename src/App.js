@@ -9,7 +9,6 @@ import Bot from "./components/Bot/Bot"
 import Apps from "./components/Apps/Main"
 import Footer from "./components/Footer"
 import Dashboard from "./components/Users/Dashboard"
-import MyChannels from "./components/Users/Channels"
 import Team from "./components/Team/Team"
 import Header from "./components/Header"
 import ProtectedRoute from "./components/ProtectedRoute"
@@ -69,7 +68,6 @@ function App() {
                             <Route path="/invite" component={Invite}/>
                             <Route path="/members" component={Team}/>
                             <ProtectedRoute path="/dashboard/:id" component={Dashboard}/>
-                            <ProtectedRoute path="/my-channels" component={MyChannels}/>
                             <Redirect to="/"/>
                         </Switch>
                     </main>

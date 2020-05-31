@@ -208,7 +208,6 @@ const Header = props => {
                         <CSSTransition unmountOnExit in={userDropDown} timeout={200} classNames="user-node">
                             <div className="user-dropdown">
                                 <Link onClick={() => setUserDropDown(false)} to={`/dashboard/${firebase.auth.currentUser.uid}`} className="user-item">Dashboard</Link>
-                                <Link onClick={() => setUserDropDown(false)} to="/my-channels" className="user-item">My Channels</Link>
                                 <div onClick={async () => {await firebase.logout(); setCurrentUser(null)}} className="user-item logout">Logout</div>
                             </div>
                         </CSSTransition>

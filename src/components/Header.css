@@ -319,14 +319,6 @@
 		grid-template-columns: 1fr;
     }
     
-    .channel-name{
-        font-size: 1.5rem;
-    }
-
-    .channel-item{
-        width: 80%;
-    }
-
 	.application-list {
 		padding: 0;
 	}
@@ -423,21 +415,6 @@
     
 
 
-}
-
-@media screen and (max-width: 750px) {
-    .channel-name{
-        font-size: 1rem;
-    }
-
-    .channel-profile-pic {
-        /* padding-right: .5rem; */
-        max-width: 50px;
-    }
-
-    .channel-item{
-        width: 85%;
-    }
 }
 
 @media screen and (max-width: 500px) {

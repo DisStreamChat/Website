@@ -23,7 +23,6 @@ const Setting = props => {
                     />
                     <button onClick={() => changeHandler("")}>reset</button>
                 </div>
-                
                 :
                 <>
                     <FormControlLabel control={<Checkbox checked={value} onChange={e => changeHandler(e.target.checked)} name={props.name} />} label={props.name}/>
