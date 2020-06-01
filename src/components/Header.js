@@ -27,7 +27,7 @@ const Header = props => {
         if (codeArray.length > 0) {
             (async () => {
                 const code = codeArray[0][1]
-                const response = await fetch("https://distwitchchat-backend.herokuapp.com/token?code="+code)
+                const response = await fetch("https://api.distwitchchat.com/token?code="+code)
                 // const response = await fetch("http://localhost:3200/token?code="+code)
                 const json = await response.json()
                 if(response.ok){
