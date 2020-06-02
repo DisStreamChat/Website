@@ -53,15 +53,14 @@ const Dashboard = props => {
         })()
     }, [id, props.history])
 
-    console.log(overlaySettings)
 
     return (
         <div className="settings-container">
             <div className="settings">
                 <h2>Chat Manager Settings</h2>
-                {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
-                    <Setting onChange={updateAppSetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings}/>
-                ))}
+                {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
+                    return !["showHeader", "showSourceButton"].includes(key) && <Setting onChange={updateAppSetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings}/>
+                })}
             </div>
             {overlaySettings && 
                 <div className="settings">
