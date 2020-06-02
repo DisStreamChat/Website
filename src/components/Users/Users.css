@@ -26,8 +26,26 @@
     transition: .25s ease-in-out
 }
 
-.color-setting{
+.color-header{
+    /* border: solid; */
     height: 40px;
+    padding-left: .75rem;
+    grid-column: 1 / span 2;
+    display: flex;
+    align-items: center;
+    height: 70px;
+}
+
+.color-preview{
+    width: 50%;
+    height: 40px;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: .5rem;
+}
+
+.color-setting{
+    height: 50px;
     overflow: hidden;
 }
 
@@ -37,8 +55,4 @@
 
 .setting:last-child{
     margin-bottom: 1rem; 
-}
-
-.color-header{
-    grid-column: 1 / span 2;
 }

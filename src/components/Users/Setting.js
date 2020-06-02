@@ -14,10 +14,17 @@ const Setting = props => {
     }
 
     return (
-        <div className={`setting ${props.type === "color" && "color-setting"} ${open && "open"}`} onClick={() => setOpen(o => !o)}>
+        <div className={`setting ${props.type === "color" && "color-setting"} ${open && "open"}`}>
             {props.type === "color" ? 
                 <>
-                    <h3 className="color-header">{props.name}</h3>
+                    <div className="color-header" onClick={() => setOpen(o => !o)}>
+                        <h3>{props.name}</h3>
+                        <div className="color-preview" style={{
+                            background: value || "#000",
+                        }}>
+
+                        </div>
+                    </div>
                     <ChromePicker
                         color={value}
                         onChange={color => changeHandler(color.hex)}
