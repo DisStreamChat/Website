@@ -31,7 +31,6 @@ function App() {
     const [userId, setUserId] = useState("")
     const [dropDownOpen, setDropDownOpen] = useState(false)
     const [currentUser, setCurrentUser] = useState()
-    const [loaded, setLoaded] = useState(true)
     const [firebaseInit, setFirebaseInit] = useState(false)
 
     useEffect(() => {
@@ -55,7 +54,6 @@ function App() {
         >
             <Switch>
                 <Route path="/overlay" component={Team}></Route>
-                {loaded ? 
                 <div className="App">
                     <Header/>
                     <main className={`main ${dropDownOpen && "open"}`}>
@@ -72,7 +70,7 @@ function App() {
                         </Switch>
                     </main>
                     <Footer/>
-                </div> : <></>}
+                </div> : <></>
             </Switch>
         </AppContext.Provider>
     </Router>

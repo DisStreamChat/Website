@@ -1,22 +1,16 @@
-import React, {useContext, useState} from 'react';
+import React from 'react';
 import "./Home.css"
 
 import {Link} from "react-router-dom"
 import { useTitle } from 'react-use';
-import { AppContext } from '../../contexts/Appcontext';
-import { useEffect } from 'react';
+import firebase from "../../firebase"
+
+
 const Home = () => {
 
     useTitle("DisTwitchChat")
 
-    const {currentUser} = useContext(AppContext)
-    const [name, setName] = useState("")
-
-    useEffect(() => {
-        if(currentUser){
-            setName(currentUser?.name?.split(" ")?.join("_"))
-        }
-    }, [currentUser])
+    const currentUser = firebase.auth.currentUser
 
     return (
         <>
@@ -30,7 +24,7 @@ const Home = () => {
                         <Link to="/invite" target="_blank" rel="noreferrer noopener" className="main-button discord-button">Login</Link>
                         <Link to="/about" className="main-button about-button">See Features</Link>
                     </> :
-                    <Link to={`/dashboard/${name}`} className="dashboard-button">My DashBoard</Link>
+                    <Link to={`/dashboard/${currentUser.uid}`} className="dashboard-button">My DashBoard</Link>
                 }
             </div>
         </>

@@ -1,4 +1,8 @@
-import app from "firebase"
+import app from "firebase/app"
+import "firebase/analytics"
+import "firebase/auth"
+import "firebase/firestore"
+import "firebase/performance"
 
 
 const firebaseConfig = {
@@ -19,7 +23,6 @@ class Firebase {
         this.auth = app.auth();
         this.db = app.firestore();
         this.app = app
-        this.storage = app.storage()
         this.perf = app.performance()
     }
 
@@ -37,7 +40,7 @@ class Firebase {
         return result
     }
 
-    documentId() {
+    get documentId() {
         return app.firestore.FieldPath.documentId()
     }
 

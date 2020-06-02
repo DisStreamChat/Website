@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback} from 'react';
 import {useTitle} from "react-use"
-import { AppContext } from '../../contexts/Appcontext';
-import {useParams, withRouter} from "react-router-dom"
+import {useParams} from "react-router-dom"
 import firebase from "../../firebase"
 import Setting from './Setting';
 import "./Users.css"
@@ -22,6 +21,15 @@ const Dashboard = props => {
             appSettings: copy
         })
     }, [appSettings, id])
+
+    const updateOverlaySetting = useCallback(async (name, value) => {
+        const copy = { ...overlaySettings }
+        copy[name] = value
+        const userRef = firebase.db.collection("Streamers").doc(id)
+        await userRef.update({
+            overlaySettings: copy
+        })
+    }, [overlaySettings, id])
 
     useEffect(() => {
         (async () => {
@@ -50,14 +58,17 @@ const Dashboard = props => {
     return (
         <div className="settings-container">
             <div className="settings">
+                <h2>Chat Manager Settings</h2>
                 {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
                     <Setting onChange={updateAppSetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings}/>
                 ))}
             </div>
             {overlaySettings && 
                 <div className="settings">
+                <h2>Chat Overlay Settings</h2>
+
                 {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
-                    <Setting onChange={updateAppSetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings} />
+                    <Setting onChange={updateOverlaySetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings} />
                 ))}
                 </div>
             }

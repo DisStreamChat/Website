@@ -1,7 +1,7 @@
 import React from 'react';
 
 import "./About.css"
-import Tutorials from "./Tutorials"
+// import Tutorials from "./Tutorials"
 
 const About = () => {
     return (

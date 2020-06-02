@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { ChromePicker } from "react-color"
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import "./Users.css"
 
 const Setting = props => {
     const [value, setValue] = useState(props.value)
+    const [open, setOpen] = useState(false)
     
     const changeHandler = v => {
         setValue(v)
@@ -12,17 +14,17 @@ const Setting = props => {
     }
 
     return (
-        <div>
+        <div className={`setting ${props.type === "color" && "color-setting"} ${open && "open"}`} onClick={() => setOpen(o => !o)}>
             {props.type === "color" ? 
-                <div className="color-picker">
-                    <h3>{props.name}</h3>
+                <>
+                    <h3 className="color-header">{props.name}</h3>
                     <ChromePicker
                         color={value}
                         onChange={color => changeHandler(color.hex)}
                         disableAlpha
                     />
                     <button onClick={() => changeHandler("")}>reset</button>
-                </div>
+                </>
                 :
                 <>
                     <FormControlLabel control={<Checkbox checked={value} onChange={e => changeHandler(e.target.checked)} name={props.name} />} label={props.name}/>

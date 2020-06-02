@@ -4,9 +4,41 @@
     display: flex;
     justify-content: center;
 }
+
 .settings{
     width: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.settings:first-child{
+    border-right: solid;
+}
+
+.setting{
+    border-bottom: solid;
+    padding-bottom: 1rem;
+    width: 95%;
+    display: grid;
+    grid-template-columns: auto .9fr;
+    grid-template-rows: auto auto;
+    transition: .25s ease-in-out
+}
+
+.color-setting{
+    height: 40px;
+    overflow: hidden;
+}
+
+.color-setting.open{
+    height: 303px;
+}
+
+.setting:last-child{
+    margin-bottom: 1rem; 
+}
+
+.color-header{
+    grid-column: 1 / span 2;
 }
