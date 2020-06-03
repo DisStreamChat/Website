@@ -12,13 +12,42 @@
     align-items: center;
 }
 
+.checkbox-setting{
+    padding-left: 1rem;
+    font-size: 1.17rem;
+    width: 904px;
+}
+
+.checkbox-setting *{
+    font-family: inherit !important;
+    font-size: inherit !important
+}
+
+.checkbox-setting span.MuiFormControlLabel-label{
+    margin-left: 1rem;
+    /* height:  */
+}
+
+.checkbox-setting label{
+    height: 70px !important;
+    width: 100%;
+    /* border: solid; */
+}
+
+.setting svg{
+    transition: .25s;
+}
+
+.setting svg.open{
+    transform: rotate(180deg);
+}
+
 .settings:first-child{
     border-right: solid;
 }
 
 .setting{
     border-bottom: solid;
-    padding-bottom: 1rem;
     width: 95%;
     display: grid;
     grid-template-columns: auto .9fr;
@@ -45,6 +74,7 @@
 }
 
 .color-setting{
+    padding-bottom: 1rem;
     height: 50px;
     overflow: hidden;
 }

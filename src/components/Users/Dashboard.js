@@ -60,7 +60,6 @@ const Dashboard = props => {
         })()
     }, [id, props.history])
 
-
     return (
         <div className="settings-container">
             <div className="settings">
@@ -69,15 +68,13 @@ const Dashboard = props => {
                     return !["showHeader", "showSourceButton"].includes(key) && <Setting key={key} default={defaults[key] || defaults[key]} onChange={updateAppSetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings}/>
                 })}
             </div>
-            {overlaySettings && 
-                <div className="settings">
-                <h2>Chat Overlay Settings</h2>
 
-                {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
-                    <Setting default={defaults[key]} onChange={updateOverlaySetting} key={key} name={key} value={value || defaults[key]} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings} />
-                ))}
-                </div>
-            }
+            <div className="settings">
+            <h2>Chat Overlay Settings</h2>
+            {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
+                <Setting default={defaults[key]} onChange={updateOverlaySetting} key={key} name={key} value={value || defaults[key]} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings} />
+            ))}
+            </div>
         </div>
     );
 }

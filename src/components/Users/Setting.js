@@ -4,6 +4,42 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import "./Users.css"
 import { useEffect } from 'react';
+import { Switch } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { blue } from '@material-ui/core/colors';
+import { blueGrey } from '@material-ui/core/colors';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+
+
+const FancySwitch = withStyles({
+    root: {
+        padding: 7,
+    },
+    thumb: {
+        width: 24,
+        height: 24,
+        backgroundColor: '#fff',
+        boxShadow:
+            '0 0 12px 0 rgba(0,0,0,0.08), 0 0 8px 0 rgba(0,0,0,0.12), 0 0 4px 0 rgba(0,0,0,0.38)',
+    },
+    switchBase: {
+        color: 'rgba(0,0,0,0.38)',
+        padding: 7,
+    },
+    track: {
+        borderRadius: 20,
+        backgroundColor: blueGrey[300],
+    },
+    checked: {
+        '& $thumb': {
+            backgroundColor: '#fff',
+        },
+        '& + $track': {
+            opacity: '1 !important',
+        },
+    },
+    focusVisible: {},
+})(Switch);
 
 const Setting = props => {
     const [value, setValue] = useState(props.value)
@@ -14,7 +50,11 @@ const Setting = props => {
     }
 
     useEffect(() => {
-        setValue(props.value || props.default)
+        if (props.type === "color") {
+            setValue(props.value || props.default)
+        }else{
+            setValue(props.value)
+        }
     }, [props])
 
     return (
@@ -25,9 +65,8 @@ const Setting = props => {
                         <h3>{props.name}</h3>
                         <div className="color-preview" style={{
                             background: value || "#000",
-                        }}>
-
-                        </div>
+                        }}></div>
+                        <KeyboardArrowDownIcon className={open && "open"}/>
                     </div>
                     <ChromePicker
                         color={value}
@@ -37,9 +76,9 @@ const Setting = props => {
                     <button onClick={() => changeHandler(props.default)}>reset</button>
                 </>
                 :
-                <>
-                    <FormControlLabel control={<Checkbox checked={value} onChange={e => changeHandler(e.target.checked)} name={props.name} />} label={props.name}/>
-                </>
+                <span className="checkbox-setting">
+                    <FormControlLabel control={<FancySwitch color="primary" checked={value} onChange={e => changeHandler(e.target.checked)} name={props.name} />} label={props.name}/>
+                </span>
             }
         </div>
     );
