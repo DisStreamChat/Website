@@ -5,6 +5,13 @@ import firebase from "../../firebase"
 import Setting from './Setting';
 import "./Users.css"
 
+const defaults = {
+    TwitchColor: "#462b45",
+    YoutubeColor: "#c4302b",
+    discordColor: "#2d688d",
+    highlightedMessageColor: "#6e022e"
+}
+
 const Dashboard = props => {
 
     useTitle("DisTwitchChat - Dashboard")
@@ -59,7 +66,7 @@ const Dashboard = props => {
             <div className="settings">
                 <h2>Chat Manager Settings</h2>
                 {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
-                    return !["showHeader", "showSourceButton"].includes(key) && <Setting onChange={updateAppSetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings}/>
+                    return !["showHeader", "showSourceButton"].includes(key) && <Setting default={defaults[key] || defaults[key]} onChange={updateAppSetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings}/>
                 })}
             </div>
             {overlaySettings && 
@@ -67,7 +74,7 @@ const Dashboard = props => {
                 <h2>Chat Overlay Settings</h2>
 
                 {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
-                    <Setting onChange={updateOverlaySetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings} />
+                    <Setting default={defaults[key]} onChange={updateOverlaySetting} name={key} value={value || defaults[key]} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings} />
                 ))}
                 </div>
             }
