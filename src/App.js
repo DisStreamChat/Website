@@ -53,7 +53,6 @@ function App() {
             }}
         >
             <Switch>
-                <Route path="/overlay" component={Team}></Route>
                 <div className="App">
                     <Header/>
                     <main className={`main ${dropDownOpen && "open"}`}>
