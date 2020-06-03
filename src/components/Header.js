@@ -23,12 +23,11 @@ const Header = props => {
 
     useEffect(() => {
         
-        const codeArray = window.location.search.slice(1).split("&").map(item => item.split("=")).filter(item => item[0] === "code")
-        if (codeArray.length > 0) {
+        const codeArray = new URLSearchParams(window.location.search)
+        if (codeArray.has("code")) {
             (async () => {
-                const code = codeArray[0][1]
+                const code = codeArray.get("code")
                 const response = await fetch("https://api.distwitchchat.com/token?code="+code)
-                // const response = await fetch("http://localhost:3200/token?code="+code)
                 const json = await response.json()
                 if(response.ok){
                     const result = await firebase.auth.signInWithCustomToken(json.token)
