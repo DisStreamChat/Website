@@ -21,7 +21,7 @@ const Home = () => {
             <div className="buttons">
                 {!currentUser ? 
                     <>
-                        <Link to="/invite" target="_blank" rel="noreferrer noopener" className="main-button discord-button">Login</Link>
+                        {/* <Link to="/invite" target="_blank" rel="noreferrer noopener" className="main-button discord-button">Login</Link> */}
                         <Link to="/about" className="main-button about-button">See Features</Link>
                     </> :
                     <Link to={`/dashboard/${currentUser.uid}`} className="dashboard-button">My DashBoard</Link>
