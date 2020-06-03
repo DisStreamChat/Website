@@ -16,15 +16,6 @@ import Loader from "react-loader"
 
 import { AppContext } from "./contexts/Appcontext"
 
-const Invite = () => {
-
-    useEffect(() => {
-        window.location = "https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=0&scope=bot"
-    }, [])
-    return (
-        <></>
-    )
-} 
 
 function App() {
 
@@ -40,7 +31,86 @@ function App() {
         })()
     }, [])
 
-    return firebaseInit !== false ? (
+    useEffect(() => {
+        const codeArray = new URLSearchParams(window.location.search)
+        if (codeArray.has("code")) {
+            (async () => {
+                const code = codeArray.get("code")
+                if(!codeArray.has("discord")){
+                    try {
+                        const response = await fetch("https://api.distwitchchat.com/token?code=" + code)
+                        const json = await response.json()
+                        if (response.ok) {
+                            const result = await firebase.auth.signInWithCustomToken(json.token)
+                            const uid = result.user.uid
+                            const { displayName, profilePicture, ModChannels } = json
+                            try {
+                                await firebase.db.collection("Streamers").doc(uid).update({
+                                    displayName,
+                                    profilePicture,
+                                    ModChannels
+                                })
+                            } catch (err) {
+                                await firebase.db.collection("Streamers").doc(uid).set({
+                                    displayName,
+                                    uid,
+                                    profilePicture,
+                                    ModChannels,
+                                    TwitchName: displayName.toLowerCase(),
+                                    appSettings: {
+                                        TwitchColor: "",
+                                        YoutubeColor: "",
+                                        discordColor: "",
+                                        displayPlatformColors: false,
+                                        displayPlatformIcons: false,
+                                        highlightedMessageColor: "",
+                                        showHeader: true,
+                                        showSourceButton: false
+                                    },
+                                    discordLinked: false,
+                                    guildId: "",
+                                    liveChatId: "",
+                                    overlaySettings: {
+                                        TwitchColor: "",
+                                        YoutubeColor: "",
+                                        discordColor: "",
+                                        displayPlatformColors: false,
+                                        displayPlatformIcons: false,
+                                        highlightedMessageColor: "",
+                                    },
+                                    twitchAuthenticated: true,
+                                    youtubeAuthenticated: false
+                                })
+                            }
+                        }
+                    } catch (err) {
+
+                    }
+                }else{
+                    try{
+                        const response = await fetch("http://localhost:3200/discord/token?code="+code)
+                        // console.log(response.ok)
+                        if(!response.ok){
+                            
+                            console.log(await response.text())
+                        }else{
+                            const json = await response.json()
+                            await firebase.db.collection("Streamers").doc(firebase?.auth?.currentUser?.uid || " ").collection("discord").doc("data").set(json)
+                        }
+                    }catch(err){
+                        alert(err.message)
+                        // console.log()
+                    }
+                }
+                
+                
+                // alert("read the console")
+                window.location = "/"
+            })()
+        }
+    }, [])
+
+    return firebaseInit !== false && !new URLSearchParams(window.location.search).has("code") ? (
     <Router>
         <AppContext.Provider
             value={{
@@ -62,7 +132,6 @@ function App() {
                             <Route exact path="/apps" component={Apps}/>
                             <Route path="/community" component={Community}/>
                             <Route path="/about" component={About}/>
-                            <Route path="/invite" component={Invite}/>
                             <Route path="/members" component={Team}/>
                             <ProtectedRoute path="/dashboard/:id" component={Dashboard}/>
                             <Redirect to="/"/>

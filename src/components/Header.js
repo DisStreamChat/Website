@@ -22,63 +22,6 @@ const Header = props => {
     const [loginOpen, setLoginOpen] = useState(false)
 
     useEffect(() => {
-        
-        const codeArray = new URLSearchParams(window.location.search)
-        if (codeArray.has("code")) {
-            (async () => {
-                const code = codeArray.get("code")
-                const response = await fetch("https://api.distwitchchat.com/token?code="+code)
-                const json = await response.json()
-                if(response.ok){
-                    const result = await firebase.auth.signInWithCustomToken(json.token)
-                    const uid = result.user.uid
-                    const {displayName, profilePicture, ModChannels} = json
-                    try {
-                        await firebase.db.collection("Streamers").doc(uid).update({
-                            displayName,
-                            profilePicture,
-                            ModChannels
-                        })
-                    } catch (err) {
-                        await firebase.db.collection("Streamers").doc(uid).set({
-                            displayName,
-                            uid,
-                            profilePicture, 
-                            ModChannels,
-                            TwitchName: displayName.toLowerCase(),
-                            appSettings: {
-                                TwitchColor: "",
-                                YoutubeColor: "",
-                                discordColor: "",
-                                displayPlatformColors: false,
-                                displayPlatformIcons: false,
-                                highlightedMessageColor: "",
-                                showHeader: true,
-                                showSourceButton: false
-                            },
-                            discordLinked: false,
-                            guildId: "",
-                            liveChatId: "",
-                            overlaySettings: {
-                                TwitchColor: "",
-                                YoutubeColor: "",
-                                discordColor: "",
-                                displayPlatformColors: false,
-                                displayPlatformIcons: false,
-                                highlightedMessageColor: "",
-                            },
-                            twitchAuthenticated: true,
-                            youtubeAuthenticated: false
-                        })
-                    }
-                    window.location = "/"
-
-                }
-            })()
-        }
-    }, [])
-
-    useEffect(() => {
         setUserDropDown(d => d && !!currentUser)
     }, [currentUser])
 
