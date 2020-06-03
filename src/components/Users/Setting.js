@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
 import { ChromePicker } from "react-color"
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import "./Users.css"
 import { useEffect } from 'react';
 import { Switch } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { blue } from '@material-ui/core/colors';
 import { blueGrey } from '@material-ui/core/colors';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import "./Users.css"
 
 
 const FancySwitch = withStyles({
