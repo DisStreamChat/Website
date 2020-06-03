@@ -64,6 +64,7 @@
 }
 
 .login-button:hover {
+    filter: brightness(110%);
 	box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.25);
 }
 
