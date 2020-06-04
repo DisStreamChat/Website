@@ -65,15 +65,15 @@ const Dashboard = props => {
             <div className="settings">
                 <h2>Chat Manager Settings</h2>
                 {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
-                    return !["showHeader", "showSourceButton"].includes(key) && <Setting key={key} default={defaults[key] || defaults[key]} onChange={updateAppSetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings}/>
+                    return !["showHeader", "showSourceButton"].includes(key) && <Setting key={key} default={defaults[key]} onChange={updateAppSetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"}/>
                 })}
             </div>
 
             <div className="settings">
             <h2>Chat Overlay Settings</h2>
-            {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
-                <Setting default={defaults[key]} onChange={updateOverlaySetting} key={key} name={key} value={value || defaults[key]} type={typeof value === "boolean" ? "boolean" : "color"} setter={setAppSettings} />
-            ))}
+                {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
+                    return <Setting key={key} default={defaults[key]} onChange={updateOverlaySetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} />
+                })}
             </div>
         </div>
     );
