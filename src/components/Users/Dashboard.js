@@ -62,6 +62,13 @@ const Dashboard = props => {
 
     return (
         <div className="settings-container">
+            <div className="setting-options">
+                
+            </div>
+            <div className="settings">
+
+            </div>
+        {/* <div className="settings-container">
             <div className="settings">
                 <h2>Chat Manager Settings</h2>
                 {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
@@ -75,6 +82,10 @@ const Dashboard = props => {
                     return <Setting key={key} default={defaults[key]} onChange={updateOverlaySetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} />
                 })}
             </div>
+        </div>
+        <div className="settings-container">
+            <h1>Discord Settings</h1>
+        </div> */}
         </div>
     );
 }
