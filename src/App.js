@@ -88,7 +88,8 @@ function App() {
                     }
                 }else{
                     try{
-                        const response = await fetch("https://api.distwitchchat.com/discord/token?code="+code)
+                        // const response = await fetch("https://api.distwitchchat.com/discord/token?code="+code)
+                        const response = await fetch("http://localhost:3200/discord/token?code="+code)
                         if(!response.ok){
                             console.log(await response.text())
                         }else{

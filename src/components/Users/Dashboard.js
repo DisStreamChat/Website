@@ -41,7 +41,7 @@ const Dashboard = props => {
     useEffect(() => {
         (async () => {
             try {
-                await firebase.db.collection("Streamers").doc(id).get()
+                // await firebase.db.collection("Streamers").doc(id).get()
                 const unsub = firebase.db.collection("Streamers").doc(id).onSnapshot(snapshot => {
                     const data = snapshot.data()
                     if (data) {
