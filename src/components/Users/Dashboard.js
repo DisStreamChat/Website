@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback} from 'react';
 import {useTitle} from "react-use"
-import {useParams} from "react-router-dom"
+import { useParams, Link, Route, Redirect, Switch} from "react-router-dom"
 import firebase from "../../firebase"
 import Setting from './Setting';
 import "./Users.css"
@@ -14,7 +14,8 @@ const defaults = {
 
 const Dashboard = props => {
 
-    useTitle("DisTwitchChat - Dashboard")
+    // useTitle("DisTwitchChat - Dashboard")
+    const [redirect, setRedirect] = useState(props.match.url)
     const { id } = useParams();
 
     const [overlaySettings, setOverlaySettings] = useState()
@@ -60,13 +61,20 @@ const Dashboard = props => {
         })()
     }, [id, props.history])
 
+    useEffect(() => {
+        setRedirect(props.match.url.endsWith("/") ? props.match.url.slice(0, -1) : props.match.url)
+    }, [props])
+
     return (
         <div className="settings-container">
             <div className="setting-options">
-                
+                <Link to={`${props.match.url}/discord`}>discord</Link>
             </div>
             <div className="settings">
-
+                <Switch>
+                    <Route path={`${props.match.url}/discord`}><h1>it works</h1></Route>
+                    <Redirect to={redirect}/>
+                </Switch>
             </div>
         {/* <div className="settings-container">
             <div className="settings">
