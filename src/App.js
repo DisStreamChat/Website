@@ -133,7 +133,7 @@ function App(props) {
                             <Route path="/community" component={Community}/>
                             <Route path="/about" component={About}/>
                             <Route path="/members" component={Team}/>
-                            <ProtectedRoute path="/dashboard/:id" component={Dashboard}/>
+                            <ProtectedRoute path="/dashboard" component={Dashboard}/>
                             <Redirect to="/"/>
                         </Switch>
                     </main>

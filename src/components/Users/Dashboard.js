@@ -18,8 +18,8 @@ const Dashboard = props => {
     const [discordInfo, setDiscordInfo] = useState()
 
 
-    const { id } = useParams();
     const currentUser = firebase.auth.currentUser
+    const id = currentUser.uid
 
     const [overlaySettings, setOverlaySettings] = useState()
     const [appSettings, setAppSettings] = useState()
@@ -49,6 +49,7 @@ const Dashboard = props => {
                 const unsub = firebase.db.collection("Streamers").doc(id).onSnapshot(snapshot => {
                     const data = snapshot.data()
                     if (data) {
+                        console.log(data)
                         setOverlaySettings(data.overlaySettings)
                         setAppSettings(data.appSettings)
                     }
