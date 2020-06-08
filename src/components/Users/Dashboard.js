@@ -21,10 +21,19 @@ const defaults = {
 }
 
 const colourStyles = {
-    container: styles => ({ ...styles, width: "50%", height: 50, }),
-    control: styles => ({ ...styles, backgroundColor: "#17181b", color: "white", height: 50}),
-    valueContainer: styles => ({...styles, height: 50}),
-    menu: styles => ({ ...styles, backgroundColor: "17181b"}),
+    container: styles => ({ ...styles, width: "50%", minHeight: 50}),
+    control: styles => ({ ...styles, backgroundColor: "#17181b", color: "white", minHeight: 50}),
+    valueContainer: styles => ({...styles, minHeight: 50}),
+    menu: styles => ({ ...styles, backgroundColor: "#17181b"}),
+    multiValue: styles => ({...styles, backgroundColor: chroma("#17181b").brighten(1).css(), color: "white"}),
+    multiValueLabel: (styles) => ({
+        ...styles,
+        color: "white",
+    }),
+    multiValueRemove: (styles) => ({
+        ...styles,
+        color: "white",
+    }),
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
         const color = chroma("#17181b");
         return {
@@ -63,6 +72,7 @@ const Dashboard = props => {
     // useTitle("DisTwitchChat - Dashboard")
     const [discordInfo, setDiscordInfo] = useState()
     const [selectedGuild, setSelectedGuild] = useState()
+    const [selectedChannel, setSelectedChannel] = useState()
 
     const currentUser = firebase.auth.currentUser
     const id = currentUser.uid
@@ -96,11 +106,16 @@ const Dashboard = props => {
                     console.log(data)
                     setOverlaySettings(data.overlaySettings)
                     setAppSettings(data.appSettings)
+                    const channels = data.liveChatId
+                    const channelData = channels instanceof Array ? channels : [channels]
+                    setSelectedChannel({guild: data.guildId, channels: channelData})
                 }
             })
             return unsub
         })()
     }, [id, props.history])
+
+    console.log(selectedChannel)
 
     useEffect(() => {
         firebase.db.collection("Streamers").doc(currentUser.uid).collection("discord").onSnapshot(snapshot => {
@@ -116,12 +131,14 @@ const Dashboard = props => {
         const response = await fetch("http://localhost:3200/ismember?guild="+guildId)
         const json = await response.json()
         const isMember = json.result
-        console.log(isMember)
+        const channelReponse = await fetch("http://localhost:3200/getchannels?guild="+guildId)
+        const channelJson = await channelReponse.json()
         setSelectedGuild({
             name,
             isMember,
             icon: guildByName.icon,
-            id: guildByName.id
+            id: guildByName.id,
+            channels: channelJson
         })
     }, [discordInfo])
 
@@ -163,10 +180,22 @@ const Dashboard = props => {
                                             <>
                                             {!selectedGuild.isMember ? 
                                                 <div className="not-member">
-                                                    <span className="error-color">DisTwitchBot is not a member of this server</span> <a href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${selectedGuild.id}`}><button className="invite-link">Invite it</button></a>
+                                                    <span className="error-color">DisTwitchBot is not a member of this server</span>
+                                                    <a href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${selectedGuild.id}`}><button className="invite-link">Invite it</button></a>
                                                 </div>
                                                 :
+                                                <>
                                                 <GuildIcon size={40} {...selectedGuild}/>
+                                                <Select
+                                                    closeMenuOnSelect={false}
+                                                    onChange={() => {}}
+                                                    placeholder="Select Channel"
+                                                    // defaultValue={[{value: selectedChannels, label: selectedChannels}]}
+                                                    options={selectedGuild.channels.map(channel => ({value: channel.id, label: channel.name}))}
+                                                    styles={colourStyles}
+                                                    isMulti
+                                                />
+                                                </>
                                             }   
                                             </>
                                         }
