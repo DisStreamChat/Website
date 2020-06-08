@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback} from 'react';
 import {useTitle} from "react-use"
-import { useParams, Link, Route, Redirect, Switch} from "react-router-dom"
+import { useParams, NavLink, Route, Redirect, Switch} from "react-router-dom"
 import firebase from "../../firebase"
 import Setting from './Setting';
 import "./Users.css"
@@ -15,8 +15,11 @@ const defaults = {
 const Dashboard = props => {
 
     // useTitle("DisTwitchChat - Dashboard")
-    const [redirect, setRedirect] = useState(props.match.url)
+    const [discordInfo, setDiscordInfo] = useState()
+
+
     const { id } = useParams();
+    const currentUser = firebase.auth.currentUser
 
     const [overlaySettings, setOverlaySettings] = useState()
     const [appSettings, setAppSettings] = useState()
@@ -62,18 +65,49 @@ const Dashboard = props => {
     }, [id, props.history])
 
     useEffect(() => {
-        setRedirect(props.match.url.endsWith("/") ? props.match.url.slice(0, -1) : props.match.url)
-    }, [props])
+        firebase.db.collection("Streamers").doc(currentUser.uid).collection("discord").onSnapshot(snapshot => {
+            setDiscordInfo(snapshot.docs.map(doc => doc.data())[0])
+            console.log(snapshot.docs.map(doc => doc.data())[0])
+        })
+    }, [currentUser])
 
     return (
         <div className="settings-container">
             <div className="setting-options">
-                <Link to={`${props.match.url}/discord`}>discord</Link>
+                <NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/appsettings`}>App Settings</NavLink>
+                <NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/overlaysettings`}>overlay Settings</NavLink>
+                <NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord`}>Discord Connect</NavLink>
             </div>
             <div className="settings">
                 <Switch>
-                    <Route path={`${props.match.url}/discord`}><h1>it works</h1></Route>
-                    <Redirect to={redirect}/>
+                    <Route path={`${props.match.url}/discord`}>
+                        <h1>Discord Connect</h1>
+                        <h3>Connect your discord account to DisTwitchChat to get discord messages in your client/overlay during stream. You can only connect one server at a time but you can connect as many channels in that server</h3>
+                        <hr/>
+                        <div className="settings-body">
+                            {discordInfo ? 
+                                <div className="discord-header">
+                                    <div className="guilds">
+
+                                    </div>
+                                    <span>
+                                        <img className="discord-profile" src={discordInfo.profilePicture} alt="" />
+                                        <span className="discord-name">{discordInfo.name}</span>
+                                    </span>
+                                    
+                                </div>
+                            :
+                                "discord not linked"
+                            }
+                        </div>
+                    </Route>
+                    <Route path={`${props.match.url}/overlaysettings`}>
+
+                    </Route>
+                    <Route path={`${props.match.url}/appsettings`}>
+
+                    </Route>
+                    <Redirect to={`${props.match.url}/appsettings`}/>
                 </Switch>
             </div>
         {/* <div className="settings-container">

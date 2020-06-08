@@ -6,14 +6,67 @@
 }
 
 .setting-options{
-    border: solid;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.setting-link{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding-left: 1rem;
+    border-radius: .5rem;
+}
+
+.setting-link.active{
+    background: var(--distwitchchat-blue);
 }
 
 .settings{
     width: 50%;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    margin-left: 3rem;
+    padding: .5rem;
+    padding-top: 0;
+}
+
+.settings h1{
+    margin: 0;
+}
+
+.settings h3{
+    font-weight: normal;
+}
+
+.settings hr{
+    width: 100%;
+    border-color: grey;
+}
+
+.settings-body{
+    width: 100%;
+}
+
+.discord-header{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 .5rem;
+}
+
+.discord-header span{
+    display: flex;
     align-items: center;
+}
+
+.discord-profile{
+    width: 30px;
+}
+
+.discord-name{
+    margin-left: .5rem;
 }
 
 .checkbox-setting{
