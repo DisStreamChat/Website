@@ -44,24 +44,15 @@ const Dashboard = props => {
 
     useEffect(() => {
         (async () => {
-            try {
-                // await firebase.db.collection("Streamers").doc(id).get()
-                const unsub = firebase.db.collection("Streamers").doc(id).onSnapshot(snapshot => {
-                    const data = snapshot.data()
-                    if (data) {
-                        console.log(data)
-                        setOverlaySettings(data.overlaySettings)
-                        setAppSettings(data.appSettings)
-                    }
-                })
-                return unsub
-            } catch (err) {
-                try{
-                    // try to get mod info
-                }catch(err2){
-                    props.history.push("/")
+            const unsub = firebase.db.collection("Streamers").doc(id).onSnapshot(snapshot => {
+                const data = snapshot.data()
+                if (data) {
+                    console.log(data)
+                    setOverlaySettings(data.overlaySettings)
+                    setAppSettings(data.appSettings)
                 }
-            } 
+            })
+            return unsub
         })()
     }, [id, props.history])
 
