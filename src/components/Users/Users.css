@@ -75,6 +75,34 @@
     width: 904px;
 }
 
+.guild-icon{
+    border-radius: 50%;
+}
+
+.invite-link{
+    background: var(--distwitchchat-blue);
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+    border: none;
+    outline: none;
+    color: white;
+    font-weight: bold;
+}
+
+.error-color{
+    color: #b92838;
+    font-weight: 600;
+}
+
+.invite-link:active{
+    transform: scale(.9);
+}
+
+
+.invite-link:hover, .invite-link:focus{
+    text-decoration: underline;
+}
+
 .no-icon{
     display: flex;
     align-items: center;

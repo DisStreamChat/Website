@@ -7,6 +7,12 @@ import "./Users.css"
 import Select from 'react-select'
 import chroma from 'chroma-js';
 
+const GuildIcon = props => {
+    return props.icon ? <img style={{ width: props.size, borderRadius: "50%", marginRight: "1rem" }} alt="" src={`https://cdn.discordapp.com/icons/${props.id}/${props.icon}`}></img>
+        : 
+        <span className="no-icon" style={{ width: props.size, height: props.size, borderRadius: "50%", marginRight: "1rem", backgroundColor: "#36393f" }}>{props.name.split(" ").map(w => w[0])}</span>
+}
+
 const defaults = {
     TwitchColor: "#462b45",
     YoutubeColor: "#c4302b",
@@ -15,7 +21,7 @@ const defaults = {
 }
 
 const colourStyles = {
-    container: styles => ({ ...styles, width: "50%", height: 50 }),
+    container: styles => ({ ...styles, width: "50%", height: 50, }),
     control: styles => ({ ...styles, backgroundColor: "#17181b", color: "white", height: 50}),
     valueContainer: styles => ({...styles, height: 50}),
     menu: styles => ({ ...styles, backgroundColor: "17181b"}),
@@ -47,11 +53,7 @@ const guildOption = guild => {
     return {
         value: guild.name,
         label: <span style={{height: size}}>
-            {guild.icon ?
-                <img style={{ width: size, borderRadius: "50%", marginRight: "1rem" }} alt="" src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`}></img>
-                :
-                <span className="no-icon" style={{ width: size, height: size, borderRadius: "50%", marginRight: "1rem", backgroundColor: "#36393f"}}>{guild.name.split(" ").map(w => w[0])}</span>
-            }
+            <GuildIcon size={size} {...guild}/>
             {guild.name}
         </span>
     }
@@ -107,12 +109,21 @@ const Dashboard = props => {
         })
     }, [currentUser])
 
-    const onGuildSelect = useCallback(e => {
+    const onGuildSelect = useCallback(async e => {
         const name = e.value
         const guildByName = discordInfo.guilds.filter(guild => guild.name === name)[0]
-        console.log(guildByName)
-        setSelectedGuild(e.value)
-    })
+        const guildId = guildByName.id
+        const response = await fetch("http://localhost:3200/ismember?guild="+guildId)
+        const json = await response.json()
+        const isMember = json.result
+        console.log(isMember)
+        setSelectedGuild({
+            name,
+            isMember,
+            icon: guildByName.icon,
+            id: guildByName.id
+        })
+    }, [discordInfo])
 
     return (
         <div className="settings-container">
@@ -148,7 +159,17 @@ const Dashboard = props => {
                                                 
                                     </div>
                                     <div className="discord-body">
-                                        {JSON.stringify(discordInfo.guilds.filter(guild => guild.name === selectedGuild)[0], null, 4)}
+                                        {selectedGuild && 
+                                            <>
+                                            {!selectedGuild.isMember ? 
+                                                <div className="not-member">
+                                                    <span className="error-color">DisTwitchBot is not a member of this server</span> <a href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${selectedGuild.id}`}><button className="invite-link">Invite it</button></a>
+                                                </div>
+                                                :
+                                                <GuildIcon size={40} {...selectedGuild}/>
+                                            }   
+                                            </>
+                                        }
                                     </div>
                                 </>
                             :
