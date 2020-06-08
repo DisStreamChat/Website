@@ -80,6 +80,8 @@ function App() {
                                         displayPlatformColors: false,
                                         displayPlatformIcons: false,
                                         highlightedMessageColor: "",
+                                        nameColors: true,
+                                        compact: false
                                     },
                                     twitchAuthenticated: true,
                                     youtubeAuthenticated: false
