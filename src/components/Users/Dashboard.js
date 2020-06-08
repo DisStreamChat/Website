@@ -100,7 +100,7 @@ const Dashboard = props => {
 
     useEffect(() => {
         (async () => {
-            const unsub = firebase.db.collection("Streamers").doc(id).onSnapshot(snapshot => {
+            const unsub = firebase.db.collection("Streamers").doc(id).onSnapshot(async snapshot => {
                 const data = snapshot.data()
                 if (data) {
                     console.log(data)
@@ -108,7 +108,11 @@ const Dashboard = props => {
                     setAppSettings(data.appSettings)
                     const channels = data.liveChatId
                     const channelData = channels instanceof Array ? channels : [channels]
-                    setSelectedChannel({guild: data.guildId, channels: channelData})
+                    const resolveChannel = async channel => {
+                        const res = await fetch(`http://localhost:3200/resolvechannel?guild=${data.guildId}&channel=${channel}`)
+                        return res.json()
+                    }
+                    setSelectedChannel({guild: data.guildId, channels: await Promise.all(channelData.map(resolveChannel))})
                 }
             })
             return unsub
