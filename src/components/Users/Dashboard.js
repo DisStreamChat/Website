@@ -4,6 +4,7 @@ import { useParams, NavLink, Route, Redirect, Switch} from "react-router-dom"
 import firebase from "../../firebase"
 import Setting from './Setting';
 import "./Users.css"
+import Select from 'react-select'
 
 const defaults = {
     TwitchColor: "#462b45",
@@ -11,6 +12,11 @@ const defaults = {
     discordColor: "#2d688d",
     highlightedMessageColor: "#6e022e"
 }
+
+const colourStyles = {
+    container: styles => ({ ...styles, backgroundColor: 'white', width: "50%" }),
+};
+
 
 const Dashboard = props => {
 
@@ -79,9 +85,12 @@ const Dashboard = props => {
                         <div className="settings-body">
                             {discordInfo ? 
                                 <div className="discord-header">
-                                    <div className="guilds">
+                                        <Select
+                                            options={discordInfo.guilds.map(guild => {return {value: guild.name, label: guild.name}})}
+                                            styles={colourStyles}
+                                        >
 
-                                    </div>
+                                        </Select>
                                     <span>
                                         <img className="discord-profile" src={discordInfo.profilePicture} alt="" />
                                         <span className="discord-name">{discordInfo.name}</span>
