@@ -75,6 +75,19 @@
     width: 904px;
 }
 
+.no-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.discord-body{
+    margin-top: 1rem;
+    padding: 0 .5rem;
+}
+
 .checkbox-setting *{
     font-family: inherit !important;
     font-size: inherit !important
