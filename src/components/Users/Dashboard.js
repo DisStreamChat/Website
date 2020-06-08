@@ -14,7 +14,7 @@ const defaults = {
 }
 
 const colourStyles = {
-    container: styles => ({ ...styles, backgroundColor: 'white', width: "50%" }),
+    container: styles => ({ ...styles, width: "50%" }),
 };
 
 
