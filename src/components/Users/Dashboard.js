@@ -109,7 +109,7 @@ const Dashboard = props => {
                     const channels = data.liveChatId
                     const channelData = channels instanceof Array ? channels : [channels]
                     const resolveChannel = async channel => {
-                        const res = await fetch(`http://localhost:3200/resolvechannel?guild=${data.guildId}&channel=${channel}`)
+                        const res = await fetch(`https://api.distwitchchat.com/resolvechannel?guild=${data.guildId}&channel=${channel}`)
                         return res.json()
                     }
                     setSelectedChannel({guild: data.guildId, channels: await Promise.all(channelData.map(resolveChannel))})
@@ -132,10 +132,10 @@ const Dashboard = props => {
         const name = e.value
         const guildByName = discordInfo.guilds.filter(guild => guild.name === name)[0]
         const guildId = guildByName.id
-        const response = await fetch("http://localhost:3200/ismember?guild="+guildId)
+        const response = await fetch("https://api.distwitchchat.com/ismember?guild="+guildId)
         const json = await response.json()
         const isMember = json.result
-        const channelReponse = await fetch("http://localhost:3200/getchannels?guild="+guildId)
+        const channelReponse = await fetch("https://api.distwitchchat.com/getchannels?guild="+guildId)
         const channelJson = await channelReponse.json()
         setSelectedGuild({
             name,
