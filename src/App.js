@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import firebase from "./firebase"
 import "./App.css"
-import {HashRouter as Router, Route, Redirect, Switch, withRouter} from "react-router-dom"
+import {HashRouter as Router, Route, Redirect, Switch} from "react-router-dom"
 import Home from "./components/Home/Home"
 import About from "./components/About/About"
 import Community from "./components/Community/Community"

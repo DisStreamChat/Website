@@ -190,15 +190,15 @@ const Dashboard = props => {
                                                 :
                                                 <>
                                                 <GuildIcon size={40} {...selectedGuild}/>
-                                                <Select
+                                                {selectedGuild.id == selectedChannel.guild && <Select
                                                     closeMenuOnSelect={false}
                                                     onChange={() => {}}
                                                     placeholder="Select Channel"
-                                                    // defaultValue={[{value: selectedChannels, label: selectedChannels}]}
+                                                    defaultValue={selectedChannel.channels.map(channel => ({value: channel.id, label: channel.name}))}
                                                     options={selectedGuild.channels.map(channel => ({value: channel.id, label: channel.name}))}
                                                     styles={colourStyles}
                                                     isMulti
-                                                />
+                                                />}
                                                 </>
                                             }   
                                             </>
