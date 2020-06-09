@@ -93,6 +93,7 @@
     outline: none;
     color: white;
     font-weight: bold;
+    margin-left: 1rem;
 }
 
 .error-color{

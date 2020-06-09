@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useCallback} from 'react';
-import {useTitle} from "react-use"
-import { useParams, NavLink, Route, Redirect, Switch} from "react-router-dom"
+import { NavLink, Route, Redirect, Switch} from "react-router-dom"
 import firebase from "../../firebase"
-import Setting from './Setting';
 import "./Users.css"
 import Select from 'react-select'
 import chroma from 'chroma-js';
@@ -163,16 +161,14 @@ const Dashboard = props => {
                             {discordInfo ? 
                                 <>
                                     <div className="discord-header">
-                                            <Select
-                                                onChange={onGuildSelect}
-                                                placeholder="Select Guild"
-                                                options={discordInfo.guilds
-                                                    .filter(guild => guild.permissions.includes("MANAGE_GUILD"))
-                                                    .map(guildOption)}
-                                                styles={colourStyles}
-                                            >
-
-                                            </Select>
+                                        <Select
+                                            onChange={onGuildSelect}
+                                            placeholder="Select Guild"
+                                            options={discordInfo.guilds
+                                                .filter(guild => guild.permissions.includes("MANAGE_GUILD"))
+                                                .map(guildOption)}
+                                            styles={colourStyles}
+                                        />
                                         <span>
                                             <img className="discord-profile" src={discordInfo.profilePicture} alt="" />
                                             <span className="discord-name">{discordInfo.name}</span>
@@ -189,16 +185,25 @@ const Dashboard = props => {
                                                 </div>
                                                 :
                                                 <>
-                                                <GuildIcon size={40} {...selectedGuild}/>
-                                                {selectedGuild.id == selectedChannel.guild && <Select
-                                                    closeMenuOnSelect={false}
-                                                    onChange={() => {}}
-                                                    placeholder="Select Channel"
-                                                    defaultValue={selectedChannel.channels.map(channel => ({value: channel.id, label: channel.name}))}
-                                                    options={selectedGuild.channels.map(channel => ({value: channel.id, label: channel.name}))}
-                                                    styles={colourStyles}
-                                                    isMulti
-                                                />}
+                                                {/* <GuildIcon size={40} {...selectedGuild}/> */}
+                                                {selectedGuild.id === selectedChannel.guild ? 
+                                                    <>
+                                                    <h3>select channels to listen to</h3>
+                                                    <Select
+                                                        closeMenuOnSelect={false}
+                                                        onChange={() => {}}
+                                                        placeholder="Select Channel"
+                                                        defaultValue={selectedChannel.channels.map(channel => ({value: channel.id, label: channel.name}))}
+                                                        options={selectedGuild.channels.map(channel => ({value: channel.id, label: channel.name}))}
+                                                        styles={colourStyles}
+                                                        isMulti
+                                                    />
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <span>This channel is not connected to your account</span><button>Connect it</button>
+                                                    </>
+                                                }
                                                 </>
                                             }   
                                             </>
