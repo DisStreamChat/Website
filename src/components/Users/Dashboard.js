@@ -112,9 +112,13 @@ const Dashboard = props => {
                     const channelData = channels instanceof Array ? channels : [channels]
                     const resolveChannel = async channel => {
                         const res = await fetch(`https://api.distwitchchat.com/resolvechannel?guild=${data.guildId}&channel=${channel}`)
-                        return res.json()
+                        try{
+                            return await res.json()
+                        }catch(err){
+
+                        }
                     }
-                    setSelectedChannel({guild: data.guildId, channels: await Promise.all(channelData.map(resolveChannel))})
+                    setSelectedChannel({guild: data.guildId, channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c)})
                 }
             })
             return unsub
@@ -129,6 +133,13 @@ const Dashboard = props => {
             console.log(snapshot.docs.map(doc => doc.data())[0])
         })
     }, [currentUser])
+
+    const Connectguild = useCallback(async () => {
+        console.log(selectedGuild)
+        firebase.db.collection("Streamers").doc(id).update({
+            guildId: selectedGuild.id
+        })
+    }, [selectedGuild, id])
 
     const onGuildSelect = useCallback(async e => {
         const name = e.value
@@ -206,7 +217,10 @@ const Dashboard = props => {
                                                     </>
                                                     :
                                                     <>
-                                                            <span>This channel is not connected to your account</span><Tooltip  TransitionComponent={Zoom} arrow title="this will remove the previously connected channel" placement="top"><button className="discord-settings-button connect-button">Connect it</button></Tooltip>
+                                                            <span>This channel is not connected to your account</span>
+                                                            <Tooltip TransitionComponent={Zoom} arrow title="this will remove the previously connected channel" placement="top">
+                                                                <button onClick={Connectguild} className="discord-settings-button connect-button">Connect it</button>
+                                                            </Tooltip>
                                                     </>
                                                 }
                                                 </>
