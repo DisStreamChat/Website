@@ -85,8 +85,7 @@
     border-radius: 50%;
 }
 
-.invite-link{
-    background: var(--distwitchchat-blue);
+.discord-settings-button{
     padding: .5rem 1rem;
     border-radius: .5rem;
     border: none;
@@ -96,19 +95,34 @@
     margin-left: 1rem;
 }
 
+.discord-settings-button:active{
+    transform: scale(.9);
+}
+
+
+.discord-settings-button:hover, .discord-settings-button:focus{
+    text-decoration: underline;
+}
+
+.connect-button{
+    background: #b92838;
+}
+
+.MuiTooltip-tooltip{
+    font-size: .75rem !important
+}
+
+.invite-link{
+    background: var(--distwitchchat-blue);
+    
+}
+
 .error-color{
     color: #b92838;
     font-weight: 600;
 }
 
-.invite-link:active{
-    transform: scale(.9);
-}
 
-
-.invite-link:hover, .invite-link:focus{
-    text-decoration: underline;
-}
 
 .no-icon{
     display: flex;

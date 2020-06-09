@@ -4,6 +4,9 @@ import firebase from "../../firebase"
 import "./Users.css"
 import Select from 'react-select'
 import chroma from 'chroma-js';
+import Tooltip from '@material-ui/core/Tooltip';
+import Fade from '@material-ui/core/Fade';
+import Zoom from '@material-ui/core/Zoom';
 
 const GuildIcon = props => {
     return props.icon ? <img style={{ minWidth: props.size, height: props.size, borderRadius: "50%", marginRight: "1rem" }} alt="" src={`https://cdn.discordapp.com/icons/${props.id}/${props.icon}`}></img>
@@ -181,7 +184,7 @@ const Dashboard = props => {
                                             {!selectedGuild.isMember ? 
                                                 <div className="not-member">
                                                     <span className="error-color">DisTwitchBot is not a member of this server</span>
-                                                    <a href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${selectedGuild.id}`}><button className="invite-link">Invite it</button></a>
+                                                    <a href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${selectedGuild.id}`}><button className="invite-link discord-settings-button">Invite it</button></a>
                                                 </div>
                                                 :
                                                 <>
@@ -201,7 +204,7 @@ const Dashboard = props => {
                                                     </>
                                                     :
                                                     <>
-                                                        <span>This channel is not connected to your account</span><button>Connect it</button>
+                                                            <span>This channel is not connected to your account</span><Tooltip  TransitionComponent={Zoom} arrow title="this will remove the previously connected channel" placement="top"><button className="discord-settings-button connect-button">Connect it</button></Tooltip>
                                                     </>
                                                 }
                                                 </>
