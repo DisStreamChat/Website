@@ -8,7 +8,9 @@
 .setting-options{
     display: flex;
     flex-direction: column;
-    width: 300px;
+    width: 25%;
+    max-width: 300px;
+    min-width: 200px;
 }
 
 .setting-link{
@@ -67,6 +69,10 @@
 
 .discord-name{
     margin-left: .5rem;
+}
+
+.css-5sz5u5-singleValue span{
+    white-space: break-spaces;
 }
 
 .checkbox-setting{
