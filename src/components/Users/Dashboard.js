@@ -59,6 +59,7 @@ const colourStyles = {
 };
 
 const guildOption = guild => {
+    if(!guild)return
     const size = 40
     return {
         value: guild.name,
@@ -165,6 +166,7 @@ const Dashboard = props => {
                                 <>
                                     <div className="discord-header">
                                         <Select
+                                            value={guildOption(selectedGuild)}
                                             onChange={onGuildSelect}
                                             placeholder="Select Guild"
                                             options={discordInfo.guilds
