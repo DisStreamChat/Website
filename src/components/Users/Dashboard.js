@@ -10,6 +10,7 @@ import Zoom from '@material-ui/core/Zoom';
 import Setting from "./Setting"
 import useFetch from "../../hooks/useFetch"
 import SmallLoader from "../Shared/SmallLoader"
+import A from "../Shared/A"
 
 const GuildIcon = props => {
     return props.icon ? <img style={{ minWidth: props.size, height: props.size, borderRadius: "50%", marginRight: "1rem" }} alt="" src={`https://cdn.discordapp.com/icons/${props.id}/${props.icon}`}></img>
@@ -239,7 +240,7 @@ const Dashboard = props => {
                     </Route>
                     <Route path={`${props.match.url}/overlaysettings`}>
                         <h1>Overlay Settings</h1>
-                        <h3>Adjust the settings of your overlay. if you don't use the but want to you can start using it <Link className="ul bld" to="/apps">here</Link></h3>
+                        <h3>Adjust the settings of your overlay. if you don't use the overlay but want to you can start using it <A className="ul bld" href="/apps" newTab local>here</A></h3>
                         <hr />
                         {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
                             <Setting value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"}/>
@@ -247,7 +248,7 @@ const Dashboard = props => {
                     </Route>
                     <Route path={`${props.match.url}/appsettings`}>
                         <h1>App Settings</h1>
-                        <h3>Adjust the distwitchchat overlay</h3>
+                        <h3>Adjust the settings of your Client. if you don't use the client but want to you can start using it <A className="ul bld" href="/apps" newTab local>here</A></h3>
                         <hr />
                         {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
                             return !["showHeader", "showSourceButton"].includes(key) && <Setting value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"} />

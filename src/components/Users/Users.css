@@ -55,7 +55,7 @@
 .discord-header{
     display: flex;
     justify-content: space-between;
-    padding: 0 .5rem;
+    padding: .5rem;
 }
 
 .discord-header span{
