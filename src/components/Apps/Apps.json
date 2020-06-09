@@ -1,37 +1,16 @@
 [
-    {
-        "title": "Chat Manager",
-        "subtitle": "feature filled chat manager",
-        "description": "",
-        "pageLink": "chat_app",
-        "displayImage": ""
-    },
-    {
-        "title": "Chat Overlay",
-        "subtitle": "beautiful stream chat overlay",
-        "description": "",
-        "pageLink": "chat_overlay",
-        "displayImage": ""
-    },
-    {
-        "title": "QNA Manager",
-        "subtitle": "feature filled qna manager",
-        "description": "Coming Soon...",
-        "pageLink": "qna_app",
-        "displayImage": ""
-    },
-    {
-        "title": "Poll",
-        "subtitle": "Easy to use Poll and voting system",
-        "description": "Coming Soon...",
-        "pageLink": "poll",
-        "displayImage": ""
-    },
-    {
-        "title": "Dashboard App",
-        "subtitle": "feature filled dashboard for managing your apps",
-        "description": "",
-        "pageLink": "dashboard",
-        "displayImage": "Coming Soon..."
-    }
+  {
+    "title": "Chat Client",
+    "subtitle": "feature filled chat manager",
+    "description": "",
+    "pageLink": "chat_app",
+    "displayImage": ""
+  },
+  {
+    "title": "Chat Overlay",
+    "subtitle": "beautiful stream chat overlay",
+    "description": "",
+    "pageLink": "chat_overlay",
+    "displayImage": ""
+  }
 ]

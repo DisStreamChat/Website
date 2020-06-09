@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback} from 'react';
-import { NavLink, Route, Redirect, Switch} from "react-router-dom"
+import { NavLink, Route, Redirect, Switch, Link} from "react-router-dom"
 import firebase from "../../firebase"
 import "./Users.css"
 import Select from 'react-select'
@@ -9,6 +9,7 @@ import Fade from '@material-ui/core/Fade';
 import Zoom from '@material-ui/core/Zoom';
 import Setting from "./Setting"
 import useFetch from "../../hooks/useFetch"
+import SmallLoader from "../Shared/SmallLoader"
 
 const GuildIcon = props => {
     return props.icon ? <img style={{ minWidth: props.size, height: props.size, borderRadius: "50%", marginRight: "1rem" }} alt="" src={`https://cdn.discordapp.com/icons/${props.id}/${props.icon}`}></img>
@@ -84,7 +85,8 @@ const Dashboard = props => {
     const [overlaySettings, setOverlaySettings] = useState()
     const [appSettings, setAppSettings] = useState()
 
-    const {isLoading, sendRequest} = useFetch()
+    const {sendRequest} = useFetch()
+    const {isLoading, sendRequest: sendLoadingRequest} = useFetch()
 
     const updateAppSetting = useCallback(async (name, value) => {
         const copy = {...appSettings}
@@ -141,19 +143,17 @@ const Dashboard = props => {
         const name = e.value
         const guildByName = discordInfo.guilds.filter(guild => guild.name === name)[0]
         const guildId = guildByName.id
-        const response = await fetch("https://api.distwitchchat.com/ismember?guild="+guildId)
-        const json = await response.json()
-        const isMember = json.result
-        const channelReponse = await fetch("https://api.distwitchchat.com/getchannels?guild="+guildId)
-        const channelJson = await channelReponse.json()
+        const response = await sendLoadingRequest("https://api.distwitchchat.com/ismember?guild="+guildId)
+        const isMember = response.result
+        const channelReponse = await sendLoadingRequest("https://api.distwitchchat.com/getchannels?guild="+guildId)
         setSelectedGuild({
             name,
             isMember,
             icon: guildByName.icon,
             id: guildByName.id,
-            channels: channelJson
+            channels: channelReponse
         })
-    }, [discordInfo])
+    }, [discordInfo, sendLoadingRequest])
 
     const onChannelSelect = useCallback(async e => {
         firebase.db.collection("Streamers").doc(id).update({
@@ -194,7 +194,9 @@ const Dashboard = props => {
                                                 
                                     </div>
                                     <div className="discord-body">
-                                        {selectedGuild && 
+                                        {isLoading ? 
+                                            <SmallLoader/> : 
+                                        selectedGuild && 
                                             <>
                                             {!selectedGuild.isMember ? 
                                                 <div className="not-member">
@@ -203,7 +205,6 @@ const Dashboard = props => {
                                                 </div>
                                                 :
                                                 <>
-                                                {/* <GuildIcon size={40} {...selectedGuild}/> */}
                                                 {selectedGuild.id === selectedChannel.guild ? 
                                                     <>
                                                         <h3>select channels to listen to</h3>
@@ -238,7 +239,7 @@ const Dashboard = props => {
                     </Route>
                     <Route path={`${props.match.url}/overlaysettings`}>
                         <h1>Overlay Settings</h1>
-                        <h3>Adjust the distwitchchat overlay</h3>
+                        <h3>Adjust the settings of your overlay. if you don't use the but want to you can start using it <Link className="ul bld" to="/apps">here</Link></h3>
                         <hr />
                         {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
                             <Setting value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"}/>

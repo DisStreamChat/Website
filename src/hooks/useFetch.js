@@ -29,7 +29,7 @@ const useFetch = () => {
                     throw new Error(responseData.message);
                 }
 
-                setIsLoading(false);
+                setTimeout(() => setIsLoading(false), 0);
                 return responseData;
             } catch (err) {
                 setError(err.message);
