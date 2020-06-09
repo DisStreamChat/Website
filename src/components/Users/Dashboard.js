@@ -1,81 +1,19 @@
 import React, { useEffect, useState, useCallback} from 'react';
-import { NavLink, Route, Redirect, Switch, Link} from "react-router-dom"
+import { NavLink, Route, Redirect, Switch} from "react-router-dom"
 import firebase from "../../firebase"
 import "./Users.css"
 import Select from 'react-select'
-import chroma from 'chroma-js';
 import Tooltip from '@material-ui/core/Tooltip';
-import Fade from '@material-ui/core/Fade';
 import Zoom from '@material-ui/core/Zoom';
 import Setting from "./Setting"
 import useFetch from "../../hooks/useFetch"
 import SmallLoader from "../Shared/SmallLoader"
 import A from "../Shared/A"
 
-const GuildIcon = props => {
-    return props.icon ? <img style={{ minWidth: props.size, height: props.size, borderRadius: "50%", marginRight: "1rem" }} alt="" src={`https://cdn.discordapp.com/icons/${props.id}/${props.icon}`}></img>
-        : 
-        <span className="no-icon" style={{ minWidth: props.size, height: props.size, borderRadius: "50%", marginRight: "1rem", backgroundColor: "#36393f" }}>{props.name.split(" ").map(w => w[0])}</span>
-}
+import {defaults, colorStyles, guildOption} from "./userUtils"
 
-const defaults = {
-    TwitchColor: "#462b45",
-    YoutubeColor: "#c4302b",
-    discordColor: "#2d688d",
-    highlightedMessageColor: "#6e022e"
-}
-
-const colourStyles = {
-    container: styles => ({ ...styles, width: "50%", minHeight: 50}),
-    control: styles => ({ ...styles, backgroundColor: "#17181b", color: "white", minHeight: 50}),
-    valueContainer: styles => ({...styles, minHeight: 50}),
-    menu: styles => ({ ...styles, backgroundColor: "#17181b"}),
-    multiValue: styles => ({...styles, backgroundColor: chroma("#17181b").brighten(1).css(), color: "white"}),
-    multiValueLabel: (styles) => ({
-        ...styles,
-        color: "white",
-    }),
-    multiValueRemove: (styles) => ({
-        ...styles,
-        color: "white",
-    }),
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-        const color = chroma("#17181b");
-        return {
-            ...styles,
-            backgroundColor: isDisabled
-                ? null
-                : isSelected
-                    ? color.brighten(.6).css()
-                    : isFocused
-                        ? color.brighten(.6).css()
-                        : color.css(),
-            color: isDisabled ? '#ccc' : chroma.contrast(color, 'white') > 2? 'white': 'black',
-            cursor: isDisabled ? 'not-allowed' : 'default',
-
-            ':active': {
-                ...styles[':active'],
-                backgroundColor: !isDisabled && (isSelected ? data.color : color.brighten(1).css()),
-            },
-        };
-    },
-    singleValue: styles => ({...styles, color: "white"})
-};
-
-const guildOption = guild => {
-    if(!guild) return
-    const size = 40
-    return {
-        value: guild.name,
-        label: <span style={{height: size}}>
-            <GuildIcon size={size} {...guild}/>
-            {guild.name}
-        </span>
-    }
-}
 
 const Dashboard = props => {
-    // useTitle("DisTwitchChat - Dashboard")
     const [discordInfo, setDiscordInfo] = useState()
     const [selectedGuild, setSelectedGuild] = useState()
     const [selectedChannel, setSelectedChannel] = useState()
@@ -186,7 +124,7 @@ const Dashboard = props => {
                                             options={discordInfo.guilds
                                                 .filter(guild => guild.permissions.includes("MANAGE_GUILD"))
                                                 .map(guildOption)}
-                                            styles={colourStyles}
+                                            styles={colorStyles}
                                         />
                                         <span>
                                             <img className="discord-profile" src={discordInfo.profilePicture} alt="" />
@@ -215,7 +153,7 @@ const Dashboard = props => {
                                                             placeholder="Select Channel"
                                                             value={selectedChannel.channels.map(channel => ({value: channel.id, label: channel.name}))}
                                                             options={selectedGuild.channels.map(channel => ({value: channel.id, label: channel.name}))}
-                                                            styles={colourStyles}
+                                                            styles={colorStyles}
                                                             isMulti
                                                         />
                                                     </>
