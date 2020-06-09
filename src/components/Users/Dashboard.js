@@ -243,7 +243,7 @@ const Dashboard = props => {
                         <h3>Adjust the settings of your overlay. if you don't use the overlay but want to you can start using it <A className="ul bld" href="/apps" newTab local>here</A></h3>
                         <hr />
                         {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
-                            <Setting value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"}/>
+                            <Setting default={defaults[key]} onChange={updateOverlaySetting} value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"}/>
                         ))}
                     </Route>
                     <Route path={`${props.match.url}/appsettings`}>
@@ -251,7 +251,7 @@ const Dashboard = props => {
                         <h3>Adjust the settings of your Client. if you don't use the client but want to you can start using it <A className="ul bld" href="/apps" newTab local>here</A></h3>
                         <hr />
                         {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
-                            return !["showHeader", "showSourceButton"].includes(key) && <Setting value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"} />
+                            return !["showHeader", "showSourceButton"].includes(key) && <Setting default={defaults[key]} onChange={updateAppSetting} value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"} />
                         })}        
                     </Route>
                     <Redirect to={`${props.match.url}/appsettings`}/>
