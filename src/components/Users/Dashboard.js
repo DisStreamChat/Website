@@ -7,6 +7,8 @@ import chroma from 'chroma-js';
 import Tooltip from '@material-ui/core/Tooltip';
 import Fade from '@material-ui/core/Fade';
 import Zoom from '@material-ui/core/Zoom';
+import Setting from "./Setting"
+import useFetch from "../../hooks/useFetch"
 
 const GuildIcon = props => {
     return props.icon ? <img style={{ minWidth: props.size, height: props.size, borderRadius: "50%", marginRight: "1rem" }} alt="" src={`https://cdn.discordapp.com/icons/${props.id}/${props.icon}`}></img>
@@ -59,7 +61,7 @@ const colourStyles = {
 };
 
 const guildOption = guild => {
-    if(!guild)return
+    if(!guild) return
     const size = 40
     return {
         value: guild.name,
@@ -81,6 +83,8 @@ const Dashboard = props => {
 
     const [overlaySettings, setOverlaySettings] = useState()
     const [appSettings, setAppSettings] = useState()
+
+    const {isLoading, sendRequest} = useFetch()
 
     const updateAppSetting = useCallback(async (name, value) => {
         const copy = {...appSettings}
@@ -105,39 +109,31 @@ const Dashboard = props => {
             const unsub = firebase.db.collection("Streamers").doc(id).onSnapshot(async snapshot => {
                 const data = snapshot.data()
                 if (data) {
-                    console.log(data)
                     setOverlaySettings(data.overlaySettings)
                     setAppSettings(data.appSettings)
                     const channels = data.liveChatId
                     const channelData = channels instanceof Array ? channels : [channels]
                     const resolveChannel = async channel => {
-                        const res = await fetch(`https://api.distwitchchat.com/resolvechannel?guild=${data.guildId}&channel=${channel}`)
-                        try{
-                            return await res.json()
-                        }catch(err){
-
-                        }
+                        return sendRequest(`https://api.distwitchchat.com/resolvechannel?guild=${data.guildId}&channel=${channel}`)
                     }
                     setSelectedChannel({guild: data.guildId, channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c)})
                 }
             })
             return unsub
         })()
-    }, [id, props.history])
+    }, [id, props.history, sendRequest])
 
-    console.log(selectedChannel)
 
     useEffect(() => {
         firebase.db.collection("Streamers").doc(currentUser.uid).collection("discord").onSnapshot(snapshot => {
             setDiscordInfo(snapshot.docs.map(doc => doc.data())[0])
-            console.log(snapshot.docs.map(doc => doc.data())[0])
         })
     }, [currentUser])
 
     const Connectguild = useCallback(async () => {
-        console.log(selectedGuild)
         firebase.db.collection("Streamers").doc(id).update({
-            guildId: selectedGuild.id
+            guildId: selectedGuild.id,
+            liveChatId: []
         })
     }, [selectedGuild, id])
 
@@ -158,6 +154,12 @@ const Dashboard = props => {
             channels: channelJson
         })
     }, [discordInfo])
+
+    const onChannelSelect = useCallback(async e => {
+        firebase.db.collection("Streamers").doc(id).update({
+            liveChatId: e.map(c => c.value)
+        })
+    }, [id]) 
 
     return (
         <div className="settings-container">
@@ -204,23 +206,23 @@ const Dashboard = props => {
                                                 {/* <GuildIcon size={40} {...selectedGuild}/> */}
                                                 {selectedGuild.id === selectedChannel.guild ? 
                                                     <>
-                                                    <h3>select channels to listen to</h3>
-                                                    <Select
-                                                        closeMenuOnSelect={false}
-                                                        onChange={() => {}}
-                                                        placeholder="Select Channel"
-                                                        defaultValue={selectedChannel.channels.map(channel => ({value: channel.id, label: channel.name}))}
-                                                        options={selectedGuild.channels.map(channel => ({value: channel.id, label: channel.name}))}
-                                                        styles={colourStyles}
-                                                        isMulti
-                                                    />
+                                                        <h3>select channels to listen to</h3>
+                                                        <Select
+                                                            closeMenuOnSelect={false}
+                                                            onChange={onChannelSelect}
+                                                            placeholder="Select Channel"
+                                                            value={selectedChannel.channels.map(channel => ({value: channel.id, label: channel.name}))}
+                                                            options={selectedGuild.channels.map(channel => ({value: channel.id, label: channel.name}))}
+                                                            styles={colourStyles}
+                                                            isMulti
+                                                        />
                                                     </>
                                                     :
                                                     <>
-                                                            <span>This channel is not connected to your account</span>
-                                                            <Tooltip TransitionComponent={Zoom} arrow title="this will remove the previously connected channel" placement="top">
-                                                                <button onClick={Connectguild} className="discord-settings-button connect-button">Connect it</button>
-                                                            </Tooltip>
+                                                        <span>This channel is not connected to your account</span>
+                                                        <Tooltip TransitionComponent={Zoom} arrow title="this will remove the previously connected channel" placement="top">
+                                                            <button onClick={Connectguild} className="discord-settings-button connect-button">Connect it</button>
+                                                        </Tooltip>
                                                     </>
                                                 }
                                                 </>
@@ -235,32 +237,24 @@ const Dashboard = props => {
                         </div>
                     </Route>
                     <Route path={`${props.match.url}/overlaysettings`}>
-
+                        <h1>Overlay Settings</h1>
+                        <h3>Adjust the distwitchchat overlay</h3>
+                        <hr />
+                        {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
+                            <Setting value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"}/>
+                        ))}
                     </Route>
                     <Route path={`${props.match.url}/appsettings`}>
-
+                        <h1>App Settings</h1>
+                        <h3>Adjust the distwitchchat overlay</h3>
+                        <hr />
+                        {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
+                            return !["showHeader", "showSourceButton"].includes(key) && <Setting value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"} />
+                        })}        
                     </Route>
                     <Redirect to={`${props.match.url}/appsettings`}/>
                 </Switch>
             </div>
-        {/* <div className="settings-container">
-            <div className="settings">
-                <h2>Chat Manager Settings</h2>
-                {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
-                    return !["showHeader", "showSourceButton"].includes(key) && <Setting key={key} default={defaults[key]} onChange={updateAppSetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"}/>
-                })}
-            </div>
-
-            <div className="settings">
-            <h2>Chat Overlay Settings</h2>
-                {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
-                    return <Setting key={key} default={defaults[key]} onChange={updateOverlaySetting} name={key} value={value} type={typeof value === "boolean" ? "boolean" : "color"} />
-                })}
-            </div>
-        </div>
-        <div className="settings-container">
-            <h1>Discord Settings</h1>
-        </div> */}
         </div>
     );
 }
