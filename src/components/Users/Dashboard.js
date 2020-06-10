@@ -16,9 +16,12 @@ import {defaults, colorStyles, guildOption} from "./userUtils"
 const Dashboard = props => {
     const [discordInfo, setDiscordInfo] = useState()
     const [selectedGuild, setSelectedGuild] = useState()
-    const [selectedChannel, setSelectedChannel] = useState()
+    const [selectedChannel, setSelectedChannel] = useState({})
+    const [displayGuild, setDisplayGuild] = useState()
 
-    console.log(discordInfo)
+    useEffect(() => {
+        setDisplayGuild(guildOption(selectedGuild))
+    }, [selectedGuild])
 
     const currentUser = firebase.auth.currentUser
     const id = currentUser.uid
@@ -47,54 +50,79 @@ const Dashboard = props => {
         })
     }, [overlaySettings, id])
 
+    const disconnect = useCallback(async () => {
+        setSelectedGuild(null)
+        firebase.db.collection("Streamers").doc(id).update({
+            guildId: "",
+            liveChatId: []
+        })
+    }, [id])
+
+    useEffect(() => {
+        if(discordInfo){
+            const unsub = firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").onSnapshot(async snapshot => {
+                const data = snapshot.data()
+                if(data){
+                    const id = data.connectedGuild
+                    const guildByName = discordInfo.guilds.find(guild => guild.id === id)
+                    if (guildByName) {
+                        const guildId = guildByName.id
+                        const { result: isMember } = await sendRequest("https://api.distwitchchat.com/ismember?guild=" + guildId)
+                        const channelReponse = await sendRequest("https://api.distwitchchat.com/getchannels?guild=" + guildId)
+                        setSelectedGuild({
+                            name: guildByName.name,
+                            isMember,
+                            icon: guildByName.icon,
+                            id: guildByName.id,
+                            channels: channelReponse
+                        })
+                    } 
+                }
+            })
+            return unsub
+        }
+    }, [discordInfo, id, sendRequest])
+
     useEffect(() => {
         (async () => {
+            const user = await firebase.db.collection("Streamers").doc(id).get()
+            const discord = await firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").get()
+            const userData = await user.data()
+            const discordData = await discord.data()
+            
+            const channels = userData.liveChatId
+            const channelData = channels instanceof Array ? channels : [channels]
+
+
+            const resolveChannel = async channel => (
+                sendRequest(`https://api.distwitchchat.com/resolvechannel?guild=${discordData.connectedGuild}&channel=${channel}`)
+            )
+
+            setSelectedChannel({ guild: discordData.connectedGuild, channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c) })
+
             const unsub = firebase.db.collection("Streamers").doc(id).onSnapshot(async snapshot => {
                 const data = snapshot.data()
                 if (data) {
                     setOverlaySettings(data.overlaySettings)
-                    setAppSettings(data.appSettings)
-                    const channels = data.liveChatId
-                    const channelData = channels instanceof Array ? channels : [channels]
-                    const resolveChannel = async channel => {
-                        return sendRequest(`https://api.distwitchchat.com/resolvechannel?guild=${data.guildId}&channel=${channel}`)
-                    }
-                    if(discordInfo){
-                        const id = data.guildId
-                        const guildByName = discordInfo.guilds.find(guild => guild.id === id)
-                        if(guildByName){
-                            const guildId = guildByName.id
-                            const { result: isMember } = await sendLoadingRequest("https://api.distwitchchat.com/ismember?guild=" + guildId)
-                            const channelReponse = await sendLoadingRequest("https://api.distwitchchat.com/getchannels?guild=" + guildId)
-                            setSelectedGuild({
-                                name: guildByName.name,
-                                isMember,
-                                icon: guildByName.icon,
-                                id: guildByName.id,
-                                channels: channelReponse
-                            })
-                        }
-                        
-                    }
-                    
-                    setSelectedChannel({guild: data.guildId, channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c)})
+                    setAppSettings(data.appSettings)              
                 }
             })
             return unsub
         })()
-    }, [id, props.history, sendRequest, discordInfo, sendLoadingRequest])
+    }, [id, props.history, sendRequest, discordInfo])
+
 
 
     useEffect(() => {
-        firebase.db.collection("Streamers").doc(currentUser.uid).collection("discord").onSnapshot(snapshot => {
+        const unsub = firebase.db.collection("Streamers").doc(id).collection("discord").onSnapshot(snapshot => {
             setDiscordInfo(snapshot.docs.map(doc => doc.data())[0])
         })
-    }, [currentUser])
+        return unsub
+    }, [currentUser, id])
 
     const Connectguild = useCallback(async () => {
-        firebase.db.collection("Streamers").doc(id).update({
-            guildId: selectedGuild.id,
-            liveChatId: []
+        firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
+            connectedGuild: selectedGuild.id,
         })
     }, [selectedGuild, id])
 
@@ -114,10 +142,14 @@ const Dashboard = props => {
     }, [discordInfo, sendLoadingRequest])
 
     const onChannelSelect = useCallback(async e => {
+        console.log(e)
+        setSelectedChannel(s => ({...s, channels: e.map(c => ({id: c.value, name: c.label}))}))
         firebase.db.collection("Streamers").doc(id).update({
             liveChatId: e.map(c => c.value)
         })
     }, [id]) 
+
+    console.log(discordInfo)
 
     return (
         <div className="settings-container">
@@ -137,14 +169,14 @@ const Dashboard = props => {
                                 <>
                                     <div className="discord-header">
                                         <Select
-                                            value={guildOption(selectedGuild)}
+                                            value={displayGuild}
                                             onChange={onGuildSelect}
                                             placeholder="Select Guild"
                                             options={discordInfo.guilds
                                                 .filter(guild => guild.permissions.includes("MANAGE_GUILD"))
                                                 .map(guildOption)}
                                             styles={colorStyles}
-                                            isDisabled={!!selectedChannel.guild}
+                                            isDisabled={!!discordInfo.connectedGuild}
                                         />
                                         <span>
                                             <img className="discord-profile" src={discordInfo.profilePicture} alt="" />
@@ -176,12 +208,13 @@ const Dashboard = props => {
                                                             styles={colorStyles}
                                                             isMulti
                                                         />
+                                                        <button onClick={disconnect} className="discord-settings-button warning-button">Disconnect</button>
                                                     </>
                                                     :
                                                     <>
                                                         <span>This channel is not connected to your account</span>
                                                         <Tooltip TransitionComponent={Zoom} arrow title="this will remove the previously connected channel" placement="top">
-                                                            <button onClick={Connectguild} className="discord-settings-button connect-button">Connect it</button>
+                                                            <button onClick={Connectguild} className="discord-settings-button warning-button">Connect it</button>
                                                         </Tooltip>
                                                     </>
                                                 }

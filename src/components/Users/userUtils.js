@@ -53,7 +53,7 @@ export const colorStyles = {
 };
 
 export const guildOption = guild => {
-    if (!guild) return
+    if (!guild) return null
     const size = 40
     return {
         value: guild.name,
