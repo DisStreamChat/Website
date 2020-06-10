@@ -51,6 +51,14 @@ const Dashboard = props => {
         })
     }, [overlaySettings, id])
 
+    const disconnect = useCallback(async () => {
+        setSelectedGuild(null)
+        firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
+            connectedGuild: "",
+            liveChatId: []
+        })
+    }, [id])
+
     useSnapshot(firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"), snapshot => {
         const data = snapshot.data()
         if(data){
@@ -58,13 +66,6 @@ const Dashboard = props => {
                 guildId: data.connectedGuild||""
             })
         }
-    }, [id])
-
-    const disconnect = useCallback(async () => {
-        setSelectedGuild(null)
-        firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
-            connectedGuild: ""
-        })
     }, [id])
 
     useSnapshot(firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"), async snapshot => {
@@ -87,6 +88,18 @@ const Dashboard = props => {
         }
     }, [discordInfo, id, sendRequest])
 
+    useSnapshot(firebase.db.collection("Streamers").doc(id), async snapshot => {
+        const data = snapshot.data()
+        if (data) {
+            setOverlaySettings(data.overlaySettings)
+            setAppSettings(data.appSettings)
+        }
+    }, [id])
+
+    useSnapshot(firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"), snapshot => {
+        setDiscordInfo(snapshot.data())
+    }, [id])
+
     useEffect(() => {
         (async () => {
             const user = await firebase.db.collection("Streamers").doc(id).get()
@@ -96,35 +109,13 @@ const Dashboard = props => {
             if(discordData) {
                 const channels = userData.liveChatId
                 const channelData = channels instanceof Array ? channels : [channels]
-
-
                 const resolveChannel = async channel => (
                     sendRequest(`https://api.distwitchchat.com/resolvechannel?guild=${discordData.connectedGuild}&channel=${channel}`)
                 )
-
                 setSelectedChannel({ guild: discordData.connectedGuild, channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c) })
             }
-
-
-            const unsub = firebase.db.collection("Streamers").doc(id).onSnapshot(async snapshot => {
-                const data = snapshot.data()
-                if (data) {
-                    setOverlaySettings(data.overlaySettings)
-                    setAppSettings(data.appSettings)              
-                }
-            })
-            return unsub
         })()
     }, [id, props.history, sendRequest, discordInfo])
-
-
-
-    useEffect(() => {
-        const unsub = firebase.db.collection("Streamers").doc(id).collection("discord").onSnapshot(snapshot => {
-            setDiscordInfo(snapshot.docs.map(doc => doc.data())[0])
-        })
-        return unsub
-    }, [currentUser, id])
 
     const Connectguild = useCallback(async () => {
         firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({

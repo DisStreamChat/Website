@@ -16,8 +16,8 @@ export const defaults = {
 }
 
 export const colorStyles = {
-    container: styles => ({ ...styles, width: "50%", minHeight: 50 }),
-    control: styles => ({ ...styles, backgroundColor: "#17181b", color: "white", minHeight: 50 }),
+    container: (styles) => ({ ...styles, width: "50%", minHeight: 50 }),
+    control: (styles, {isDisabled}) => ({ ...styles, backgroundColor: isDisabled ? "black" : "#17181b", color: "white", minHeight: 50, opacity: isDisabled ? 0.5 : 1}),
     valueContainer: styles => ({ ...styles, minHeight: 50 }),
     menu: styles => ({ ...styles, backgroundColor: "#17181b" }),
     multiValue: styles => ({ ...styles, backgroundColor: chroma("#17181b").brighten(1).css(), color: "white" }),
