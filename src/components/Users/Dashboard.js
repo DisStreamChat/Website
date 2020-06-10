@@ -162,7 +162,7 @@ const Dashboard = props => {
                         <h3>Connect your discord account to DisTwitchChat to get discord messages in your client/overlay during stream. You can only connect one server at a time but you can connect as many channels in that server</h3>
                         <hr/>
                         <div className="settings-body">
-                            {discordInfo && false ? 
+                            {discordInfo ? 
                                 <>
                                     <div className="discord-header">
                                         <Select
