@@ -104,6 +104,9 @@
     transform: scale(.95);
 }
 
+.discord-settings-button.good-button{
+    background: var(--distwitchchat-blue)
+}
 
 .discord-settings-button:hover, .discord-settings-button:focus{
     text-decoration: underline;

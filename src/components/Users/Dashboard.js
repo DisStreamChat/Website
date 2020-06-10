@@ -220,7 +220,10 @@ const Dashboard = props => {
                                     </div>
                                 </>
                             :
-                                "discord not linked"
+                                <>
+                                    {/* You have not Connected your Discord Account, <A newTab href="https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=https%3A%2F%2Fwww.distwitchchat.com%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20connections"><button className="discord-settings-button good-button">Connect It</button></A> */}
+                                    You have not Connected your Discord Account, <A newTab href="https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20connections"><button className="discord-settings-button good-button">Connect It</button></A>
+                                </>
                             }
                         </div>
                     </Route>
