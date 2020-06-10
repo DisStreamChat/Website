@@ -93,12 +93,13 @@ function App(props) {
                     }
                 }else{
                     try{
-                        // const response = await fetch("https://api.distwitchchat.com/discord/token?code="+code)
-                        const response = await fetch("http://localhost:3200/discord/token?code="+code)
+                        const response = await fetch("https://api.distwitchchat.com/discord/token?code="+code)
+                        // const response = await fetch("http://localhost:3200/discord/token?code="+code)
                         if(!response.ok){
                             console.log(await response.text())
                         }else{
                             const json = await response.json()
+                            console.log(json)
                             await firebase.db.collection("Streamers").doc(firebase?.auth?.currentUser?.uid || " ").collection("discord").doc("data").set(json)
                         }
                     }catch(err){

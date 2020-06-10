@@ -55,7 +55,7 @@ const Dashboard = props => {
             const data = snapshot.data()
             if(data){
                 firebase.db.collection("Streamers").doc(id).update({
-                    guildId: data.connectedGuild
+                    guildId: data.connectedGuild||""
                 })
             }
         })
@@ -100,16 +100,18 @@ const Dashboard = props => {
             const discord = await firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").get()
             const userData = await user.data()
             const discordData = await discord.data()
-            
-            const channels = userData.liveChatId
-            const channelData = channels instanceof Array ? channels : [channels]
+            if(discordData) {
+                const channels = userData.liveChatId
+                const channelData = channels instanceof Array ? channels : [channels]
 
 
-            const resolveChannel = async channel => (
-                sendRequest(`https://api.distwitchchat.com/resolvechannel?guild=${discordData.connectedGuild}&channel=${channel}`)
-            )
+                const resolveChannel = async channel => (
+                    sendRequest(`https://api.distwitchchat.com/resolvechannel?guild=${discordData.connectedGuild}&channel=${channel}`)
+                )
 
-            setSelectedChannel({ guild: discordData.connectedGuild, channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c) })
+                setSelectedChannel({ guild: discordData.connectedGuild, channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c) })
+            }
+
 
             const unsub = firebase.db.collection("Streamers").doc(id).onSnapshot(async snapshot => {
                 const data = snapshot.data()
@@ -233,8 +235,8 @@ const Dashboard = props => {
                                 </>
                             :
                                 <>
-                                    You have not Connected your Discord Account, <A newTab href="https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=https%3A%2F%2Fwww.distwitchchat.com%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20connections"><button className="discord-settings-button good-button">Connect It</button></A>
-                                    {/* You have not Connected your Discord Account<A newTab href="https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20connections"><button className="discord-settings-button good-button">Connect It</button></A> */}
+                                    {/* You have not Connected your Discord Account, <A newTab href="https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=https%3A%2F%2Fwww.distwitchchat.com%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20connections"><button className="discord-settings-button good-button">Connect It</button></A> */}
+                                    You have not Connected your Discord Account<A newTab href="https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20connections"><button className="discord-settings-button good-button">Connect It</button></A>
                                 </>
                             }
                         </div>
