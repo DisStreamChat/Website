@@ -203,7 +203,7 @@ const Dashboard = props => {
                                                             styles={colorStyles}
                                                             isMulti
                                                         />
-                                                        <button onClick={disconnect} className="discord-settings-button warning-button">Disconnect</button>
+                                                        <button onClick={disconnect} className="discord-settings-button ml-0 mt-1 warning-button">Disconnect</button>
                                                     </>
                                                     :
                                                     <>

@@ -61,3 +61,11 @@ html, body{
 hr {
     width: 80%;
 }
+
+.App .ml-0{
+    margin-left: 0px;
+}
+
+.mt-1{
+    margin-top: 1rem;
+}
