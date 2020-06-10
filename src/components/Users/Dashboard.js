@@ -52,9 +52,8 @@ const Dashboard = props => {
 
     const disconnect = useCallback(async () => {
         setSelectedGuild(null)
-        firebase.db.collection("Streamers").doc(id).update({
-            guildId: "",
-            liveChatId: []
+        firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
+            connectedGuild: ""
         })
     }, [id])
 
@@ -149,8 +148,6 @@ const Dashboard = props => {
         })
     }, [id]) 
 
-    console.log(discordInfo)
-
     return (
         <div className="settings-container">
             <div className="setting-options">
@@ -165,7 +162,7 @@ const Dashboard = props => {
                         <h3>Connect your discord account to DisTwitchChat to get discord messages in your client/overlay during stream. You can only connect one server at a time but you can connect as many channels in that server</h3>
                         <hr/>
                         <div className="settings-body">
-                            {discordInfo ? 
+                            {discordInfo && false ? 
                                 <>
                                     <div className="discord-header">
                                         <Select
@@ -213,9 +210,7 @@ const Dashboard = props => {
                                                     :
                                                     <>
                                                         <span>This channel is not connected to your account</span>
-                                                        <Tooltip TransitionComponent={Zoom} arrow title="this will remove the previously connected channel" placement="top">
-                                                            <button onClick={Connectguild} className="discord-settings-button warning-button">Connect it</button>
-                                                        </Tooltip>
+                                                        <button onClick={Connectguild} className="discord-settings-button warning-button">Connect it</button>
                                                     </>
                                                 }
                                                 </>
