@@ -51,25 +51,13 @@ const Dashboard = props => {
         })
     }, [overlaySettings, id])
 
-    // useSnapshot(firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"), snapshot => {
-    //     const data = snapshot.data()
-    //     if(data){
-    //         firebase.db.collection("Streamers").doc(id).update({
-    //             guildId: data.connectedGuild||""
-    //         })
-    //     }
-    // }, [id])
-
-    useEffect(() => {
-        const unsub = firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").onSnapshot(snapshot => {
-            const data = snapshot.data()
-            if(data){
-                firebase.db.collection("Streamers").doc(id).update({
-                    guildId: data.connectedGuild||""
-                })
-            }
-        })
-        return unsub
+    useSnapshot(firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"), snapshot => {
+        const data = snapshot.data()
+        if(data){
+            firebase.db.collection("Streamers").doc(id).update({
+                guildId: data.connectedGuild||""
+            })
+        }
     }, [id])
 
     const disconnect = useCallback(async () => {
@@ -98,31 +86,6 @@ const Dashboard = props => {
             } 
         }
     }, [discordInfo, id, sendRequest])
-
-    // useEffect(() => {
-    //     if(discordInfo){
-    //         const unsub = firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").onSnapshot(async snapshot => {
-    //             const data = snapshot.data()
-    //             if(data){
-    //                 const id = data.connectedGuild
-    //                 const guildByName = discordInfo.guilds.find(guild => guild.id === id)
-    //                 if (guildByName) {
-    //                     const guildId = guildByName.id
-    //                     const { result: isMember } = await sendRequest("https://api.distwitchchat.com/ismember?guild=" + guildId)
-    //                     const channelReponse = await sendRequest("https://api.distwitchchat.com/getchannels?guild=" + guildId)
-    //                     setSelectedGuild({
-    //                         name: guildByName.name,
-    //                         isMember,
-    //                         icon: guildByName.icon,
-    //                         id: guildByName.id,
-    //                         channels: channelReponse
-    //                     })
-    //                 } 
-    //             }
-    //         })
-    //         return unsub
-    //     }
-    // }, [discordInfo, id, sendRequest])
 
     useEffect(() => {
         (async () => {
