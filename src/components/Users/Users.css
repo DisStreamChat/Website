@@ -19,10 +19,15 @@
     align-items: center;
     padding-left: 1rem;
     border-radius: .5rem;
+    text-transform: capitalize;
 }
 
 .setting-link.active{
     background: var(--distwitchchat-blue);
+}
+
+.settings-sub-body * {
+    text-transform: capitalize;
 }
 
 .settings{

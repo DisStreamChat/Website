@@ -18,6 +18,8 @@ const Dashboard = props => {
     const [selectedGuild, setSelectedGuild] = useState()
     const [selectedChannel, setSelectedChannel] = useState()
 
+    console.log(discordInfo)
+
     const currentUser = firebase.auth.currentUser
     const id = currentUser.uid
 
@@ -57,12 +59,30 @@ const Dashboard = props => {
                     const resolveChannel = async channel => {
                         return sendRequest(`https://api.distwitchchat.com/resolvechannel?guild=${data.guildId}&channel=${channel}`)
                     }
+                    if(discordInfo){
+                        const id = data.guildId
+                        const guildByName = discordInfo.guilds.find(guild => guild.id === id)
+                        if(guildByName){
+                            const guildId = guildByName.id
+                            const { result: isMember } = await sendLoadingRequest("https://api.distwitchchat.com/ismember?guild=" + guildId)
+                            const channelReponse = await sendLoadingRequest("https://api.distwitchchat.com/getchannels?guild=" + guildId)
+                            setSelectedGuild({
+                                name: guildByName.name,
+                                isMember,
+                                icon: guildByName.icon,
+                                id: guildByName.id,
+                                channels: channelReponse
+                            })
+                        }
+                        
+                    }
+                    
                     setSelectedChannel({guild: data.guildId, channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c)})
                 }
             })
             return unsub
         })()
-    }, [id, props.history, sendRequest])
+    }, [id, props.history, sendRequest, discordInfo, sendLoadingRequest])
 
 
     useEffect(() => {
@@ -82,8 +102,7 @@ const Dashboard = props => {
         const name = e.value
         const guildByName = discordInfo.guilds.filter(guild => guild.name === name)[0]
         const guildId = guildByName.id
-        const response = await sendLoadingRequest("https://api.distwitchchat.com/ismember?guild="+guildId)
-        const isMember = response.result
+        const { result: isMember } = await sendLoadingRequest("https://api.distwitchchat.com/ismember?guild="+guildId)
         const channelReponse = await sendLoadingRequest("https://api.distwitchchat.com/getchannels?guild="+guildId)
         setSelectedGuild({
             name,
@@ -125,6 +144,7 @@ const Dashboard = props => {
                                                 .filter(guild => guild.permissions.includes("MANAGE_GUILD"))
                                                 .map(guildOption)}
                                             styles={colorStyles}
+                                            isDisabled={!!selectedChannel.guild}
                                         />
                                         <span>
                                             <img className="discord-profile" src={discordInfo.profilePicture} alt="" />
@@ -140,7 +160,7 @@ const Dashboard = props => {
                                             {!selectedGuild.isMember ? 
                                                 <div className="not-member">
                                                     <span className="error-color">DisTwitchBot is not a member of this server</span>
-                                                    <a href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${selectedGuild.id}`}><button className="invite-link discord-settings-button">Invite it</button></a>
+                                                    <a href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${selectedGuild?.id}`}><button className="invite-link discord-settings-button">Invite it</button></a>
                                                 </div>
                                                 :
                                                 <>
@@ -180,17 +200,22 @@ const Dashboard = props => {
                         <h1>Overlay Settings</h1>
                         <h3>Adjust the settings of your overlay. if you don't use the overlay but want to you can start using it <A className="ul bld" href="/apps" newTab local>here</A></h3>
                         <hr />
-                        {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
-                            <Setting default={defaults[key]} onChange={updateOverlaySetting} value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"}/>
-                        ))}
+                        <span className="settings-sub-body">
+                            {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
+                                <Setting default={defaults[key]} onChange={updateOverlaySetting} value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"} />
+                            ))}
+                        </span>
+                        
                     </Route>
                     <Route path={`${props.match.url}/appsettings`}>
                         <h1>App Settings</h1>
                         <h3>Adjust the settings of your Client. if you don't use the client but want to you can start using it <A className="ul bld" href="/apps" newTab local>here</A></h3>
                         <hr />
-                        {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
-                            return !["showHeader", "showSourceButton"].includes(key) && <Setting default={defaults[key]} onChange={updateAppSetting} value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"} />
-                        })}        
+                        <span className="settings-sub-body">
+                            {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
+                                return !["showHeader", "showSourceButton"].includes(key) && <Setting default={defaults[key]} onChange={updateAppSetting} value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"} />
+                            })} 
+                        </span>   
                     </Route>
                     <Redirect to={`${props.match.url}/appsettings`}/>
                 </Switch>
