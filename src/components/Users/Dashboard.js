@@ -50,6 +50,18 @@ const Dashboard = props => {
         })
     }, [overlaySettings, id])
 
+    useEffect(() => {
+        const unsub = firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").onSnapshot(snapshot => {
+            const data = snapshot.data()
+            if(data){
+                firebase.db.collection("Streamers").doc(id).update({
+                    guildId: data.connectedGuild
+                })
+            }
+        })
+        return unsub
+    }, [id])
+
     const disconnect = useCallback(async () => {
         setSelectedGuild(null)
         firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
