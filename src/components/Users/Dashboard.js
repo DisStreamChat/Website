@@ -55,6 +55,8 @@ const Dashboard = props => {
         setSelectedGuild(null)
         firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
             connectedGuild: "",
+        })
+        firebase.db.collection("Streamers").doc(id).update({
             liveChatId: []
         })
     }, [id])
