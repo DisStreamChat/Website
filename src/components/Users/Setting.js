@@ -60,11 +60,11 @@ const Setting = props => {
             {props.type === "color" ? 
                 <>
                     <div className="color-header" onClick={() => setOpen(o => !o)}>
+                        <KeyboardArrowDownIcon className={`${open ? "open" : "closed"} mr-quarter`}/>
                         <h3>{props.name}</h3>
                         <div className="color-preview" style={{
                             background: value || "#000",
                         }}></div>
-                        <KeyboardArrowDownIcon className={open && "open"}/>
                     </div>
                     <ChromePicker
                         color={value}

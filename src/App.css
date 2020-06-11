@@ -69,3 +69,11 @@ hr {
 .mt-1{
     margin-top: 1rem;
 }
+
+.mr-half{
+    margin-right: .5rem;
+}
+
+.mr-quarter{
+    margin-right: .25rem;
+}

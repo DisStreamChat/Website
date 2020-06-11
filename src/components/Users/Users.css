@@ -26,6 +26,10 @@
     background: var(--distwitchchat-blue);
 }
 
+.settings-sub-body{
+    width: 100%;
+}
+
 .settings-sub-body * {
     text-transform: capitalize;
 }
@@ -165,7 +169,11 @@
 }
 
 .setting svg.open{
-    transform: rotate(180deg);
+    transform: rotate(0deg);
+}
+
+.settings svg.closed{
+    transform: rotate(-90deg);
 }
 
 .settings:first-child{
@@ -173,8 +181,12 @@
 }
 
 .setting{
-    border-bottom: solid;
-    width: 95%;
+    background: #212121;
+    border-radius: .5rem;
+    margin: 1rem 0;
+    box-shadow: 3px 3px 5px 0 #111;
+    /* border-bottom: solid; */
+    /* width: 95%; */
     display: grid;
     grid-template-columns: auto .9fr;
     grid-template-rows: auto auto;
