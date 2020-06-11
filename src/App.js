@@ -11,7 +11,7 @@ import Footer from "./components/Footer/Footer"
 import Dashboard from "./components/Users/Dashboard"
 import Team from "./components/Team/Team"
 import Header from "./components/Header"
-import ProtectedRoute from "./components/ProtectedRoute"
+import ProtectedRoute from "./components/Shared/ProtectedRoute"
 import Loader from "react-loader"
 
 import { AppContext } from "./contexts/Appcontext"
