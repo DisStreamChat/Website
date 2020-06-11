@@ -13,6 +13,10 @@ a {
     color: white;
 }
 
+*{
+    font-family: Montserrat !important;
+}
+
 html, body{
     padding: 0;
     margin: 0;

@@ -201,6 +201,7 @@
     display: flex;
     align-items: center;
     height: 70px;
+    cursor: context-menu;
 }
 
 .color-preview{
@@ -230,4 +231,7 @@
     height: 50%;
     align-self: center;
     justify-self: center;
+    border-radius: .5rem !important;
+    font-size: 1.25rem !important;
+    font-weight: bold !important;
 }

@@ -7,7 +7,8 @@ import { blueGrey } from '@material-ui/core/colors';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import "./Users.css"
-
+import Button from '@material-ui/core/Button';
+import chroma from "chroma-js"
 
 const FancySwitch = withStyles({
     root: {
@@ -55,6 +56,11 @@ const Setting = props => {
         }
     }, [props])
 
+    const buttonStyles = {
+        backgroundColor: props.default, 
+        color: chroma.contrast(chroma(props.default||"#000"), "white") > 2 ? "white" : "black"
+    }
+
     return (
         <div className={`setting ${props.type === "color" && "color-setting"} ${open && "open"}`}>
             {props.type === "color" ? 
@@ -72,7 +78,9 @@ const Setting = props => {
                         disableAlpha
                         className="ml-1"
                     />
-                    <button className="reset-button" onClick={() => changeHandler(props.default)}>reset</button>
+                    <Button variant="contained" className="reset-button" style={buttonStyles} onClick={() => changeHandler(props.default)} color="primary">
+                        Reset
+                    </Button>
                 </>
                 :
                 <span className="checkbox-setting">
