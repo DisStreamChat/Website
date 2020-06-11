@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { NavLink, Route, Redirect, Switch } from "react-router-dom";
+import { NavLink, Route, Redirect, Switch, useParams } from "react-router-dom";
 import firebase from "../../firebase";
 import "./Users.css";
 import Select from "react-select";
@@ -8,9 +8,46 @@ import useFetch from "../../hooks/useFetch";
 import SmallLoader from "../Shared/SmallLoader";
 import A from "../Shared/A";
 import useSnapshot from "../../hooks/useSnapshot";
-import SettingAccordion from "./SettingAccordion"
+import SettingAccordion from "./SettingAccordion";
 
 import { defaults, colorStyles, guildOption } from "./userUtils";
+
+const SettingList = props => {
+	const { key } = useParams();
+	const [index, setIndex] = useState(key)
+	useEffect(() => {
+		if(props.index){
+			setIndex(props.index)
+		}else if(key){
+			setIndex(key)
+		}
+	}, [props, key])
+	return (
+		<SettingAccordion>
+			{Object.entries(props.settings[index] || {})
+				.sort()
+				.sort((a, b) => (typeof a[1] === "boolean" ? -1 : 1))
+				.map(([key, value]) => {
+					return (
+						!["showHeader", "showSourceButton"].includes(key) && (
+							<Setting
+								default={defaults[key]}
+								key={key}
+								onChange={props.updateSettings}
+								value={value}
+								name={key}
+								type={
+									typeof value !== "boolean"
+										? "color"
+										: "boolean"
+								}
+							/>
+						)
+					);
+				})}
+		</SettingAccordion>
+	);
+};
 
 const Dashboard = props => {
 	const [discordInfo, setDiscordInfo] = useState();
@@ -430,27 +467,57 @@ const Dashboard = props => {
 						</h3>
 						<hr />
 						<span className="settings-sub-body">
-							<SettingAccordion>
-								{Object.entries(overlaySettings || {})
+							<div className="settings-categories">
+								<NavLink
+									to={`${props.match.url}/overlaysettings/all`}
+								>
+									All
+								</NavLink>
+								{Object.keys(overlaySettings || {})
 									.sort()
-									.sort((a, b) =>
-										typeof a[1] === "boolean" ? -1 : 1
-									)
-									.map(([key, value]) => (
-										<Setting
-											default={defaults[key]}
-											key={key}
-											onChange={updateOverlaySetting}
-											value={value}
-											name={key}
-											type={
-												typeof value !== "boolean"
-													? "color"
-													: "boolean"
-											}
-										/>
+									.filter(key => key != "id")
+									.map(key => (
+										<div>
+											<NavLink
+												to={`${props.match.url}/overlaysettings/${key}`}
+												key={key}
+											>
+												{key}
+											</NavLink>
+										</div>
 									))}
-							</SettingAccordion>
+							</div>
+							<Switch>
+								<Route
+									path={`${props.match.url}/overlaysettings/all`}
+								>
+									{Object.keys(overlaySettings || {})
+										.filter(key => key != "id")
+										.map(key => (
+											<SettingList
+												index={key}
+												key={key}
+												settings={overlaySettings}
+												updateSettings={
+													updateAppSetting
+												}
+											/>
+										))}
+								</Route>
+								{Object.keys(overlaySettings || {}).map(key => (
+									<Route
+										path={`${props.match.url}/overlaysettings/:key`}
+									>
+										<SettingList
+											settings={overlaySettings}
+											updateSettings={updateAppSetting}
+										/>
+									</Route>
+								))}
+								<Redirect
+									to={`${props.match.url}/overlaysettings/all`}
+								/>
+							</Switch>
 						</span>
 					</Route>
 					<Route path={`${props.match.url}/appsettings`}>
@@ -464,35 +531,57 @@ const Dashboard = props => {
 						</h3>
 						<hr />
 						<span className="settings-sub-body">
-							<SettingAccordion>
-								{Object.entries(appSettings || {})
+							<div className="settings-categories">
+								<NavLink
+									to={`${props.match.url}/appsettings/all`}
+								>
+									All
+								</NavLink>
+								{Object.keys(appSettings || {})
 									.sort()
-									.sort((a, b) =>
-										typeof a[1] === "boolean" ? -1 : 1
-									)
-									.map(([key, value]) => {
-										return (
-											![
-												"showHeader",
-												"showSourceButton",
-											].includes(key) && (
-												<Setting
-													default={defaults[key]}
-													key={key}
-													onChange={updateAppSetting}
-													value={value}
-													name={key}
-													type={
-														typeof value !==
-														"boolean"
-															? "color"
-															: "boolean"
-													}
-												/>
-											)
-										);
-									})}
-							</SettingAccordion>
+									.filter(key => key != "id")
+									.map(key => (
+										<div>
+											<NavLink
+												to={`${props.match.url}/appsettings/${key}`}
+												key={key}
+											>
+												{key}
+											</NavLink>
+										</div>
+									))}
+							</div>
+							<Switch>
+								<Route
+									path={`${props.match.url}/appsettings/all`}
+								>
+									{Object.keys(appSettings || {})
+										.filter(key => key != "id")
+										.map(key => (
+											<SettingList
+												index={key}
+												key={key}
+												settings={appSettings}
+												updateSettings={
+													updateAppSetting
+												}
+											/>
+										))}
+								</Route>
+								{Object.keys(appSettings || {}).map(key => (
+									<Route
+										path={`${props.match.url}/appsettings/:key`}
+									>
+										<SettingList
+											settings={appSettings}
+											updateSettings={updateAppSetting}
+										/>
+									</Route>
+								))}
+								<Redirect
+									to={`${props.match.url}/appsettings/all`}
+								/>
+							</Switch>
 						</span>
 					</Route>
 					<Redirect to={`${props.match.url}/appsettings`} />

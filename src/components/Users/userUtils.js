@@ -9,11 +9,11 @@ export const GuildIcon = props => {
 }
 
 export const defaults = {
-    TwitchColor: "#462b45",
-    YoutubeColor: "#c4302b",
-    discordColor: "#2d688d",
-    highlightedMessageColor: "#6e022e"
-}
+			TwitchColor: "#462b45",
+			YoutubeColor: "#c4302b",
+			DiscordColor: "#2d688d",
+			HighlightedMessageColor: "#6e022e",
+		};
 
 export const colorStyles = {
     container: (styles) => ({ ...styles, width: "50%", minHeight: 50 }),
