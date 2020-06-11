@@ -14,14 +14,14 @@ import { defaults, colorStyles, guildOption } from "./userUtils";
 
 const SettingList = props => {
 	const { key } = useParams();
-	const [index, setIndex] = useState(key)
+	const [index, setIndex] = useState(key);
 	useEffect(() => {
-		if(props.index){
-			setIndex(props.index)
-		}else if(key){
-			setIndex(key)
+		if (props.index) {
+			setIndex(props.index);
+		} else if (key) {
+			setIndex(key);
 		}
-	}, [props, key])
+	}, [props, key]);
 	return (
 		<SettingAccordion>
 			{Object.entries(props.settings[index] || {})
@@ -468,27 +468,29 @@ const Dashboard = props => {
 						<hr />
 						<span className="settings-sub-body">
 							<div className="settings-categories">
-								<NavLink
+								{/* <NavLink
+									className="category"
+									activeClassName="active-category"
 									to={`${props.match.url}/overlaysettings/all`}
 								>
 									All
-								</NavLink>
+								</NavLink> */}
 								{Object.keys(overlaySettings || {})
 									.sort()
 									.filter(key => key != "id")
 									.map(key => (
-										<div>
-											<NavLink
-												to={`${props.match.url}/overlaysettings/${key}`}
-												key={key}
-											>
-												{key}
-											</NavLink>
-										</div>
+										<NavLink
+											activeClassName="active-category"
+											className="category"
+											to={`${props.match.url}/overlaysettings/${key}`}
+											key={key}
+										>
+											{key}
+										</NavLink>
 									))}
 							</div>
 							<Switch>
-								<Route
+								{/* <Route
 									path={`${props.match.url}/overlaysettings/all`}
 								>
 									{Object.keys(overlaySettings || {})
@@ -503,7 +505,7 @@ const Dashboard = props => {
 												}
 											/>
 										))}
-								</Route>
+								</Route> */}
 								{Object.keys(overlaySettings || {}).map(key => (
 									<Route
 										path={`${props.match.url}/overlaysettings/:key`}
@@ -515,7 +517,7 @@ const Dashboard = props => {
 									</Route>
 								))}
 								<Redirect
-									to={`${props.match.url}/overlaysettings/all`}
+									to={`${props.match.url}/overlaysettings/Colors`}
 								/>
 							</Switch>
 						</span>
@@ -532,27 +534,29 @@ const Dashboard = props => {
 						<hr />
 						<span className="settings-sub-body">
 							<div className="settings-categories">
-								<NavLink
+								{/* <NavLink
+									activeClassName="active-category"
+									className="category"
 									to={`${props.match.url}/appsettings/all`}
 								>
 									All
-								</NavLink>
+								</NavLink> */}
 								{Object.keys(appSettings || {})
 									.sort()
 									.filter(key => key != "id")
 									.map(key => (
-										<div>
-											<NavLink
-												to={`${props.match.url}/appsettings/${key}`}
-												key={key}
-											>
-												{key}
-											</NavLink>
-										</div>
+										<NavLink
+											activeClassName="active-category"
+											className="category"
+											to={`${props.match.url}/appsettings/${key}`}
+											key={key}
+										>
+											{key}
+										</NavLink>
 									))}
 							</div>
 							<Switch>
-								<Route
+								{/* <Route
 									path={`${props.match.url}/appsettings/all`}
 								>
 									{Object.keys(appSettings || {})
@@ -567,7 +571,7 @@ const Dashboard = props => {
 												}
 											/>
 										))}
-								</Route>
+								</Route> */}
 								{Object.keys(appSettings || {}).map(key => (
 									<Route
 										path={`${props.match.url}/appsettings/:key`}
@@ -579,7 +583,7 @@ const Dashboard = props => {
 									</Route>
 								))}
 								<Redirect
-									to={`${props.match.url}/appsettings/all`}
+									to={`${props.match.url}/appsettings/Colors`}
 								/>
 							</Switch>
 						</span>

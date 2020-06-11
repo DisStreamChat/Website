@@ -27,7 +27,37 @@
 }
 
 .settings-sub-body {
-	width: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.settings-categories{
+    margin-right: 1rem;
+    background: black;
+    height: fit-content;
+    padding: 1rem;
+    border-radius: .5rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 15%;
+    margin-top: 1rem;
+}
+
+.category{
+    background: grey;
+    /* width: 100%; */
+    margin-top: 1rem;
+    border-radius: .5rem;
+    text-align: center;
+    padding: .35rem .25rem;
+}
+
+.active-category{
+    background: blue;
+}
+
+.category:first-child{
+    margin-top: 0
 }
 
 .settings-sub-body * {
@@ -185,7 +215,7 @@
 	margin: 1rem 0;
 	box-shadow: 3px 3px 5px 0 #111;
 	/* border-bottom: solid; */
-	/* width: 95%; */
+	width: 83%;
 	display: grid;
 	grid-template-columns: auto 0.9fr;
 	grid-template-rows: auto auto;
