@@ -10,11 +10,12 @@ import A from "../Shared/A";
 import useSnapshot from "../../hooks/useSnapshot";
 import SettingAccordion from "./SettingAccordion";
 
-import { defaults, colorStyles, guildOption } from "./userUtils";
+import { defaults, colorStyles, guildOption, types } from "./userUtils";
 
 const SettingList = props => {
 	const { key } = useParams();
 	const [index, setIndex] = useState(key);
+
 	useEffect(() => {
 		if (props.index) {
 			setIndex(props.index);
@@ -22,11 +23,14 @@ const SettingList = props => {
 			setIndex(key);
 		}
 	}, [props, key]);
+	
 	return (
 		<SettingAccordion>
 			{Object.entries(props.settings[index] || {})
 				.sort()
-				.sort((a, b) => (typeof a[1] === "boolean" ? -1 : 1))
+				.sort((a, b) => {
+					return types[a[0]] === "boolean" && types[b[0]] !== "boolean" ? -1 : 1;
+				})
 				.map(([key, value]) => {
 					return (
 						!["showHeader", "showSourceButton"].includes(key) && (
