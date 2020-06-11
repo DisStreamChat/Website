@@ -70,8 +70,9 @@ const Setting = props => {
                         color={value}
                         onChange={color => changeHandler(color.hex)}
                         disableAlpha
+                        className="ml-1"
                     />
-                    <button onClick={() => changeHandler(props.default)}>reset</button>
+                    <button className="reset-button" onClick={() => changeHandler(props.default)}>reset</button>
                 </>
                 :
                 <span className="checkbox-setting">

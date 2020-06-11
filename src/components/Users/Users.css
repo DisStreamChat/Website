@@ -224,3 +224,10 @@
 .setting:last-child{
     margin-bottom: 1rem; 
 }
+
+.reset-button{
+    width: 50%;
+    height: 50%;
+    align-self: center;
+    justify-self: center;
+}
