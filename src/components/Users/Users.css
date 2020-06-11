@@ -1,237 +1,236 @@
-.settings-container{
-    width: 100%;
-    min-height: calc(100vh - var(--header-height));
-    display: flex;
-    justify-content: center;
+.settings-container {
+	width: 100%;
+	min-height: calc(100vh - var(--header-height));
+	display: flex;
+	justify-content: center;
 }
 
-.setting-options{
-    display: flex;
-    flex-direction: column;
-    width: 25%;
-    max-width: 300px;
-    min-width: 200px;
+.setting-options {
+	display: flex;
+	flex-direction: column;
+	width: 25%;
+	max-width: 300px;
+	min-width: 200px;
 }
 
-.setting-link{
-    height: 50px;
-    display: flex;
-    align-items: center;
-    padding-left: 1rem;
-    border-radius: .5rem;
-    text-transform: capitalize;
+.setting-link {
+	height: 50px;
+	display: flex;
+	align-items: center;
+	padding-left: 1rem;
+	border-radius: 0.5rem;
+	text-transform: capitalize;
 }
 
-.setting-link.active{
-    background: var(--distwitchchat-blue);
+.setting-link.active {
+	background: var(--distwitchchat-blue);
 }
 
-.settings-sub-body{
-    width: 100%;
+.settings-sub-body {
+	width: 100%;
 }
 
 .settings-sub-body * {
-    text-transform: capitalize;
+	text-transform: capitalize;
 }
 
-.settings{
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: 3rem;
-    padding: .5rem;
-    padding-top: 0;
+.settings {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin-left: 3rem;
+	padding: 0.5rem;
+	padding-top: 0;
 }
 
-.settings h1{
-    margin: 0;
+.settings h1 {
+	margin: 0;
 }
 
-.settings h3{
-    font-weight: normal;
+.settings h3 {
+	font-weight: normal;
 }
 
-.settings hr{
-    width: 100%;
-    border-color: grey;
+.settings hr {
+	width: 100%;
+	border-color: grey;
 }
 
-.settings-body{
-    width: 100%;
+.settings-body {
+	width: 100%;
 }
 
-.discord-header{
-    display: flex;
-    justify-content: space-between;
-    padding: .5rem;
+.discord-header {
+	display: flex;
+	justify-content: space-between;
+	padding: 0.5rem;
 }
 
-.discord-header span{
-    display: flex;
-    align-items: center;
+.discord-header span {
+	display: flex;
+	align-items: center;
 }
 
-.discord-profile{
-    width: 30px;
+.discord-profile {
+	width: 30px;
 }
 
-.discord-name{
-    margin-left: .5rem;
+.discord-name {
+	margin-left: 0.5rem;
 }
 
-.css-5sz5u5-singleValue span{
-    white-space: break-spaces;
+.css-5sz5u5-singleValue span {
+	white-space: break-spaces;
 }
 
-.checkbox-setting{
-    padding-left: 1rem;
-    font-size: 1.17rem;
-    width: 904px;
+.checkbox-setting {
+	padding-left: 1rem;
+	font-size: 1.17rem;
+	width: 904px;
 }
 
-.guild-icon{
-    border-radius: 50%;
+.guild-icon {
+	border-radius: 50%;
 }
 
-.discord-settings-button{
-    padding: .5rem 1rem;
-    border-radius: .5rem;
-    border: none;
-    outline: none;
-    color: white;
-    font-weight: bold;
-    margin-left: 1rem;
+.discord-settings-button {
+	padding: 0.5rem 1rem;
+	border-radius: 0.5rem;
+	border: none;
+	outline: none;
+	color: white;
+	font-weight: bold;
+	margin-left: 1rem;
 }
 
-.discord-settings-button:active{
-    transform: scale(.95);
+.discord-settings-button:active {
+	transform: scale(0.95);
 }
 
-.discord-settings-button.good-button{
-    background: var(--distwitchchat-blue)
+.discord-settings-button.good-button {
+	background: var(--distwitchchat-blue);
 }
 
-.discord-settings-button:hover, .discord-settings-button:focus{
-    text-decoration: underline;
+.discord-settings-button:hover,
+.discord-settings-button:focus {
+	text-decoration: underline;
 }
 
-.warning-button{
-    background: #b92838;
+.warning-button {
+	background: #b92838;
 }
 
-.MuiTooltip-tooltip{
-    font-size: .75rem !important
+.MuiTooltip-tooltip {
+	font-size: 0.75rem !important;
 }
 
-.invite-link{
-    background: var(--distwitchchat-blue);
+.invite-link {
+	background: var(--distwitchchat-blue);
 }
 
-.error-color{
-    color: #b92838;
-    font-weight: 600;
+.error-color {
+	color: #b92838;
+	font-weight: 600;
 }
 
-
-
-.no-icon{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    text-transform: uppercase;
+.no-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 10px;
+	text-transform: uppercase;
 }
 
-.discord-body{
-    margin-top: 1rem;
-    padding: 0 .5rem;
+.discord-body {
+	margin-top: 1rem;
+	padding: 0 0.5rem;
 }
 
-.checkbox-setting *{
-    font-family: inherit !important;
-    font-size: inherit !important
+.checkbox-setting * {
+	font-family: inherit !important;
+	font-size: inherit !important;
 }
 
-.checkbox-setting span.MuiFormControlLabel-label{
-    margin-left: 1rem;
-    /* height:  */
+.checkbox-setting span.MuiFormControlLabel-label {
+	margin-left: 1rem;
+	/* height:  */
 }
 
-.checkbox-setting label{
-    height: 70px !important;
-    width: 100%;
-    /* border: solid; */
+.checkbox-setting label {
+	height: 70px !important;
+	width: 100%;
+	/* border: solid; */
 }
 
-.setting svg{
-    transition: .25s;
+.setting svg {
+	transition: 0.25s;
 }
 
-.setting svg.open{
-    transform: rotate(0deg);
+.setting svg.open {
+	transform: rotate(0deg);
 }
 
-.settings svg.closed{
-    transform: rotate(-90deg);
+.settings svg.closed {
+	transform: rotate(-90deg);
 }
 
-.settings:first-child{
-    border-right: solid;
+.settings:first-child {
+	border-right: solid;
 }
 
-.setting{
-    background: #212121;
-    border-radius: .5rem;
-    margin: 1rem 0;
-    box-shadow: 3px 3px 5px 0 #111;
-    /* border-bottom: solid; */
-    /* width: 95%; */
-    display: grid;
-    grid-template-columns: auto .9fr;
-    grid-template-rows: auto auto;
-    transition: .25s ease-in-out
+.setting {
+	background: #212121;
+	border-radius: 0.5rem;
+	margin: 1rem 0;
+	box-shadow: 3px 3px 5px 0 #111;
+	/* border-bottom: solid; */
+	/* width: 95%; */
+	display: grid;
+	grid-template-columns: auto 0.9fr;
+	grid-template-rows: auto auto;
+	transition: 0.25s ease-in-out;
 }
 
-.color-header{
-    /* border: solid; */
-    height: 40px;
-    padding-left: .75rem;
-    grid-column: 1 / span 2;
-    display: flex;
-    align-items: center;
-    height: 70px;
-    cursor: context-menu;
+.color-header {
+	/* border: solid; */
+	height: 40px;
+	padding-left: 0.75rem;
+	grid-column: 1 / span 2;
+	display: flex;
+	align-items: center;
+	height: 70px;
+	cursor: context-menu;
 }
 
-.color-preview{
-    width: 50%;
-    height: 40px;
-    margin-right: auto;
-    margin-left: auto;
-    border-radius: .5rem;
+.color-preview {
+	width: 50%;
+	height: 40px;
+	margin-right: auto;
+	margin-left: auto;
+	border-radius: 0.5rem;
 }
 
-.color-setting{
-    padding-bottom: 1rem;
-    height: 50px;
-    overflow: hidden;
+.color-setting {
+	padding-bottom: 1rem;
+	height: 50px;
+	overflow: hidden;
 }
 
-.color-setting.open{
-    height: 303px;
+.color-setting.open {
+	height: 303px;
 }
 
-.setting:last-child{
-    margin-bottom: 1rem; 
+.setting:last-child {
+	margin-bottom: 1rem;
 }
 
-.reset-button{
-    width: 50%;
-    height: 50%;
-    align-self: center;
-    justify-self: center;
-    border-radius: .5rem !important;
-    font-size: 1.25rem !important;
-    font-weight: bold !important;
+.reset-button {
+	width: 50%;
+	height: 50%;
+	align-self: center;
+	justify-self: center;
+	border-radius: 0.5rem !important;
+	font-size: 1.25rem !important;
+	font-weight: bold !important;
 }
