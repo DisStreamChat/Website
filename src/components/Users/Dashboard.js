@@ -231,7 +231,7 @@ const Dashboard = props => {
                         <hr />
                         <span className="settings-sub-body">
                             {Object.entries(overlaySettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => (
-                                <Setting default={defaults[key]} onChange={updateOverlaySetting} value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"} />
+                                <Setting default={defaults[key]} key={key} onChange={updateOverlaySetting} value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"} />
                             ))}
                         </span>
                         
@@ -242,7 +242,7 @@ const Dashboard = props => {
                         <hr />
                         <span className="settings-sub-body">
                             {Object.entries(appSettings || {}).sort().sort((a, b) => typeof a[1] === "boolean" ? -1 : 1).map(([key, value]) => {
-                                return !["showHeader", "showSourceButton"].includes(key) && <Setting default={defaults[key]} onChange={updateAppSetting} value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"} />
+                                return !["showHeader", "showSourceButton"].includes(key) && <Setting default={defaults[key]} key={key} onChange={updateAppSetting} value={value} name={key} type={typeof value !== "boolean" ? "color" : "boolean"} />
                             })} 
                         </span>   
                     </Route>
