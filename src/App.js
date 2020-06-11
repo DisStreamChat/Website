@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from "react";
-import firebase from "./firebase";
-import "./App.css";
-import {
-	HashRouter as Router,
-	Route,
-	Redirect,
-	Switch,
-} from "react-router-dom";
-import Home from "./components/Home/Home";
-import About from "./components/About/About";
-import Community from "./components/Community/Community";
-import Bot from "./components/Bot/Bot";
-import Apps from "./components/Apps/Main";
-import Footer from "./components/Footer/Footer";
-import Dashboard from "./components/Users/Dashboard";
-import Team from "./components/Team/Team";
-import Header from "./components/Header";
-import ProtectedRoute from "./components/Shared/ProtectedRoute";
-import Loader from "react-loader";
+import React, {useEffect, useState} from "react"
+import firebase from "./firebase"
+import "./App.css"
+import {HashRouter as Router, Route, Redirect, Switch} from "react-router-dom"
+import Home from "./components/Home/Home"
+import About from "./components/About/About"
+import Community from "./components/Community/Community"
+import Bot from "./components/Bot/Bot"
+import Apps from "./components/Apps/Main"
+import Footer from "./components/Footer/Footer"
+import Dashboard from "./components/Users/Dashboard"
+import Team from "./components/Team/Team"
+import Header from "./components/header/Header"
+import ProtectedRoute from "./components/Shared/ProtectedRoute"
+import Loader from "react-loader"
 
 import { AppContext } from "./contexts/Appcontext";
 
