@@ -3,8 +3,6 @@ import { NavLink, Route, Redirect, Switch} from "react-router-dom"
 import firebase from "../../firebase"
 import "./Users.css"
 import Select from 'react-select'
-import Tooltip from '@material-ui/core/Tooltip';
-import Zoom from '@material-ui/core/Zoom';
 import Setting from "./Setting"
 import useFetch from "../../hooks/useFetch"
 import SmallLoader from "../Shared/SmallLoader"

@@ -8,8 +8,8 @@ const Anchor = ({children, ...rest}) => {
 const A = props => {
 
     const elementProps = {
-        href: props.href,
-        to: props.href,
+        href: props.local ? "": props.href,
+        to: props.local ? props.href : "",
         className: props.className,
         target: props.newTab && "_blank",
         rel: props.newTab && "noopener noreferrer"
