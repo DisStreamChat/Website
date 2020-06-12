@@ -51,41 +51,45 @@ function App(props) {
                                     ModChannels
                                 })
                             } catch (err) {
-                                await firebase.db.collection("Streamers").doc(uid).set({
+                                await firebase.db
+                                  .collection("Streamers")
+                                  .doc(uid)
+                                  .set({
                                     displayName,
                                     uid,
                                     profilePicture,
                                     ModChannels,
+                                    name: displayName.toLowerCase(),
                                     TwitchName: displayName.toLowerCase(),
                                     appSettings: {
-                                        TwitchColor: "",
-                                        YoutubeColor: "",
-                                        discordColor: "",
-                                        displayPlatformColors: false,
-                                        displayPlatformIcons: false,
-                                        highlightedMessageColor: "",
-                                        showHeader: true,
-                                        showSourceButton: false,
-                                        compact: false,
-                                        showBorder: false,
-                                        nameColors: true
+                                      TwitchColor: "",
+                                      YoutubeColor: "",
+                                      discordColor: "",
+                                      displayPlatformColors: false,
+                                      displayPlatformIcons: false,
+                                      highlightedMessageColor: "",
+                                      showHeader: true,
+                                      showSourceButton: false,
+                                      compact: false,
+                                      showBorder: false,
+                                      nameColors: true,
                                     },
                                     discordLinked: false,
                                     guildId: "",
                                     liveChatId: "",
                                     overlaySettings: {
-                                        TwitchColor: "",
-                                        YoutubeColor: "",
-                                        discordColor: "",
-                                        displayPlatformColors: false,
-                                        displayPlatformIcons: false,
-                                        highlightedMessageColor: "",
-                                        nameColors: true,
-                                        compact: false
+                                      TwitchColor: "",
+                                      YoutubeColor: "",
+                                      discordColor: "",
+                                      displayPlatformColors: false,
+                                      displayPlatformIcons: false,
+                                      highlightedMessageColor: "",
+                                      nameColors: true,
+                                      compact: false,
                                     },
                                     twitchAuthenticated: true,
-                                    youtubeAuthenticated: false
-                                })
+                                    youtubeAuthenticated: false,
+                                  });
                             }
                         }
                     } catch (err) {
