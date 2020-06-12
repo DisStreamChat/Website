@@ -37,6 +37,7 @@ const SettingList = props => {
 							<Setting
 								default={defaults[key]}
 								key={key}
+								index={index}
 								onChange={props.updateSettings}
 								value={value}
 								name={key}
@@ -73,25 +74,23 @@ const Dashboard = props => {
 	const { isLoading, sendRequest: sendLoadingRequest } = useFetch();
 
 	const updateAppSetting = useCallback(
-		async (name, value) => {
+		async (index, name, value) => {
 			const copy = { ...appSettings };
-			copy[name] = value;
-			const userRef = firebase.db.collection("Streamers").doc(id);
-			await userRef.update({
-				appSettings: copy,
-			});
+			copy[index][name] = value;
+			setAppSettings(copy)
+			const userRef = firebase.db.collection("Streamers").doc(id).collection("settings").doc("app");
+			await userRef.update(copy);
 		},
 		[appSettings, id]
 	);
 
 	const updateOverlaySetting = useCallback(
-		async (name, value) => {
+		async (index, name, value) => {
 			const copy = { ...overlaySettings };
-			copy[name] = value;
-			const userRef = firebase.db.collection("Streamers").doc(id);
-			await userRef.update({
-				overlaySettings: copy,
-			});
+			copy[index][name] = value;
+			setOverlaySettings(copy)
+			const userRef = firebase.db.collection("Streamers").doc(id).collection("settings").doc("overlay");
+			await userRef.update(copy);
 		},
 		[overlaySettings, id]
 	);
@@ -167,20 +166,40 @@ const Dashboard = props => {
 		[discordInfo, id, sendRequest]
 	);
 
-	useSnapshot(
-		firebase.db.collection("Streamers").doc(id).collection("settings"),
-		async snapshot => {
-			const data = snapshot.docs
-				.map(doc => ({ id: doc.id, ...doc.data() }))
-				.sort();
-			console.log(data);
+	useEffect(() => {
+		(async () => {
+			const settingRef = firebase.db
+				.collection("Streamers")
+				.doc(id)
+				.collection("settings");
+			const settingsDataRef = await settingRef.get()
+			const data = await settingsDataRef.docs.map(doc => ({
+				id: doc.id,
+				...doc.data(),
+			}));
 			if (data) {
-				setOverlaySettings(data.find(doc => doc.id === "overlay"));
+				setOverlaySettings(
+					data.find(doc => doc.id === "overlay")
+				);
 				setAppSettings(data.find(doc => doc.id === "app"));
 			}
-		},
-		[id]
-	);
+		})()
+	}, [])
+
+	// useSnapshot(
+	// 	firebase.db.collection("Streamers").doc(id).collection("settings"),
+	// 	async snapshot => {
+	// 		const data = snapshot.docs
+	// 			.map(doc => ({ id: doc.id, ...doc.data() }))
+	// 			.sort();
+	// 		console.log(data);
+			// if (data) {
+			// 	setOverlaySettings(data.find(doc => doc.id === "overlay"));
+			// 	setAppSettings(data.find(doc => doc.id === "app"));
+			// }
+	// 	},
+	// 	[id]
+	// );
 
 	useSnapshot(
 		firebase.db
@@ -516,7 +535,7 @@ const Dashboard = props => {
 									>
 										<SettingList
 											settings={overlaySettings}
-											updateSettings={updateAppSetting}
+											updateSettings={updateOverlaySetting}
 										/>
 									</Route>
 								))}

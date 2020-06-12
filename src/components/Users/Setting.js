@@ -45,7 +45,7 @@ const Setting = props => {
 	const [open, setOpen] = useState(props.open);
 
 	const changeHandler = v => {
-		props.onChange(props.name, v);
+		props.onChange(props.index, props.name, v);
 	};
 
 	useEffect(() => {

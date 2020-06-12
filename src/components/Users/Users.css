@@ -123,7 +123,7 @@
 .checkbox-setting {
 	padding-left: 1rem;
 	font-size: 1.17rem;
-	width: 904px;
+	width: 100%;
 }
 
 .guild-icon {
@@ -221,7 +221,7 @@
 	margin: 1rem 0;
 	box-shadow: 3px 3px 5px 0 #111;
 	/* border-bottom: solid; */
-	width: 83%;
+	width: 100%;
 	display: grid;
 	grid-template-columns: auto 0.9fr;
 	grid-template-rows: auto auto;
