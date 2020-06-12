@@ -67,7 +67,8 @@ function App(props) {
 										displayName,
 										uid,
 										profilePicture,
-										ModChannels,
+                                        ModChannels,
+                                        name: displayName.toLowerCase(),
 										TwitchName: displayName.toLowerCase(),
 										appSettings: {
 											TwitchColor: "",
