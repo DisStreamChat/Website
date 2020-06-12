@@ -186,21 +186,6 @@ const Dashboard = props => {
 		})()
 	}, [])
 
-	// useSnapshot(
-	// 	firebase.db.collection("Streamers").doc(id).collection("settings"),
-	// 	async snapshot => {
-	// 		const data = snapshot.docs
-	// 			.map(doc => ({ id: doc.id, ...doc.data() }))
-	// 			.sort();
-	// 		console.log(data);
-			// if (data) {
-			// 	setOverlaySettings(data.find(doc => doc.id === "overlay"));
-			// 	setAppSettings(data.find(doc => doc.id === "app"));
-			// }
-	// 	},
-	// 	[id]
-	// );
-
 	useSnapshot(
 		firebase.db
 			.collection("Streamers")

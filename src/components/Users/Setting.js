@@ -76,16 +76,22 @@ const Setting = props => {
 						className="color-header"
 						onClick={() => props.onClick(props.name)}
 					>
-						<KeyboardArrowDownIcon
-							className={`${props.open ? "open" : "closed"} mr-quarter`}
-						/>
-						<h3>{props.name}</h3>
-						<div
-							className="color-preview"
-							style={{
-								background: value || "#000",
-							}}
-						></div>
+						<span>
+							<KeyboardArrowDownIcon
+								className={`${
+									props.open ? "open" : "closed"
+								} mr-quarter`}
+							/>
+							<h3>{props.name}</h3>
+						</span>
+						<span>
+							<div
+								className="color-preview"
+								style={{
+									background: value || "#000",
+								}}
+							></div>
+						</span>
 					</div>
 					<ChromePicker
 						color={value}
