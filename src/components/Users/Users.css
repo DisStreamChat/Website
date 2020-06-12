@@ -46,7 +46,7 @@
 	margin-top: 1rem;
 	box-shadow: 3px 3px 5px 0 #111;
 	position: sticky;
-	top: 0px;
+	top: 1rem;
 }
 
 .category {
@@ -250,13 +250,21 @@
 
 .color-preview {
 	height: 40px;
-	border-radius: 0.5rem;
+    border-radius: 0.5rem;
+    margin-left: 1rem;
 }
 
 .color-setting {
 	padding-bottom: 1rem;
 	height: 50px;
 	overflow: hidden;
+}
+
+.number-setting{
+    padding-left: 1.5rem;
+    height: 70px;
+    display: flex;
+
 }
 
 .color-setting.open {
@@ -287,5 +295,8 @@
 @media screen and (max-width: 1110px){
     .settings-sub-body{
         flex-direction: column;
+    }
+    .settings-categories{
+        position: initial;
     }
 }

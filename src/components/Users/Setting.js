@@ -9,6 +9,7 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import "./Users.css";
 import Button from "@material-ui/core/Button";
 import chroma from "chroma-js";
+import InputSlider from "../Shared/InputSlider"
 
 const FancySwitch = withStyles({
 	root: {
@@ -43,7 +44,6 @@ const FancySwitch = withStyles({
 const Setting = props => {
 	const [value, setValue] = useState(props.value);
 	const [open, setOpen] = useState(props.open);
-
 	const changeHandler = v => {
 		props.onChange(props.index, props.name, v);
 	};
@@ -109,7 +109,7 @@ const Setting = props => {
 						Reset
 					</Button>
 				</>
-			) : (
+			) : props.type == "boolean" ? (
 				<span className="checkbox-setting">
 					<FormControlLabel
 						control={
@@ -121,6 +121,28 @@ const Setting = props => {
 							/>
 						}
 						label={props.name}
+					/>
+				</span>
+			) : (
+				<span className="number-setting">
+					<FormControlLabel
+						control={
+							<InputSlider
+								color="primary"
+                                value={value}
+                                min={0}
+                                max={1000}
+                                onSliderChange={(e, value) => changeHandler(value)}
+                                onInputChange={event => {
+		                            changeHandler(
+										event.target.value === ""
+											? ""
+											: Number(event.target.value)
+									);
+                                }}
+								name={props.name}
+							/>
+						}
 					/>
 				</span>
 			)}

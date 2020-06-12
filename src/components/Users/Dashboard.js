@@ -41,11 +41,7 @@ const SettingList = props => {
 								onChange={props.updateSettings}
 								value={value}
 								name={key}
-								type={
-									typeof value !== "boolean"
-										? "color"
-										: "boolean"
-								}
+								type={types[key]}
 							/>
 						)
 					);
