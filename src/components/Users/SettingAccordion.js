@@ -15,7 +15,7 @@ const SettingAccordion = props => {
     return (
         <div style={{width: "100%"}}>
             {props.children.map(Element => (
-                React.cloneElement(Element, {onClick: clickHandler, open: Element.props.name === openItem})
+                React.cloneElement(Element, {onClick: clickHandler, open: Element.props?.name === openItem})
             ))}
         </div>
     );

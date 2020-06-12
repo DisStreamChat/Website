@@ -23,27 +23,31 @@ const SettingList = props => {
 			setIndex(key);
 		}
 	}, [props, key]);
-	
+
 	return (
 		<SettingAccordion>
-			{Object.entries(props.settings[index] || {})
+			{Object.entries(props.defaultSettings || {})
+				.filter(
+					([,details]) =>
+						details.category?.toLowerCase() === index?.toLowerCase() || props.all && props.app ? true : !details.appOnly
+				)
 				.sort()
 				.sort((a, b) => {
-					return types[a[0]] === "boolean" && types[b[0]] !== "boolean" ? -1 : 1;
+					return a[1].type === "boolean" && b[1].type !== "boolean"
+						? -1
+						: 1;
 				})
 				.map(([key, value]) => {
 					return (
-						!["showHeader", "showSourceButton"].includes(key) && (
-							<Setting
-								default={defaults[key]}
-								key={key}
-								index={index}
-								onChange={props.updateSettings}
-								value={value}
-								name={key}
-								type={types[key]}
-							/>
-						)
+						<Setting
+							default={defaults[key]}
+							key={key}
+							index={index}
+							onChange={props.updateSettings}
+							value={props?.settings?.[key]}
+							name={key}
+							type={value.type}
+						/>
 					);
 				})}
 		</SettingAccordion>
@@ -55,6 +59,15 @@ const Dashboard = props => {
 	const [selectedGuild, setSelectedGuild] = useState();
 	const [selectedChannel, setSelectedChannel] = useState({});
 	const [displayGuild, setDisplayGuild] = useState();
+	const [defaultSettings, setDefaultSettings] = useState()
+
+	useEffect(() => {
+		(async () => {
+			const settingsRef = await firebase.db.collection("defaults").doc("settings").get()
+			const settingsData = settingsRef.data().settings
+			setDefaultSettings(settingsData)
+		})()
+	}, [])
 
 	useEffect(() => {
 		setDisplayGuild(guildOption(selectedGuild));
@@ -472,13 +485,13 @@ const Dashboard = props => {
 						<hr />
 						<span className="settings-sub-body">
 							<div className="settings-categories">
-								{/* <NavLink
+								<NavLink
 									className="category"
 									activeClassName="active-category"
 									to={`${props.match.url}/overlaysettings/all`}
 								>
 									All
-								</NavLink> */}
+								</NavLink>
 								{Object.keys(overlaySettings || {})
 									.sort()
 									.filter(key => key != "id")
@@ -494,34 +507,31 @@ const Dashboard = props => {
 									))}
 							</div>
 							<Switch>
-								{/* <Route
+								<Route
 									path={`${props.match.url}/overlaysettings/all`}
 								>
-									{Object.keys(overlaySettings || {})
-										.filter(key => key != "id")
-										.map(key => (
-											<SettingList
-												index={key}
-												key={key}
-												settings={overlaySettings}
-												updateSettings={
-													updateAppSetting
-												}
-											/>
-										))}
-								</Route> */}
+									<SettingList
+										defaultSettings={defaultSettings}
+										settings={overlaySettings}
+										updateSettings={updateAppSetting}
+										all
+										/>
+								</Route>
 								{Object.keys(overlaySettings || {}).map(key => (
 									<Route
-										path={`${props.match.url}/overlaysettings/:key`}
+									path={`${props.match.url}/overlaysettings/:key`}
 									>
 										<SettingList
+											defaultSettings={defaultSettings}
 											settings={overlaySettings}
-											updateSettings={updateOverlaySetting}
+											updateSettings={
+												updateOverlaySetting
+											}
 										/>
 									</Route>
 								))}
 								<Redirect
-									to={`${props.match.url}/overlaysettings/Colors`}
+									to={`${props.match.url}/overlaysettings/all`}
 								/>
 							</Switch>
 						</span>
@@ -538,13 +548,13 @@ const Dashboard = props => {
 						<hr />
 						<span className="settings-sub-body">
 							<div className="settings-categories">
-								{/* <NavLink
+								<NavLink
 									activeClassName="active-category"
 									className="category"
 									to={`${props.match.url}/appsettings/all`}
 								>
 									All
-								</NavLink> */}
+								</NavLink>
 								{Object.keys(appSettings || {})
 									.sort()
 									.filter(key => key != "id")
@@ -560,34 +570,30 @@ const Dashboard = props => {
 									))}
 							</div>
 							<Switch>
-								{/* <Route
+								<Route
 									path={`${props.match.url}/appsettings/all`}
 								>
-									{Object.keys(appSettings || {})
-										.filter(key => key != "id")
-										.map(key => (
-											<SettingList
-												index={key}
-												key={key}
-												settings={appSettings}
-												updateSettings={
-													updateAppSetting
-												}
-											/>
-										))}
-								</Route> */}
+									<SettingList
+										defaultSettings={defaultSettings}
+										settings={appSettings}
+										updateSettings={updateAppSetting}
+										all
+										app
+										/>
+								</Route>
 								{Object.keys(appSettings || {}).map(key => (
 									<Route
-										path={`${props.match.url}/appsettings/:key`}
+									path={`${props.match.url}/appsettings/:key`}
 									>
 										<SettingList
 											settings={appSettings}
+											defaultSettings={defaultSettings}
 											updateSettings={updateAppSetting}
 										/>
 									</Route>
 								))}
 								<Redirect
-									to={`${props.match.url}/appsettings/Colors`}
+									to={`${props.match.url}/appsettings/all`}
 								/>
 							</Switch>
 						</span>
