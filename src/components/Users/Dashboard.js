@@ -49,6 +49,9 @@ const SettingList = props => {
 							value={props?.settings?.[key]}
 							name={key}
 							type={value.type}
+							min={value.min}
+                            max={value.max}
+                            step={value.step}
 						/>
 					);
 				})}

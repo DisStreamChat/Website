@@ -135,8 +135,9 @@ const Setting = props => {
 							<InputSlider
 								color="primary"
                                 value={value}
-                                min={0}
-                                max={100}
+                                min={props.min}
+                                max={props.max}
+                                step={props.step}
                                 onSliderChange={(e, value) => changeHandler(value)}
                                 onInputChange={event => {
 		                            changeHandler(

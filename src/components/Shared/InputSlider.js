@@ -85,7 +85,9 @@ const InputSlider = props => {
 						onChange={props.onSliderChange}
 						aria-labelledby="input-slider"
 						min={props.min}
-						max={props.max}
+                        max={props.max}
+                        step={props.step||1}
+                        
 					/>
 				</Grid>
 				<Grid item>
