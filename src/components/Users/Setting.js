@@ -43,10 +43,15 @@ const FancySwitch = withStyles({
 
 const Setting = props => {
 	const [value, setValue] = useState(props.value);
-	const [open, setOpen] = useState(props.open);
+    const [open, setOpen] = useState(props.open);
+    const [displayName, setDisplayName] = useState()
 	const changeHandler = v => {
-		props.onChange(props.index, props.name, v);
-	};
+		props.onChange(props.name, v);
+    };
+    
+    useEffect(() => {
+        setDisplayName(props.name.match(/[A-Z][a-z]+|[0-9]+/g).join(" "))
+    }, [props.name])
 
 	useEffect(() => {
 		if (props.type === "color") {
@@ -82,7 +87,7 @@ const Setting = props => {
 									props.open ? "open" : "closed"
 								} mr-quarter`}
 							/>
-							<h3>{props.name}</h3>
+							<h3>{displayName}</h3>
 						</span>
 						<span>
 							<div
@@ -120,7 +125,7 @@ const Setting = props => {
 								name={props.name}
 							/>
 						}
-						label={props.name}
+						label={displayName}
 					/>
 				</span>
 			) : (
@@ -131,7 +136,7 @@ const Setting = props => {
 								color="primary"
                                 value={value}
                                 min={0}
-                                max={1000}
+                                max={100}
                                 onSliderChange={(e, value) => changeHandler(value)}
                                 onInputChange={event => {
 		                            changeHandler(
@@ -140,7 +145,7 @@ const Setting = props => {
 											: Number(event.target.value)
 									);
                                 }}
-								name={props.name}
+								name={displayName}
 							/>
 						}
 					/>

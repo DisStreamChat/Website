@@ -12,6 +12,8 @@ import SettingAccordion from "./SettingAccordion";
 
 import { defaults, colorStyles, guildOption, types } from "./userUtils";
 
+const typesIndices = ["boolean", "color", "number"]
+
 const SettingList = props => {
 	const { key } = useParams();
 	const [index, setIndex] = useState(key);
@@ -28,14 +30,14 @@ const SettingList = props => {
 		<SettingAccordion>
 			{Object.entries(props.defaultSettings || {})
 				.filter(
-					([,details]) =>
-						details.category?.toLowerCase() === index?.toLowerCase() || props.all && props.app ? true : !details.appOnly
+					([, details]) =>
+						details.category?.toLowerCase() ===
+							index?.toLowerCase() || props.all
 				)
+				.filter(([, details]) => (props.app ? true : !details.appOnly))
 				.sort()
 				.sort((a, b) => {
-					return a[1].type === "boolean" && b[1].type !== "boolean"
-						? -1
-						: 1;
+					return Math.sign(typesIndices.indexOf(a[1].type) - typesIndices.indexOf(b[1].type));
 				})
 				.map(([key, value]) => {
 					return (
@@ -59,15 +61,18 @@ const Dashboard = props => {
 	const [selectedGuild, setSelectedGuild] = useState();
 	const [selectedChannel, setSelectedChannel] = useState({});
 	const [displayGuild, setDisplayGuild] = useState();
-	const [defaultSettings, setDefaultSettings] = useState()
+	const [defaultSettings, setDefaultSettings] = useState();
 
 	useEffect(() => {
 		(async () => {
-			const settingsRef = await firebase.db.collection("defaults").doc("settings").get()
-			const settingsData = settingsRef.data().settings
-			setDefaultSettings(settingsData)
-		})()
-	}, [])
+			const settingsRef = await firebase.db
+				.collection("defaults")
+				.doc("settings")
+				.get();
+			const settingsData = settingsRef.data().settings;
+			setDefaultSettings(settingsData);
+		})();
+	}, []);
 
 	useEffect(() => {
 		setDisplayGuild(guildOption(selectedGuild));
@@ -83,23 +88,27 @@ const Dashboard = props => {
 	const { isLoading, sendRequest: sendLoadingRequest } = useFetch();
 
 	const updateAppSetting = useCallback(
-		async (index, name, value) => {
+		async (name, value) => {
 			const copy = { ...appSettings };
-			copy[index][name] = value;
-			setAppSettings(copy)
-			const userRef = firebase.db.collection("Streamers").doc(id).collection("settings").doc("app");
-			await userRef.update(copy);
+			copy[name] = value;
+			setAppSettings(copy);
+			const userRef = firebase.db.collection("Streamers").doc(id);
+			await userRef.update({
+				appSettings: copy,
+			});
 		},
 		[appSettings, id]
 	);
 
 	const updateOverlaySetting = useCallback(
-		async (index, name, value) => {
+		async (name, value) => {
 			const copy = { ...overlaySettings };
-			copy[index][name] = value;
-			setOverlaySettings(copy)
-			const userRef = firebase.db.collection("Streamers").doc(id).collection("settings").doc("overlay");
-			await userRef.update(copy);
+			copy[name] = value;
+			setOverlaySettings(copy);
+			const userRef = firebase.db.collection("Streamers").doc(id);
+			await userRef.update({
+				overlaySettings: copy,
+			});
 		},
 		[overlaySettings, id]
 	);
@@ -177,23 +186,18 @@ const Dashboard = props => {
 
 	useEffect(() => {
 		(async () => {
-			const settingRef = firebase.db
+			const userRef = await firebase.db
 				.collection("Streamers")
 				.doc(id)
-				.collection("settings");
-			const settingsDataRef = await settingRef.get()
-			const data = await settingsDataRef.docs.map(doc => ({
-				id: doc.id,
-				...doc.data(),
-			}));
-			if (data) {
-				setOverlaySettings(
-					data.find(doc => doc.id === "overlay")
-				);
-				setAppSettings(data.find(doc => doc.id === "app"));
+				.get();
+			const userData = userRef.data();
+
+			if (userData) {
+				setOverlaySettings(userData.overlaySettings);
+				setAppSettings(userData.appSettings);
 			}
-		})()
-	}, [])
+		})();
+	}, []);
 
 	useSnapshot(
 		firebase.db
@@ -492,9 +496,17 @@ const Dashboard = props => {
 								>
 									All
 								</NavLink>
-								{Object.keys(overlaySettings || {})
+								{[
+									...new Set(
+										Object.values(
+											defaultSettings || {}
+										).map(val => val.category)
+									),
+								]
 									.sort()
-									.filter(key => key != "id")
+									.filter(
+										cat => cat.toLowerCase() != "visibility"
+									)
 									.map(key => (
 										<NavLink
 											activeClassName="active-category"
@@ -513,13 +525,13 @@ const Dashboard = props => {
 									<SettingList
 										defaultSettings={defaultSettings}
 										settings={overlaySettings}
-										updateSettings={updateAppSetting}
+										updateSettings={updateOverlaySetting}
 										all
-										/>
+									/>
 								</Route>
 								{Object.keys(overlaySettings || {}).map(key => (
 									<Route
-									path={`${props.match.url}/overlaysettings/:key`}
+										path={`${props.match.url}/overlaysettings/:key`}
 									>
 										<SettingList
 											defaultSettings={defaultSettings}
@@ -555,7 +567,13 @@ const Dashboard = props => {
 								>
 									All
 								</NavLink>
-								{Object.keys(appSettings || {})
+								{[
+									...new Set(
+										Object.values(
+											defaultSettings || {}
+										).map(val => val.category)
+									),
+								]
 									.sort()
 									.filter(key => key != "id")
 									.map(key => (
@@ -579,16 +597,17 @@ const Dashboard = props => {
 										updateSettings={updateAppSetting}
 										all
 										app
-										/>
+									/>
 								</Route>
 								{Object.keys(appSettings || {}).map(key => (
 									<Route
-									path={`${props.match.url}/appsettings/:key`}
+										path={`${props.match.url}/appsettings/:key`}
 									>
 										<SettingList
 											settings={appSettings}
 											defaultSettings={defaultSettings}
 											updateSettings={updateAppSetting}
+											app
 										/>
 									</Route>
 								))}
