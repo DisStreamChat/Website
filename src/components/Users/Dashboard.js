@@ -484,7 +484,7 @@ const Dashboard = props => {
 						<h1>Overlay Settings</h1>
 						<h3>
 							Adjust the settings of your overlay. if you don't
-							use the overlay but want to you can start using it
+							use the overlay but want to you can start using it{" "}
 							<A className="ul bld" href="/apps" newTab local>
 								here
 							</A>
@@ -555,7 +555,7 @@ const Dashboard = props => {
 						<h1>App Settings</h1>
 						<h3>
 							Adjust the settings of your Client. if you don't use
-							the client but want to you can start using it
+							the client but want to you can start using it{" "}
 							<A className="ul bld" href="/apps" newTab local>
 								here
 							</A>

@@ -55,14 +55,14 @@
     padding: .5rem;
 }
 
-.footer a:hover{
-    text-decoration: underline !important;
-}
-
 .left h4{
     font-weight: normal;
 }
 
 .footer h3, .footer h4{
     margin: .5rem 0
+}
+
+#root footer.footer a:hover{
+    text-decoration: underline;
 }

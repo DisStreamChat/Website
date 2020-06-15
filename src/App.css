@@ -8,13 +8,13 @@
     --twitch-background: linear-gradient(198.87deg, rgb(162, 58, 195) -17.84%, rgb(106, 69, 173) 114.96%);
 }
 
-a {
-    text-decoration: none !important;
+#root a {
+    text-decoration: none;
     color: white;
 }
 
-*{
-    font-family: Montserrat !important;
+#root * {
+    font-family: Montserrat;
 }
 
 html, body{

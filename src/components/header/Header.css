@@ -309,8 +309,8 @@
 		font-size: 25px;
     }
     
-    .user--name{
-        display: none !important;
+    header .user--name{
+        display: none;
     }
 }
 

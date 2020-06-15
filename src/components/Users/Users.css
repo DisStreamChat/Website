@@ -10,7 +10,7 @@
 	flex-direction: column;
 	width: 25%;
 	max-width: 300px;
-	min-width: 200px;
+	/* min-width: 200px; */
 	position: sticky;
 	top: 1rem;
 	height: fit-content;
@@ -20,7 +20,7 @@
 	height: 50px;
 	display: flex;
 	align-items: center;
-	padding-left: 1rem;
+	padding: 0 1rem;
 	border-radius: 0.5rem;
 	text-transform: capitalize;
 }
@@ -157,8 +157,8 @@
 	background: #b92838;
 }
 
-.MuiTooltip-tooltip {
-	font-size: 0.75rem !important;
+#root .MuiTooltip-tooltip {
+	font-size: 0.75rem;
 }
 
 .invite-link {
@@ -183,20 +183,18 @@
 	padding: 0 0.5rem;
 }
 
-.checkbox-setting * {
-	font-family: inherit !important;
-	font-size: inherit !important;
+#root .checkbox-setting * {
+	font-family: inherit;
+	font-size: inherit;
 }
 
 .checkbox-setting span.MuiFormControlLabel-label {
 	margin-left: 1rem;
-	/* height:  */
 }
 
-.checkbox-setting label {
-	height: 70px !important;
+#root .checkbox-setting label {
+	height: 70px ;
 	width: 100%;
-	/* border: solid; */
 }
 
 .setting svg {
@@ -264,7 +262,7 @@
     padding-left: 1.5rem;
     height: 70px;
     display: flex;
-
+    grid-column: 1 / span 2;
 }
 
 .color-setting.open {
@@ -275,14 +273,23 @@
 	margin-bottom: 1rem;
 }
 
-.reset-button {
+#root .reset-button {
 	width: 50%;
 	height: 50%;
 	align-self: center;
 	justify-self: center;
-	border-radius: 0.5rem !important;
-	font-size: 1.25rem !important;
-	font-weight: bold !important;
+	border-radius: 0.5rem;
+	font-size: 1.25rem;
+	font-weight: bold;
+}
+
+#root .MuiFormControlLabel-root{
+    width: 100% ;
+}
+
+#root .makeStyles-root-109{
+    max-width: 250px;
+    width: 100%
 }
 
 
@@ -296,7 +303,50 @@
     .settings-sub-body{
         flex-direction: column;
     }
+
+    .settings-categories .category{
+        width: fit-content;
+        min-width: 100px;
+        flex-grow: 2;
+        margin: .5rem;
+        padding: .5rem 1rem;
+    }
+
     .settings-categories{
         position: initial;
+        margin-right: 0px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        padding: .5rem;
+    }
+}
+
+@media screen and (max-width: 500px){
+
+    .main{
+        padding-top: 100px;
+    }
+
+    .setting-link{
+        text-align: center;
+    }
+
+
+    .settings-container .setting-options{
+        position: absolute;
+        flex-direction: row;
+        top: 100px;
+        left: 50%;
+        width: 90vw;
+        max-width: 90vw;
+        transform: translateX(-50%);
+    }
+
+    .settings{
+        width: 80%;
+        margin-left: .5rem;
     }
 }
