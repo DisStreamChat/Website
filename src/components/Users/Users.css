@@ -51,7 +51,7 @@
 
 #root .settings--searchbox{
     box-sizing: border-box;
-    width: 80%;
+    width: 100%;
     align-self: center;
     padding: .75rem;
     margin: .5rem 0;
@@ -62,10 +62,37 @@
     box-shadow: 3px 3px 5px 0 #111;
     color: white;
     transition: .25s;
+    font-size: 1rem;
 }
 
 #root .settings--searchbox:hover, #root .settings--searchbox:active, #root .settings--searchbox:focus{
     box-shadow: 5px 5px 5px 0 #111;
+}
+
+
+
+.settings--searchbox::placeholder{
+    font-weight: bold;
+}
+
+.search-container{
+    display: inline-block;
+    width: 80%;
+    display: flex;
+    align-self: center;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#root .clear-button{
+    transition: .25s;
+    opacity: 0;
+    position: relative;
+    left: -2rem;
+}
+
+#root .settings--searchbox:hover ~ .clear-button, #root .settings--searchbox:active ~ .clear-button, #root .settings--searchbox:focus ~ .clear-button{
+    opacity: 1;
 }
 
 .category {
@@ -311,13 +338,7 @@
 }
 
 
-@media screen and (max-width: 1400px){
-    .category{
-        font-size: .75rem;
-    }
-}
-
-@media screen and (max-width: 1110px){
+@media screen and (max-width: 1200px){
     .settings-sub-body{
         flex-direction: column;
     }
@@ -342,7 +363,7 @@
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 660px){
 
     .main{
         padding-top: 100px;
@@ -356,7 +377,8 @@
     .settings-container .setting-options{
         position: absolute;
         flex-direction: row;
-        top: 100px;
+        justify-content: space-around;
+        top: 190px;
         left: 50%;
         width: 90vw;
         max-width: 90vw;
@@ -366,5 +388,11 @@
     .settings{
         width: 80%;
         margin-left: .5rem;
+    }
+}
+
+@media screen and (max-width: 500px){
+    .settings-container .setting-options{
+        top: 100px;
     }
 }
