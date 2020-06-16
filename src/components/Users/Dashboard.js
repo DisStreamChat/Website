@@ -490,6 +490,8 @@ const Dashboard = props => {
 							</A>
 						</h3>
 						<hr />
+                        <input type="text" name="" id="" className="settings--searchbox"/>
+
 						<span className="settings-sub-body">
 							<div className="settings-categories">
 								<NavLink
@@ -561,6 +563,7 @@ const Dashboard = props => {
 							</A>
 						</h3>
 						<hr />
+                        <input type="text" name="" id="" className="settings--searchbox"/>
 						<span className="settings-sub-body">
 							<div className="settings-categories">
 								<NavLink

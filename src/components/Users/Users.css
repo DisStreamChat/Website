@@ -49,9 +49,27 @@
 	top: 1rem;
 }
 
+#root .settings--searchbox{
+    box-sizing: border-box;
+    width: 80%;
+    align-self: center;
+    padding: .75rem;
+    margin: .5rem 0;
+    border-radius: .35rem;
+    border: none;
+    outline: none;
+    background: #212121;
+    box-shadow: 3px 3px 5px 0 #111;
+    color: white;
+    transition: .25s;
+}
+
+#root .settings--searchbox:hover, #root .settings--searchbox:active, #root .settings--searchbox:focus{
+    box-shadow: 5px 5px 5px 0 #111;
+}
+
 .category {
 	background: #2a2c30;
-	/* width: 100%; */
 	margin-top: 1rem;
 	border-radius: 0.25rem;
 	text-align: center;
