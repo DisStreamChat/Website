@@ -183,7 +183,6 @@ const Dashboard = props => {
 
 	const onChannelSelect = useCallback(
 		async e => {
-            console.log(e)
 			setSelectedChannel(s => ({
 				...s,
 				channels: e?.map(c => ({ id: c.value, name: c.label.props.children[0].props.children, parent: c.label.props.children[1].props.children })) || [],
