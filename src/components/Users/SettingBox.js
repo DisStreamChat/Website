@@ -27,9 +27,10 @@ const SettingList = props => {
 				.filter(([name]) => (!props.search ? true : name?.toLowerCase()?.includes(props.search)))
 				.filter(([, details]) => details.category?.toLowerCase() === index?.toLowerCase() || props.all)
 				.filter(([, details]) => (props.app ? true : !details.appOnly))
-				.sort()
 				.sort((a, b) => {
-					return Math.sign(typesIndices.indexOf(a[1].type) - typesIndices.indexOf(b[1].type));
+                    const categoryOrder = (a[1].type.localeCompare(b[1].type));
+                    const nameOrder = a[0].localeCompare(b[0])
+					return !!categoryOrder ? categoryOrder : nameOrder
 				})
 				.map(([key, value]) => {
 					return (

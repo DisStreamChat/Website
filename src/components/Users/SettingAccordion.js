@@ -5,12 +5,14 @@ const SettingAccordion = props => {
     const [openItem, setOpenItem] = useState()
 
     const clickHandler = useCallback(key => {
-        if(key === openItem){
-            setOpenItem("")
-        }else{
-            setOpenItem(key)
-        }
-    }, [openItem])
+        setOpenItem(prev => {
+            if(key === prev){
+                return ""
+            }else{
+                return key
+            }
+        })
+    }, [])
 
     return (
         <div style={{width: "100%"}}>
