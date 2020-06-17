@@ -8,53 +8,9 @@ import useFetch from "../../hooks/useFetch";
 import SmallLoader from "../Shared/SmallLoader";
 import A from "../Shared/A";
 import useSnapshot from "../../hooks/useSnapshot";
-import SettingAccordion from "./SettingAccordion";
 
-import { defaults, colorStyles, guildOption, types } from "./userUtils";
+import { colorStyles, guildOption } from "./userUtils";
 import SettingBox from "./SettingBox";
-
-const typesIndices = ["boolean", "color", "number"];
-
-const SettingList = props => {
-	const { key } = useParams();
-	const [index, setIndex] = useState(key);
-
-	useEffect(() => {
-		if (props.index) {
-			setIndex(props.index);
-		} else if (key) {
-			setIndex(key);
-		}
-	}, [props, key]);
-
-	return (
-		<SettingAccordion>
-			{Object.entries(props.defaultSettings || {})
-				.filter(([, details]) => details.category?.toLowerCase() === index?.toLowerCase() || props.all)
-				.filter(([, details]) => (props.app ? true : !details.appOnly))
-				.sort()
-				.sort((a, b) => {
-					return Math.sign(typesIndices.indexOf(a[1].type) - typesIndices.indexOf(b[1].type));
-				})
-				.map(([key, value]) => {
-					return (
-						<Setting
-							default={defaults[key]}
-							key={key}
-							index={index}
-							onChange={props.updateSettings}
-							value={props?.settings?.[key]}
-							name={key}
-							type={value.type}
-							min={value.min}
-							max={value.max}
-							step={value.step}
-						/>
-					);
-				})}
-		</SettingAccordion>
-	);
-};
 
 const Dashboard = props => {
 	const [discordInfo, setDiscordInfo] = useState();
@@ -145,8 +101,9 @@ const Dashboard = props => {
 				const guildByName = discordInfo?.guilds?.find?.(guild => guild.id === id);
 				if (guildByName) {
 					const guildId = guildByName.id;
-					const { result: isMember } = await sendRequest("https://api.distwitchchat.com/ismember?guild=" + guildId);
-					const channelReponse = await sendRequest("https://api.distwitchchat.com/getchannels?guild=" + guildId);
+					const { result: isMember } = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
+					const channelReponse = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
+
 					setSelectedGuild({
 						name: guildByName.name,
 						isMember,
@@ -190,7 +147,7 @@ const Dashboard = props => {
 				const channels = userData.liveChatId;
 				const channelData = channels instanceof Array ? channels : [channels];
 				const resolveChannel = async channel =>
-					sendRequest(`https://api.distwitchchat.com/resolvechannel?guild=${discordData.connectedGuild}&channel=${channel}`);
+					sendRequest(`${process.env.REACT_APP_API_URL}/resolvechannel?guild=${discordData.connectedGuild}&channel=${channel}`);
 				setSelectedChannel({
 					guild: discordData.connectedGuild,
 					channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c),
@@ -210,8 +167,9 @@ const Dashboard = props => {
 			const name = e.value;
 			const guildByName = discordInfo.guilds.filter(guild => guild.name === name)[0];
 			const guildId = guildByName.id;
-			const { result: isMember } = await sendLoadingRequest("https://api.distwitchchat.com/ismember?guild=" + guildId);
-			const channelReponse = await sendLoadingRequest("https://api.distwitchchat.com/getchannels?guild=" + guildId);
+			const { result: isMember } = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
+			const channelReponse = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
+
 			setSelectedGuild({
 				name,
 				isMember,
@@ -225,10 +183,9 @@ const Dashboard = props => {
 
 	const onChannelSelect = useCallback(
 		async e => {
-			console.log(e);
 			setSelectedChannel(s => ({
 				...s,
-				channels: e.map(c => ({ id: c.value, name: c.label })),
+				channels: e.map(c => ({ id: c.value, name: c.label, parent: c.parent })),
 			}));
 			firebase.db
 				.collection("Streamers")
@@ -305,11 +262,21 @@ const Dashboard = props => {
 																		placeholder="Select Channel"
 																		value={selectedChannel.channels.map(channel => ({
 																			value: channel.id,
-																			label: channel.name,
+																			label: (
+																				<>
+																					<span>{channel.name}</span>
+																					<span className="channel-category">{channel.parent}</span>
+																				</>
+																			),
 																		}))}
 																		options={selectedGuild.channels.map(channel => ({
 																			value: channel.id,
-																			label: channel.name,
+																			label: (
+																				<>
+																					<span>{channel.name}</span>
+																					<span className="channel-category">{channel.parent}</span>
+																				</>
+																			),
 																		}))}
 																		styles={colorStyles}
 																		isMulti
