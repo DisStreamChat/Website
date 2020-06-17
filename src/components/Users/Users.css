@@ -19,13 +19,9 @@
 .channel-category{
     font-size: .65rem;
     margin-left: .5rem;
-    margin-top: .125rem;
     opacity: .75;
-}
-
-.css-11hh5z3{
-    display: flex;
-    align-items: center;
+    position: relative;
+    top: -.1rem;
 }
 
 .setting-link {

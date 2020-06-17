@@ -183,15 +183,16 @@ const Dashboard = props => {
 
 	const onChannelSelect = useCallback(
 		async e => {
+            console.log(e)
 			setSelectedChannel(s => ({
 				...s,
-				channels: e.map(c => ({ id: c.value, name: c.label, parent: c.parent })),
+				channels: e?.map(c => ({ id: c.value, name: c.label.props.children[0].props.children, parent: c.label.props.children[1].props.children })) || [],
 			}));
 			firebase.db
 				.collection("Streamers")
 				.doc(id)
 				.update({
-					liveChatId: e.map(c => c.value),
+					liveChatId: e?.map(c => c.value) || [],
 				});
 		},
 		[id]
@@ -260,7 +261,7 @@ const Dashboard = props => {
 																		closeMenuOnSelect={false}
 																		onChange={onChannelSelect}
 																		placeholder="Select Channel"
-																		value={selectedChannel.channels.map(channel => ({
+																		value={selectedChannel.channels.sort((a, b) => a.parent.localeCompare(b.parent)).map(channel => ({
 																			value: channel.id,
 																			label: (
 																				<>
@@ -269,7 +270,7 @@ const Dashboard = props => {
 																				</>
 																			),
 																		}))}
-																		options={selectedGuild.channels.map(channel => ({
+																		options={selectedGuild.channels.sort((a, b) => a.parent.localeCompare(b.parent)).map(channel => ({
 																			value: channel.id,
 																			label: (
 																				<>
@@ -278,7 +279,7 @@ const Dashboard = props => {
 																				</>
 																			),
 																		}))}
-																		styles={colorStyles}
+																		styles={{...colorStyles, container: styles => ({...styles, ...colorStyles.container})}}
 																		isMulti
 																	/>
 																	<button
