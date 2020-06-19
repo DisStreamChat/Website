@@ -13,6 +13,15 @@
 
 .team-header{
     text-align: center;
+    position: relative;
+    top: -60px
+}
+
+.member > a{
+    display: inline-flex;
+    height: 320px;
+    align-items: center;
+    justify-content: center;
 }
 
 .team-picture{
@@ -25,8 +34,8 @@
 }
 
 .members{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     text-align: center;

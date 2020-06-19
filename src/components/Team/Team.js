@@ -31,6 +31,18 @@ const Team = () => {
                         { link: "https://www.twitch.tv/saintplaysthings/", icon: <img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="24"></img> }
                     ]}
                 ></Member>
+                <Member
+                    imgUrl="https://twitter.com/jamesrturner88"
+                    img={`https://static-cdn.jtvnw.net/jtv_user_pictures/murdocturner-profile_image-c5e3ba3322f8e24a-300x300.png`}
+                    name="Murdoc"
+                    title="Twitch bot expert"
+                    socials={[
+                        { link: "https://github.com/murdocturner", icon: <GitHubIcon /> },
+                        { link: "https://twitch.tv/murdocturner", icon: <img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="24"></img> },
+                        { link: "https://twitter.com/jamesrturner88", icon: <TwitterIcon />}
+
+                    ]}
+                ></Member>
                 
             </div>
         </main>
