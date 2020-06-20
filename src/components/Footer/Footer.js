@@ -18,7 +18,7 @@ const Footer = () => {
                 <section className="left">
                     <h3>The best Twitch/Discord Integration</h3>
                     <h4>DisTwitchChat is the easiest way to link your Discord with Twitch chat</h4>
-                    <A href="https://github.com/DisTwitchChat" newTab><GitHubIcon /></A>
+                    <A href="https://github.com/DisStreamChat" newTab><GitHubIcon /></A>
                     <A href="https://twitter.com/Snyderling_" newTab><TwitterIcon /></A>
                 </section>
                 <section className="right">
@@ -30,19 +30,19 @@ const Footer = () => {
                     <div className="column">
                         <span className="column-header">Resources</span>
                         <A href="https://discord.gg/sFpMKVX" newTab>Join The Discord</A>
-                        <A href="https://github.com/DisTwitchChat" newTab>Get Help on GitHub</A>
+                        <A href="https://github.com/DisStreamChat" newTab>Get Help on GitHub</A>
                         <Link to="/faq">FAQ</Link>
                     </div>
                     <div className="column last-column">
                         <span className="column-header">Team</span>
                         <Link to="/members">Members</Link>
-                        <A href="https://github.com/DisTwitchChat/Contributors" newTab>Contributors</A>
+                        <A href="https://github.com/DisStreamChat/Contributors" newTab>Contributors</A>
                     </div>
                 </section>
             </div>
             <div className="footer-bottom">
-                <span className="copyright">© DisTwitchChat 2020</span>
-                <span className="made-by">Made with ❤ by the <a href="https://github.com/orgs/DisTwitchChat/people" target="_blank" rel="noreferrer noopener">distwitchchat team</a></span>
+                <span className="copyright">© DisStreamChat 2020</span>
+                <span className="made-by">Made with ❤ by the <a href="https://github.com/orgs/DisStreamChat/people" target="_blank" rel="noreferrer noopener">distwitchchat team</a></span>
             </div>
         </footer>
     );

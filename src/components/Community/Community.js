@@ -15,7 +15,7 @@ const Community = () => {
                     <img src={`${process.env.PUBLIC_URL}/discord.png`} alt="custom discord logo"></img>
                     Join The Discord
                 </a>
-                <a href="https://github.com/DisTwitchChat" target="_blank" rel="noreferrer noopener" className="github-button"><GitHubIcon /><span>Github</span></a>
+                <a href="https://github.com/DisStreamChat" target="_blank" rel="noreferrer noopener" className="github-button"><GitHubIcon /><span>Github</span></a>
             </div>
         </>
     );

@@ -101,12 +101,11 @@ const Dashboard = props => {
 				const guildByName = discordInfo?.guilds?.find?.(guild => guild.id === id);
 				if (guildByName) {
 					const guildId = guildByName.id;
-					const { result: isMember } = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
+					const value = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
 					const channelReponse = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
-
 					setSelectedGuild({
 						name: guildByName.name,
-						isMember,
+						isMember: value?.result,
 						icon: guildByName.icon,
 						id: guildByName.id,
 						channels: channelReponse,
