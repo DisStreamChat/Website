@@ -39,56 +39,7 @@ function App(props) {
 						const response = await fetch("https://api.distwitchchat.com/token?code=" + code);
 						const json = await response.json();
 						if (response.ok) {
-							const result = await firebase.auth.signInWithCustomToken(json.token);
-							const uid = result.user.uid;
-							const { displayName, profilePicture, ModChannels } = json;
-							try {
-								await firebase.db.collection("Streamers").doc(uid).update({
-									displayName,
-									profilePicture,
-									ModChannels,
-								});
-							} catch (err) {
-								await firebase.db
-									.collection("Streamers")
-									.doc(uid)
-									.set({
-										displayName,
-										uid,
-										profilePicture,
-										ModChannels,
-										name: displayName.toLowerCase(),
-										TwitchName: displayName.toLowerCase(),
-										appSettings: {
-											TwitchColor: "",
-											YoutubeColor: "",
-											discordColor: "",
-											displayPlatformColors: false,
-											displayPlatformIcons: false,
-											highlightedMessageColor: "",
-											showHeader: true,
-											showSourceButton: false,
-											compact: false,
-											showBorder: false,
-											nameColors: true,
-										},
-										discordLinked: false,
-										guildId: "",
-										liveChatId: "",
-										overlaySettings: {
-											TwitchColor: "",
-											YoutubeColor: "",
-											discordColor: "",
-											displayPlatformColors: false,
-											displayPlatformIcons: false,
-											highlightedMessageColor: "",
-											nameColors: true,
-											compact: false,
-										},
-										twitchAuthenticated: true,
-										youtubeAuthenticated: false,
-									});
-							}
+							await firebase.auth.signInWithCustomToken(json.token);						
 						}
 					} catch (err) {}
 				} else {
