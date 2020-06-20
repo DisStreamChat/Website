@@ -16,12 +16,12 @@
 	height: fit-content;
 }
 
-.channel-category{
-    font-size: .65rem;
-    margin-left: .5rem;
-    opacity: .75;
-    position: relative;
-    top: -.1rem;
+.channel-category {
+	font-size: 0.65rem;
+	margin-left: 0.5rem;
+	opacity: 0.75;
+	position: relative;
+	top: -0.1rem;
 }
 
 .setting-link {
@@ -253,22 +253,6 @@
 	width: 100%;
 }
 
-.setting svg {
-	transition: 0.25s;
-}
-
-.setting svg.open {
-	transform: rotate(0deg);
-}
-
-.settings svg.closed {
-	transform: rotate(-90deg);
-}
-
-.settings:first-child {
-	border-right: solid;
-}
-
 .setting {
 	background: #212121;
 	border-radius: 0.5rem;
@@ -279,6 +263,20 @@
 	grid-template-columns: auto 0.9fr;
 	grid-template-rows: auto auto;
 	transition: 0.25s ease-in-out;
+
+	svg {
+		transition: 0.25s;
+	}
+	svg.open {
+		transform: rotate(0deg);
+	}
+	svg.closed {
+		transform: rotate(-90deg);
+	}
+}
+
+.settings:first-child {
+	border-right: solid;
 }
 
 .color-header {
@@ -290,16 +288,14 @@
 	justify-content: space-between;
 	height: 70px;
 	cursor: context-menu;
-}
-
-.color-header span:first-child {
-	display: flex;
-	align-items: center;
-}
-
-.color-header span:last-child {
-	width: 50%;
-	margin-right: 10%;
+	span:first-child {
+		display: flex;
+		align-items: center;
+	}
+	span:last-child {
+		width: 50%;
+		margin-right: 10%;
+	}
 }
 
 .color-preview {
@@ -353,14 +349,6 @@
 		flex-direction: column;
 	}
 
-	.settings-categories .category {
-		width: fit-content;
-		min-width: 100px;
-		flex-grow: 2;
-		margin: 0.5rem;
-		padding: 0.5rem 1rem;
-	}
-
 	.settings-categories {
 		position: initial;
 		margin-right: 0px;
@@ -370,6 +358,13 @@
 		align-items: center;
 		justify-content: center;
 		padding: 0.5rem;
+		.category {
+			width: fit-content;
+			min-width: 100px;
+			flex-grow: 2;
+			margin: 0.5rem;
+			padding: 0.5rem 1rem;
+		}
 	}
 
 	.color-header h3,
@@ -410,10 +405,9 @@
 	}
 }
 
-
-@media screen and (max-width: 340px){
-    .color-preview{
-        margin-left: -1rem;
-        margin-right: 2rem;
-    }
+@media screen and (max-width: 340px) {
+	.color-preview {
+		margin-left: -1rem;
+		margin-right: 2rem;
+	}
 }

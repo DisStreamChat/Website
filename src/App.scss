@@ -1,0 +1,41 @@
+.App {
+	min-height: 100vh;
+	width: 100%;
+	background: linear-gradient(119.36deg, #17181b 21.35%, #24252a 76.56%);
+	font-family: Montserrat;
+	color: white;
+	.ml-0 {
+		margin-left: 0px;
+	}
+}
+
+.main {
+	min-height: calc(100vh - var(--header-height));
+	transition: 0.25s;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	transition: 0.25s;
+}
+
+::-webkit-scrollbar {
+	width: 1rem;
+	border-radius: 100px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #24252a;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: var(--background-dark-gray);
+	border-radius: 100px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #111;
+}

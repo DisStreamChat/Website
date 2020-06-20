@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { NavLink, Route, Redirect, Switch, useParams } from "react-router-dom";
 import firebase from "../../firebase";
-import "./Users.css";
+import "./Users.scss";
 import Select from "react-select";
 import Setting from "./Setting";
 import useFetch from "../../hooks/useFetch";

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import "./Apps.css"
+import "./Apps.scss"
 import ApplicationItem from "./ApplicationItem"
 
 import apps from "./Apps.json"

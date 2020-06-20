@@ -6,7 +6,6 @@ import { withStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import "./Users.css";
 import Button from "@material-ui/core/Button";
 import chroma from "chroma-js";
 import InputSlider from "../Shared/InputSlider";
