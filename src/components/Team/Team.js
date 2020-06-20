@@ -44,14 +44,10 @@ const Team = () => {
 							link: "https://twitch.tv/murdocturner",
 							icon: <img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="24"></img>,
 						},
-<<<<<<< HEAD
-						{ link: "https://twitter.com/jamesrturner88", icon: <TwitterIcon /> },
-=======
 						{
 							link: "https://twitter.com/jamesrturner88",
 							icon: <TwitterIcon />,
 						},
->>>>>>> master
 					]}
 				></Member>
 			</div>

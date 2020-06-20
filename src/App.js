@@ -1,18 +1,18 @@
-import React, {useEffect, useState} from "react"
-import firebase from "./firebase"
-import "./App.css"
-import {HashRouter as Router, Route, Redirect, Switch} from "react-router-dom"
-import Home from "./components/Home/Home"
-import About from "./components/About/About"
-import Community from "./components/Community/Community"
-import Bot from "./components/Bot/Bot"
-import Apps from "./components/Apps/Main"
-import Footer from "./components/Footer/Footer"
-import Dashboard from "./components/Users/Dashboard"
-import Team from "./components/Team/Team"
-import Header from "./components/header/Header"
-import ProtectedRoute from "./components/Shared/ProtectedRoute"
-import Loader from "react-loader"
+import React, { useEffect, useState } from "react";
+import firebase from "./firebase";
+import "./App.css";
+import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom";
+import Home from "./components/Home/Home";
+import About from "./components/About/About";
+import Community from "./components/Community/Community";
+import Bot from "./components/Bot/Bot";
+import Apps from "./components/Apps/Main";
+import Footer from "./components/Footer/Footer";
+import Dashboard from "./components/Users/Dashboard";
+import Team from "./components/Team/Team";
+import Header from "./components/header/Header";
+import ProtectedRoute from "./components/Shared/ProtectedRoute";
+import Loader from "react-loader";
 
 import { AppContext } from "./contexts/Appcontext";
 
@@ -36,29 +36,18 @@ function App(props) {
 				const code = codeArray.get("code");
 				if (!codeArray.has("discord")) {
 					try {
-						const response = await fetch(
-							"https://api.distwitchchat.com/token?code=" + code
-						);
+						const response = await fetch("https://api.distwitchchat.com/token?code=" + code);
 						const json = await response.json();
 						if (response.ok) {
-							const result = await firebase.auth.signInWithCustomToken(
-								json.token
-							);
+							const result = await firebase.auth.signInWithCustomToken(json.token);
 							const uid = result.user.uid;
-							const {
-								displayName,
-								profilePicture,
-								ModChannels,
-							} = json;
+							const { displayName, profilePicture, ModChannels } = json;
 							try {
-								await firebase.db
-									.collection("Streamers")
-									.doc(uid)
-									.update({
-										displayName,
-										profilePicture,
-										ModChannels,
-									});
+								await firebase.db.collection("Streamers").doc(uid).update({
+									displayName,
+									profilePicture,
+									ModChannels,
+								});
 							} catch (err) {
 								await firebase.db
 									.collection("Streamers")
@@ -67,8 +56,8 @@ function App(props) {
 										displayName,
 										uid,
 										profilePicture,
-                                        ModChannels,
-                                        name: displayName.toLowerCase(),
+										ModChannels,
+										name: displayName.toLowerCase(),
 										TwitchName: displayName.toLowerCase(),
 										appSettings: {
 											TwitchColor: "",
@@ -104,10 +93,7 @@ function App(props) {
 					} catch (err) {}
 				} else {
 					try {
-						const response = await fetch(
-							"https://api.distwitchchat.com/discord/token?code=" +
-								code
-						);
+						const response = await fetch("https://api.distwitchchat.com/discord/token?code=" + code);
 						// const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
 							console.log(await response.text());
@@ -130,8 +116,7 @@ function App(props) {
 		}
 	}, []);
 
-	return firebaseInit !== false &&
-		!new URLSearchParams(window.location.search).has("code") ? (
+	return firebaseInit !== false && !new URLSearchParams(window.location.search).has("code") ? (
 		<Router>
 			<AppContext.Provider
 				value={{
@@ -151,16 +136,10 @@ function App(props) {
 								<Route exact path="/" component={Home} />
 								<Route path="/bot" component={Bot} />
 								<Route exact path="/apps" component={Apps} />
-								<Route
-									path="/community"
-									component={Community}
-								/>
+								<Route path="/community" component={Community} />
 								<Route path="/about" component={About} />
 								<Route path="/members" component={Team} />
-								<ProtectedRoute
-									path="/dashboard"
-									component={Dashboard}
-								/>
+								<ProtectedRoute path="/dashboard" component={Dashboard} />
 								<Redirect to="/" />
 							</Switch>
 						</main>
