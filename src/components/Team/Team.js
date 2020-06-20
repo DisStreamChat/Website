@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./Team.css";
+import "./Team.scss";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import Member from "./Member";

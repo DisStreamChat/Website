@@ -1,6 +1,6 @@
 import React from 'react';
 
-import "./Footer.css"
+import "./Footer.scss"
 import TwitterIcon from '@material-ui/icons/Twitter';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import {Link} from "react-router-dom"

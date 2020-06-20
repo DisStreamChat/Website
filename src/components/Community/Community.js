@@ -1,6 +1,6 @@
 import React from 'react';
 
-import "./Community.css"
+import "./Community.scss"
 import GitHubIcon from '@material-ui/icons/GitHub';
 
 const Community = () => {

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import "./Header.css"
+import "./Header.scss"
 import {Link, withRouter} from "react-router-dom"
 import { AppContext } from '../../contexts/Appcontext';
 import {CSSTransition} from "react-transition-group"

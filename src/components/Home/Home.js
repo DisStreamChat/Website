@@ -1,5 +1,5 @@
 import React from 'react';
-import "./Home.css"
+import "./Home.scss"
 
 import {Link} from "react-router-dom"
 import { useTitle } from 'react-use';

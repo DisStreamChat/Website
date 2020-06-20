@@ -1,5 +1,5 @@
 import React from 'react';
-import "./Bot.css"
+import "./Bot.scss"
 import A from '../Shared/A';
 
 const Bot = () => {
