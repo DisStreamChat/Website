@@ -64,7 +64,7 @@ const Team = () => {
               icon: <TwitterIcon />,
             },
           ]}
-        ></Member>
+        ></Member> 
       </div>
     </main>
   );
