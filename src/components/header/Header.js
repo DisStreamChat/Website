@@ -48,7 +48,6 @@ const Header = props => {
         try{
             const result = await firebase.auth.signInWithPopup(provider)
             const user = result.user
-            console.log(user)
             const {displayName, photoURL: profilePicture } = user
             firebase.auth.currentUser.updateProfile({
                 displayName: user.displayName
