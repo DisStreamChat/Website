@@ -13,7 +13,7 @@ import Header from "./components/header/Header";
 import ProtectedRoute from "./components/Shared/ProtectedRoute";
 import Loader from "react-loader";
 
-import "./App.scss";
+import "./App.css";
 import { AppContext } from "./contexts/Appcontext";
 
 function App(props) {
