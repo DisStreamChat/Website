@@ -204,14 +204,14 @@ const Dashboard = props => {
 						</h3>
 						<hr />
 						<div className="settings-body">
-							{discordInfo ? (
+							{Object.keys(discordInfo || {}).length ? (
 								<>
 									<div className="discord-header">
 										<Select
 											value={displayGuild}
 											onChange={onGuildSelect}
 											placeholder="Select Guild"
-											options={discordInfo.guilds.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
+											options={discordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
 											styles={colorStyles}
 											isDisabled={!!discordInfo.connectedGuild}
 										/>
