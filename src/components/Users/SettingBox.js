@@ -6,7 +6,6 @@ import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 
 import { defaults } from "./userUtils";
 
-const typesIndices = ["boolean", "color", "number"];
 
 const SettingList = props => {
 	const { key } = useParams();

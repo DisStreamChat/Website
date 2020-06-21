@@ -8,41 +8,48 @@ import Input from "@material-ui/core/Input";
 const useStyles = makeStyles({
 	root: {
 		width: 250,
-		marginLeft: 15,
+		marginLeft: 8,
 	},
 	input: {
         color: "white",
         borderBottom: "1px solid white",
+        marginBottom: 8,
     },
 });
 
 const PrettoSlider = withStyles({
 	root: {
-		color: "#52af77",
-		height: 8,
+		color: "#fff",
+        height: 8,
+        marginBottom: 16,
+        paddingTop: 4,
+        boxSizing: "content-box"
 	},
 	thumb: {
-		height: 16,
-		width: 16,
+		height: 24,
+		width: 24,
 		backgroundColor: "#fff",
-		border: "2px solid currentColor",
-		marginTop: -6,
-		// marginLeft: -10,
-		"&:focus, &:hover, &$active": {
+		border: "4px solid #2D688D",
+		marginTop: 0,
+		"&:focus, &:hover, &:active": {
 			boxShadow: "inherit",
 		},
 	},
 	active: {},
 	valueLabel: {
+        color: "black",
 		left: "calc(-50% - 4px)",
 	},
 	track: {
-		height: 4,
-		borderRadius: 4,
+		height: 24,
+        borderRadius: 24,
+        paddingRight: 12,
+        boxSizing: "content-box !important"
 	},
 	rail: {
-		height: 4,
-		borderRadius: 4,
+        overflow: "hidden",
+		height: 24,
+		borderRadius: 24,
 	},
 })(Slider);
 
