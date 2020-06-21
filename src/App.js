@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import firebase from "./firebase";
-import "./App.css";
 import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import Home from "./components/Home/Home";
 import About from "./components/About/About";
@@ -14,13 +13,15 @@ import Header from "./components/header/Header";
 import ProtectedRoute from "./components/Shared/ProtectedRoute";
 import Loader from "react-loader";
 
+import "./App.scss";
 import { AppContext } from "./contexts/Appcontext";
 
 function App(props) {
 	const [userId, setUserId] = useState("");
 	const [dropDownOpen, setDropDownOpen] = useState(false);
 	const [currentUser, setCurrentUser] = useState();
-	const [firebaseInit, setFirebaseInit] = useState(false);
+    const [firebaseInit, setFirebaseInit] = useState(false);
+    const user = firebase.auth.currentUser
 
 	useEffect(() => {
 		(async () => {
@@ -33,24 +34,23 @@ function App(props) {
 		const codeArray = new URLSearchParams(window.location.search);
 		if (codeArray.has("code")) {
 			(async () => {
-				const code = codeArray.get("code");
+                const code = codeArray.get("code");
 				if (!codeArray.has("discord")) {
 					try {
 						const response = await fetch("https://api.distwitchchat.com/token?code=" + code);
 						const json = await response.json();
 						if (response.ok) {
-							await firebase.auth.signInWithCustomToken(json.token);						
+							await firebase.auth.signInWithCustomToken(json.token);
 						}
 					} catch (err) {}
 				} else {
 					try {
-						const response = await fetch("https://api.distwitchchat.com/discord/token?code=" + code);
+						const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token?code=${code}`);
 						// const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
-							console.log(await response.text());
+							console.log(await response.json());
 						} else {
 							const json = await response.json();
-							console.log(json);
 							await firebase.db
 								.collection("Streamers")
 								.doc(firebase?.auth?.currentUser?.uid || " ")
@@ -65,7 +65,23 @@ function App(props) {
 				window.location = "/#/dashboard/login";
 			})();
 		}
-	}, []);
+    }, []);
+    
+    useEffect(() => {
+		(async () => {
+			if (firebaseInit !== false && user) {
+                const userData = (await firebase.db.collection("Streamers").doc(user.uid).get()).data();
+				const profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
+				const profilePicture = await profilePictureResponse.json();
+				const modChannelResponse = await fetch(`${process.env.REACT_APP_API_URL}/modchannels?user=${userData?.TwitchName}`);
+                const ModChannels = await modChannelResponse.json();
+				firebase.db.collection("Streamers").doc(user.uid).update({
+                    profilePicture,
+                    ModChannels
+				});
+			}
+		})();
+	}, [firebaseInit, user]);
 
 	return firebaseInit !== false && !new URLSearchParams(window.location.search).has("code") ? (
 		<Router>
