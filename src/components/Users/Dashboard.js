@@ -74,7 +74,13 @@ const Dashboard = props => {
 		firebase.db.collection("Streamers").doc(id).update({
 			liveChatId: [],
 		});
-	}, [id]);
+    }, [id]);
+    
+    const disconnectAccount = useCallback(async () => {
+        disconnect()
+        firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").set({})
+        setDiscordInfo({})
+    }, [id, disconnect])
 
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
@@ -184,7 +190,12 @@ const Dashboard = props => {
 		async e => {
 			setSelectedChannel(s => ({
 				...s,
-				channels: e?.map(c => ({ id: c.value, name: c.label.props.children[0].props.children, parent: c.label.props.children[1].props.children })) || [],
+				channels:
+					e?.map(c => ({
+						id: c.value,
+						name: c.label.props.children[0].props.children,
+						parent: c.label.props.children[1].props.children,
+					})) || [],
 			}));
 			firebase.db
 				.collection("Streamers")
@@ -219,86 +230,93 @@ const Dashboard = props => {
 						</h3>
 						<hr />
 						<div className="settings-body">
-							{discordInfo ? (
+							{Object.keys(discordInfo || {}).length ? (
 								<>
 									<div className="discord-header">
 										<Select
 											value={displayGuild}
 											onChange={onGuildSelect}
 											placeholder="Select Guild"
-											options={discordInfo.guilds.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
+											options={discordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
 											styles={colorStyles}
 											isDisabled={!!discordInfo.connectedGuild}
 										/>
 										<span>
-											<img className="discord-profile" src={discordInfo.profilePicture} alt="" />
-											<span className="discord-name">{discordInfo.name}</span>
+											<img className="discord-profile" src={discordInfo?.profilePicture} alt="" />
+											<span className="discord-name">{discordInfo?.name}</span>
 										</span>
 									</div>
 									<div className="discord-body">
 										{isLoading ? (
 											<SmallLoader />
+										) : selectedGuild ? (
+											<>
+												{!selectedGuild.isMember ? (
+													<div className="not-member">
+														<span className="error-color">DisTwitchBot is not a member of this server</span>
+														<a
+															href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${selectedGuild?.id}`}
+														>
+															<button className="invite-link discord-settings-button">Invite it</button>
+														</a>
+													</div>
+												) : (
+													<>
+														{selectedGuild.id === selectedChannel.guild ? (
+															<>
+																<h3>select channels to listen to</h3>
+																<Select
+																	closeMenuOnSelect={false}
+																	onChange={onChannelSelect}
+																	placeholder="Select Channel"
+																	value={selectedChannel.channels
+																		.sort((a, b) => a.parent.localeCompare(b.parent))
+																		.map(channel => ({
+																			value: channel.id,
+																			label: (
+																				<>
+																					<span>{channel.name}</span>
+																					<span className="channel-category">{channel.parent}</span>
+																				</>
+																			),
+																		}))}
+																	options={selectedGuild.channels
+																		.sort((a, b) => a.parent.localeCompare(b.parent))
+																		.map(channel => ({
+																			value: channel.id,
+																			label: (
+																				<>
+																					<span>{channel.name}</span>
+																					<span className="channel-category">{channel.parent}</span>
+																				</>
+																			),
+																		}))}
+																	styles={{
+																		...colorStyles,
+																		container: styles => ({ ...styles, ...colorStyles.container }),
+																	}}
+																	isMulti
+																/>
+																<button
+																	onClick={disconnect}
+																	className="discord-settings-button ml-0 mt-1 warning-button"
+																>
+																	Disconnect
+																</button>
+															</>
+														) : (
+															<>
+																<span>This channel is not connected to your account</span>
+																<button onClick={Connectguild} className="discord-settings-button warning-button">
+																	Connect it
+																</button>
+															</>
+														)}
+													</>
+												)}
+											</>
 										) : (
-											selectedGuild && (
-												<>
-													{!selectedGuild.isMember ? (
-														<div className="not-member">
-															<span className="error-color">DisTwitchBot is not a member of this server</span>
-															<a
-																href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${selectedGuild?.id}`}
-															>
-																<button className="invite-link discord-settings-button">Invite it</button>
-															</a>
-														</div>
-													) : (
-														<>
-															{selectedGuild.id === selectedChannel.guild ? (
-																<>
-																	<h3>select channels to listen to</h3>
-																	<Select
-																		closeMenuOnSelect={false}
-																		onChange={onChannelSelect}
-																		placeholder="Select Channel"
-																		value={selectedChannel.channels.sort((a, b) => a.parent.localeCompare(b.parent)).map(channel => ({
-																			value: channel.id,
-																			label: (
-																				<>
-																					<span>{channel.name}</span>
-																					<span className="channel-category">{channel.parent}</span>
-																				</>
-																			),
-																		}))}
-																		options={selectedGuild.channels.sort((a, b) => a.parent.localeCompare(b.parent)).map(channel => ({
-																			value: channel.id,
-																			label: (
-																				<>
-																					<span>{channel.name}</span>
-																					<span className="channel-category">{channel.parent}</span>
-																				</>
-																			),
-																		}))}
-																		styles={{...colorStyles, container: styles => ({...styles, ...colorStyles.container})}}
-																		isMulti
-																	/>
-																	<button
-																		onClick={disconnect}
-																		className="discord-settings-button ml-0 mt-1 warning-button"
-																	>
-																		Disconnect
-																	</button>
-																</>
-															) : (
-																<>
-																	<span>This channel is not connected to your account</span>
-																	<button onClick={Connectguild} className="discord-settings-button warning-button">
-																		Connect it
-																	</button>
-																</>
-															)}
-														</>
-													)}
-												</>
-											)
+											<button onClick={disconnectAccount} className="discord-settings-button ml-0 mt-1 warning-button" >Disconnect Account</button>
 										)}
 									</div>
 								</>
@@ -307,7 +325,7 @@ const Dashboard = props => {
 									You have not Connected your Discord Account
 									<A
 										newTab
-										href="https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=https%3A%2F%2Fwww.distwitchchat.com%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20guilds"
+										href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20guilds`}
 									>
 										<button className="discord-settings-button good-button">Connect It</button>
 									</A>
