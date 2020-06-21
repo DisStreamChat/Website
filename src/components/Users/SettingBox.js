@@ -24,7 +24,7 @@ const SettingList = props => {
 	return (
 		<SettingAccordion>
 			{Object.entries(props.defaultSettings || {})
-				.filter(([name]) => (!props.search ? true : name?.toLowerCase()?.includes(props.search)))
+				.filter(([name]) => (!props.search ? true : name?.toLowerCase()?.includes(props.search?.toLowerCase())))
 				.filter(([, details]) => details.category?.toLowerCase() === index?.toLowerCase() || props.all)
 				.filter(([, details]) => (props.app ? true : !details.appOnly))
 				.sort((a, b) => {
