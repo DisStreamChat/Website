@@ -1,4 +1,4 @@
-## Contributing to The DisTwitchChat
+## Contributing to The DisStreamChat
 
 Contributions to this repository encouraged!
 

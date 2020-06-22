@@ -37,7 +37,7 @@ function App(props) {
                 const code = codeArray.get("code");
 				if (!codeArray.has("discord")) {
 					try {
-						const response = await fetch("https://api.distwitchchat.com/token?code=" + code);
+						const response = await fetch("https://api.disstreamchat.com/token?code=" + code);
 						const json = await response.json();
 						if (response.ok) {
 							await firebase.auth.signInWithCustomToken(json.token);

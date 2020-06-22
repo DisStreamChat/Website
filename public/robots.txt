@@ -1,4 +1,4 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
-https://www.distwitchchat.com/index.html
+https://www.disstreamchat.com/index.html

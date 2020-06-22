@@ -8,7 +8,7 @@ import Member from "./Member";
 const Team = () => {
 	return (
 		<main className="main team-page">
-			<h1 className="team-header">DisTwitchChat's Team</h1>
+			<h1 className="team-header">DisStreamChat's Team</h1>
 			<div className="members">
 				<Member
 					imgUrl="https://github.com/GypsyDangerous"

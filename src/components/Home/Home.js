@@ -8,7 +8,7 @@ import firebase from "../../firebase"
 
 const Home = () => {
 
-    useTitle("DisTwitchChat")
+    useTitle("DisStreamChat")
 
     const currentUser = firebase.auth.currentUser
 

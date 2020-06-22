@@ -42,7 +42,7 @@ const Footer = () => {
             </div>
             <div className="footer-bottom">
                 <span className="copyright">© DisStreamChat 2020</span>
-                <span className="made-by">Made with ❤ by the <a href="https://github.com/orgs/DisStreamChat/people" target="_blank" rel="noreferrer noopener">distwitchchat team</a></span>
+                <span className="made-by">Made with ❤ by the <a href="https://github.com/orgs/DisStreamChat/people" target="_blank" rel="noreferrer noopener">DisStreamChat Team</a></span>
             </div>
         </footer>
     );

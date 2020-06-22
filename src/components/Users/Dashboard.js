@@ -225,7 +225,7 @@ const Dashboard = props => {
 					<Route path={`${props.match.url}/discord`}>
 						<h1>Discord Connect</h1>
 						<h3>
-							Connect your discord account to DisTwitchChat to get discord messages in your client/overlay during stream. You can only
+							Connect your discord account to DisStreamChat to get discord messages in your client/overlay during stream. You can only
 							connect one server at a time but you can connect as many channels in that server
 						</h3>
 						<hr />
