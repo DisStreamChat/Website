@@ -16,8 +16,8 @@ const Footer = () => {
         <footer className={`footer ${dropDownOpen && "open"}`}>
             <div className="footer-top">
                 <section className="left">
-                    <h3>The best Twitch/Discord Integration</h3>
-                    <h4>DisTwitchChat is the easiest way to link your Discord with Twitch chat</h4>
+                    <h3>The best Discord/Stream chat Integration</h3>
+                    <h4>DisStreamChat is the easiest way to link your Discord with your Stream chat</h4>
                     <A href="https://github.com/DisStreamChat" newTab><GitHubIcon /></A>
                     <A href="https://twitter.com/Snyderling_" newTab><TwitterIcon /></A>
                 </section>
