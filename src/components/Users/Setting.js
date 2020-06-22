@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { ChromePicker } from "react-color";
-import { useEffect } from "react";
 import { Switch } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
@@ -9,6 +8,7 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import Button from "@material-ui/core/Button";
 import chroma from "chroma-js";
 import InputSlider from "../Shared/InputSlider";
+import lodash from "lodash";
 
 const FancySwitch = withStyles({
 	root: {
@@ -43,9 +43,13 @@ const Setting = props => {
 	const [value, setValue] = useState(props.value);
 	const [open, setOpen] = useState(props.open);
 	const [displayName, setDisplayName] = useState();
-	const changeHandler = v => {
-		props.onChange(props.name, v);
-	};
+
+	const changeHandler = useCallback(
+		lodash.debounce(v => {
+			props.onChange(props.name, v);
+		}, 1000),
+		[props.onChange, props.name]
+	);
 
 	useEffect(() => {
 		setDisplayName(props.name.match(/[A-Z][a-z]+|[0-9]+/g).join(" "));
@@ -82,14 +86,44 @@ const Setting = props => {
 							></div>
 						</span>
 					</div>
-					<ChromePicker color={value} onChange={color => changeHandler(color.hex)} disableAlpha className="ml-1" />
-					<Button variant="contained" className="reset-button" style={buttonStyles} onClick={() => changeHandler(props.default)} color="primary">
+					<ChromePicker
+						color={value}
+						onChange={color => {
+							setValue(color.hex);
+							changeHandler(color.hex);
+						}}
+						disableAlpha
+						className="ml-1"
+					/>
+					<Button
+						variant="contained"
+						className="reset-button"
+						style={buttonStyles}
+						onClick={() => {
+							setValue(props.default);
+							changeHandler(props.default);
+						}}
+						color="primary"
+					>
 						Reset
 					</Button>
 				</>
 			) : props.type == "boolean" ? (
 				<span className="checkbox-setting">
-					<FormControlLabel control={<FancySwitch color="primary" checked={value} onChange={e => changeHandler(e.target.checked)} name={props.name} />} label={displayName} />
+					<FormControlLabel
+						control={
+							<FancySwitch
+								color="primary"
+								checked={value}
+								onChange={e => {
+									setValue(e.target.checked);
+									changeHandler(e.target.checked);
+								}}
+								name={props.name}
+							/>
+						}
+						label={displayName}
+					/>
 				</span>
 			) : (
 				<span className="number-setting">
@@ -101,8 +135,12 @@ const Setting = props => {
 								min={props.min}
 								max={props.max}
 								step={props.step}
-								onSliderChange={(e, value) => changeHandler(value)}
+								onSliderChange={(e, value) => {
+									setValue(value);
+									changeHandler(value);
+								}}
 								onInputChange={event => {
+									setValue(event.target.value === "" ? "" : Number(event.target.value));
 									changeHandler(event.target.value === "" ? "" : Number(event.target.value));
 								}}
 								name={displayName}
