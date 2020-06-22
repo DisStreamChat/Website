@@ -24,7 +24,7 @@ const Footer = () => {
                 <section className="right">
                     <div className="column">
                         <span className="column-header">Product</span>
-                        <A href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=0&scope=bot`} newTab>Add To Discord</A>
+                        <A href={`/dashboard/discord`} local newTab>Add To Discord</A>
                         <Link to="/apps">Check out the Apps</Link>
                     </div>
                     <div className="column">
