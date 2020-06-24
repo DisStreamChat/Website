@@ -34,7 +34,7 @@ const SettingList = props => {
 				.map(([key, value]) => {
 					return (
 						<Setting
-							default={defaults[key]}
+							default={value.value}
 							key={key}
 							index={index}
 							onChange={props.updateSettings}

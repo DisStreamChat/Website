@@ -87,7 +87,7 @@ const InputSlider = props => {
 			<Grid container spacing={2} alignItems="center">
 				<Grid item xs>
 					<PrettoSlider
-						valueLabelDisplay="auto"
+						// valueLabelDisplay="auto"
 						value={typeof value === "number" ? value : 0}
 						onChange={props.onSliderChange}
 						aria-labelledby="input-slider"
