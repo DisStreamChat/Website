@@ -20,21 +20,21 @@ const GoogleAuth = props => {
 	useEffect(() => {
 		(async () => {
 			const provider = new firebase.app.auth.GoogleAuthProvider();
-            try {
-                const result = await firebase.auth.getRedirectResult()
-                if(!result || !result.user){
-                    firebase.auth.signInWithRedirect(provider)
-                }else{
-                    if(!result.user){
-                        return
-                    }
-                    const params = new URLSearchParams(window.location.search)
-                    const token = await result.user.getIdToken()
-                    const code = params.get("one-time-code")
-                    await fetch(`http://localhost:3200/createauthtoken?code=${code}&token=${token}`)
-                    await firebase.logout()
-                    props.history.push("/")
-                }			
+			try {
+				const result = await firebase.auth.getRedirectResult();
+				if (!result || !result.user) {
+					firebase.auth.signInWithRedirect(provider);
+				} else {
+					if (!result.user) {
+						return;
+					}
+					const params = new URLSearchParams(window.location.search);
+					const token = await result.user.getIdToken();
+					const code = params.get("one-time-code");
+					await fetch(`http://localhost:3200/createauthtoken?code=${code}&token=${token}`);
+					await firebase.logout();
+					props.history.push("/");
+				}
 			} catch (err) {
 				console.log(err);
 			}
@@ -99,14 +99,16 @@ function App(props) {
 		(async () => {
 			if (firebaseInit !== false && user) {
 				const userData = (await firebase.db.collection("Streamers").doc(user.uid).get()).data();
-				const profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
-				const profilePicture = await profilePictureResponse.json();
-				const modChannelResponse = await fetch(`${process.env.REACT_APP_API_URL}/modchannels?user=${userData?.TwitchName}`);
-				const ModChannels = await modChannelResponse.json();
-				firebase.db.collection("Streamers").doc(user.uid).update({
-					profilePicture,
-					ModChannels,
-				});
+				if (!userData.googleAccount) {
+					const profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
+					const profilePicture = await profilePictureResponse.json();
+					const modChannelResponse = await fetch(`${process.env.REACT_APP_API_URL}/modchannels?user=${userData?.TwitchName}`);
+					const ModChannels = await modChannelResponse.json();
+					firebase.db.collection("Streamers").doc(user.uid).update({
+						profilePicture,
+						ModChannels,
+					});
+				}
 			}
 		})();
 	}, [firebaseInit, user]);
