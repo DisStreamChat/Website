@@ -16,12 +16,40 @@ import Loader from "react-loader";
 import "./App.scss";
 import { AppContext } from "./contexts/Appcontext";
 
+const GoogleAuth = props => {
+	useEffect(() => {
+		(async () => {
+			const provider = new firebase.app.auth.GoogleAuthProvider();
+            try {
+                const result = await firebase.auth.getRedirectResult()
+                if(!result || !result.user){
+                    firebase.auth.signInWithRedirect(provider)
+                }else{
+                    if(!result.user){
+                        return
+                    }
+                    const params = new URLSearchParams(window.location.search)
+                    const token = await result.user.getIdToken()
+                    const code = params.get("one-time-code")
+                    await fetch(`http://localhost:3200/createauthtoken?code=${code}&token=${token}`)
+                    await firebase.logout()
+                    props.history.push("/")
+                }			
+			} catch (err) {
+				console.log(err);
+			}
+		})();
+	}, []);
+
+	return <></>;
+};
+
 function App(props) {
 	const [userId, setUserId] = useState("");
 	const [dropDownOpen, setDropDownOpen] = useState(false);
 	const [currentUser, setCurrentUser] = useState();
-    const [firebaseInit, setFirebaseInit] = useState(false);
-    const user = firebase.auth.currentUser
+	const [firebaseInit, setFirebaseInit] = useState(false);
+	const user = firebase.auth.currentUser;
 
 	useEffect(() => {
 		(async () => {
@@ -34,7 +62,7 @@ function App(props) {
 		const codeArray = new URLSearchParams(window.location.search);
 		if (codeArray.has("code")) {
 			(async () => {
-                const code = codeArray.get("code");
+				const code = codeArray.get("code");
 				if (!codeArray.has("discord")) {
 					try {
 						const response = await fetch("https://api.disstreamchat.com/token?code=" + code);
@@ -65,19 +93,19 @@ function App(props) {
 				window.location = "/#/dashboard/login";
 			})();
 		}
-    }, []);
-    
-    useEffect(() => {
+	}, []);
+
+	useEffect(() => {
 		(async () => {
 			if (firebaseInit !== false && user) {
-                const userData = (await firebase.db.collection("Streamers").doc(user.uid).get()).data();
+				const userData = (await firebase.db.collection("Streamers").doc(user.uid).get()).data();
 				const profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
 				const profilePicture = await profilePictureResponse.json();
 				const modChannelResponse = await fetch(`${process.env.REACT_APP_API_URL}/modchannels?user=${userData?.TwitchName}`);
-                const ModChannels = await modChannelResponse.json();
+				const ModChannels = await modChannelResponse.json();
 				firebase.db.collection("Streamers").doc(user.uid).update({
-                    profilePicture,
-                    ModChannels
+					profilePicture,
+					ModChannels,
 				});
 			}
 		})();
@@ -106,6 +134,7 @@ function App(props) {
 								<Route path="/community" component={Community} />
 								<Route path="/about" component={About} />
 								<Route path="/members" component={Team} />
+								<Route path="/login/google" component={GoogleAuth}></Route>
 								<ProtectedRoute path="/dashboard" component={Dashboard} />
 								<Redirect to="/" />
 							</Switch>

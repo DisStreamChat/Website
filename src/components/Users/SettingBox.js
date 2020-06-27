@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Switch, NavLink, Route, Redirect } from "react-router-dom";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
+import SettingList from "./SettingsList"
 
 const SettingBox = props => {
 	const [search, setSearch] = useState("");
