@@ -67,9 +67,11 @@ function App(props) {
 					try {
 						const response = await fetch(`${process.env.REACT_APP_API_URL}/token?code=` + code);
 						const json = await response.json();
-						if (response.ok) {
+						if (response.ok && !codeArray.has("connect")) {
 							await firebase.auth.signInWithCustomToken(json.token);
-						}
+						}else if(codeArray.has("connect")){
+                            // do connection stuff
+                        }
 					} catch (err) {}
 				} else {
 					try {

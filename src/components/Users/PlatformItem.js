@@ -11,7 +11,7 @@ const PlatformItem = props => {
                 </div>
 				{props.title}
 			</div>
-			<Button className="connect-button" disabled={props.connected}>Connect{props.connected ? "ed" : ""}</Button>
+			<Button onClick={props.connect} className="connect-button" disabled={props.connected}>Connect{props.connected ? "ed" : ""}</Button>
 		</li>
 	);
 };

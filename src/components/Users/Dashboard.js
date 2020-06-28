@@ -235,7 +235,10 @@ const Dashboard = props => {
 								<PlatformItem
 									title="Twitch"
 									connected={userInfo?.twitchAuthenticated}
-									logo={<img src="https://www.freepnglogos.com/uploads/twitch-app-logo-png-3.png" alt="" />}
+                                    logo={<img src="https://www.freepnglogos.com/uploads/twitch-app-logo-png-3.png" alt="" />}
+                                    connect={() => {
+                                        window.location=`https://id.twitch.tv/oauth2/authorize?client_id=ip3igc72c6wu7j00nqghb24duusmbr&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}?connect=true&response_type=code&scope=openid%20moderation:read%20chat:edit%20chat:read%20channel:moderate`
+                                    }}
 								/>
 								<PlatformItem
 									title="Youtube"

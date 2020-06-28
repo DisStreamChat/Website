@@ -47,55 +47,64 @@ const Header = props => {
 
 	useEffect(() => {
 		(async () => {
-            const result = await firebase.auth.getRedirectResult();
-            
-            // only proceed if you have a result
-            if(!result || !result.user) return
+			const result = await firebase.auth.getRedirectResult();
 
-            const { displayName, photoURL: profilePicture } = result.user;
-            
-			firebase.auth.currentUser.updateProfile({
-				displayName
-			});
-			try {
-				await firebase.db.collection("Streamers").doc(user.uid).update({
+			// only proceed if you have a result
+			if (!result || !result.user) return;
+
+			const { displayName, photoURL: profilePicture } = result.user;
+
+			const params = new URLSearchParams(window.location.search);
+
+			if (params.has("prev")) {
+				const token = params.get("prev");
+				firebase.auth.signInWithCustomToken(token);
+				return;
+			} else {
+				firebase.auth.currentUser.updateProfile({
 					displayName,
-					profilePicture,
 				});
-			} catch (err) {
-				await firebase.db
-					.collection("Streamers")
-					.doc(user.uid)
-					.set({
+				try {
+					await firebase.db.collection("Streamers").doc(user.uid).update({
 						displayName,
-						uid: user.uid,
 						profilePicture,
-						ModChannels: [],
-						googleAccount: true,
-						appSettings: {
-							TwitchColor: "",
-							YoutubeColor: "",
-							discordColor: "",
-							displayPlatformColors: false,
-							displayPlatformIcons: false,
-							highlightedMessageColor: "",
-							showHeader: true,
-							showSourceButton: false,
-						},
-						discordLinked: false,
-						guildId: "",
-						liveChatId: "",
-						overlaySettings: {
-							TwitchColor: "",
-							YoutubeColor: "",
-							discordColor: "",
-							displayPlatformColors: false,
-							displayPlatformIcons: false,
-							highlightedMessageColor: "",
-						},
 					});
+				} catch (err) {
+					await firebase.db
+						.collection("Streamers")
+						.doc(user.uid)
+						.set({
+							displayName,
+							uid: user.uid,
+							profilePicture,
+							ModChannels: [],
+							googleAccount: true,
+							appSettings: {
+								TwitchColor: "",
+								YoutubeColor: "",
+								discordColor: "",
+								displayPlatformColors: false,
+								displayPlatformIcons: false,
+								highlightedMessageColor: "",
+								showHeader: true,
+								showSourceButton: false,
+							},
+							discordLinked: false,
+							guildId: "",
+							liveChatId: "",
+							overlaySettings: {
+								TwitchColor: "",
+								YoutubeColor: "",
+								discordColor: "",
+								displayPlatformColors: false,
+								displayPlatformIcons: false,
+								highlightedMessageColor: "",
+							},
+						});
+				}
 			}
-		})();
+        })();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const signInWithGoogle = useCallback(async () => {
@@ -117,7 +126,7 @@ const Header = props => {
 				<h2 className="modal-subheading">Connect with:</h2>
 				<div className="modal-buttons">
 					<A
-						href={`https://id.twitch.tv/oauth2/authorize?client_id=ip3igc72c6wu7j00nqghb24duusmbr&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code&scope=openid%20moderation:read`}
+						href={`https://id.twitch.tv/oauth2/authorize?client_id=ip3igc72c6wu7j00nqghb24duusmbr&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code&scope=openid%20moderation:read%20chat:edit%20chat:read%20channel:moderate`}
 						className="modal-button twitch"
 					>
 						<img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="20" className="logo-icon" />
