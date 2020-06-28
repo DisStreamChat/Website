@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { NavLink, Route, Redirect, Switch, useParams } from "react-router-dom";
+import { NavLink, Route, Redirect, Switch } from "react-router-dom";
 import firebase from "../../firebase";
 import "./Users.scss";
 import Select from "react-select";
-import Setting from "./Setting";
 import useFetch from "../../hooks/useFetch";
 import SmallLoader from "../Shared/SmallLoader";
 import A from "../Shared/A";
 import useSnapshot from "../../hooks/useSnapshot";
-
 import { colorStyles, guildOption } from "./userUtils";
 import SettingBox from "./SettingBox";
+import PlatformItem from "./PlatformItem";
 
 const Dashboard = props => {
 	const [discordInfo, setDiscordInfo] = useState();
@@ -18,6 +17,7 @@ const Dashboard = props => {
 	const [selectedChannel, setSelectedChannel] = useState({});
 	const [displayGuild, setDisplayGuild] = useState();
 	const [defaultSettings, setDefaultSettings] = useState();
+	const [userInfo, setUserInfo] = useState();
 
 	useEffect(() => {
 		(async () => {
@@ -74,13 +74,13 @@ const Dashboard = props => {
 		firebase.db.collection("Streamers").doc(id).update({
 			liveChatId: [],
 		});
-    }, [id]);
-    
-    const disconnectAccount = useCallback(async () => {
-        disconnect()
-        firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").set({})
-        setDiscordInfo({})
-    }, [id, disconnect])
+	}, [id]);
+
+	const disconnectAccount = useCallback(async () => {
+		disconnect();
+		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").set({});
+		setDiscordInfo({});
+	}, [id, disconnect]);
 
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
@@ -129,7 +129,8 @@ const Dashboard = props => {
 
 			if (userData) {
 				setOverlaySettings(userData.overlaySettings);
-				setAppSettings(userData.appSettings);
+                setAppSettings(userData.appSettings);
+                setUserInfo(userData)
 			}
 		})();
 	}, []);
@@ -219,9 +220,36 @@ const Dashboard = props => {
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord`}>
 					Discord Connect
 				</NavLink>
+				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/platforms`}>
+					Other Platforms
+				</NavLink>
 			</div>
 			<div className="settings">
 				<Switch>
+					<Route path={`${props.match.url}/platforms`}>
+						<h1>Streaming Platforms</h1>
+						<h3>Connect your account to other supported streaming platforms and link all your chats together</h3>
+						<hr />
+						<div className="settings-body">
+							<ul>
+								<PlatformItem
+									title="Twitch"
+									connected={userInfo?.twitchAuthenticated}
+									logo={<img src="https://www.freepnglogos.com/uploads/twitch-app-logo-png-3.png" alt="" />}
+								/>
+								<PlatformItem
+									title="Youtube"
+									connected={userInfo?.youtubeAuthenticated}
+									logo={
+										<img
+											src="https://media.discordapp.net/attachments/699812263670055052/726591765758476400/youtube-play-button-logo-graphic-designer-subscribe.png"
+											alt=""
+										/>
+									}
+								/>
+							</ul>
+						</div>
+					</Route>
 					<Route path={`${props.match.url}/discord`}>
 						<h1>Discord Connect</h1>
 						<h3>
@@ -237,7 +265,9 @@ const Dashboard = props => {
 											value={displayGuild}
 											onChange={onGuildSelect}
 											placeholder="Select Guild"
-											options={discordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
+											options={discordInfo?.guilds
+												?.filter(guild => guild.permissions.includes("MANAGE_GUILD"))
+												.map(guildOption)}
 											styles={colorStyles}
 											isDisabled={!!discordInfo.connectedGuild}
 										/>
@@ -316,7 +346,9 @@ const Dashboard = props => {
 												)}
 											</>
 										) : (
-											<button onClick={disconnectAccount} className="discord-settings-button ml-0 mt-1 warning-button" >Disconnect Account</button>
+											<button onClick={disconnectAccount} className="discord-settings-button ml-0 mt-1 warning-button">
+												Disconnect Account
+											</button>
 										)}
 									</div>
 								</>
