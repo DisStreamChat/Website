@@ -15,6 +15,9 @@ import Loader from "react-loader";
 
 import "./App.scss";
 import { AppContext } from "./contexts/Appcontext";
+import Banner from "./components/Shared/Banner";
+import { Button } from "@material-ui/core";
+import A from "./components/Shared/A"
 
 function App(props) {
 	const [userId, setUserId] = useState("");
@@ -114,6 +117,9 @@ function App(props) {
 					</div>{" "}
 					: <></>
 				</Switch>
+                <Banner message="DisStreamChat is in very early beta, you can help test it if you are a streamer">
+                <A newTab href="https://api.disstreamchat.com/discord"><Button className="banner-button">Learn More</Button></A>
+                </Banner>
 			</AppContext.Provider>
 		</Router>
 	) : (
