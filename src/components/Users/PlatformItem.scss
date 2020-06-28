@@ -1,0 +1,58 @@
+
+.platform-item {
+    box-sizing: border-box !important;
+    height: 100px;
+    width: 100%;
+    border-radius: 0.5rem;
+    box-shadow: 3px 3px 5px 0 #111;
+    background: #212121;
+    color: white;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    margin: 1rem 0;
+    
+    &.twitch{
+      .connect-button{
+        background: #613fa0;
+        color: white;
+      }
+      .logo{
+        filter: saturate(1.5)
+      }
+    }
+    &.youtube{
+        .connect-button{
+            background: #d22321;
+            color: white;
+        }
+    }
+    
+    .title {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1.5rem;
+      .logo {
+        width: 60px;
+        margin-right: .5rem;
+        font-size: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img{
+            max-width: 100%;
+            height: 32px;
+        }
+      }
+    }
+    .connect-button{
+      padding: .5rem 1rem;
+      &:disabled{
+        filter: grayscale(1)
+      }
+    }
+  }
+  
