@@ -8,4 +8,3 @@ Hello and welcome to the GitHub repo for The DisStreamChat website! This houses 
 
 # Contributing and Installation
 The site welcomes contributions from the community in a variety of ways! For more information see [CONTRIBUTING.md](CONTRIBUTING.md) and [INSTALLATION.md](INSTALLATION.md). Suggestions are also welcome in the form of an issue.
-
