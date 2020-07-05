@@ -65,11 +65,11 @@ const Setting = props => {
 
 	const buttonStyles = {
 		backgroundColor: props.default,
-		color: chroma.contrast(chroma(props.default || "#000"), "white") > 2 ? "white" : "black",
+		color: chroma.contrast(chroma(typeof props.default === "string" ? props.default : "#000"), "white") > 2 ? "white" : "black",
 	};
 
 	return (
-		<div className={`setting ${props.type === "color" && "color-setting"} ${props.open && "open"}`}>
+		<div className={`setting ${props.type === "color" ? "color-setting" : props.type === "list" ? "list-setting" : ""} ${props.open && "open"}`}>
 			{props.type === "color" ? (
 				<>
 					<div className="color-header" onClick={() => props.onClick(props.name)}>
@@ -108,7 +108,7 @@ const Setting = props => {
 						Reset
 					</Button>
 				</>
-			) : props.type == "boolean" ? (
+			) : props.type === "boolean" ? (
 				<span className="checkbox-setting">
 					<FormControlLabel
 						control={
@@ -125,7 +125,7 @@ const Setting = props => {
 						label={displayName}
 					/>
 				</span>
-			) : (
+			) : props.type === "number" ? (
 				<span className="number-setting">
 					<FormControlLabel
 						control={
@@ -147,6 +147,11 @@ const Setting = props => {
 							/>
 						}
 					/>
+				</span>
+			) : (
+				<span className="color-header">
+					<KeyboardArrowDownIcon className={`${props.open ? "open" : "closed"} mr-quarter`} onClick={() => props.onClick(props.name)} />
+					<h3>{displayName}</h3>
 				</span>
 			)}
 		</div>

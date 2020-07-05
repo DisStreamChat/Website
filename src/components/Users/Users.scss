@@ -317,8 +317,24 @@
 	grid-column: 1 / span 2;
 }
 
+.list-header{
+    align-items: center;
+    display: flex;
+    grid-column: 1 / span 2;
+    height: 70px;
+}
+
+.list-setting{
+    height: 50px;
+    padding-bottom: 1rem;
+}
+
 .color-setting.open {
 	height: 303px;
+}
+
+.setting.open{
+    height: 300px;
 }
 
 .setting:last-child {
