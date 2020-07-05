@@ -34,10 +34,10 @@ const Team = () => {
 					]}
 				></Member>
 				<Member
-					imgUrl="https://twitter.com/jamesrturner88"
+					imgUrl="https://turnergames.net"
 					img={`https://static-cdn.jtvnw.net/jtv_user_pictures/murdocturner-profile_image-c5e3ba3322f8e24a-300x300.png`}
 					name="Murdoc"
-					title="Twitch bot expert"
+					title="Twitch/Discord bot expert"
 					socials={[
 						{ link: "https://github.com/murdocturner", icon: <GitHubIcon /> },
 						{
@@ -47,7 +47,11 @@ const Team = () => {
 						{
 							link: "https://twitter.com/jamesrturner88",
 							icon: <TwitterIcon />,
-						},
+                        },
+                        {
+                            link: "https://discord.turnergames.net",
+                            icon: <img src="https://cdn.iconscout.com/icon/free/png-512/discord-3-569463.png" alt="" width="24"/>
+                        }
 					]}
 				></Member>
 			</div>
