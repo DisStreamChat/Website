@@ -43,7 +43,8 @@ const SettingList = props => {
 							type={value.type}
 							min={value.min}
 							max={value.max}
-							step={value.step}
+                            step={value.step}
+                            placeholder={value.placeholder}
 						/>
 					);
 				})}

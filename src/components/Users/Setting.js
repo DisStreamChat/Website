@@ -3,12 +3,16 @@ import { ChromePicker } from "react-color";
 import { Switch } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
+import AddIcon from "@material-ui/icons/Add";
+import CheckIcon from "@material-ui/icons/Check";
+import ClearIcon from "@material-ui/icons/Clear";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import Button from "@material-ui/core/Button";
 import chroma from "chroma-js";
 import InputSlider from "../Shared/InputSlider";
 import lodash from "lodash";
+import uid from "uid";
 
 const FancySwitch = withStyles({
 	root: {
@@ -43,6 +47,8 @@ const Setting = props => {
 	const [value, setValue] = useState(props.value);
 	const [open, setOpen] = useState(props.open);
 	const [displayName, setDisplayName] = useState();
+	const [addingItem, setAddingItem] = useState(false);
+	const [valueToBeAdded, setValueToBeAdded] = useState();
 
 	const changeHandler = useCallback(
 		lodash.debounce(v => {
@@ -59,7 +65,9 @@ const Setting = props => {
 		if (props.type === "color") {
 			setValue(props.value || props.default);
 		} else {
-			setValue(props.value);
+			setValue(prev => {
+				return props.value == undefined ? props.default : props.value;
+			});
 		}
 	}, [props]);
 
@@ -149,10 +157,59 @@ const Setting = props => {
 					/>
 				</span>
 			) : (
-				<span className="color-header">
-					<KeyboardArrowDownIcon className={`${props.open ? "open" : "closed"} mr-quarter`} onClick={() => props.onClick(props.name)} />
-					<h3>{displayName}</h3>
-				</span>
+				<>
+					<span className="list-header" onClick={() => props.onClick(props.name)}>
+						<KeyboardArrowDownIcon className={`${props.open ? "open" : "closed"} mr-quarter`} />
+						<h3>{displayName}</h3>
+					</span>
+					<div className="list-body">
+						<div className="item add-item" onClick={() => setAddingItem(prev => !prev)}>
+							<h3>Add Item</h3>
+							<button>
+								<AddIcon />
+							</button>
+						</div>
+						{addingItem && (
+							<div className="item adding-item">
+								<input value={valueToBeAdded} onChange={e => setValueToBeAdded(e.target.value)} placeholder={props.placeholder} />
+								<span className="buttons">
+									<button
+										onClick={() => {
+											setValue(value => {
+												const newValue = [{ value: valueToBeAdded, id: uid() }, ...value];
+												changeHandler(newValue);
+												return newValue;
+											});
+											setAddingItem(false);
+										}}
+									>
+										<CheckIcon />
+									</button>
+									<button
+										onClick={() => {
+											setValueToBeAdded("");
+											setAddingItem(false);
+										}}
+									>
+										<ClearIcon />
+									</button>
+								</span>
+							</div>
+						)}
+						{value?.map?.(item => (
+							<div className="item">
+								{item.value}
+								<button onClick={() => {
+                                    setValue(prev => {
+                                        const newValue = prev.filter(prevItem => prevItem.id !== item.id)
+                                        changeHandler(newValue)
+                                        return newValue
+                                    })
+                                }}><ClearIcon /></button>
+							</div>
+						))}
+					</div>
+				</>
 			)}
 		</div>
 	);
