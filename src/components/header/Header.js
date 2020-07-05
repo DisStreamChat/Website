@@ -111,7 +111,7 @@ const Header = props => {
 				<h2 className="modal-subheading">Connect with:</h2>
 				<div className="modal-buttons">
 					<A
-						href={`https://id.twitch.tv/oauth2/authorize?client_id=ip3igc72c6wu7j00nqghb24duusmbr&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code&scope=openid%20moderation:read%20chat:edit%20chat:read%20channel:moderate`}
+						href={`https://id.twitch.tv/oauth2/authorize?client_id=ip3igc72c6wu7j00nqghb24duusmbr&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code&scope=openid%20moderation:read%20chat:edit%20chat:read%20channel:moderate%20channel:read:redemptions`}
 						className="modal-button twitch"
 					>
 						<img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="20" className="logo-icon" />
