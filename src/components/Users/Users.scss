@@ -326,10 +326,9 @@
 }
 
 .list-setting{
-    max-height: 70px;
     display: block;
     overflow: hidden;
-    transition: .5s;
+    transition: .25s;
 }
 
 .list-body{
@@ -349,6 +348,9 @@
         padding: 0 2rem;
         align-items: center;
         overflow: hidden;
+        &, * {
+            text-transform: none;
+        }
         & + * {
             margin: .5rem 0;
         }
@@ -370,20 +372,21 @@
         input{
             box-sizing: border-box !important;
             height: 100%;
-            margin-left: -2rem;
             flex: 1;
             background: none;
             border: none !important;
             outline: none;
             color: white;
-            padding: 0 1rem;
             font-weight: 600;
             font-size: 1rem;
         }
     }
     .buttons{
         width: fit-content;
-        *{
+        *:last-child{
+            margin-right: 0;
+        }
+        * {
             margin: 0 .125rem;
         }
     }
@@ -399,9 +402,8 @@
 }
 
 .list-setting.open{
-    transition: 2.5s;
-    max-height: 3000px;
-    height: fit-content;  
+    // max-height: 3000px;
+    height: fit-content; 
 }
 
 .setting:last-child {

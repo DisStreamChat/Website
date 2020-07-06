@@ -13,6 +13,7 @@ import chroma from "chroma-js";
 import InputSlider from "../Shared/InputSlider";
 import lodash from "lodash";
 import uid from "uid";
+import AnimateHeight from "react-animate-height";
 
 const FancySwitch = withStyles({
 	root: {
@@ -162,53 +163,62 @@ const Setting = props => {
 						<KeyboardArrowDownIcon className={`${props.open ? "open" : "closed"} mr-quarter`} />
 						<h3>{displayName}</h3>
 					</span>
-					<div className="list-body">
-						<div className="item add-item" onClick={() => setAddingItem(prev => !prev)}>
-							<h3>Add Item</h3>
-							<button>
-								<AddIcon />
-							</button>
-						</div>
-						{addingItem && (
-							<div className="item adding-item">
-								<input value={valueToBeAdded} onChange={e => setValueToBeAdded(e.target.value)} placeholder={props.placeholder} />
-								<span className="buttons">
+					<AnimateHeight duration={250} height={!props.open ? 0 : "auto"}>
+						<div className="list-body">
+							<div className="item add-item" onClick={() => setAddingItem(prev => !prev)}>
+								<h3>Add Item</h3>
+								<button>
+									<AddIcon />
+								</button>
+							</div>
+							{addingItem && (
+								<form
+									onSubmit={e => {
+										e.preventDefault();
+										if (!valueToBeAdded) return;
+										setValue(value => {
+											const newValue = [{ value: valueToBeAdded, id: uid() }, ...value];
+											changeHandler(newValue);
+											return newValue;
+										});
+										setValueToBeAdded("");
+									}}
+									className="item adding-item"
+								>
+									<input value={valueToBeAdded} onChange={e => setValueToBeAdded(e.target.value)} placeholder={props.placeholder} />
+									<span className="buttons">
+										<button type="subit">
+											<CheckIcon />
+										</button>
+										<button
+											onClick={() => {
+												setValueToBeAdded("");
+												setAddingItem(false);
+											}}
+										>
+											<ClearIcon />
+										</button>
+									</span>
+								</form>
+							)}
+							{value?.map?.(item => (
+								<div className="item">
+									{item.value}
 									<button
 										onClick={() => {
-											setValue(value => {
-												const newValue = [{ value: valueToBeAdded, id: uid() }, ...value];
+											setValue(prev => {
+												const newValue = prev.filter(prevItem => prevItem.id !== item.id);
 												changeHandler(newValue);
 												return newValue;
 											});
-											setAddingItem(false);
-										}}
-									>
-										<CheckIcon />
-									</button>
-									<button
-										onClick={() => {
-											setValueToBeAdded("");
-											setAddingItem(false);
 										}}
 									>
 										<ClearIcon />
 									</button>
-								</span>
-							</div>
-						)}
-						{value?.map?.(item => (
-							<div className="item">
-								{item.value}
-								<button onClick={() => {
-                                    setValue(prev => {
-                                        const newValue = prev.filter(prevItem => prevItem.id !== item.id)
-                                        changeHandler(newValue)
-                                        return newValue
-                                    })
-                                }}><ClearIcon /></button>
-							</div>
-						))}
-					</div>
+								</div>
+							))}
+						</div>
+					</AnimateHeight>
 				</>
 			)}
 		</div>
