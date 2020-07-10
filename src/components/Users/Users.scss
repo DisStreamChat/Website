@@ -262,7 +262,7 @@
 	display: grid;
 	grid-template-columns: auto 0.9fr;
 	grid-template-rows: auto auto;
-	transition: 0.25s ease-in-out;
+    transition: 0.25s ease-in-out;
 
 	svg {
 		transition: 0.25s;
@@ -317,8 +317,93 @@
 	grid-column: 1 / span 2;
 }
 
+.list-header{
+    align-items: center;
+    display: flex;
+    grid-column: 1 / span 2;
+    height: 70px;
+    padding-left: .75rem;
+}
+
+.list-setting{
+    display: block;
+    overflow: hidden;
+    transition: .25s;
+}
+
+.list-body{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+    .item{
+        box-sizing: border-box !important;
+        height: 50px;
+        border-radius: .5rem;
+        border: 1px solid white;
+        width: 75%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 2rem;
+        align-items: center;
+        overflow: hidden;
+        &, * {
+            text-transform: none;
+        }
+        & + * {
+            margin: .5rem 0;
+        }
+    }
+    button{
+        border: none;
+        outline: none !important;
+        background: none;
+        color: white;
+        transition: .05s;
+        svg{
+            transform: scale(1.5)
+        }
+        &:active{
+            transform: scale(.9);
+        }
+    }
+    .adding-item{
+        input{
+            box-sizing: border-box !important;
+            height: 100%;
+            flex: 1;
+            background: none;
+            border: none !important;
+            outline: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+    }
+    .buttons{
+        width: fit-content;
+        *:last-child{
+            margin-right: 0;
+        }
+        * {
+            margin: 0 .125rem;
+        }
+    }
+
+    .add-item{
+        margin-bottom: .5rem;
+        
+    }
+}
+
 .color-setting.open {
 	height: 303px;
+}
+
+.list-setting.open{
+    // max-height: 3000px;
+    height: fit-content; 
 }
 
 .setting:last-child {
