@@ -6,10 +6,14 @@ $bg-color: #0b0c0e;
 	flex-direction: column;
 	width: 100%;
 	align-items: center;
-	padding: 0;
+    padding: 0;
 }
 
 .application-item {
+    display: grid;
+    align-items: flex-end;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
 	width: calc(80% - 1.5rem);
 	height: calc(300px - 1.5rem);
 	margin: 1rem;
@@ -21,8 +25,14 @@ $bg-color: #0b0c0e;
 }
 
 .application-item:hover {
-	background: lighten($bg-color, 3);
+	background: lighten($bg-color, .3);
 	box-shadow: 5px 5px 20px -0px rgba(0, 0, 0, 0.75);
+}
+
+.application--title, .application--subtitle, .application-description{
+    align-self: start;
+    margin: 0;
+    padding: 0;
 }
 
 .application--title {
@@ -36,5 +46,74 @@ $bg-color: #0b0c0e;
 }
 
 .application--image {
-	width: 200px;
+    width: 200px;
+    grid-row: 1 / 5;
+    grid-column: 2 / 3;
+    align-self: center;
+    justify-self: center;
+    max-height: 100%;
+}
+
+.application--link{
+    background: var(--disstreamchat-purple) !important;
+    * {
+        color: white;
+    }
+}
+
+.download-page{
+    $height: calc(100vh - var(--header-height));
+    box-sizing: border-box !important;
+    width: 100%;
+    min-height: $height;
+    padding: 0 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    .right{
+        box-sizing: border-box !important;
+        flex: .5;
+        min-height: calc(#{$height} * .25);
+        align-items: center;
+        padding: 1rem;
+        padding-top: 0;
+        background: $bg-color;
+        box-shadow: 10px 10px 14px -4px #000000;
+        border-radius: .5rem;
+        min-width: fit-content;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        *{
+            transition: .25s ease-in-out;
+        }
+        .open .chevron{
+            transform: rotate(90deg)
+        }
+        .versions{
+            height: fit-content;
+            max-height: 0;
+            overflow: hidden;
+            &.open{
+                max-height: 1000px;
+            }
+        }
+        .opener{
+            display: flex;
+            align-items: center;
+        }
+        .download-button{
+            color: white;
+            background: var(--disstreamchat-blue);
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+        .download-links{
+            display: flex;
+            align-items: flex-end;
+        }
+    }
 }

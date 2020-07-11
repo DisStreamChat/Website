@@ -3,14 +3,16 @@
     "title": "Chat Client",
     "subtitle": "feature filled chat manager",
     "description": "",
-    "pageLink": "chat_app",
-    "displayImage": ""
+    "pageLink": "download",
+    "displayImage": "https://cdn.discordapp.com/attachments/727356806552092675/731526962065178624/unknown.png",
+    "linkText": "Get The App"
   },
   {
     "title": "Chat Overlay",
     "subtitle": "beautiful stream chat overlay",
     "description": "Coming Soon",
-    "pageLink": "chat_overlay",
-    "displayImage": ""
+    "pageLink": "overlay",
+    "displayImage": "",
+    "linkText": "Coming Soon"
   }
 ]
