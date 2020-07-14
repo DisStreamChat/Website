@@ -49,6 +49,7 @@ function App(props) {
 					} catch (err) {}
 				} else {
 					try {
+						alert(code)
 						const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token?code=${code}`);
 						// const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
@@ -66,7 +67,7 @@ function App(props) {
 						console.log(err.message);
 					}
 				}
-				window.location = "/#/dashboard/login";
+				window.location = "/#/dashboard/discord";
 			})();
 		}
     }, []);
