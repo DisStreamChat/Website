@@ -253,7 +253,7 @@ const Dashboard = props => {
 											<>
 												{!selectedGuild.isMember ? (
 													<div className="not-member">
-														<span className="error-color">DisTwitchBot is not a member of this server</span>
+														<span className="error-color">DisStreamBot is not a member of this server</span>
 														<a
 															href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${selectedGuild?.id}`}
 														>
