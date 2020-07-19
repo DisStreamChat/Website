@@ -5,6 +5,7 @@ import Setting from "./Setting";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 
 import { defaults } from "./userUtils";
+import { property } from "lodash";
 
 
 const SettingList = props => {
@@ -45,6 +46,7 @@ const SettingList = props => {
 							max={value.max}
                             step={value.step}
                             placeholder={value.placeholder}
+                            options={value.options}
 						/>
 					);
 				})}
