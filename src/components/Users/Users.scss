@@ -331,6 +331,39 @@
     transition: .25s;
 }
 
+
+.list-body.selector {
+	max-height: 380px;
+	overflow: auto;
+    width: 80%;
+    margin: auto;
+	&::-webkit-scrollbar {
+		width: 10px;
+		height: 5px;
+	}
+
+	/* Track */
+	&::-webkit-scrollbar-track {
+		background: #f1f1f100;
+	}
+
+	/* Handle */
+	&::-webkit-scrollbar-thumb {
+		background: #888;
+		border-radius: 15px;
+	}
+
+	/* Handle on hover */
+	&::-webkit-scrollbar-thumb:hover {
+		background: #555;
+	}
+	.item {
+        min-height: 50px;
+        width: 95%;
+		margin: 0.5rem 0;
+	}
+}
+
 .list-body{
 
     display: flex;

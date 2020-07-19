@@ -72,13 +72,8 @@ const Setting = props => {
 		}
 	}, [props]);
 
-	const buttonStyles = {
-		backgroundColor: props.default,
-		color: chroma.contrast(chroma(typeof props.default === "string" ? props.default : "#000"), "white") > 2 ? "white" : "black",
-	};
-
 	return (
-		<div className={`setting ${props.type === "color" ? "color-setting" : props.type === "list" ? "list-setting" : ""} ${props.open && "open"}`}>
+		<div className={`setting ${props.type === "color" ? "color-setting" :  "list-setting"} ${props.open && "open"}`}>
 			{props.type === "color" ? (
 				<>
 					<div className="color-header" onClick={() => props.onClick(props.name)}>
@@ -107,7 +102,11 @@ const Setting = props => {
 					<Button
 						variant="contained"
 						className="reset-button"
-						style={buttonStyles}
+						style={{
+							backgroundColor: props.default,
+							color:
+								chroma.contrast(chroma(typeof props.default === "string" ? props.default : "#000"), "white") > 2 ? "white" : "black",
+						}}
 						onClick={() => {
 							setValue(props.default);
 							changeHandler(props.default);
@@ -157,7 +156,7 @@ const Setting = props => {
 						}
 					/>
 				</span>
-			) : (
+			) : props.type === "list" ? (
 				<>
 					<span className="list-header" onClick={() => props.onClick(props.name)}>
 						<KeyboardArrowDownIcon className={`${props.open ? "open" : "closed"} mr-quarter`} />
@@ -217,6 +216,41 @@ const Setting = props => {
 									</button>
 								</div>
 							))}
+						</div>
+					</AnimateHeight>
+				</>
+			) : (
+				<>
+					<span className="color-header flex" onClick={() => props.onClick(props.name)}>
+						<span>
+							<KeyboardArrowDownIcon className={`${props.open ? "open" : "closed"} mr-quarter`} />
+							<h3>{displayName}</h3>
+						</span>
+						<span>
+							<h3>{value}</h3>
+						</span>
+					</span>
+					<AnimateHeight duration={250} height={!props.open ? 0 : "auto"}>
+						<div className="list-body selector">
+							{props.options
+								?.sort()
+								?.filter(item => item !== value)
+								?.map?.(item => (
+									<div style={{ fontFamily: item }} className="item">
+										{item}
+										<button
+											onClick={() => {
+												setValue(prev => {
+													const newValue = item;
+													changeHandler(newValue);
+													return newValue;
+												});
+											}}
+										>
+											<CheckIcon />
+										</button>
+									</div>
+								))}
 						</div>
 					</AnimateHeight>
 				</>

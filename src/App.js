@@ -75,7 +75,9 @@ function App(props) {
 						}else if(codeArray.has("connect")){
                             // do connection stuff
                         }
-					} catch (err) {}
+					} catch (err) {
+                        alert(err.message)
+                    }
 				} else {
 					try {
 						const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token?code=${code}`);
