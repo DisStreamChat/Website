@@ -69,11 +69,25 @@ function App(props) {
 				if (!codeArray.has("discord")) {
 					try {
 						const response = await fetch(`${process.env.REACT_APP_API_URL}/token?code=` + code);
-						const json = await response.json();
-						if (response.ok && !codeArray.has("connect")) {
+                        const json = await response.json();
+						if (response.ok && !firebase.auth.currentUser) {
 							await firebase.auth.signInWithCustomToken(json.token);
-						}else if(codeArray.has("connect")){
-                            // do connection stuff
+						}else if(firebase.auth.currentUser){
+                            const userData = (await firebase.db.collection("Streamers").doc(firebase.auth.currentUser.uid).get()).data();
+                            const ModChannels = [...userData.ModChannels, ...json.ModChannels].filter(
+                                (thing, index, self) => index === self.findIndex(t => t.id === thing.id)
+                            );
+                            const TwitchName = json.displayName.toLowerCase()
+                            console.log(json, ModChannels)
+                            await firebase.db.collection("Streamers").doc(firebase.auth.currentUser.uid).update({
+                                ModChannels,
+                                TwitchName,
+                                twitchAuthenticated: true
+                            })
+                            await firebase.db.collection("Streamers").doc(firebase.auth.currentUser.uid).collection("twitch").doc("data").set({
+                                refresh_token: json.refresh_token
+                            })
+                            // alert()
                         }
 					} catch (err) {
                         alert(err.message)
@@ -83,7 +97,7 @@ function App(props) {
 						const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token?code=${code}`);
 						// const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
-							console.log(await response.json());
+							console.log(await response.text());
 						} else {
 							const json = await response.json();
 							await firebase.db
@@ -107,10 +121,12 @@ function App(props) {
 			if (firebaseInit !== false && user) {
 				const userData = (await firebase.db.collection("Streamers").doc(user.uid).get()).data();
 				if (!userData.googleAccount) {
-					const profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture&user=${userData?.TwitchName}`);
+					const profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
 					const profilePicture = await profilePictureResponse.json();
-					const modChannelResponse = await fetch(`${process.env.REACT_APP_API_URL}/modchannels&user=${userData?.TwitchName}`);
-					const ModChannels = await modChannelResponse.json();
+					const modChannelResponse = await fetch(`${process.env.REACT_APP_API_URL}/modchannels?user=${userData?.TwitchName}`);
+					const ModChannels = [...await modChannelResponse.json(), ...userData.ModChannels].filter(
+                        (thing, index, self) => index === self.findIndex(t => t.id === thing.id)
+                    );
 					firebase.db.collection("Streamers").doc(user.uid).update({
 						profilePicture,
 						ModChannels,

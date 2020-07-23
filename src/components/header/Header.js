@@ -24,7 +24,8 @@ const Header = props => {
 		setUserDropDown(d => d && !!currentUser);
 	}, [currentUser]);
 
-	const user = firebase.auth.currentUser;
+    const user = firebase.auth.currentUser;
+    console.log(currentUser)
 
 	useEffect(() => {
 		if (user) {
