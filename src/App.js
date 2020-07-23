@@ -13,6 +13,7 @@ import Header from "./components/header/Header";
 import ProtectedRoute from "./components/Shared/ProtectedRoute";
 import Loader from "react-loader";
 import DownloadPage from "./components/Apps/DownloadPage"
+import PrivacyPolicy from "./components/Shared/PrivacyPolicy"
 
 import "./App.scss";
 import { AppContext } from "./contexts/Appcontext";
@@ -111,6 +112,7 @@ function App(props) {
 								<Route path="/community" component={Community} />
 								<Route path="/about" component={About} />
 								<Route path="/members" component={Team} />
+                                <Route path="/privacy" component={PrivacyPolicy}/>
 								<Route path="/apps/download" component={DownloadPage}/>
                                 <ProtectedRoute path="/dashboard" component={Dashboard} />
 								<Redirect to="/" />
