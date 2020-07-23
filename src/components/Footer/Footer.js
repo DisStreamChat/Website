@@ -31,7 +31,7 @@ const Footer = () => {
                         <span className="column-header">Resources</span>
                         <A href="https://discord.gg/sFpMKVX" newTab>Join The Discord</A>
                         <A href="https://github.com/DisStreamChat" newTab>Get Help on GitHub</A>
-                        <Link to="/faq">FAQ</Link>
+                        <Link to="/privacy">Privacy Policy</Link>
                     </div>
                     <div className="column last-column">
                         <span className="column-header">Team</span>
