@@ -26,7 +26,8 @@ const SettingList = props => {
 			{Object.entries(props.defaultSettings || {})
 				.filter(([name]) => (!props.search ? true : name?.toLowerCase()?.includes(props.search?.toLowerCase())))
 				.filter(([, details]) => details.category?.toLowerCase() === index?.toLowerCase() || props.all)
-				.filter(([, details]) => (props.app ? true : !details.appOnly))
+                .filter(([, details]) => (props.app ? true : !details.appOnly))
+                .filter(([, details]) => details.type !== "keybind")
 				.sort((a, b) => {
                     const categoryOrder = (a[1].type.localeCompare(b[1].type));
                     const nameOrder = a[0].localeCompare(b[0])
