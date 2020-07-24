@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { NavLink, Route, Redirect, Switch, useParams } from "react-router-dom";
+import { NavLink, Route, Redirect, Switch } from "react-router-dom";
 import firebase from "../../firebase";
 import "./Users.scss";
 import Select from "react-select";
-import Setting from "./Setting";
 import useFetch from "../../hooks/useFetch";
 import SmallLoader from "../Shared/SmallLoader";
 import A from "../Shared/A";

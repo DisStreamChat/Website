@@ -4,10 +4,6 @@ import SettingAccordion from "./SettingAccordion";
 import Setting from "./Setting";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 
-import { defaults } from "./userUtils";
-import { property } from "lodash";
-
-
 const SettingList = props => {
 	const { key } = useParams();
 	const [index, setIndex] = useState(key);
