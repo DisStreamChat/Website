@@ -79,11 +79,8 @@ function App(props) {
                 const userData = (await firebase.db.collection("Streamers").doc(user.uid).get()).data();
 				const profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
 				const profilePicture = await profilePictureResponse.json();
-				const modChannelResponse = await fetch(`${process.env.REACT_APP_API_URL}/modchannels?user=${userData?.TwitchName}`);
-                const ModChannels = await modChannelResponse.json();
 				firebase.db.collection("Streamers").doc(user.uid).update({
                     profilePicture,
-                    ModChannels
 				});
 			}
 		})();
