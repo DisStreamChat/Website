@@ -1,4 +1,4 @@
-.privacy-policy{
+.privacy-policy, .policy{
     width: 50vw;
     .biggest{
         font-weight: bold;
@@ -6,5 +6,8 @@
     }
     p{
         line-height: 28px;
+    }
+    a{
+        text-decoration: underline;
     }
 }
