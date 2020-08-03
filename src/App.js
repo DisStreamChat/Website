@@ -121,7 +121,7 @@ function App(props) {
 					</div>{" "}
 					: <></>
 				</Switch>
-                <Banner message="DisStreamChat is in very early alpha, you can help test it if you are a streamer">
+                <Banner message="DisStreamChat is in early alpha and we would like your help to test it">
                 <A newTab href="https://api.disstreamchat.com/discord"><Button className="banner-button">Learn More</Button></A>
                 </Banner>
 			</AppContext.Provider>
