@@ -139,8 +139,8 @@ const Header = props => {
 					<img src={`${process.env.PUBLIC_URL}/logo.png`} alt="" />
 				</Link>
 				<nav className={`nav-bar ${open && "open"}`}>
+					<Link to="/apps">Chat Manager</Link>
 					<Link to="/bot">Discord Bot</Link>
-					<Link to="/apps">Apps</Link>
 					<Link to="/community">Community</Link>
 					{/* <Link to="/about">About</Link> */}
 				</nav>
