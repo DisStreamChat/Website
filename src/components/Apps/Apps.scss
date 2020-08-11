@@ -75,18 +75,22 @@ $bg-color: #0b0c0e;
     .right{
         display: flex;
         justify-content: space-around;
+        align-items: space-around;
         width: 100%;
+        flex-wrap: wrap;
     }
     .download-item{
         box-sizing: border-box !important;
         min-height: calc(#{$height} * .25);
         align-items: center;
+        flex: .25;
         padding: 1rem;
+        margin: 1rem;
         padding-top: 0;
         background: $bg-color;
         box-shadow: 10px 10px 14px -4px #000000;
         border-radius: .5rem;
-        min-width: fit-content;
+        min-width: 190px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
