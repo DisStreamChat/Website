@@ -32,6 +32,7 @@ const Footer = () => {
                         <A href="https://discord.gg/sFpMKVX" newTab>Join The Discord</A>
                         <A href="https://github.com/DisStreamChat" newTab>Get Help on GitHub</A>
                         <Link to="/privacy">Privacy Policy</Link>
+                        <Link to="/terms">Terms and Conditions</Link>
                     </div>
                     <div className="column last-column">
                         <span className="column-header">Team</span>
