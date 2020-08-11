@@ -1,46 +1,77 @@
 $background: #202024;
 $height: 65px;
-$purple: #462B45;
+$purple: #462b45;
 
-.banner{
-    box-sizing: border-box !important;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: $height;
-    padding: 0;
-    margin: 0;
-    background: darken($background, 8);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 2rem;
-    color: white;
-    overflow: hidden;
-    .banner-button{
-        color: white;
-        background: $purple;
-        padding: .5rem 2rem;
-        transition: .25s;
-        margin: .25rem .5rem;
-        &:hover{
-            background: lighten($purple, 3);
+.banner {
+	box-sizing: border-box !important;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	min-height: $height;
+	margin: 0;
+	background: darken($background, 8);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.5rem 2rem;
+	@media screen and (max-width: 400px) {
+		& {
+            padding: .5rem 1rem;
+		}
+	}
+	color: white;
+	overflow: hidden;
+	.banner-buttons {
+		display: flex;
+		flex-wrap: nowrap;
+		max-height: fit-content;
+		min-width: 312px;
+		justify-content: center;
+		box-sizing: border-box !important;
+		margin-left: 0.5rem;
+		@media screen and (max-width: 400px) {
+			& {
+				flex-wrap: wrap;
+                min-width: 0px;
+                font-size: .75rem;
+                *{
+                    font-size: inherit;
+                }
+                .banner-button:first-child{
+                    padding: 0.5rem;
+                    *{
+                        width: calc(115px - 1.5rem);
+                    }
+                }
+
+			}
         }
-    }
+	}
+	.banner-button {
+		color: white;
+		background: $purple;
+		padding: 0.5rem 2rem;
+		transition: 0.25s;
+		margin: 0.25rem 0.5rem;
+		height: 40px;
+		&:hover {
+			background: lighten($purple, 3);
+		}
+	}
 }
 
 .banner-node-enter {
-    height: 0px;
-  }
-  .banner-node-enter-active {
-    height: $height;
-    transition: 200ms;
-  }
-  .banner-node-exit {
-    height: $height;
-  }
-  .banner-node-exit-active {
-    height: 0px;
-    transition: 200ms;
-  }
+	height: 0px;
+}
+.banner-node-enter-active {
+	height: $height;
+	transition: 200ms;
+}
+.banner-node-exit {
+	height: $height;
+}
+.banner-node-exit-active {
+	height: 0px;
+	transition: 200ms;
+}
