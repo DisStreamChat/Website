@@ -74,7 +74,7 @@ const PrivacyPolicy = () => {
 				<a href="https://www.privacypolicyonline.com/privacy-policy-generator/">Online Privacy Policy Generator</a>.
 			</p>
 
-			<h2>Cookies and Web Beacons</h2>
+			{/* <h2>Cookies and Web Beacons</h2>
 
 			<p>
 				Like any other website, DisStreamChat uses 'cookies'. These cookies are used to store information including visitors' preferences, and
@@ -84,7 +84,7 @@ const PrivacyPolicy = () => {
 
 			<p>
 				For more general information on cookies, please read <a href="https://www.cookieconsent.com/what-are-cookies/">"What Are Cookies"</a>.
-			</p>
+			</p> */}
 
 			<h2>Advertising Partners Privacy Policies</h2>
 
