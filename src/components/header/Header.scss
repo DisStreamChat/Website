@@ -195,12 +195,16 @@
 		flex-direction: column;
 		justify-content: center;
         align-items: center;
+        
         & > button:first-child{
             all: unset;
             box-sizing: content-box !important;
             width: 100%;
         }
         .legal{
+            a{
+                text-decoration: underline !important;
+            }
             display: flex;
             margin-top: 1rem;
             input[type="checkbox"]{

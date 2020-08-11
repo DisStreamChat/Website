@@ -146,7 +146,16 @@ const Header = props => {
 							type="checkbox"
 							name="terms"
 						/>
-						<label htmlFor="terms-check">I accept the terms and conditions and privacy policy</label>
+						<label htmlFor="terms-check">
+							I accept the{" "}
+							<A href="/terms" local newTab>
+								terms and conditions
+							</A>{" "}
+							and{" "}
+							<A href="/privacy" local newTab>
+								privacy policy
+							</A>
+						</label>
 					</div>
 				</form>
 			</Modal>
