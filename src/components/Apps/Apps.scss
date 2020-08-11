@@ -73,8 +73,12 @@ $bg-color: #0b0c0e;
     align-items: center;
 
     .right{
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+    .download-item{
         box-sizing: border-box !important;
-        flex: .5;
         min-height: calc(#{$height} * .25);
         align-items: center;
         padding: 1rem;
