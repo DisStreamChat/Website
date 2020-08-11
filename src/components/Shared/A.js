@@ -12,7 +12,8 @@ const A = props => {
         to: props.local ? props.href : "",
         className: props.className,
         target: props.newTab && "_blank",
-        rel: props.newTab && "noopener noreferrer"
+        rel: props.newTab && "noopener noreferrer",
+        disabled: props.disabled
     }
 
     const Element = props.local ? Link : Anchor

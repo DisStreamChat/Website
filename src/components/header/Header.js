@@ -111,23 +111,44 @@ const Header = props => {
 				</button>
 				<h1 className="modal-heading">Login to DisStreamChat</h1>
 				<h2 className="modal-subheading">Connect with:</h2>
-				<div className="modal-buttons">
-					<A
-						href={`https://id.twitch.tv/oauth2/authorize?client_id=ip3igc72c6wu7j00nqghb24duusmbr&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code&scope=openid%20moderation:read%20chat:edit%20chat:read%20channel:moderate%20channel:read:redemptions`}
-						className="modal-button twitch"
-					>
-						<img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="20" className="logo-icon" />
-						Twitch
-					</A>
-					<div className="modal-button youtube" onClick={signInWithGoogle}>
+
+				<form
+					className="modal-buttons"
+					onSubmit={e => {
+						e.preventDefault();
+						alert("submitted");
+					}}
+				>
+					<button type="submit">
+						<A
+							href={
+								readTerms
+									? `https://id.twitch.tv/oauth2/authorize?client_id=ip3igc72c6wu7j00nqghb24duusmbr&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code&scope=openid%20moderation:read%20chat:edit%20chat:read%20channel:moderate%20channel:read:redemptions`
+									: null
+							}
+							className="modal-button twitch"
+							disabled={!readTerms}
+						>
+							<img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="20" className="logo-icon" />
+							Twitch
+						</A>
+					</button>
+					<button disabled={!readTerms} type="submit" className="modal-button youtube" onClick={readTerms ? signInWithGoogle : () => {}}>
 						<YouTubeIcon className="logo-icon yt-icon" />
 						YouTube
-					</div>
+					</button>
 					<div className="legal">
-						<input value={readTerms} onChange={e => setReadTerms(e.target.checked)} id="terms-check" type="checkbox" name="terms" />
+						<input
+							required
+							value={readTerms}
+							onChange={e => setReadTerms(e.target.checked)}
+							id="terms-check"
+							type="checkbox"
+							name="terms"
+						/>
 						<label htmlFor="terms-check">I accept the terms and conditions and privacy policy</label>
 					</div>
-				</div>
+				</form>
 			</Modal>
 			<div className="hamburger-holder">
 				<HamburgerMenu

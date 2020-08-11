@@ -194,7 +194,19 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		align-items: center;
+        align-items: center;
+        & > button:first-child{
+            all: unset;
+            box-sizing: content-box !important;
+            width: 100%;
+        }
+        .legal{
+            display: flex;
+            margin-top: 1rem;
+            input[type="checkbox"]{
+                margin-right: .5rem;
+            }
+        }
 	}
 
 	.modal-heading {
@@ -212,13 +224,18 @@
 	.modal-button {
 		display: flex;
 		align-items: center;
-		justify-content: center;
+        justify-content: center;
+        border: none;
+        outline: none !important;
+        color: white;
 		padding: 8px 28px;
 		margin: 0.5rem 0;
 		border-radius: 100rem;
 		transition: 0.125s;
 		height: 24px;
-		width: 70%;
+        width: 70%;
+        flex: 1;
+        box-sizing: content-box !important;
 		cursor: pointer;
 		&:hover {
 			filter: brightness(0.85);
