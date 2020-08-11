@@ -11,6 +11,7 @@ import A from "../Shared/A";
 import ClearIcon from "@material-ui/icons/Clear";
 import firebase from "../../firebase";
 import HamburgerMenu from "react-hamburger-menu";
+import { Checkbox } from "@material-ui/core";
 
 Modal.setAppElement("#root");
 
@@ -19,6 +20,7 @@ const Header = props => {
 	const { dropDownOpen: open, setDropDownOpen: setOpen } = useContext(AppContext);
 	const [userDropDown, setUserDropDown] = useState(false);
 	const [loginOpen, setLoginOpen] = useState(false);
+	const [readTerms, setReadTerms] = useState(false);
 
 	useEffect(() => {
 		setUserDropDown(d => d && !!currentUser);
@@ -120,6 +122,10 @@ const Header = props => {
 					<div className="modal-button youtube" onClick={signInWithGoogle}>
 						<YouTubeIcon className="logo-icon yt-icon" />
 						YouTube
+					</div>
+					<div className="legal">
+						<input value={readTerms} onChange={e => setReadTerms(e.target.checked)} id="terms-check" type="checkbox" name="terms" />
+						<label htmlFor="terms-check">I accept the terms and conditions and privacy policy</label>
 					</div>
 				</div>
 			</Modal>
