@@ -16,7 +16,7 @@ const Home = () => {
         <>
             <div className="header-area">
                 <h1 className="body-header">Integrate your Discord server with Twitch</h1>
-                <h3 className="body-subheader">Chat, QnAs, Polls, Games and much more easily Integrated with Twitch and Discord!</h3>
+                <h3 className="body-subheader">Chat, moderation, interactivity, and much more easily Integrated with Twitch and Discord!</h3>
             </div>
             <div className="buttons">
                 {!currentUser ? 

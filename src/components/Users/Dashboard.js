@@ -212,9 +212,9 @@ const Dashboard = props => {
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/appsettings`}>
 					App Settings
 				</NavLink>
-				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/overlaysettings`}>
+				{/* <NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/overlaysettings`}>
 					overlay Settings
-				</NavLink>
+				</NavLink> */}
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord`}>
 					Discord Connect
 				</NavLink>
