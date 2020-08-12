@@ -133,10 +133,10 @@ const Header = props => {
 							Twitch
 						</A>
 					</button>
-					<button disabled={!readTerms} type="submit" className="modal-button youtube" onClick={readTerms ? signInWithGoogle : () => {}}>
+					{/* <button disabled={!readTerms} type="submit" className="modal-button youtube" onClick={readTerms ? signInWithGoogle : () => {}}>
 						<YouTubeIcon className="logo-icon yt-icon" />
 						YouTube
-					</button>
+					</button> */}
 					<div className="legal">
 						<input
 							required
