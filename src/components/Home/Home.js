@@ -22,9 +22,12 @@ const Home = () => {
 					<A href="#features" className="main-button dashboard-button">
 						See Features
 					</A>
-					<Link to={`/dashboard/${currentUser.uid}`} className="dashboard-button">
-						My DashBoard
-					</Link>
+
+					{currentUser && (
+						<Link to={`/dashboard/${currentUser.uid}`} className="dashboard-button">
+							My DashBoard
+						</Link>
+					)}
 				</div>
 			</div>
 
