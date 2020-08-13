@@ -19,18 +19,12 @@ const Home = () => {
 					<h3 className="body-subheader">Chat, moderation, interactivity, and much more easily Integrated with Twitch and Discord!</h3>
 				</div>
 				<div className="buttons">
-					{!currentUser ? (
-						<>
-							{/* <Link to="/invite" target="_blank" rel="noreferrer noopener" className="main-button discord-button">Login</Link> */}
-							<A href="#features" className="main-button dashboard-button">
-								See Features
-							</A>
-						</>
-					) : (
-						<Link to={`/dashboard/${currentUser.uid}`} className="dashboard-button">
-							My DashBoard
-						</Link>
-					)}
+					<A href="#features" className="main-button dashboard-button">
+						See Features
+					</A>
+					<Link to={`/dashboard/${currentUser.uid}`} className="dashboard-button">
+						My DashBoard
+					</Link>
 				</div>
 			</div>
 
