@@ -24,7 +24,7 @@ const Home = () => {
 					</A>
 
 					{currentUser && (
-						<Link to={`/dashboard/${currentUser.uid}`} className="dashboard-button">
+						<Link to={`/dashboard/${currentUser?.uid}`} className="dashboard-button">
 							My DashBoard
 						</Link>
 					)}
