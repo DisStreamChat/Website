@@ -41,13 +41,13 @@ const Home = () => {
 						</h3>
 					</div>
 					<div className="right">
-						<img src="https://cdn.discordapp.com/attachments/689169277781016629/743138583434494162/unknown.png" alt="" />
+						<img src={`${process.env.PUBLIC_URL}/home.png`} alt="" />
 					</div>
 				</section>
 				<section className="feature">
 					<div className="left two-images">
-						<img src="https://cdn.discordapp.com/attachments/689169277781016629/743139720346861659/unknown.png" alt="" />
-						<img src="https://cdn.discordapp.com/attachments/689169277781016629/743139786436509818/unknown.png" alt="" />
+						<img src={`${process.env.PUBLIC_URL}/appsettings.png`} alt="" />
+						<img src={`${process.env.PUBLIC_URL}/settings.png`} alt="" />
 					</div>
 					<div className="right">
 						<h1>Customize just about anything</h1>
