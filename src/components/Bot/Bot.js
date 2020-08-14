@@ -17,8 +17,8 @@ const Bot = () => {
 					</h3>
 				</div>
 				<div className="right two-images">
-                    <img className="on-top nudge-up see-through" src="https://cdn.discordapp.com/attachments/689169277781016629/743149311491178567/unknown.png" alt=""/>
-					<img src="https://cdn.discordapp.com/attachments/689169277781016629/743149131102421122/unknown.png" alt="" />
+                    <img className="on-top nudge-up see-through" src={`${process.env.PUBLIC_URL}/invite.png`} alt=""/>
+					<img src={`${process.env.PUBLIC_URL}/rank.png`} alt="" />
 				</div>
 			</section>
 		</div>
