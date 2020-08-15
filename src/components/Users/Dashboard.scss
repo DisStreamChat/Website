@@ -1,5 +1,6 @@
 .plugins {
-	padding-top: 1rem;
+    padding-top: 1rem;
+    margin-bottom: 5rem;
 	h2 {
 		text-transform: uppercase;
 		font-size: 1.25rem;
@@ -40,8 +41,8 @@
                 flex: 1;
             }
         }
-		#announcement-type {
-			// outline: solid;
-		}
+		.channels{
+            flex-direction: column;
+        }
 	}
 }

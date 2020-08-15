@@ -19,7 +19,8 @@ const Dashboard = props => {
 	const [selectedChannel, setSelectedChannel] = useState({});
 	const [displayGuild, setDisplayGuild] = useState();
 	const [defaultSettings, setDefaultSettings] = useState();
-	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
+    const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
+    const [announcementChannel, setAnnouncementChannel] = useState(false)
 
 	useEffect(() => {
 		(async () => {
@@ -373,6 +374,30 @@ const Dashboard = props => {
 																		}}
 																	/>
 																</div>
+                                                                {levelUpAnnouncement?.value === 3 && <div id="announcement-channel">
+																	<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
+																	<Select
+																		closeMenuOnSelect
+																		onChange={setAnnouncementChannel}
+																		placeholder="Select Annoucement Channel"
+																		value={announcementChannel}
+																		options={selectedGuild?.channels
+                                                                            ?.sort((a, b) => a.parent.localeCompare(b.parent))
+                                                                            ?.map(channel => ({
+                                                                                value: channel.id,
+                                                                                label: (
+                                                                                    <>
+                                                                                        <span>{channel.name}</span>
+                                                                                        <span className="channel-category">{channel.parent}</span>
+                                                                                    </>
+                                                                                ),
+                                                                            }))}
+																		styles={{
+																			...colorStyles,
+																			container: styles => ({ ...styles, ...colorStyles.container }),
+																		}}
+																	/>
+																</div>}
 															</div>
 															<div className="message"></div>
 														</div>
