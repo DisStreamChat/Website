@@ -24,8 +24,9 @@ const Footer = () => {
                 <section className="right">
                     <div className="column">
                         <span className="column-header">Products</span>
-                        <A href={`/dashboard/discord`} local newTab>Add The Bot to Discord</A>
+                        <A href="/dashboard/discord" local newTab>Use the Discord Bot</A>
                         <Link to="/apps">Get the Chat Client</Link>
+                        <A href="https://www.patreon.com/disstreamchat?fan_landing=true" newTab>Support us on Patreon</A>
                     </div>
                     <div className="column">
                         <span className="column-header">Resources</span>

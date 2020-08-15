@@ -309,13 +309,13 @@ const Dashboard = props => {
 					overlay Settings
 				</NavLink> */}
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord`}>
-					Discord Connect
+					Discord Settings
 				</NavLink>
 			</div>
 			<div className="settings">
 				<Switch>
 					<Route path={`${props.match.url}/discord`}>
-						<h1>Discord Connect</h1>
+						<h1>Discord Settings</h1>
 						<h3>
 							Connect your discord account to DisStreamChat to get discord messages in your client/overlay during stream. You can only
 							connect one server at a time but you can connect as many channels in that server
