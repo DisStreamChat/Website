@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { NavLink, Route, Redirect, Switch } from "react-router-dom";
 import firebase from "../../firebase";
 import "./Users.scss";
+import "./Dashboard.scss";
 import Select from "react-select";
 import useFetch from "../../hooks/useFetch";
 import SmallLoader from "../Shared/SmallLoader";
@@ -10,6 +11,7 @@ import useSnapshot from "../../hooks/useSnapshot";
 
 import { colorStyles, guildOption } from "./userUtils";
 import SettingBox from "./SettingBox";
+import PluginCard from "./PluginCard";
 
 const Dashboard = props => {
 	const [discordInfo, setDiscordInfo] = useState();
@@ -17,10 +19,11 @@ const Dashboard = props => {
 	const [selectedChannel, setSelectedChannel] = useState({});
 	const [displayGuild, setDisplayGuild] = useState();
 	const [defaultSettings, setDefaultSettings] = useState();
+	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
 
 	useEffect(() => {
 		(async () => {
-			const settingsRef = await firebase.db.collection("defaults").doc("settings").get();
+			const settingsRef = await firebase.db.collection("defaults").doc("settings13").get();
 			const settingsData = settingsRef.data().settings;
 			setDefaultSettings(settingsData);
 		})();
@@ -73,13 +76,13 @@ const Dashboard = props => {
 		firebase.db.collection("Streamers").doc(id).update({
 			liveChatId: [],
 		});
-    }, [id]);
-    
-    const disconnectAccount = useCallback(async () => {
-        disconnect()
-        firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").set({})
-        setDiscordInfo({})
-    }, [id, disconnect])
+	}, [id]);
+
+	const disconnectAccount = useCallback(async () => {
+		disconnect();
+		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").set({});
+		setDiscordInfo({});
+	}, [id, disconnect]);
 
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
@@ -236,7 +239,9 @@ const Dashboard = props => {
 											value={displayGuild}
 											onChange={onGuildSelect}
 											placeholder="Select Guild"
-											options={discordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
+											options={discordInfo?.guilds
+												?.filter(guild => guild.permissions.includes("MANAGE_GUILD"))
+												.map(guildOption)}
 											styles={colorStyles}
 											isDisabled={!!discordInfo.connectedGuild}
 										/>
@@ -300,12 +305,12 @@ const Dashboard = props => {
 																	onClick={disconnect}
 																	className="discord-settings-button ml-0 mt-1 warning-button"
 																>
-																	Disconnect
+																	Disconnect Guild
 																</button>
 															</>
 														) : (
 															<>
-																<span>This channel is not connected to your account</span>
+																<span>This guild is not connected to the bot</span>
 																<button onClick={Connectguild} className="discord-settings-button warning-button">
 																	Connect it
 																</button>
@@ -315,8 +320,66 @@ const Dashboard = props => {
 												)}
 											</>
 										) : (
-											<button onClick={disconnectAccount} className="discord-settings-button ml-0 mt-1 warning-button" >Disconnect Account</button>
+											<button onClick={disconnectAccount} className="discord-settings-button ml-0 mt-1 warning-button">
+												Disconnect Account
+											</button>
 										)}
+										<hr />
+										<div className="plugins">
+											<Switch>
+												<Route exact path={`${props.match.url}/discord`}>
+													<div className="plugin-header">
+														<h2>Plugins</h2>
+														<h3>
+															Add extra functionality to the bot in your server with plugins like leveling, custom
+															commands, and logging
+														</h3>
+													</div>
+
+													<div className="plugin-list">
+														<A href={`${props.match.url}/discord/leveling`} local>
+															<PluginCard
+																title="Leveling"
+																image="https://mee6.xyz/assets/4900ec753129e77fa1067ea04cca8192.svg"
+																description="Let your users gain XP and levels by participating in the chat!"
+															/>
+														</A>
+													</div>
+												</Route>
+												<Route path={`${props.match.url}/discord/leveling`}>
+													<div className="plugin-item-header">
+														<img src="https://mee6.xyz/assets/4900ec753129e77fa1067ea04cca8192.svg" alt="" />
+														<h2>Leveling</h2>
+													</div>
+													<hr />
+													<div className="plugin-item-subheader">
+														<h2>Leveling Up</h2>
+														<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
+													</div>
+													<div className="plugin-item-body">
+														<div className="level-settings">
+															<div className="channels">
+																<div id="announcement-type">
+																	<h5 className="bold uppercase">Level up announcement</h5>
+																	<Select
+																		closeMenuOnSelect
+																		onChange={setLevelUpAnnouncement}
+																		placeholder="Select Annoucement type"
+																		value={levelUpAnnouncement}
+																		options={[{value: 1, label: "Disabled"}, {value: 2, label: "Current Channel"}, {value: 3, label: "Custom Channel"}].map(type => type)}
+																		styles={{
+																			...colorStyles,
+																			container: styles => ({ ...styles, ...colorStyles.container }),
+																		}}
+																	/>
+																</div>
+															</div>
+															<div className="message"></div>
+														</div>
+													</div>
+												</Route>
+											</Switch>
+										</div>
 									</div>
 								</>
 							) : (

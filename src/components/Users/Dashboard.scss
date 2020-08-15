@@ -1,0 +1,47 @@
+.plugins {
+	padding-top: 1rem;
+	h2 {
+		text-transform: uppercase;
+		font-size: 1.25rem;
+	}
+	.plugin-header {
+		padding-bottom: 1rem;
+	}
+	.plugin-list {
+		min-height: 120px;
+	}
+	.plugin-item-header {
+		display: flex;
+	}
+	.plugin-item-subheader {
+		h2 {
+			margin-bottom: 0;
+		}
+		h3,
+		h4 {
+			margin: 0.5rem 0;
+			font-weight: 400;
+			color: #aaa;
+		}
+	}
+	h5 {
+        font-size: 0.75rem;
+        margin-bottom: .5rem;
+	}
+	.level-settings {
+		display: flex;
+		// outline: solid;
+        // align-items: center;
+        & > *{
+            // outline: solid;
+            flex: 1;
+            display: flex;
+            & > *{
+                flex: 1;
+            }
+        }
+		#announcement-type {
+			// outline: solid;
+		}
+	}
+}

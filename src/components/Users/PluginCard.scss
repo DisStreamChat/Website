@@ -1,0 +1,31 @@
+.plugin-card {
+    $background-color: #212121;
+    background: $background-color;
+    transition: .25s;
+    &:hover{
+        background: lighten($color: $background-color, $amount: 3)
+    }
+	display: flex;
+	width: 350px;
+	height: 100px;
+	padding: 20px;
+	align-items: center;
+    box-sizing: content-box !important;
+    box-shadow: 3px 3px 5px 0 #111;
+	.image {
+		margin-right: 0.5rem;
+	}
+
+	h2,
+	h3,
+	h4 {
+		margin: 0;
+		padding: 0;
+	}
+	h4 {
+		font-weight: 400;
+        color: #aaa;
+        margin-top: .25rem;
+        line-height: 1.5rem;
+	}
+}
