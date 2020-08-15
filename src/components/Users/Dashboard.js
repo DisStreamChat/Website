@@ -154,6 +154,7 @@ const Dashboard = props => {
 			if (discordData) {
 				const channels = userData.liveChatId;
 				const channelData = channels instanceof Array ? channels : [channels];
+
 				const resolveChannel = async channel =>
 					sendRequest(`${process.env.REACT_APP_API_URL}/resolvechannel?guild=${discordData.connectedGuild}&channel=${channel}`);
 				setSelectedChannel({
@@ -251,18 +252,20 @@ const Dashboard = props => {
 			const data = guild.data();
 			if (data) {
 				const id = data.notifications;
-				const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${selectedGuild.id}&channel=${id}`;
-				const response = await fetch(apiUrl);
-				const channel = await response.json();
-				setAnnouncementChannel({
-					value: id,
-					label: (
-						<>
-							<span>{channel.name}</span>
-							<span className="channel-category">{channel.parent}</span>
-						</>
-					),
-				});
+				if (id) {
+					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${selectedGuild.id}&channel=${id}`;
+					const response = await fetch(apiUrl);
+					const channel = await response.json();
+					setAnnouncementChannel({
+						value: id,
+						label: (
+							<>
+								<span>{channel.name}</span>
+								<span className="channel-category">{channel.parent}</span>
+							</>
+						),
+					});
+				}
 			}
 		})();
 	}, [selectedGuild]);
@@ -412,7 +415,7 @@ const Dashboard = props => {
 											</button>
 										)}
 										<hr />
-										<div className="plugins">
+										{selectedGuild?.id === selectedChannel?.guild ? <div className="plugins">
 											<Switch>
 												<Route exact path={`${props.match.url}/discord`}>
 													<div className="plugin-header">
@@ -499,7 +502,7 @@ const Dashboard = props => {
 													</div>
 												</Route>
 											</Switch>
-										</div>
+										</div> : <Redirect to={`${props.match.url}/discord`}/>}
 									</div>
 								</>
 							) : (
