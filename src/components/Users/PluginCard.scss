@@ -13,7 +13,9 @@
     box-sizing: content-box !important;
     box-shadow: 3px 3px 5px 0 #111;
 	.image {
-		margin-right: 0.5rem;
+        margin-right: 1rem;
+        margin-left: -.25rem;
+        min-width: 50px;
 	}
 
 	h2,

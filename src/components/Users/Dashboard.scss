@@ -1,6 +1,6 @@
 .plugins {
-    padding-top: 1rem;
-    margin-bottom: 5rem;
+	padding-top: 1rem;
+	margin-bottom: 5rem;
 	h2 {
 		text-transform: uppercase;
 		font-size: 1.25rem;
@@ -13,6 +13,10 @@
 	}
 	.plugin-item-header {
 		display: flex;
+		img {
+			max-width: 50px;
+			margin-right: 1rem;
+		}
 	}
 	.plugin-item-subheader {
 		h2 {
@@ -26,23 +30,50 @@
 		}
 	}
 	h5 {
-        font-size: 0.75rem;
-        margin-bottom: .5rem;
+		font-size: 0.75rem;
+		margin-bottom: 0.5rem;
 	}
 	.level-settings {
 		display: flex;
-		// outline: solid;
-        // align-items: center;
-        & > *{
-            // outline: solid;
-            flex: 1;
-            display: flex;
-            & > *{
+		background: lighten($color: #121212, $amount: 10);
+		padding: 0.5rem;
+		border-radius: 0.5rem;
+		height: 210px;
+		border: 0.5px solid lighten($color: #121212, $amount: 20);
+		& > * {
+            &:first-child{
+                margin-right: .5rem;
+            }
+            &:last-child{
+                margin-left: .5rem;
+            }
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			& > * {
+				flex: 1;
+			}
+        }
+        .message{
+            h5{
+                flex: 0;
+            }
+            textarea{
                 flex: 1;
+                resize: none;
+                background: lighten($color: #121212, $amount: 7);
+                border: 1px solid black;
+                color: white;
+                border-radius: .5rem;
+                padding: .5rem;
+                // border: none;
+                &:focus{
+                    outline: none !important;
+                    box-shadow: 0 0 0 1px #137cbd, 0 0 0 1px #137cbd, 0 0 0 3px rgba(19, 124, 189, 0.3), inset 0 0 0 1px rgba(16, 22, 26, 0.3),
+                    inset 0 1px 1px rgba(16, 22, 26, 0.4);
+                }
             }
         }
-		.channels{
-            flex-direction: column;
-        }
+        
 	}
 }

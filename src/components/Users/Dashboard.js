@@ -19,8 +19,8 @@ const Dashboard = props => {
 	const [selectedChannel, setSelectedChannel] = useState({});
 	const [displayGuild, setDisplayGuild] = useState();
 	const [defaultSettings, setDefaultSettings] = useState();
-    const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
-    const [announcementChannel, setAnnouncementChannel] = useState(false)
+	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
+	const [announcementChannel, setAnnouncementChannel] = useState(false);
 
 	useEffect(() => {
 		(async () => {
@@ -210,6 +210,92 @@ const Dashboard = props => {
 		[id]
 	);
 
+	const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
+
+	const handleTypeSelect = useCallback(
+		async e => {
+			const guildLevelRef = firebase.db.collection("Leveling").doc(selectedGuild.id);
+			// const guildLevel = await guildLevelRef.get()
+			setLevelUpAnnouncement(e);
+			await guildLevelRef.update({ type: e.value });
+		},
+		[selectedGuild]
+	);
+
+	const handleMessageChange = useCallback(
+		async e => {
+			const guildLevelRef = firebase.db.collection("Leveling").doc(selectedGuild.id);
+			// const guildLevel = await guildLevelRef.get()
+			const message = e.target.value;
+			setLevelUpMessage(message);
+			await guildLevelRef.update({ message });
+		},
+		[selectedGuild]
+	);
+
+	const handleAnnoucmentSelect = useCallback(
+		async e => {
+			const guildLevelRef = firebase.db.collection("Leveling").doc(selectedGuild.id);
+			guildLevelRef.update({ notifications: e.value });
+			setAnnouncementChannel(e);
+		},
+		[selectedGuild]
+	);
+
+	useEffect(() => {
+		(async () => {
+			const guild = await firebase.db
+				.collection("Leveling")
+				.doc(selectedGuild?.id || " ")
+				.get();
+			const data = guild.data();
+			if (data) {
+				const id = data.notifications;
+				const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${selectedGuild.id}&channel=${id}`;
+				const response = await fetch(apiUrl);
+				const channel = await response.json();
+				setAnnouncementChannel({
+					value: id,
+					label: (
+						<>
+							<span>{channel.name}</span>
+							<span className="channel-category">{channel.parent}</span>
+						</>
+					),
+				});
+			}
+		})();
+	}, [selectedGuild]);
+
+	useEffect(() => {
+		(async () => {
+			const guild = await firebase.db
+				.collection("Leveling")
+				.doc(selectedGuild?.id || " ")
+				.get();
+			const data = guild.data();
+			if (data) {
+				setLevelUpAnnouncement({
+					value: data.type,
+					label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
+				});
+			}
+		})();
+	}, [selectedGuild]);
+
+	useEffect(() => {
+		(async () => {
+			const guild = await firebase.db
+				.collection("Leveling")
+				.doc(selectedGuild?.id || " ")
+				.get();
+			const data = guild.data();
+			if (data) {
+				setLevelUpMessage(data.message);
+			}
+		})();
+	}, [selectedGuild]);
+
 	return (
 		<div className="settings-container">
 			<div className="setting-options">
@@ -341,7 +427,7 @@ const Dashboard = props => {
 														<A href={`${props.match.url}/discord/leveling`} local>
 															<PluginCard
 																title="Leveling"
-																image="https://mee6.xyz/assets/4900ec753129e77fa1067ea04cca8192.svg"
+																image={`${process.env.PUBLIC_URL}/trophy.svg`}
 																description="Let your users gain XP and levels by participating in the chat!"
 															/>
 														</A>
@@ -349,7 +435,7 @@ const Dashboard = props => {
 												</Route>
 												<Route path={`${props.match.url}/discord/leveling`}>
 													<div className="plugin-item-header">
-														<img src="https://mee6.xyz/assets/4900ec753129e77fa1067ea04cca8192.svg" alt="" />
+														<img src={`${process.env.PUBLIC_URL}/trophy.svg`} alt="" />
 														<h2>Leveling</h2>
 													</div>
 													<hr />
@@ -364,42 +450,51 @@ const Dashboard = props => {
 																	<h5 className="bold uppercase">Level up announcement</h5>
 																	<Select
 																		closeMenuOnSelect
-																		onChange={setLevelUpAnnouncement}
+																		onChange={handleTypeSelect}
 																		placeholder="Select Annoucement type"
 																		value={levelUpAnnouncement}
-																		options={[{value: 1, label: "Disabled"}, {value: 2, label: "Current Channel"}, {value: 3, label: "Custom Channel"}].map(type => type)}
+																		options={[
+																			{ value: 1, label: "Disabled" },
+																			{ value: 2, label: "Current Channel" },
+																			{ value: 3, label: "Custom Channel" },
+																		].map(type => type)}
 																		styles={{
 																			...colorStyles,
 																			container: styles => ({ ...styles, ...colorStyles.container }),
 																		}}
 																	/>
 																</div>
-                                                                {levelUpAnnouncement?.value === 3 && <div id="announcement-channel">
-																	<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
-																	<Select
-																		closeMenuOnSelect
-																		onChange={setAnnouncementChannel}
-																		placeholder="Select Annoucement Channel"
-																		value={announcementChannel}
-																		options={selectedGuild?.channels
-                                                                            ?.sort((a, b) => a.parent.localeCompare(b.parent))
-                                                                            ?.map(channel => ({
-                                                                                value: channel.id,
-                                                                                label: (
-                                                                                    <>
-                                                                                        <span>{channel.name}</span>
-                                                                                        <span className="channel-category">{channel.parent}</span>
-                                                                                    </>
-                                                                                ),
-                                                                            }))}
-																		styles={{
-																			...colorStyles,
-																			container: styles => ({ ...styles, ...colorStyles.container }),
-																		}}
-																	/>
-																</div>}
+																{levelUpAnnouncement?.value === 3 && (
+																	<div id="announcement-channel">
+																		<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
+																		<Select
+																			closeMenuOnSelect
+																			onChange={handleAnnoucmentSelect}
+																			placeholder="Select Annoucement Channel"
+																			value={announcementChannel}
+																			options={selectedGuild?.channels
+																				?.sort((a, b) => a.parent.localeCompare(b.parent))
+																				?.map(channel => ({
+																					value: channel.id,
+																					label: (
+																						<>
+																							<span>{channel.name}</span>
+																							<span className="channel-category">{channel.parent}</span>
+																						</>
+																					),
+																				}))}
+																			styles={{
+																				...colorStyles,
+																				container: styles => ({ ...styles, ...colorStyles.container }),
+																			}}
+																		/>
+																	</div>
+																)}
 															</div>
-															<div className="message"></div>
+															<div className="message">
+																<h5>LEVEL UP ANNOUNCEMENT MESSAGE</h5>
+																<textarea value={levelUpMessage} onChange={handleMessageChange}></textarea>
+															</div>
 														</div>
 													</div>
 												</Route>
