@@ -58,7 +58,7 @@ const Team = () => {
 					imgUrl="https://twitch.tv/twidget99"
 					img={`${process.env.PUBLIC_URL}/twidget.png`}
 					name="Twidget"
-					title="Community Leader"
+					title="Community Manager"
 					socials={[
 						{
 							link: "https://twitch.tv/twidget99",
