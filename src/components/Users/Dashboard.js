@@ -437,13 +437,13 @@ const Dashboard = props => {
 															</A>
 															<PluginCard
 																title="Custom Commands"
-																image={`${process.env.PUBLIC_URL}/trophy.svg`}
+																image={`${process.env.PUBLIC_URL}/discord.png`}
 																description="Add awesome custom commands to your server"
                                                                 comingSoon
                                                                 />
 															<PluginCard
 																title="Logging"
-																image={`${process.env.PUBLIC_URL}/discord.png`}
+																image={`${process.env.PUBLIC_URL}/clipboard.svg`}
 																description=" Don't miss anything happening in your server when you are not around!"
                                                                 comingSoon
 															/>
