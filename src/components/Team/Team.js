@@ -8,7 +8,7 @@ import Member from "./Member";
 const Team = () => {
 	return (
 		<main className="main team-page">
-			<h1 className="team-header">DisStreamChat's Team</h1>
+			<h1 className="team-header" style={{width: "70%"}}>DisStreamChat's Team</h1>
 			<div className="members">
 				<Member
 					imgUrl="https://github.com/GypsyDangerous"
@@ -47,11 +47,23 @@ const Team = () => {
 						{
 							link: "https://twitter.com/jamesrturner88",
 							icon: <TwitterIcon />,
-                        },
-                        {
-                            link: "https://discord.turnergames.net",
-                            icon: <img src="https://cdn.iconscout.com/icon/free/png-512/discord-3-569463.png" alt="" width="24"/>
-                        }
+						},
+						{
+							link: "https://discord.turnergames.net",
+							icon: <img src="https://cdn.iconscout.com/icon/free/png-512/discord-3-569463.png" alt="" width="24" />,
+						},
+					]}
+				></Member>
+				<Member
+					imgUrl="https://twitch.tv/twidget99"
+					img={`${process.env.PUBLIC_URL}/twidget.png`}
+					name="Twidget"
+					title="Community Leader"
+					socials={[
+						{
+							link: "https://twitch.tv/twidget99",
+							icon: <img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="24"></img>,
+						},
 					]}
 				></Member>
 			</div>

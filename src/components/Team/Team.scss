@@ -27,6 +27,9 @@
 .team-picture{
     margin: 0 2rem;
     transition: .25s ease-in-out;
+    @media screen and (max-width: 400px){
+        width: 250px
+    }
 }
 
 .team-picture:hover{
