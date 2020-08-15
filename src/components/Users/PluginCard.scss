@@ -1,21 +1,40 @@
 .plugin-card {
-    $background-color: #212121;
-    background: $background-color;
-    transition: .25s;
-    &:hover{
-        background: lighten($color: $background-color, $amount: 3)
-    }
+	$background-color: #212121;
+	background: $background-color;
+	transition: 0.25s;
+	margin: 0.5rem;
+	&.coming-soon {
+        position: relative;
+		&:after {
+			content: "Coming Soon";
+			background: var(--disstreamchat-blue);
+            width: fit-content;
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform: translate(10%, -25%);
+            padding: .25rem;
+            border-radius: 5rem;
+		}
+	}
+	&:hover {
+		background: lighten($color: $background-color, $amount: 3);
+	}
 	display: flex;
-	width: 350px;
+	width: 300px;
 	height: 100px;
 	padding: 20px;
 	align-items: center;
-    box-sizing: content-box !important;
-    box-shadow: 3px 3px 5px 0 #111;
+	box-sizing: content-box !important;
+	box-shadow: 3px 3px 5px 0 #111;
 	.image {
-        margin-right: 1rem;
-        margin-left: -.25rem;
-        min-width: 50px;
+		margin-right: 1rem;
+		margin-left: -0.25rem;
+		min-width: 50px;
+		max-width: 75px;
+		img {
+			max-width: 100%;
+		}
 	}
 
 	h2,
@@ -26,8 +45,8 @@
 	}
 	h4 {
 		font-weight: 400;
-        color: #aaa;
-        margin-top: .25rem;
-        line-height: 1.5rem;
+		color: #aaa;
+		margin-top: 0.25rem;
+		line-height: 1.5rem;
 	}
 }

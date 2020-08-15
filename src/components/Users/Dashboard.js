@@ -415,94 +415,112 @@ const Dashboard = props => {
 											</button>
 										)}
 										<hr />
-										{selectedGuild?.id === selectedChannel?.guild ? <div className="plugins">
-											<Switch>
-												<Route exact path={`${props.match.url}/discord`}>
-													<div className="plugin-header">
-														<h2>Plugins</h2>
-														<h3>
-															Add extra functionality to the bot in your server with plugins like leveling, custom
-															commands, and logging
-														</h3>
-													</div>
+										{selectedGuild?.id === selectedChannel?.guild ? (
+											<div className="plugins">
+												<Switch>
+													<Route exact path={`${props.match.url}/discord`}>
+														<div className="plugin-header">
+															<h2>Plugins</h2>
+															<h3>
+																Add extra functionality to the bot in your server with plugins like leveling, custom
+																commands, and logging
+															</h3>
+														</div>
 
-													<div className="plugin-list">
-														<A href={`${props.match.url}/discord/leveling`} local>
+														<div className="plugin-list">
+															<A href={`${props.match.url}/discord/leveling`} local>
+																<PluginCard
+																	title="Leveling"
+																	image={`${process.env.PUBLIC_URL}/trophy.svg`}
+																	description="Let your users gain XP and levels by participating in the chat!"
+																/>
+															</A>
 															<PluginCard
-																title="Leveling"
+																title="Custom Commands"
 																image={`${process.env.PUBLIC_URL}/trophy.svg`}
-																description="Let your users gain XP and levels by participating in the chat!"
+																description="Add awesome custom commands to your server"
+                                                                comingSoon
+                                                                />
+															<PluginCard
+																title="Logging"
+																image={`${process.env.PUBLIC_URL}/discord.png`}
+																description=" Don't miss anything happening in your server when you are not around!"
+                                                                comingSoon
 															/>
-														</A>
-													</div>
-												</Route>
-												<Route path={`${props.match.url}/discord/leveling`}>
-													<div className="plugin-item-header">
-														<img src={`${process.env.PUBLIC_URL}/trophy.svg`} alt="" />
-														<h2>Leveling</h2>
-													</div>
-													<hr />
-													<div className="plugin-item-subheader">
-														<h2>Leveling Up</h2>
-														<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
-													</div>
-													<div className="plugin-item-body">
-														<div className="level-settings">
-															<div className="channels">
-																<div id="announcement-type">
-																	<h5 className="bold uppercase">Level up announcement</h5>
-																	<Select
-																		closeMenuOnSelect
-																		onChange={handleTypeSelect}
-																		placeholder="Select Annoucement type"
-																		value={levelUpAnnouncement}
-																		options={[
-																			{ value: 1, label: "Disabled" },
-																			{ value: 2, label: "Current Channel" },
-																			{ value: 3, label: "Custom Channel" },
-																		].map(type => type)}
-																		styles={{
-																			...colorStyles,
-																			container: styles => ({ ...styles, ...colorStyles.container }),
-																		}}
-																	/>
-																</div>
-																{levelUpAnnouncement?.value === 3 && (
-																	<div id="announcement-channel">
-																		<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
+														</div>
+													</Route>
+													<Route path={`${props.match.url}/discord/leveling`}>
+														<div className="plugin-item-header">
+															<img src={`${process.env.PUBLIC_URL}/trophy.svg`} alt="" />
+															<h2>Leveling</h2>
+														</div>
+														<hr />
+														<div className="plugin-item-subheader">
+															<h2>Leveling Up</h2>
+															<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
+														</div>
+														<div className="plugin-item-body">
+															<div className="level-settings">
+																<div className="channels">
+																	<div id="announcement-type">
+																		<h5 className="bold uppercase">Level up announcement</h5>
 																		<Select
 																			closeMenuOnSelect
-																			onChange={handleAnnoucmentSelect}
-																			placeholder="Select Annoucement Channel"
-																			value={announcementChannel}
-																			options={selectedGuild?.channels
-																				?.sort((a, b) => a.parent.localeCompare(b.parent))
-																				?.map(channel => ({
-																					value: channel.id,
-																					label: (
-																						<>
-																							<span>{channel.name}</span>
-																							<span className="channel-category">{channel.parent}</span>
-																						</>
-																					),
-																				}))}
+																			onChange={handleTypeSelect}
+																			placeholder="Select Annoucement type"
+																			value={levelUpAnnouncement}
+																			options={[
+																				{ value: 1, label: "Disabled" },
+																				{ value: 2, label: "Current Channel" },
+																				{ value: 3, label: "Custom Channel" },
+																			].map(type => type)}
 																			styles={{
 																				...colorStyles,
 																				container: styles => ({ ...styles, ...colorStyles.container }),
 																			}}
 																		/>
 																	</div>
-																)}
-															</div>
-															<div className="message">
-																<h5>LEVEL UP ANNOUNCEMENT MESSAGE</h5>
-																<textarea value={levelUpMessage} onChange={handleMessageChange}></textarea>
+																	{levelUpAnnouncement?.value === 3 && (
+																		<div id="announcement-channel">
+																			<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
+																			<Select
+																				closeMenuOnSelect
+																				onChange={handleAnnoucmentSelect}
+																				placeholder="Select Annoucement Channel"
+																				value={announcementChannel}
+																				options={selectedGuild?.channels
+																					?.sort((a, b) => a.parent.localeCompare(b.parent))
+																					?.map(channel => ({
+																						value: channel.id,
+																						label: (
+																							<>
+																								<span>{channel.name}</span>
+																								<span className="channel-category">
+																									{channel.parent}
+																								</span>
+																							</>
+																						),
+																					}))}
+																				styles={{
+																					...colorStyles,
+																					container: styles => ({ ...styles, ...colorStyles.container }),
+																				}}
+																			/>
+																		</div>
+																	)}
+																</div>
+																<div className="message">
+																	<h5>LEVEL UP ANNOUNCEMENT MESSAGE</h5>
+																	<textarea value={levelUpMessage} onChange={handleMessageChange}></textarea>
+																</div>
 															</div>
 														</div>
-													</div>
-												</Route>
-											</Switch>
-										</div> : <Redirect to={`${props.match.url}/discord`}/>}
+													</Route>
+												</Switch>
+											</div>
+										) : (
+											<Redirect to={`${props.match.url}/discord`} />
+										)}
 									</div>
 								</>
 							) : (

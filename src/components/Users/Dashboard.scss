@@ -9,7 +9,10 @@
 		padding-bottom: 1rem;
 	}
 	.plugin-list {
-		min-height: 120px;
+        min-height: 120px;
+        display: flex;
+        // justify-content: space-around;
+        flex-wrap: wrap;
 	}
 	.plugin-item-header {
 		display: flex;
