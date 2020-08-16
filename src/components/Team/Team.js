@@ -56,8 +56,8 @@ const Team = () => {
 				></Member>
 				<Member
 					imgUrl="https://twitch.tv/twidget99"
-					img={`${process.env.PUBLIC_URL}/twidget.png`}
-					name="Twidget"
+					img={`${process.env.PUBLIC_URL}/patriot.png`}
+					name="Patriot"
 					title="Community Manager"
 					socials={[
 						{
