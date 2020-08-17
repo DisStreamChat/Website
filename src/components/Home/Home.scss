@@ -49,12 +49,14 @@
 		justify-content: center;
 		align-items: center;
 		width: 300px;
-		height: 60px;
+		min-height: 60px;
 		font-family: Montserrat;
 		font-style: normal;
 		font-weight: bold;
 		font-size: 23px;
-		line-height: 28px;
+        line-height: 28px;
+        box-sizing: border-box !important;
+
 
 		text-align: center;
 
@@ -65,7 +67,7 @@
 		border: none;
 		border-radius: 10px;
 		transition: transform 0.1s;
-		margin: 0 2.5rem;
+		margin: 1rem 2.5rem;
 		img {
 			margin-right: 1.5rem;
 		}
@@ -114,6 +116,7 @@
 		align-items: center;
 		color: #aaa;
         margin: 4rem 0;
+        
         a{
             text-decoration: underline;
         }
@@ -148,7 +151,32 @@
 		}
 		&:nth-child(odd) .right {
 			text-align: right;
-		}
+        }
+        @media screen and (max-width: 500px) {
+            flex-direction: column;
+            &:nth-child(odd){
+                flex-direction: column-reverse;
+            }
+            .right{
+                margin-top: 1rem;
+            }
+            .right, .left{
+                text-align: center;
+            }
+            .two-images {
+                position: relative;
+                img:first-child {
+                    max-width: 300px;
+                }
+                img:last-child {
+                    position: absolute;
+                    bottom: -12px;
+                    left: 0;
+                    transform: translateX(0%);
+                    max-width: 400px !important;
+                }
+            }
+        }
 	}
 }
 
