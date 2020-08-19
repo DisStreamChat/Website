@@ -178,6 +178,7 @@ const Header = props => {
 					<Link to="/apps/download">Chat Manager</Link>
 					<Link to="/bot">Discord Bot</Link>
 					<Link to="/community">Community</Link>
+                    <A href="https://www.patreon.com/disstreamchat?fan_landing=true" newTab>Support Us</A>
 					{/* <Link to="/about">About</Link> */}
 				</nav>
 			</span>
