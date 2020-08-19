@@ -1,3 +1,24 @@
+.discord-prefix{
+    min-height: 100px;
+    .prefix-body{
+        width: 98%;
+        padding: .5rem;
+        background: #2c2c2c;
+        border-radius: .5rem;
+        border: .5px solid #888
+    }
+    .prefix-input{
+        padding: .5rem;
+        width: 25%;
+        border-radius: .5rem;
+        border: none;
+        outline: none;
+        background: #242424;
+        color: white;
+        font-size: 1.5rem;
+    }
+}
+
 .plugins {
 	padding-top: 1rem;
 	margin-bottom: 5rem;

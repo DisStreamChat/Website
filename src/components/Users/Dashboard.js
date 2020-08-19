@@ -237,8 +237,8 @@ const Dashboard = props => {
 	const handleAnnoucmentSelect = useCallback(
 		async e => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(selectedGuild.id);
-			guildLevelRef.update({ notifications: e.value });
 			setAnnouncementChannel(e);
+			guildLevelRef.update({ notifications: e.value });
 		},
 		[selectedGuild]
 	);
@@ -297,7 +297,44 @@ const Dashboard = props => {
 				setLevelUpMessage(data.message);
 			}
 		})();
-	}, [selectedGuild]);
+    }, [selectedGuild]);
+
+    useEffect(() => {
+		(async () => {
+			const guild = await firebase.db
+				.collection("Leveling")
+				.doc(selectedGuild?.id || " ")
+				.get();
+			const data = guild.data();
+			if (data) {
+				setLevelUpMessage(data.message);
+			}
+		})();
+    }, [selectedGuild]);
+    
+    const [prefix, setPrefix] = useState("!")
+
+    useEffect(() => {
+		(async () => {
+			const guild = await firebase.db
+				.collection("DiscordSettings")
+				.doc(selectedGuild?.id || " ")
+				.get();
+			const data = guild.data();
+			if (data) {
+				setPrefix(data.prefix || "!");
+			}else{
+                setPrefix("!")
+            }
+		})();
+    }, [selectedGuild]);
+    
+    const prefixChange = useCallback(async e => {
+        setPrefix(e.target.value)
+        firebase.db.collection("DiscordSettings").doc(selectedGuild?.id || " ").update({
+            prefix: e.target.value
+        })
+    }, [selectedGuild?.id])
 
 	return (
 		<div className="settings-container">
@@ -415,6 +452,20 @@ const Dashboard = props => {
 											</button>
 										)}
 										<hr />
+										{selectedGuild?.id === selectedChannel?.guild && (
+											<div className="discord-prefix">
+												<label htmlFor="discord-prefix">
+													<h2 className="prefix-header">Command Prefix</h2>
+													<h3 className="prefix-subheader">
+														Set the prefix used to run DisStreamBot commands in this discord server
+													</h3>
+												</label>
+												<div className="prefix-body">
+													<input value={prefix} onChange={prefixChange} type="text" className="prefix-input" id="discord-prefix" />
+												</div>
+											</div>
+										)}
+										<hr />
 										{selectedGuild?.id === selectedChannel?.guild ? (
 											<div className="plugins">
 												<Switch>
@@ -439,13 +490,13 @@ const Dashboard = props => {
 																title="Custom Commands"
 																image={`${process.env.PUBLIC_URL}/discord.png`}
 																description="Add awesome custom commands to your server"
-                                                                comingSoon
-                                                                />
+																comingSoon
+															/>
 															<PluginCard
 																title="Logging"
 																image={`${process.env.PUBLIC_URL}/clipboard.svg`}
 																description=" Don't miss anything happening in your server when you are not around!"
-                                                                comingSoon
+																comingSoon
 															/>
 														</div>
 													</Route>
