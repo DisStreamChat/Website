@@ -36,7 +36,29 @@
         flex-wrap: wrap;
 	}
 	.plugin-item-header {
-		display: flex;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        span:first-child{
+            display: flex;
+        }
+        span button{
+            padding: .75rem 1.25rem;
+            border: none;
+            outline: none !important;
+            background: var(--disstreamchat-blue);
+            color: white;
+            border-radius: .5rem;
+            transition: .125s;
+            text-transform: uppercase;
+            &:hover, :focus{
+                transform: scale(1.1);
+            }
+            &:active{
+                transform: scale(.95);
+            }
+
+        }
 		img {
 			max-width: 50px;
 			margin-right: 1rem;

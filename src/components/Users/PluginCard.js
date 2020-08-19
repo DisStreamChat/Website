@@ -3,7 +3,7 @@ import "./PluginCard.scss"
 
 const PluginCard = props => {
 	return (
-		<div className={`plugin-card ${props.comingSoon ? "coming-soon" : ""}`}>
+		<div className={`plugin-card ${props.active ? "active" : "disabled"} ${props.comingSoon ? "coming-soon" : ""}`}>
 			<div className="image">
 				<img src={props.image} alt="" />
 			</div>

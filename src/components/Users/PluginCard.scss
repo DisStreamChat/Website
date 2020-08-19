@@ -2,7 +2,11 @@
 	$background-color: #212121;
 	background: $background-color;
 	transition: 0.25s;
-	margin: 0.5rem;
+    margin: 0.5rem;
+    cursor: pointer;
+    &.disabled{
+        opacity: .3;
+    }
 	&.coming-soon {
         position: relative;
 		&:after {

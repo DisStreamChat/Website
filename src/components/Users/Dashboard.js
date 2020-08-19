@@ -297,9 +297,9 @@ const Dashboard = props => {
 				setLevelUpMessage(data.message);
 			}
 		})();
-    }, [selectedGuild]);
+	}, [selectedGuild]);
 
-    useEffect(() => {
+	useEffect(() => {
 		(async () => {
 			const guild = await firebase.db
 				.collection("Leveling")
@@ -310,11 +310,12 @@ const Dashboard = props => {
 				setLevelUpMessage(data.message);
 			}
 		})();
-    }, [selectedGuild]);
-    
-    const [prefix, setPrefix] = useState("!")
+	}, [selectedGuild]);
 
-    useEffect(() => {
+	const [prefix, setPrefix] = useState("!");
+	const [activePlugins, setActivePlugins] = useState({});
+
+	useEffect(() => {
 		(async () => {
 			const guild = await firebase.db
 				.collection("DiscordSettings")
@@ -323,18 +324,25 @@ const Dashboard = props => {
 			const data = guild.data();
 			if (data) {
 				setPrefix(data.prefix || "!");
-			}else{
-                setPrefix("!")
-            }
+				setActivePlugins(data.activePlugins);
+			} else {
+				setPrefix("!");
+			}
 		})();
-    }, [selectedGuild]);
-    
-    const prefixChange = useCallback(async e => {
-        setPrefix(e.target.value)
-        firebase.db.collection("DiscordSettings").doc(selectedGuild?.id || " ").update({
-            prefix: e.target.value
-        })
-    }, [selectedGuild?.id])
+	}, [selectedGuild]);
+
+	const prefixChange = useCallback(
+		async e => {
+			setPrefix(e.target.value);
+			firebase.db
+				.collection("DiscordSettings")
+				.doc(selectedGuild?.id || " ")
+				.update({
+					prefix: e.target.value,
+				});
+		},
+		[selectedGuild?.id]
+	);
 
 	return (
 		<div className="settings-container">
@@ -461,7 +469,13 @@ const Dashboard = props => {
 													</h3>
 												</label>
 												<div className="prefix-body">
-													<input value={prefix} onChange={prefixChange} type="text" className="prefix-input" id="discord-prefix" />
+													<input
+														value={prefix}
+														onChange={prefixChange}
+														type="text"
+														className="prefix-input"
+														id="discord-prefix"
+													/>
 												</div>
 											</div>
 										)}
@@ -479,8 +493,9 @@ const Dashboard = props => {
 														</div>
 
 														<div className="plugin-list">
-															<A href={`${props.match.url}/discord/leveling`} local>
+															<A href={activePlugins["leveling"] ? `${props.match.url}/discord/leveling` : null} local>
 																<PluginCard
+																	active={activePlugins["leveling"]}
 																	title="Leveling"
 																	image={`${process.env.PUBLIC_URL}/trophy.svg`}
 																	description="Let your users gain XP and levels by participating in the chat!"
@@ -500,73 +515,99 @@ const Dashboard = props => {
 															/>
 														</div>
 													</Route>
-													<Route path={`${props.match.url}/discord/leveling`}>
-														<div className="plugin-item-header">
-															<img src={`${process.env.PUBLIC_URL}/trophy.svg`} alt="" />
-															<h2>Leveling</h2>
-														</div>
-														<hr />
-														<div className="plugin-item-subheader">
-															<h2>Leveling Up</h2>
-															<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
-														</div>
-														<div className="plugin-item-body">
-															<div className="level-settings">
-																<div className="channels">
-																	<div id="announcement-type">
-																		<h5 className="bold uppercase">Level up announcement</h5>
-																		<Select
-																			closeMenuOnSelect
-																			onChange={handleTypeSelect}
-																			placeholder="Select Annoucement type"
-																			value={levelUpAnnouncement}
-																			options={[
-																				{ value: 1, label: "Disabled" },
-																				{ value: 2, label: "Current Channel" },
-																				{ value: 3, label: "Custom Channel" },
-																			].map(type => type)}
-																			styles={{
-																				...colorStyles,
-																				container: styles => ({ ...styles, ...colorStyles.container }),
-																			}}
-																		/>
-																	</div>
-																	{levelUpAnnouncement?.value === 3 && (
-																		<div id="announcement-channel">
-																			<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
+													{activePlugins["leveling"] && (
+														<Route path={`${props.match.url}/discord/leveling`}>
+															<div className="plugin-item-header">
+																<span className="title">
+																	<img src={`${process.env.PUBLIC_URL}/trophy.svg`} alt="" />
+																	<h2>Leveling</h2>
+																</span>
+																<span className="toggle-button">
+																	<button
+																		onClick={() => {
+																			setActivePlugins(prev => {
+																				const newPlugs = { ...prev, leveling: false };
+																				firebase.db
+																					.collection("DiscordSettings")
+																					.doc(selectedGuild?.id || " ")
+																					.update({
+																						activePlugins: newPlugs,
+																					});
+																				return newPlugs;
+																			});
+																		}}
+																	>
+																		Disable
+																	</button>
+																</span>
+															</div>
+															<hr />
+															<div className="plugin-item-subheader">
+																<h2>Leveling Up</h2>
+																<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
+															</div>
+															<div className="plugin-item-body">
+																<div className="level-settings">
+																	<div className="channels">
+																		<div id="announcement-type">
+																			<h5 className="bold uppercase">Level up announcement</h5>
 																			<Select
 																				closeMenuOnSelect
-																				onChange={handleAnnoucmentSelect}
-																				placeholder="Select Annoucement Channel"
-																				value={announcementChannel}
-																				options={selectedGuild?.channels
-																					?.sort((a, b) => a.parent.localeCompare(b.parent))
-																					?.map(channel => ({
-																						value: channel.id,
-																						label: (
-																							<>
-																								<span>{channel.name}</span>
-																								<span className="channel-category">
-																									{channel.parent}
-																								</span>
-																							</>
-																						),
-																					}))}
+																				onChange={handleTypeSelect}
+																				placeholder="Select Annoucement type"
+																				value={levelUpAnnouncement}
+																				options={[
+																					{ value: 1, label: "Disabled" },
+																					{ value: 2, label: "Current Channel" },
+																					{ value: 3, label: "Custom Channel" },
+																				].map(type => type)}
 																				styles={{
 																					...colorStyles,
 																					container: styles => ({ ...styles, ...colorStyles.container }),
 																				}}
 																			/>
 																		</div>
-																	)}
-																</div>
-																<div className="message">
-																	<h5>LEVEL UP ANNOUNCEMENT MESSAGE</h5>
-																	<textarea value={levelUpMessage} onChange={handleMessageChange}></textarea>
+																		{levelUpAnnouncement?.value === 3 && (
+																			<div id="announcement-channel">
+																				<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
+																				<Select
+																					closeMenuOnSelect
+																					onChange={handleAnnoucmentSelect}
+																					placeholder="Select Annoucement Channel"
+																					value={announcementChannel}
+																					options={selectedGuild?.channels
+																						?.sort((a, b) => a.parent.localeCompare(b.parent))
+																						?.map(channel => ({
+																							value: channel.id,
+																							label: (
+																								<>
+																									<span>{channel.name}</span>
+																									<span className="channel-category">
+																										{channel.parent}
+																									</span>
+																								</>
+																							),
+																						}))}
+																					styles={{
+																						...colorStyles,
+																						container: styles => ({
+																							...styles,
+																							...colorStyles.container,
+																						}),
+																					}}
+																				/>
+																			</div>
+																		)}
+																	</div>
+																	<div className="message">
+																		<h5>LEVEL UP ANNOUNCEMENT MESSAGE</h5>
+																		<textarea value={levelUpMessage} onChange={handleMessageChange}></textarea>
+																	</div>
 																</div>
 															</div>
-														</div>
-													</Route>
+														</Route>
+													)}
+													<Redirect to={`${props.match.url}/discord`} />
 												</Switch>
 											</div>
 										) : (
