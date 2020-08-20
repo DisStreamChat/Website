@@ -114,7 +114,7 @@ const Dashboard = props => {
 					});
 			}
 		},
-		[id, sendRequest, discordInfo]
+		[id, discordInfo]
 	);
 
 	useEffect(() => {
@@ -220,18 +220,20 @@ const Dashboard = props => {
 		[selectedGuild]
 	);
 
+    const {location} = props
+    const guildId = selectedGuild?.id
 	useEffect(() => {
 		(async () => {
-            if(props.location.pathname.includes("/leveling")){
+            if(location.pathname.includes("/leveling")){
                 const guild = await firebase.db
 				.collection("Leveling")
-				.doc(selectedGuild?.id || " ")
+				.doc(guildId || " ")
 				.get();
 			const data = guild.data();
 			if (data) {
 				const id = data.notifications;
 				if (id) {
-					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${selectedGuild.id}&channel=${id}`;
+					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
 					const response = await fetch(apiUrl);
 					const channel = await response.json();
 					setAnnouncementChannel({
@@ -253,7 +255,7 @@ const Dashboard = props => {
             }
 			
 		})();
-	}, [selectedGuild, props.location]);
+	}, [location, guildId]);
 
 	const [prefix, setPrefix] = useState("!");
 	const [activePlugins, setActivePlugins] = useState({});
