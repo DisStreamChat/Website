@@ -87,26 +87,11 @@ const Dashboard = props => {
 
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
-		snapshot => {
-			const data = snapshot.data();
-			if (data) {
-				firebase.db
-					.collection("Streamers")
-					.doc(id)
-					.update({
-						guildId: data.connectedGuild || "",
-					});
-			}
-		},
-		[id]
-	);
-
-	useSnapshot(
-		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
 		async snapshot => {
 			const data = snapshot.data();
 			if (data) {
-				const id = data.connectedGuild;
+                setDiscordInfo(data);
+                const id = data.connectedGuild;
 				const guildByName = discordInfo?.guilds?.find?.(guild => guild.id === id);
 				if (guildByName) {
 					const guildId = guildByName.id;
@@ -120,30 +105,27 @@ const Dashboard = props => {
 						channels: channelReponse,
 					});
 				}
+				firebase.db
+					.collection("Streamers")
+					.doc(id)
+					.update({
+						guildId: data.connectedGuild || "",
+					});
 			}
 		},
-		[discordInfo, id, sendRequest]
+		[id]
 	);
 
 	useEffect(() => {
 		(async () => {
 			const userRef = await firebase.db.collection("Streamers").doc(id).get();
 			const userData = userRef.data();
-
 			if (userData) {
 				setOverlaySettings(userData.overlaySettings);
 				setAppSettings(userData.appSettings);
 			}
 		})();
 	}, []);
-
-	useSnapshot(
-		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
-		snapshot => {
-			setDiscordInfo(snapshot.data());
-		},
-		[id]
-	);
 
 	useEffect(() => {
 		(async () => {
