@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { NavLink, Route, Redirect, Switch } from "react-router-dom";
 import firebase from "../../firebase";
 import "./Users.scss";
@@ -12,6 +12,7 @@ import useSnapshot from "../../hooks/useSnapshot";
 import { colorStyles, guildOption } from "./userUtils";
 import SettingBox from "./SettingBox";
 import PluginCard from "./PluginCard";
+import { AppContext } from "../../contexts/Appcontext";
 
 const Dashboard = props => {
 	const [discordInfo, setDiscordInfo] = useState();
@@ -21,6 +22,7 @@ const Dashboard = props => {
 	const [defaultSettings, setDefaultSettings] = useState();
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
+	const { currentUser } = useContext(AppContext);
 
 	useEffect(() => {
 		(async () => {
@@ -34,8 +36,7 @@ const Dashboard = props => {
 		setDisplayGuild(guildOption(selectedGuild));
 	}, [selectedGuild]);
 
-	const currentUser = firebase.auth.currentUser;
-	const id = currentUser.uid;
+	const id = currentUser?.uid || " ";
 
 	const [overlaySettings, setOverlaySettings] = useState();
 	const [appSettings, setAppSettings] = useState();
@@ -90,8 +91,8 @@ const Dashboard = props => {
 		async snapshot => {
 			const data = snapshot.data();
 			if (data) {
-                setDiscordInfo(data);
-                const id = data.connectedGuild;
+				setDiscordInfo(data);
+				const id = data.connectedGuild;
 				const guildByName = discordInfo?.guilds?.find?.(guild => guild.id === id);
 				if (guildByName) {
 					const guildId = guildByName.id;
@@ -118,25 +119,21 @@ const Dashboard = props => {
 
 	useEffect(() => {
 		(async () => {
-			const userRef = await firebase.db.collection("Streamers").doc(id).get();
-			const userData = userRef.data();
-			if (userData) {
-				setOverlaySettings(userData.overlaySettings);
-				setAppSettings(userData.appSettings);
+			if (currentUser) {
+				setOverlaySettings(currentUser.overlaySettings);
+				setAppSettings(currentUser.appSettings);
 			}
 		})();
-	}, []);
+	}, [currentUser]);
 
 	useEffect(() => {
 		(async () => {
-			const user = await firebase.db.collection("Streamers").doc(id).get();
 			const discord = await firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").get();
-			const userData = await user.data();
+			const userData = currentUser;
 			const discordData = await discord.data();
 			if (discordData) {
 				const channels = userData.liveChatId;
 				const channelData = channels instanceof Array ? channels : [channels];
-
 				const resolveChannel = async channel =>
 					sendRequest(`${process.env.REACT_APP_API_URL}/resolvechannel?guild=${discordData.connectedGuild}&channel=${channel}`);
 				setSelectedChannel({
@@ -145,7 +142,7 @@ const Dashboard = props => {
 				});
 			}
 		})();
-	}, [id, props.history, sendRequest, discordInfo]);
+	}, [currentUser, id, props.history, sendRequest, discordInfo]);
 
 	const Connectguild = useCallback(async () => {
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
@@ -198,7 +195,6 @@ const Dashboard = props => {
 	const handleTypeSelect = useCallback(
 		async e => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(selectedGuild.id);
-			// const guildLevel = await guildLevelRef.get()
 			setLevelUpAnnouncement(e);
 			await guildLevelRef.update({ type: e.value });
 		},
@@ -208,7 +204,6 @@ const Dashboard = props => {
 	const handleMessageChange = useCallback(
 		async e => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(selectedGuild.id);
-			// const guildLevel = await guildLevelRef.get()
 			const message = e.target.value;
 			setLevelUpMessage(message);
 			await guildLevelRef.update({ message });

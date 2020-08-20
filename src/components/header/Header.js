@@ -37,10 +37,11 @@ const Header = props => {
 					const data = snapshot.data();
 					if (data) {
 						const { displayName, profilePicture } = data;
-						setCurrentUser({
+						setCurrentUser(prev => ({
+                            ...prev,
 							name: displayName,
 							profilePicture,
-						});
+						}));
 					}
 				});
 			return unsub;
