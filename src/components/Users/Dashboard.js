@@ -36,7 +36,7 @@ const Dashboard = props => {
 		setDisplayGuild(guildOption(selectedGuild));
 	}, [selectedGuild]);
 
-	const id = currentUser?.uid || " ";
+	const id = firebase.auth.currentUser.uid;
 
 	const [overlaySettings, setOverlaySettings] = useState();
 	const [appSettings, setAppSettings] = useState();
@@ -114,7 +114,7 @@ const Dashboard = props => {
 					});
 			}
 		},
-		[id]
+		[id, sendRequest, discordInfo]
 	);
 
 	useEffect(() => {
@@ -124,14 +124,16 @@ const Dashboard = props => {
 				setAppSettings(currentUser.appSettings);
 			}
 		})();
-	}, [currentUser]);
+    }, [currentUser]);
+    
+    console.log(selectedChannel, selectedGuild)
 
 	useEffect(() => {
 		(async () => {
 			const discord = await firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").get();
 			const userData = currentUser;
 			const discordData = await discord.data();
-			if (discordData) {
+			if (discordData && userData) {
 				const channels = userData.liveChatId;
 				const channelData = channels instanceof Array ? channels : [channels];
 				const resolveChannel = async channel =>
@@ -241,50 +243,13 @@ const Dashboard = props => {
 								<span className="channel-category">{channel.parent}</span>
 							</>
 						),
-					});
+                    });
+                    setLevelUpAnnouncement({
+                        value: data.type,
+                        label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
+                    });
+                    setLevelUpMessage(data.message);
 				}
-			}
-		})();
-	}, [selectedGuild]);
-
-	useEffect(() => {
-		(async () => {
-			const guild = await firebase.db
-				.collection("Leveling")
-				.doc(selectedGuild?.id || " ")
-				.get();
-			const data = guild.data();
-			if (data) {
-				setLevelUpAnnouncement({
-					value: data.type,
-					label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
-				});
-			}
-		})();
-	}, [selectedGuild]);
-
-	useEffect(() => {
-		(async () => {
-			const guild = await firebase.db
-				.collection("Leveling")
-				.doc(selectedGuild?.id || " ")
-				.get();
-			const data = guild.data();
-			if (data) {
-				setLevelUpMessage(data.message);
-			}
-		})();
-	}, [selectedGuild]);
-
-	useEffect(() => {
-		(async () => {
-			const guild = await firebase.db
-				.collection("Leveling")
-				.doc(selectedGuild?.id || " ")
-				.get();
-			const data = guild.data();
-			if (data) {
-				setLevelUpMessage(data.message);
 			}
 		})();
 	}, [selectedGuild]);
