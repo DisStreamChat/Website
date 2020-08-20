@@ -126,8 +126,6 @@ const Dashboard = props => {
 		})();
     }, [currentUser]);
     
-    console.log(selectedChannel, selectedGuild)
-
 	useEffect(() => {
 		(async () => {
 			const discord = await firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").get();
@@ -224,7 +222,8 @@ const Dashboard = props => {
 
 	useEffect(() => {
 		(async () => {
-			const guild = await firebase.db
+            if(props.location.pathname.includes("/leveling")){
+                const guild = await firebase.db
 				.collection("Leveling")
 				.doc(selectedGuild?.id || " ")
 				.get();
@@ -251,8 +250,10 @@ const Dashboard = props => {
                     setLevelUpMessage(data.message);
 				}
 			}
+            }
+			
 		})();
-	}, [selectedGuild]);
+	}, [selectedGuild, props.location]);
 
 	const [prefix, setPrefix] = useState("!");
 	const [activePlugins, setActivePlugins] = useState({});
