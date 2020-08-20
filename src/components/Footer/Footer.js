@@ -19,7 +19,7 @@ const Footer = () => {
                     <h3>The best Stream/Discord chat Integration</h3>
                     <h4>DisStreamChat is the easiest way to link your Discord with your Stream chat</h4>
                     <A href="https://github.com/DisStreamChat" newTab><GitHubIcon /></A>
-                    <A href="https://twitter.com/Snyderling_" newTab><TwitterIcon /></A>
+                    <A href="https://twitter.com/twitchDis" newTab><TwitterIcon /></A>
                 </section>
                 <section className="right">
                     <div className="column">
