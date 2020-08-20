@@ -12,12 +12,12 @@ const Bot = () => {
 						<A href="https://api.disstreamchat.com/invite" newTab>
 							Invite
 						</A>{" "}
-						our bot over here to unlock your server's full potential and allow people to level up, moderate the chat, get info about users
-						and so much more. Disclaimer: The discord bot is a WIP and not every feature is publicly released yet
+						our bot to unlock your server's full potential and allow people to level up, moderate the chat, get info about users and so
+						much more. Disclaimer: The discord bot is a WIP and not every feature is publicly released yet.
 					</h3>
 				</div>
 				<div className="right two-images">
-                    <img className="on-top nudge-up see-through" src={`${process.env.PUBLIC_URL}/invite.png`} alt=""/>
+					<img className="on-top nudge-up see-through" src={`${process.env.PUBLIC_URL}/invite.png`} alt="" />
 					<img src={`${process.env.PUBLIC_URL}/rank.png`} alt="" />
 				</div>
 			</section>
