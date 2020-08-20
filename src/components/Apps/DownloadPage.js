@@ -21,6 +21,7 @@ const DownloadPage = () => {
 					<div className="heading">
 						<h1>Download for Windows</h1>
 					</div>
+                    <img src={`${process.env.PUBLIC_URL}/windows.webp`} width="100" alt=""/>
 					<div className="download-links">
 						<A href="https://api.disstreamchat.com/app" newTab>
 							<Button className="download-button">Latest Version</Button>
@@ -31,6 +32,7 @@ const DownloadPage = () => {
 					<div className="heading">
 						<h1>Download for Linux</h1>
 					</div>
+                    <img src={`${process.env.PUBLIC_URL}/linux.png`} width="100" alt=""/>
 					<div className="download-links">
 						<A href="https://i.lungers.com/disstreamchat/linux" newTab>
 							<Button className="download-button">Latest Version</Button>
@@ -41,6 +43,7 @@ const DownloadPage = () => {
 					<div className="heading">
 						<h1>Download for Mac</h1>
 					</div>
+                    <img src={`${process.env.PUBLIC_URL}/apple.png`} width="64" style={{filter: "invert(1)"}} alt=""/>
 					<div className="download-links">
 						<A href="https://i.lungers.com/disstreamchat/darwin" newTab>
 							<Button className="download-button">Latest Version</Button>
