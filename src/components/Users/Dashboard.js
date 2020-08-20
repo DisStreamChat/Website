@@ -301,9 +301,13 @@ const Dashboard = props => {
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord`}>
 					Discord Settings
 				</NavLink>
+                <NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/account`}>
+					Account Settings
+				</NavLink>
 			</div>
 			<div className="settings">
 				<Switch>
+                <Route path={`${props.match.url}/account`}></Route>
 					<Route path={`${props.match.url}/discord`}>
 						<h1>Discord Settings</h1>
 						<h3>
