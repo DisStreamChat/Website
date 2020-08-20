@@ -455,7 +455,19 @@ const Dashboard = props => {
 															<PluginCard
 																title="Logging"
 																image={`${process.env.PUBLIC_URL}/clipboard.svg`}
-																description=" Don't miss anything happening in your server when you are not around!"
+																description="Don't miss anything happening in your server when you are not around!"
+																comingSoon
+															/>
+                                                            <PluginCard
+																title="Welcome"
+																image={``}
+																description="Give new users a warm welcome"
+																comingSoon
+															/>
+                                                            <PluginCard
+																title="Help"
+																image={``}
+																description="Enables the 'help' command in your server"
 																comingSoon
 															/>
 														</div>
