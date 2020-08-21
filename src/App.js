@@ -12,22 +12,34 @@ import Team from "./components/Team/Team";
 import Header from "./components/header/Header";
 import ProtectedRoute from "./components/Shared/ProtectedRoute";
 import Loader from "react-loader";
-import DownloadPage from "./components/Apps/DownloadPage"
-import PrivacyPolicy from "./components/Shared/PrivacyPolicy"
-import Terms from "./components/Shared/Terms"
+import DownloadPage from "./components/Apps/DownloadPage";
+import PrivacyPolicy from "./components/Shared/PrivacyPolicy";
+import Terms from "./components/Shared/Terms";
 
 import "./App.scss";
 import { AppContext } from "./contexts/Appcontext";
 import Banner from "./components/Shared/Banner";
 import { Button } from "@material-ui/core";
-import A from "./components/Shared/A"
+import A from "./components/Shared/A";
+import useSnapshot from "./hooks/useSnapshot";
 
 function App(props) {
 	const [userId, setUserId] = useState("");
 	const [dropDownOpen, setDropDownOpen] = useState(false);
 	const [currentUser, setCurrentUser] = useState();
-    const [firebaseInit, setFirebaseInit] = useState(false);
-    const user = firebase.auth.currentUser
+	const [firebaseInit, setFirebaseInit] = useState(false);
+	const user = firebase.auth.currentUser;
+
+	useSnapshot(
+		firebase.db.collection("Streamers").doc(userId || " "),
+		snapshot => {
+			const data = snapshot.data();
+			if (data) {
+				setCurrentUser(data);
+			}
+		},
+		[userId]
+	);
 
 	useEffect(() => {
 		(async () => {
@@ -37,10 +49,11 @@ function App(props) {
 	}, []);
 
 	useEffect(() => {
-		const codeArray = new URLSearchParams(window.location.search);
+        const codeArray = new URLSearchParams(window.location.search);
 		if (codeArray.has("code")) {
 			(async () => {
-                const code = codeArray.get("code");
+                
+				const code = codeArray.get("code");
 				if (!codeArray.has("discord")) {
 					try {
 						const response = await fetch("https://api.disstreamchat.com/token?code=" + code);
@@ -51,12 +64,14 @@ function App(props) {
 					} catch (err) {}
 				} else {
 					try {
-						
+                        console.log(code)
 						const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token?code=${code}`);
-						// const response = await fetch("http://localhost:3200/discord/token?code="+code)
+                        // const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
-							console.log(await response.json());
+                            console.log(await response.json());
+                            console.log("fail")
 						} else {
+                            console.log("success")
 							const json = await response.json();
 							await firebase.db
 								.collection("Streamers")
@@ -72,16 +87,17 @@ function App(props) {
 				window.location = "/#/dashboard/discord";
 			})();
 		}
-    }, []);
-    
-    useEffect(() => {
+	}, []);
+
+	useEffect(() => {
 		(async () => {
 			if (firebaseInit !== false && user) {
-                const userData = (await firebase.db.collection("Streamers").doc(user.uid).get()).data();
+				setUserId(user.uid);
+				const userData = (await firebase.db.collection("Streamers").doc(user.uid).get()).data();
 				const profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
 				const profilePicture = await profilePictureResponse.json();
 				firebase.db.collection("Streamers").doc(user.uid).update({
-                    profilePicture,
+					profilePicture,
 				});
 			}
 		})();
@@ -110,10 +126,10 @@ function App(props) {
 								<Route path="/community" component={Community} />
 								<Route path="/about" component={About} />
 								<Route path="/members" component={Team} />
-                                <Route path="/privacy" component={PrivacyPolicy}/>
-                                <Route path="/terms" component={Terms}/>
-								<Route path="/apps/download" component={DownloadPage}/>
-                                <ProtectedRoute path="/dashboard" component={Dashboard} />
+								<Route path="/privacy" component={PrivacyPolicy} />
+								<Route path="/terms" component={Terms} />
+								<Route path="/apps/download" component={DownloadPage} />
+								<ProtectedRoute path="/dashboard" component={Dashboard} />
 								<Redirect to="/" />
 							</Switch>
 						</main>
@@ -121,9 +137,11 @@ function App(props) {
 					</div>{" "}
 					: <></>
 				</Switch>
-                <Banner message="DisStreamChat is in early alpha and we would like your help to test it">
-                <A newTab href="https://api.disstreamchat.com/discord"><Button className="banner-button">Join the Discord</Button></A>
-                </Banner>
+				<Banner message="DisStreamChat is in early alpha and we would like your help to test it">
+					<A newTab href="https://api.disstreamchat.com/discord">
+						<Button className="banner-button">Join the Discord</Button>
+					</A>
+				</Banner>
 			</AppContext.Provider>
 		</Router>
 	) : (

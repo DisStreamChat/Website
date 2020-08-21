@@ -83,7 +83,7 @@ const SettingBox = props => {
 					</NavLink>
 					{[...new Set(Object.values(props.defaultSettings || {}).map(val => val.category))]
 						.sort()
-						.filter(cat => (props.app ? true : cat.toLowerCase() !== "visibility"))
+                        .filter(cat => cat ? (props.app ? true : cat.toLowerCase() !== "visibility") : false)
 						.map(key => (
 							<NavLink activeClassName="active-category" className="category" to={`${props.parenturl}/${props.path}/${key}`} key={key}>
 								{key}
