@@ -41,7 +41,7 @@ const Dashboard = props => {
 
 	useEffect(() => {
 		(async () => {
-			const settingsRef = await firebase.db.collection("defaults").doc("settings15").get();
+			const settingsRef = await firebase.db.collection("defaults").doc("settings13").get();
 			const settingsData = settingsRef.data().settings;
 			setDefaultSettings(settingsData);
 		})();
