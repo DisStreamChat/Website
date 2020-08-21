@@ -32,14 +32,17 @@ function App(props) {
 
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(userId || " "),
-		snapshot => {
-			const data = snapshot.data();
+		async snapshot => {
+            const data = snapshot.data();
+            const discordData = ((await snapshot.ref.collection("discord").doc("data").get()).data())
 			if (data) {
-				setCurrentUser(data);
+				setCurrentUser({...data, discordData});
 			}
 		},
 		[userId]
-	);
+    );
+    
+    console.log(currentUser)
 
 	useEffect(() => {
 		(async () => {

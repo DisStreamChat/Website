@@ -19,11 +19,11 @@ const DiscordPage = ({location, history, match}) => {
 	const [selectedChannel, setSelectedChannel] = useState({});
 	const [displayGuild, setDisplayGuild] = useState();
 	const [selectedGuild, setSelectedGuild] = useState();
-	const [discordInfo, setDiscordInfo] = useState();
 	const [refreshed, setRefreshed] = useState(false);
-    const { currentUser } = useContext(AppContext);
+    const { currentUser, setCurrentUser } = useContext(AppContext);
     const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
 	const { isLoading, sendRequest: sendLoadingRequest } = useFetch();
+    const discordInfo = currentUser?.discordData
     const id = firebase.auth.currentUser.uid;
         
 	const guildId = selectedGuild?.id;
@@ -131,8 +131,8 @@ const DiscordPage = ({location, history, match}) => {
 	const disconnectAccount = useCallback(async () => {
 		disconnect();
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").set({});
-		setDiscordInfo({});
-	}, [id, disconnect]);
+		setCurrentUser(prev => ({...prev, discordData: {}}));
+	}, [id, disconnect, setCurrentUser]);
 
 	const { sendRequest } = useFetch();
 
@@ -166,7 +166,6 @@ const DiscordPage = ({location, history, match}) => {
 		async snapshot => {
 			const data = snapshot.data();
 			if (data) {
-				setDiscordInfo(data);
 				firebase.db
 					.collection("Streamers")
 					.doc(id || " ")
@@ -180,21 +179,18 @@ const DiscordPage = ({location, history, match}) => {
 
 	useEffect(() => {
 		(async () => {
-			const discord = await firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").get();
-			const userData = currentUser;
-			const discordData = await discord.data();
-			if (discordData && userData) {
-				const channels = userData.liveChatId;
+			if (discordInfo && currentUser) {
+				const channels = currentUser.liveChatId;
 				const channelData = channels instanceof Array ? channels : [channels];
 				const resolveChannel = async channel =>
-					sendRequest(`${process.env.REACT_APP_API_URL}/resolvechannel?guild=${discordData.connectedGuild}&channel=${channel}`);
+					sendRequest(`${process.env.REACT_APP_API_URL}/resolvechannel?guild=${discordInfo.connectedGuild}&channel=${channel}`);
 				setSelectedChannel({
-					guild: discordData.connectedGuild,
+					guild: discordInfo.connectedGuild,
 					channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c),
 				});
 			}
 		})();
-	}, [currentUser, id, sendRequest, discordInfo]);
+	}, [currentUser, sendRequest, discordInfo]);
 
 	const Connectguild = useCallback(async () => {
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
@@ -232,7 +228,7 @@ const DiscordPage = ({location, history, match}) => {
 						parent: c.label.props.children[1].props.children,
 					})) || [],
 			}));
-			firebase.db
+			await firebase.db
 				.collection("Streamers")
 				.doc(id)
 				.update({
@@ -242,9 +238,7 @@ const DiscordPage = ({location, history, match}) => {
 		[id]
 	);
 
-   
-
-	const handleTypeSelect = useCallback(
+   	const handleTypeSelect = useCallback(
 		async e => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(selectedGuild.id);
 			setLevelUpAnnouncement(e);
@@ -381,7 +375,7 @@ const DiscordPage = ({location, history, match}) => {
 								</div>
 							)}
 							<hr />
-							{selectedGuild?.id === selectedChannel?.guild ? (
+							{selectedGuild && selectedChannel && selectedGuild?.id === selectedChannel?.guild ? (
 								<div className="plugins">
 									<Switch>
 										<Route exact path={`${match.url}/discord`}>
