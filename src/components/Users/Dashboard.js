@@ -42,10 +42,10 @@ const Dashboard = props => {
 				.doc("data")
 				.set(json.userData);
 		})();
-	}, [refreshToken, id]);
+	}, [id]);
 
 	useEffect(() => {
-        //hello
+		//hello
 		(async () => {
 			const settingsRef = await firebase.db.collection("defaults").doc("settings15").get();
 			const settingsData = settingsRef.data().settings;
@@ -135,8 +135,8 @@ const Dashboard = props => {
 		async snapshot => {
 			const data = snapshot.data();
 			if (data) {
-                setDiscordInfo(data);
-                firebase.db
+				setDiscordInfo(data);
+				firebase.db
 					.collection("Streamers")
 					.doc(id || " ")
 					.update({
