@@ -22,7 +22,16 @@ const Dashboard = props => {
 	const [defaultSettings, setDefaultSettings] = useState();
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
-	const { currentUser } = useContext(AppContext);
+    const { currentUser } = useContext(AppContext);
+    
+    // const refreshToken = discordInfo?.refreshToken
+    // useEffect(() => {
+    //     (async () => {
+
+    //         const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${}`);
+
+    //     })()
+    // }, [])
 
 	useEffect(() => {
 		(async () => {
@@ -108,7 +117,7 @@ const Dashboard = props => {
 				}
 				firebase.db
 					.collection("Streamers")
-					.doc(id)
+					.doc(id || " ")
 					.update({
 						guildId: data.connectedGuild || "",
 					});
