@@ -21,15 +21,18 @@ const Dashboard = props => {
 	const [displayGuild, setDisplayGuild] = useState();
 	const [defaultSettings, setDefaultSettings] = useState();
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
-	const [announcementChannel, setAnnouncementChannel] = useState(false);
+    const [announcementChannel, setAnnouncementChannel] = useState(false);
+    const [refreshed, setRefreshed] = useState(false)
 	const { currentUser } = useContext(AppContext);
 
 	const id = firebase.auth.currentUser.uid;
 	const refreshToken = discordInfo?.refreshToken;
 	useEffect(() => {
 		(async () => {
-			console.log("refreshing");
-			if (!refreshToken) return;
+            if (!refreshToken) return;
+            if(refreshed) return console.log("already refreshed")
+            console.log("refreshing");
+            setRefreshed(true)
 			const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${refreshToken}`);
 			if (!response.ok) return;
 
@@ -42,7 +45,7 @@ const Dashboard = props => {
 				.doc("data")
 				.set(json.userData);
 		})();
-	}, [id]);
+	}, [id, refreshToken, refreshed]);
 
 	useEffect(() => {
 		//hello
