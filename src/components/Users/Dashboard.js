@@ -23,6 +23,7 @@ const Dashboard = props => {
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
 
 	useEffect(() => {
+        //hello
 		(async () => {
 			const settingsRef = await firebase.db.collection("defaults").doc("settings15").get();
 			const settingsData = settingsRef.data().settings;
