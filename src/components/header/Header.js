@@ -117,7 +117,6 @@ const Header = props => {
 					className="modal-buttons"
 					onSubmit={e => {
 						e.preventDefault();
-						alert("submitted");
 					}}
 				>
 					<button type="submit">

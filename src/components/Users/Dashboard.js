@@ -24,14 +24,19 @@ const Dashboard = props => {
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
     const { currentUser } = useContext(AppContext);
     
-    // const refreshToken = discordInfo?.refreshToken
-    // useEffect(() => {
-    //     (async () => {
+    const id = firebase.auth.currentUser.uid;
+    const refreshToken = discordInfo?.refreshToken
+    useEffect(() => {
+        (async () => {
+            if(!refreshToken) return
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${refreshToken}`);
+            if(!response.ok) return
 
-    //         const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${}`);
-
-    //     })()
-    // }, [])
+            const json = await response.json()
+            if(!json) return
+            await firebase.db.collection("Streamers").doc(id || " ").collection("discord").doc("data").set(json.userData)
+        })()
+    }, [refreshToken, id])
 
 	useEffect(() => {
 		(async () => {
@@ -45,7 +50,6 @@ const Dashboard = props => {
 		setDisplayGuild(guildOption(selectedGuild));
 	}, [selectedGuild]);
 
-	const id = firebase.auth.currentUser.uid;
 
 	const [overlaySettings, setOverlaySettings] = useState();
 	const [appSettings, setAppSettings] = useState();
@@ -95,6 +99,8 @@ const Dashboard = props => {
 		setDiscordInfo({});
 	}, [id, disconnect]);
 
+
+    const guilds = discordInfo?.guilds
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
 		async snapshot => {
@@ -102,7 +108,7 @@ const Dashboard = props => {
 			if (data) {
 				setDiscordInfo(data);
 				const id = data.connectedGuild;
-				const guildByName = discordInfo?.guilds?.find?.(guild => guild.id === id);
+				const guildByName = guilds?.find?.(guild => guild.id === id);
 				if (guildByName) {
 					const guildId = guildByName.id;
 					const value = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
@@ -123,7 +129,7 @@ const Dashboard = props => {
 					});
 			}
 		},
-		[id, discordInfo]
+		[id, guilds]
 	);
 
 	useEffect(() => {

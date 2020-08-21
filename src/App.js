@@ -64,14 +64,14 @@ function App(props) {
 					} catch (err) {}
 				} else {
 					try {
-                        alert(code)
+                        console.log(code)
 						const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token?code=${code}`);
                         // const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
                             console.log(await response.json());
-                            alert("fail")
+                            console.log("fail")
 						} else {
-                            alert("success")
+                            console.log("success")
 							const json = await response.json();
 							await firebase.db
 								.collection("Streamers")
@@ -81,7 +81,7 @@ function App(props) {
 								.set(json);
 						}
 					} catch (err) {
-						alert(err.message);
+						console.log(err.message);
 					}
 				}
 				window.location = "/#/dashboard/discord";

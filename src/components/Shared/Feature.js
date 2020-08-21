@@ -14,7 +14,6 @@ const Feature = React.memo(props => {
 		</>,
 	];
 
-    console.log(props.images.length === 2)
 	return (
 		<section className={`feature`}>
 			<div className={`left ${props.images.length === 2 ? "two-images" : ""}`}>{innerBody[props.reversed ? 1 : 0]}</div>
