@@ -28,6 +28,7 @@ const Dashboard = props => {
     const refreshToken = discordInfo?.refreshToken
     useEffect(() => {
         (async () => {
+            console.log("refreshing")
             if(!refreshToken) return
             const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${refreshToken}`);
             if(!response.ok) return
