@@ -22,22 +22,27 @@ const Dashboard = props => {
 	const [defaultSettings, setDefaultSettings] = useState();
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
-    const { currentUser } = useContext(AppContext);
-    
-    const id = firebase.auth.currentUser.uid;
-    const refreshToken = discordInfo?.refreshToken
-    useEffect(() => {
-        (async () => {
-            console.log("refreshing")
-            if(!refreshToken) return
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${refreshToken}`);
-            if(!response.ok) return
+	const { currentUser } = useContext(AppContext);
 
-            const json = await response.json()
-            if(!json) return
-            await firebase.db.collection("Streamers").doc(id || " ").collection("discord").doc("data").set(json.userData)
-        })()
-    }, [refreshToken, id])
+	const id = firebase.auth.currentUser.uid;
+	const refreshToken = discordInfo?.refreshToken;
+	useEffect(() => {
+		(async () => {
+			console.log("refreshing");
+			if (!refreshToken) return;
+			const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${refreshToken}`);
+			if (!response.ok) return;
+
+			const json = await response.json();
+			if (!json) return;
+			await firebase.db
+				.collection("Streamers")
+				.doc(id || " ")
+				.collection("discord")
+				.doc("data")
+				.set(json.userData);
+		})();
+	}, [refreshToken, id]);
 
 	useEffect(() => {
 		(async () => {
@@ -50,7 +55,6 @@ const Dashboard = props => {
 	useEffect(() => {
 		setDisplayGuild(guildOption(selectedGuild));
 	}, [selectedGuild]);
-
 
 	const [overlaySettings, setOverlaySettings] = useState();
 	const [appSettings, setAppSettings] = useState();
@@ -100,14 +104,12 @@ const Dashboard = props => {
 		setDiscordInfo({});
 	}, [id, disconnect]);
 
-
-    const guilds = discordInfo?.guilds
+	const guilds = discordInfo?.guilds;
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
 		async snapshot => {
 			const data = snapshot.data();
 			if (data) {
-				setDiscordInfo(data);
 				const id = data.connectedGuild;
 				const guildByName = guilds?.find?.(guild => guild.id === id);
 				if (guildByName) {
@@ -133,6 +135,17 @@ const Dashboard = props => {
 		[id, guilds]
 	);
 
+	useSnapshot(
+		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
+		async snapshot => {
+			const data = snapshot.data();
+			if (data) {
+				setDiscordInfo(data);
+			}
+		},
+		[id]
+	);
+
 	useEffect(() => {
 		(async () => {
 			if (currentUser) {
@@ -140,8 +153,8 @@ const Dashboard = props => {
 				setAppSettings(currentUser.appSettings);
 			}
 		})();
-    }, [currentUser]);
-    
+	}, [currentUser]);
+
 	useEffect(() => {
 		(async () => {
 			const discord = await firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").get();
@@ -236,40 +249,39 @@ const Dashboard = props => {
 		[selectedGuild]
 	);
 
-    const {location} = props
-    const guildId = selectedGuild?.id
+	const { location } = props;
+	const guildId = selectedGuild?.id;
 	useEffect(() => {
 		(async () => {
-            if(location.pathname.includes("/leveling")){
-                const guild = await firebase.db
-				.collection("Leveling")
-				.doc(guildId || " ")
-				.get();
-			const data = guild.data();
-			if (data) {
-				const id = data.notifications;
-				if (id) {
-					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
-					const response = await fetch(apiUrl);
-					const channel = await response.json();
-					setAnnouncementChannel({
-						value: id,
-						label: (
-							<>
-								<span>{channel.name}</span>
-								<span className="channel-category">{channel.parent}</span>
-							</>
-						),
-                    });
-                    setLevelUpAnnouncement({
-                        value: data.type,
-                        label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
-                    });
-                    setLevelUpMessage(data.message);
+			if (location.pathname.includes("/leveling")) {
+				const guild = await firebase.db
+					.collection("Leveling")
+					.doc(guildId || " ")
+					.get();
+				const data = guild.data();
+				if (data) {
+					const id = data.notifications;
+					if (id) {
+						const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
+						const response = await fetch(apiUrl);
+						const channel = await response.json();
+						setAnnouncementChannel({
+							value: id,
+							label: (
+								<>
+									<span>{channel.name}</span>
+									<span className="channel-category">{channel.parent}</span>
+								</>
+							),
+						});
+						setLevelUpAnnouncement({
+							value: data.type,
+							label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
+						});
+						setLevelUpMessage(data.message);
+					}
 				}
 			}
-            }
-			
 		})();
 	}, [location, guildId]);
 
@@ -317,13 +329,13 @@ const Dashboard = props => {
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord`}>
 					Discord Settings
 				</NavLink>
-                <NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/account`}>
+				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/account`}>
 					Account Settings
 				</NavLink>
 			</div>
 			<div className="settings">
 				<Switch>
-                <Route path={`${props.match.url}/account`}></Route>
+					<Route path={`${props.match.url}/account`}></Route>
 					<Route path={`${props.match.url}/discord`}>
 						<h1>Discord Settings</h1>
 						<h3>
@@ -478,13 +490,13 @@ const Dashboard = props => {
 																description="Don't miss anything happening in your server when you are not around!"
 																comingSoon
 															/>
-                                                            <PluginCard
+															<PluginCard
 																title="Welcome"
 																image={``}
 																description="Give new users a warm welcome"
 																comingSoon
 															/>
-                                                            <PluginCard
+															<PluginCard
 																title="Help"
 																image={``}
 																description="Enables the 'help' command in your server"
