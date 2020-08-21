@@ -125,12 +125,6 @@ const Dashboard = props => {
 						channels: channelReponse,
 					});
 				}
-				firebase.db
-					.collection("Streamers")
-					.doc(id || " ")
-					.update({
-						guildId: data.connectedGuild || "",
-					});
 			}
 		},
 		[id, guilds]
@@ -141,7 +135,13 @@ const Dashboard = props => {
 		async snapshot => {
 			const data = snapshot.data();
 			if (data) {
-				setDiscordInfo(data);
+                setDiscordInfo(data);
+                firebase.db
+					.collection("Streamers")
+					.doc(id || " ")
+					.update({
+						guildId: data.connectedGuild || "",
+					});
 			}
 		},
 		[id]
