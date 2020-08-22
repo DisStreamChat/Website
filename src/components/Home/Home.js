@@ -50,14 +50,15 @@ const Home = () => {
 					title="Never miss a new follower again"
 					body="Get all the notifications you could ever wish for in the app, like followers, subscriptions, bits and many more. Customize
                 them to fit your style or ignore them completely, whichever serves you and your army of viewing minions best."
-					images={[]}
+					images={[`${process.env.PUBLIC_URL}/notifications.png`]}
 				></Feature>
 				<Feature
 					title="No more scrolling for days looking for that one message"
 					body="DisStreamChat provides an easy to use searchbar that you can access through ctrl+f, not only does it allow you to search
                 for that amazing cat gif you just missed, it also allows you to use tags to search for things like follows, links,
                 usernames and plenty more."
-					images={[]}
+                    images={[`${process.env.PUBLIC_URL}/search2.png`, `${process.env.PUBLIC_URL}/search1.png`]}
+                    imageClassNames={["", "small-image"]}
 					reversed
 				></Feature>
 				<Feature
@@ -66,13 +67,13 @@ const Home = () => {
 							transparent as you want and allows you to interact with anything behind it. It's basically an overlay that works live on
 							your own screen. Perfect for single monitor streamers or multiple monitor streamers that still don't have enough screen
                             space."
-					images={[]}
+					images={[`${process.env.PUBLIC_URL}/unfocus.png`]}
 				></Feature>
 				<Feature
 					title="Integrate your super-secret exclusive discord chat channel"
 					body="Set up the discord bot to listen to any channels you want and integrate any chat going on in those chats into your chat
 							client. At least now you can see your moderators talking about your messed up audio right from your own chat."
-                    images={[]}
+                    images={[`${process.env.PUBLIC_URL}/discordmessage.png`]}
                     reversed
 				></Feature>
 			</div>
