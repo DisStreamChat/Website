@@ -73,9 +73,9 @@ function App(props) {
                         // const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
                             console.log(await response.json());
-                            console.log("fail")
+                            alert("fail")
 						} else {
-                            console.log("success")
+                            alert("success")
 							const json = await response.json();
 							await firebase.db
 								.collection("Streamers")
@@ -85,7 +85,7 @@ function App(props) {
 								.set(json);
 						}
 					} catch (err) {
-						console.log(err.message);
+						alert(err.message);
 					}
 				}
 				window.location = "/#/dashboard/discord";
