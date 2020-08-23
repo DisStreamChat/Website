@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Leveing = ({}) => {
+const Leveing = () => {
     return (
         <div>
             

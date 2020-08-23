@@ -77,7 +77,7 @@ const Dashboard = props => {
 				<Switch>
 					<Route path={`${props.match.url}/account`}></Route>
 					<Route path={`${props.match.url}/discord`} component={DiscordPage}></Route>
-					<Route path={`${props.match.url}/overlaysettings`}>
+					{/* <Route path={`${props.match.url}/overlaysettings`}>
 						<SettingBox
 							title="Overlay Settings"
 							subtitle={
@@ -94,7 +94,7 @@ const Dashboard = props => {
 							settings={overlaySettings}
 							updateSettings={updateOverlaySetting}
 						/>
-					</Route>
+					</Route> */}
 					<Route path={`${props.match.url}/appsettings`}>
 						<SettingBox
 							title="App Settings"
