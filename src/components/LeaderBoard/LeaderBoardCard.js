@@ -50,7 +50,7 @@ const LeaderBoardCard = ({ place, level, xp, username, displayAvatarURL }) => {
 					</svg>
 					<span className="level data">
 						<span>Level</span>
-						{level}
+						{level+1}
 					</span>
 				</div>
 			</div>
