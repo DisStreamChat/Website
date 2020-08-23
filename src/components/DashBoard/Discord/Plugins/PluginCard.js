@@ -1,5 +1,5 @@
 import React from "react";
-import "./PluginCard.scss"
+import "../PluginCard.scss"
 
 const PluginCard = props => {
 	return (

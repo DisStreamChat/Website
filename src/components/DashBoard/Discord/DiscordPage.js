@@ -33,11 +33,9 @@ const DiscordPage = React.memo(({ location, history, match }) => {
     const [rawDiscordData, discordDataLoading, DiscordDataError] = useDocument(firebase.db.doc(`Streamers/${id}/discord/data`))
 
     useEffect(() => {
-
-    }, [])
-
-	const guildId = userConnectedGuildInfo?.id;
-	
+        if(discordDataLoading) return
+        setUserDiscordInfo(rawDiscordData?.data())
+    }, [rawDiscordData, discordDataLoading, setUserDiscordInfo])
 
 	useEffect(() => {
 		setDisplayGuild(guildOption(userConnectedGuildInfo));
@@ -80,7 +78,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		setCurrentUser(prev => ({ ...prev, discordData: {} }));
 	}, [id, disconnect, setCurrentUser]);
 
-	const guilds = discordInfo?.guilds;
+	const guilds = userDiscordInfo?.guilds;
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
 		async snapshot => {
@@ -123,18 +121,18 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 
 	useEffect(() => {
 		(async () => {
-			if (discordInfo && currentUser) {
+			if (userDiscordInfo && currentUser) {
 				const channels = currentUser.liveChatId;
 				const channelData = channels instanceof Array ? channels : [channels];
 				const resolveChannel = async channel =>
-					sendRequest(`${process.env.REACT_APP_API_URL}/resolvechannel?guild=${discordInfo.connectedGuild}&channel=${channel}`);
+					sendRequest(`${process.env.REACT_APP_API_URL}/resolvechannel?guild=${userDiscordInfo.connectedGuild}&channel=${channel}`);
 				setSelectedGuild({
-					guild: discordInfo.connectedGuild,
+					guild: userDiscordInfo.connectedGuild,
 					channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c),
 				});
 			}
 		})();
-	}, [currentUser, sendRequest, discordInfo]);
+	}, [currentUser, sendRequest, userDiscordInfo]);
 
 	const Connectguild = useCallback(async () => {
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
@@ -145,7 +143,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	const onGuildSelect = useCallback(
 		async e => {
 			const name = e.value;
-			const guildByName = discordInfo.guilds.filter(guild => guild.name === name)[0];
+			const guildByName = userDiscordInfo.guilds.filter(guild => guild.name === name)[0];
 			const guildId = guildByName.id;
 			const { result: isMember } = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
 			const channelReponse = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
@@ -158,7 +156,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 				channels: channelReponse,
 			});
 		},
-		[discordInfo, sendLoadingRequest]
+		[userDiscordInfo, sendLoadingRequest]
 	);
 
 	const onChannelSelect = useCallback(
@@ -195,20 +193,20 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 			</h3>
 			<hr />
 			<div className="settings-body">
-				{Object.keys(discordInfo || {}).length ? (
+				{Object.keys(userDiscordInfo || {}).length ? (
 					<>
 						<div className="discord-header">
 							<Select
 								value={displayGuild}
 								onChange={onGuildSelect}
 								placeholder="Select Guild"
-								options={discordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
+								options={userDiscordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
 								styles={colorStyles}
-								isDisabled={!!discordInfo.connectedGuild}
+								isDisabled={!!userDiscordInfo.connectedGuild}
 							/>
 							<span>
-								<img className="discord-profile" src={discordInfo?.profilePicture} alt="" />
-								<span className="discord-name">{discordInfo?.name}</span>
+								<img className="discord-profile" src={userDiscordInfo?.profilePicture} alt="" />
+								<span className="discord-name">{userDiscordInfo?.name}</span>
 							</span>
 						</div>
 						<div className="discord-body">
@@ -282,7 +280,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 									Disconnect Account
 								</button>
 							)}
-							<PluginHome/>
+							<PluginHome match={match}/>
 						</div>
 					</>
 				) : (
