@@ -83,8 +83,8 @@ const PluginHome = ({match}) => {
 									description="Don't miss anything happening in your server when you are not around!"
 									comingSoon
 								/>
-								<PluginCard title="Welcome" image={``} description="Give new users a warm welcome" comingSoon />
-								<PluginCard title="Help" image={``} description="Enables the 'help' command in your server" comingSoon />
+								<PluginCard title="Welcome" image={`${process.env.PUBLIC_URL}/wave.svg`} description="Give new users a warm welcome" comingSoon />
+								<PluginCard title="Help" image={`${process.env.PUBLIC_URL}/help.svg`} description="Enables the 'help' command in your server" comingSoon />
 							</div>
 						</Route>
 						{activePlugins["leveling"] && (
