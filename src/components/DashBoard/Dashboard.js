@@ -35,18 +35,18 @@ const Dashboard = props => {
 		[appSettings, id]
 	);
 
-	const updateOverlaySetting = useCallback(
-		async (name, value) => {
-			const copy = { ...overlaySettings };
-			copy[name] = value;
-			setOverlaySettings(copy);
-			const userRef = firebase.db.collection("Streamers").doc(id);
-			await userRef.update({
-				overlaySettings: copy,
-			});
-		},
-		[overlaySettings, id]
-	);
+	// const updateOverlaySetting = useCallback(
+	// 	async (name, value) => {
+	// 		const copy = { ...overlaySettings };
+	// 		copy[name] = value;
+	// 		setOverlaySettings(copy);
+	// 		const userRef = firebase.db.collection("Streamers").doc(id);
+	// 		await userRef.update({
+	// 			overlaySettings: copy,
+	// 		});
+	// 	},
+	// 	[overlaySettings, id]
+	// );
 
 	useEffect(() => {
 		(async () => {
