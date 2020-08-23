@@ -7,16 +7,13 @@ import "./LeaderBoard.scss";
 
 const LeaderBoard = () => {
 	const [leaderBoardInfo, setLeaderBoardInfo] = useState([]);
-	const [guildInfo, setGuildInfo] = useState({
-		iconUrl: "https://cdn.discordapp.com/icons/711238743213998091/0abf1a3a68c1be1c4ccde1e208d1e2db.jpg",
-		name: "DisStreamChat Community",
-	});
+	const [guildInfo, setGuildInfo] = useState({});
 	const { id } = useParams();
 
 	useEffect(() => {
 		(async () => {
 			const data = (await firebase.db.collection("Leveling").doc(id).get()).data();
-			const leaderBoardData = Object.keys(data)
+			const leaderBoardData = Object.keys(data || {})
 				.filter(key => data[key].xp)
 				.sort((a, b) => data[b].xp - data[a].xp);
 			const leaderBoardUsers = await Promise.all(
@@ -24,8 +21,17 @@ const LeaderBoard = () => {
 					const response = await fetch(`${process.env.REACT_APP_API_URL}/resolveuser?user=${id}&platform=discord`);
 					return { ...(await response.json()), ...data[id] };
 				})
-			);
-			setLeaderBoardInfo(leaderBoardUsers);
+            );
+            setLeaderBoardInfo(leaderBoardUsers);
+            try{
+                const guildResponse = await fetch(`${process.env.REACT_APP_API_URL}/resolveguild?guild=${id}`)
+                const guildJson = await guildResponse.json()
+                console.log(guildJson)
+                setGuildInfo(guildJson)
+            }catch(err){
+
+            }
+            
 			// console.log(leaderBoardUsers)
 		})();
 	}, [id]);
@@ -33,7 +39,7 @@ const LeaderBoard = () => {
 	return (
 		<div className="leaderboard">
 			<div className="leaderboard-header">
-				<img src={guildInfo.iconUrl} alt="" />
+				<img src={guildInfo.iconURL} alt="" />
 				<h1>{guildInfo.name}</h1>
 			</div>
 			<div className="leaderboard-body">
