@@ -1,3 +1,4 @@
+// production
 import React, { useEffect, useState } from "react";
 import firebase from "./firebase";
 import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom";
