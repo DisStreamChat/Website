@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import { NavLink, Route, Redirect, Switch } from "react-router-dom";
 import firebase from "../../firebase";
-import "./Users.scss";
 import "./Dashboard.scss";
 import A from "../Shared/A";
-import SettingBox from "./SettingBox";
+import SettingBox from "./Settings/SettingBox";
 import { AppContext } from "../../contexts/Appcontext";
 import DiscordPage from "./DiscordPage";
 

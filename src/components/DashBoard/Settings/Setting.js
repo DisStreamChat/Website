@@ -10,7 +10,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import Button from "@material-ui/core/Button";
 import chroma from "chroma-js";
-import InputSlider from "../Shared/InputSlider";
+import InputSlider from "../../Shared/InputSlider";
 import lodash from "lodash";
 import uid from "uid";
 import AnimateHeight from "react-animate-height";

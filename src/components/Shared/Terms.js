@@ -63,7 +63,7 @@ const Terms = () => {
 				access rights expressed in Section 2.1.the Company and its suppliers reserve all rights not granted in these Terms.
 			</p>
 
-			<h2>Third-Party Links & Ads; Other Users</h2>
+			<h2>Third-Party Links & Ads; Other DashBoard</h2>
 
 			<p>
 				<strong>Third-Party Links & Ads.</strong> The Site may contain links to third-party websites and services, and/or display
@@ -76,7 +76,7 @@ const Terms = () => {
 			</p>
 
 			<p>
-				<strong>Other Users.</strong> Each Site user is solely responsible for any and all of its own User Content.  Because we do not control
+				<strong>Other DashBoard.</strong> Each Site user is solely responsible for any and all of its own User Content.  Because we do not control
 				User Content, you acknowledge and agree that we are not responsible for any User Content, whether provided by you or by others.  You
 				agree that Company will not be responsible for any loss or damage incurred as the result of any such interactions.  If there is a
 				dispute between you and any Site user, we are under no obligation to become involved.

@@ -22,13 +22,13 @@ const LeaderBoard = ({history}) => {
 			const leaderBoardData = Object.keys(data || {})
 				.filter(key => data[key].xp)
 				.sort((a, b) => data[b].xp - data[a].xp);
-			const leaderBoardUsers = await Promise.all(
+			const leaderBoardDashBoard = await Promise.all(
 				leaderBoardData.map(async id => {
 					const response = await fetch(`${process.env.REACT_APP_API_URL}/resolveuser?user=${id}&platform=discord`);
 					return { ...(await response.json()), ...data[id] };
 				})
 			);
-			setLeaderBoardInfo(leaderBoardUsers);
+			setLeaderBoardInfo(leaderBoardDashBoard);
 			try {
 				const guildResponse = await fetch(`${process.env.REACT_APP_API_URL}/resolveguild?guild=${id}`);
 				const guildJson = await guildResponse.json();

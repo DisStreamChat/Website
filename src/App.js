@@ -7,7 +7,7 @@ import Community from "./components/Community/Community";
 import Bot from "./components/Bot/Bot";
 import Apps from "./components/Apps/Main";
 import Footer from "./components/Footer/Footer";
-import Dashboard from "./components/Users/Dashboard";
+import Dashboard from "./components/DashBoard/Dashboard";
 import Team from "./components/Team/Team";
 import Header from "./components/header/Header";
 import ProtectedRoute from "./components/Shared/ProtectedRoute";

@@ -1,15 +1,13 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import { Route, Redirect, Switch, withRouter } from "react-router-dom";
 import firebase from "../../firebase";
-import "./Users.scss";
-import "./Dashboard.scss";
 import Select from "react-select";
 import useFetch from "../../hooks/useFetch";
 import SmallLoader from "../Shared/SmallLoader";
 import A from "../Shared/A";
 import useSnapshot from "../../hooks/useSnapshot";
 
-import { colorStyles, guildOption } from "./userUtils";
+import { colorStyles, guildOption } from "../Shared/userUtils";
 import PluginCard from "./PluginCard";
 import { AppContext } from "../../contexts/Appcontext";
 
