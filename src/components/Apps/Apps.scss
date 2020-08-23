@@ -71,7 +71,9 @@ $bg-color: #0b0c0e;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-
+    & > .left{
+        width: 80%;
+    }
     .right{
         display: flex;
         justify-content: space-around;
@@ -95,6 +97,7 @@ $bg-color: #0b0c0e;
         flex-direction: column;
         justify-content: space-between;
         text-align: center;
+        
         *{
             transition: .25s ease-in-out;
         }
