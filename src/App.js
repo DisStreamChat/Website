@@ -43,7 +43,6 @@ function App(props) {
 		[userId]
     );
     
-    console.log(currentUser)
 
 	useEffect(() => {
 		(async () => {

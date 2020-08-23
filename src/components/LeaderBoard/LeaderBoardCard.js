@@ -15,12 +15,10 @@ const LeaderBoardCard = ({ place, level, xp, username, displayAvatarURL }) => {
 	useEffect(() => {
 		const xpThisLevel = getXp(level);
         const xpToNextLevel = getXp(level + 1);
-        console.log(xpToNextLevel)
 		const bigDif = Math.abs(xpThisLevel - xpToNextLevel);
 		const dif = Math.abs(xpToNextLevel - xp);
 		setProgression(map(dif, 0, bigDif, 0, circ));
-		console.log(map(dif, 0, bigDif, circ, 0));
-	}, []);
+	}, [level, xp]);
 
 	return (
 		<div className="leaderboard-item">

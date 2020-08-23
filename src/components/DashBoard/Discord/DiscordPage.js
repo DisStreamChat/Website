@@ -178,7 +178,6 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		[id]
 	);
 
-	console.log(userConnectedGuildInfo);
 
 	return (
 		<div>

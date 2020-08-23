@@ -13,30 +13,30 @@ const Leveing = ({ setActivePlugins, location }) => {
 
 	const handleTypeSelect = useCallback(
 		async e => {
-			const guildLevelRef = firebase.db.collection("Leveling").doc(userConnectedGuildInfo.id);
+			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
 			setLevelUpAnnouncement(e);
 			await guildLevelRef.update({ type: e.value });
 		},
-		[userConnectedGuildInfo]
+		[guildId]
 	);
 
 	const handleMessageChange = useCallback(
 		async e => {
-			const guildLevelRef = firebase.db.collection("Leveling").doc(userConnectedGuildInfo.id);
+			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
 			const message = e.target.value;
 			setLevelUpMessage(message);
 			await guildLevelRef.update({ message });
 		},
-		[userConnectedGuildInfo]
+		[guildId]
 	);
 
 	const handleAnnoucmentSelect = useCallback(
 		async e => {
-			const guildLevelRef = firebase.db.collection("Leveling").doc(userConnectedGuildInfo.id);
+			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
 			setAnnouncementChannel(e);
 			guildLevelRef.update({ notifications: e.value });
 		},
-		[userConnectedGuildInfo]
+		[guildId]
 	);
 
 	useEffect(() => {
@@ -85,7 +85,7 @@ const Leveing = ({ setActivePlugins, location }) => {
 								const newPlugs = { ...prev, leveling: false };
 								firebase.db
 									.collection("DiscordSettings")
-									.doc(userConnectedGuildInfo?.id || " ")
+									.doc(guildId || " ")
 									.update({
 										activePlugins: newPlugs,
 									});
