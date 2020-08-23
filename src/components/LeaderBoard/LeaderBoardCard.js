@@ -14,11 +14,12 @@ const LeaderBoardCard = ({ place, level, xp, username, displayAvatarURL }) => {
 
 	useEffect(() => {
 		const xpThisLevel = getXp(level);
-		const xpToNextLevel = getXp(level + 1);
+        const xpToNextLevel = getXp(level + 1);
+        console.log(xpToNextLevel)
 		const bigDif = Math.abs(xpThisLevel - xpToNextLevel);
 		const dif = Math.abs(xpToNextLevel - xp);
 		setProgression(map(dif, 0, bigDif, 0, circ));
-		console.log(map(dif, 0, bigDif, 0, circ));
+		console.log(map(dif, 0, bigDif, circ, 0));
 	}, []);
 
 	return (
@@ -38,7 +39,6 @@ const LeaderBoardCard = ({ place, level, xp, username, displayAvatarURL }) => {
 						<circle
                             strokeDashoffset={progression}
                             strokeDasharray={`${circ} ${circ}`}
-							style={{ strokeDashOffset: progression }}
 							class="progress-ring__circle"
 							stroke="#347aa5"
 							stroke-width="4"

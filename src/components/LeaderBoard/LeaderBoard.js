@@ -4,15 +4,18 @@ import { useParams } from "react-router";
 import SmallLoader from "../Shared/SmallLoader";
 import LeaderBoardCard from "./LeaderBoardCard";
 import "./LeaderBoard.scss";
+import { useDocumentOnce } from 'react-firebase-hooks/firestore';
 
 const LeaderBoard = () => {
 	const [leaderBoardInfo, setLeaderBoardInfo] = useState([]);
 	const [guildInfo, setGuildInfo] = useState({});
-	const { id } = useParams();
+    const { id } = useParams();
+    const [rawLeaderBoardData, loading, error] = useDocumentOnce(firebase.db.collection("Leveling").doc(id))
 
 	useEffect(() => {
-		(async () => {
-			const data = (await firebase.db.collection("Leveling").doc(id).get()).data();
+        (async () => {
+            if(loading) return
+            const data = rawLeaderBoardData.data()
 			const leaderBoardData = Object.keys(data || {})
 				.filter(key => data[key].xp)
 				.sort((a, b) => data[b].xp - data[a].xp);
@@ -32,9 +35,9 @@ const LeaderBoard = () => {
 
             }
             
-			// console.log(leaderBoardUsers)
+			console.log(leaderBoardUsers)
 		})();
-	}, [id]);
+	}, [id, rawLeaderBoardData, loading]);
 
 	return (
 		<div className="leaderboard">
