@@ -8,94 +8,42 @@ import A from "../../Shared/A";
 import useSnapshot from "../../../hooks/useSnapshot";
 
 import { colorStyles, guildOption } from "../../Shared/userUtils";
-import PluginCard from "./PluginCard";
 import { AppContext } from "../../../contexts/Appcontext";
+import { DiscordContextProvider, DiscordContext } from "../../../contexts/DiscordContext";
+import PluginHome from "./Plugins/PluginHome";
+import { useDocument } from 'react-firebase-hooks/firestore';
 
-const DiscordPage = ({location, history, match}) => {
-	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
-	const [announcementChannel, setAnnouncementChannel] = useState(false);
-	const [selectedChannel, setSelectedChannel] = useState({});
+const DiscordPage = React.memo(({ location, history, match }) => {
+	const [selectedGuild, setSelectedGuild] = useState({});
 	const [displayGuild, setDisplayGuild] = useState();
-	const [selectedGuild, setSelectedGuild] = useState();
 	const [refreshed, setRefreshed] = useState(false);
-    const { currentUser, setCurrentUser } = useContext(AppContext);
-    const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
 	const { isLoading, sendRequest: sendLoadingRequest } = useFetch();
-    const discordInfo = currentUser?.discordData
     const id = firebase.auth.currentUser.uid;
-        
-	const guildId = selectedGuild?.id;
-	useEffect(() => {
-		(async () => {
-			if (location.pathname.includes("/leveling")) {
-				const guild = await firebase.db
-					.collection("Leveling")
-					.doc(guildId || " ")
-					.get();
-				const data = guild.data();
-				if (data) {
-					const id = data.notifications;
-					if (id) {
-						const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
-						const response = await fetch(apiUrl);
-						const channel = await response.json();
-						setAnnouncementChannel({
-							value: id,
-							label: (
-								<>
-									<span>{channel.name}</span>
-									<span className="channel-category">{channel.parent}</span>
-								</>
-							),
-						});
-						setLevelUpAnnouncement({
-							value: data.type,
-							label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
-						});
-						setLevelUpMessage(data.message);
-					}
-				}
-			}
-		})();
-	}, [location, guildId]);
+    const { sendRequest } = useFetch();
+	const { currentUser, setCurrentUser } = useContext(AppContext);
+    const {
+        userDiscordInfo,
+        setUserDiscordInfo,
+        userConnectedChannels,
+        userConnectedGuildInfo,
+        setUserConnectedChannels,
+        setUserConnectedGuildInfo,
+    } = useContext(DiscordContext)
 
-	const [prefix, setPrefix] = useState("!");
-	const [activePlugins, setActivePlugins] = useState({});
+    const [rawDiscordData, discordDataLoading, DiscordDataError] = useDocument(firebase.db.doc(`Streamers/${id}/discord/data`))
+
+    useEffect(() => {
+
+    }, [])
+
+	const guildId = userConnectedGuildInfo?.id;
+	
 
 	useEffect(() => {
-		(async () => {
-			const guild = await firebase.db
-				.collection("DiscordSettings")
-				.doc(selectedGuild?.id || " ")
-				.get();
-			const data = guild.data();
-			if (data) {
-				setPrefix(data.prefix || "!");
-				setActivePlugins(data.activePlugins);
-			} else {
-				setPrefix("!");
-			}
-		})();
-	}, [selectedGuild]);
+		setDisplayGuild(guildOption(userConnectedGuildInfo));
+	}, [userConnectedGuildInfo]);
 
-	const prefixChange = useCallback(
-		async e => {
-			setPrefix(e.target.value);
-			firebase.db
-				.collection("DiscordSettings")
-				.doc(selectedGuild?.id || " ")
-				.update({
-					prefix: e.target.value,
-				});
-		},
-		[selectedGuild?.id]
-	);
-
-	useEffect(() => {
-		setDisplayGuild(guildOption(selectedGuild));
-	}, [selectedGuild]);
-
-	const refreshToken = discordInfo?.refreshToken;
+	const refreshToken = userDiscordInfo?.refreshToken;
 	useEffect(() => {
 		(async () => {
 			if (!refreshToken || !id) return;
@@ -129,10 +77,8 @@ const DiscordPage = ({location, history, match}) => {
 	const disconnectAccount = useCallback(async () => {
 		disconnect();
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").set({});
-		setCurrentUser(prev => ({...prev, discordData: {}}));
+		setCurrentUser(prev => ({ ...prev, discordData: {} }));
 	}, [id, disconnect, setCurrentUser]);
-
-	const { sendRequest } = useFetch();
 
 	const guilds = discordInfo?.guilds;
 	useSnapshot(
@@ -182,7 +128,7 @@ const DiscordPage = ({location, history, match}) => {
 				const channelData = channels instanceof Array ? channels : [channels];
 				const resolveChannel = async channel =>
 					sendRequest(`${process.env.REACT_APP_API_URL}/resolvechannel?guild=${discordInfo.connectedGuild}&channel=${channel}`);
-				setSelectedChannel({
+				setSelectedGuild({
 					guild: discordInfo.connectedGuild,
 					channels: (await Promise.all(channelData.map(resolveChannel))).filter(c => !!c),
 				});
@@ -192,9 +138,9 @@ const DiscordPage = ({location, history, match}) => {
 
 	const Connectguild = useCallback(async () => {
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
-			connectedGuild: selectedGuild.id,
+			connectedGuild: userConnectedGuildInfo.id,
 		});
-	}, [selectedGuild, id]);
+	}, [userConnectedGuildInfo, id]);
 
 	const onGuildSelect = useCallback(
 		async e => {
@@ -217,7 +163,7 @@ const DiscordPage = ({location, history, match}) => {
 
 	const onChannelSelect = useCallback(
 		async e => {
-			setSelectedChannel(s => ({
+			setSelectedGuild(s => ({
 				...s,
 				channels:
 					e?.map(c => ({
@@ -236,33 +182,9 @@ const DiscordPage = ({location, history, match}) => {
 		[id]
 	);
 
-   	const handleTypeSelect = useCallback(
-		async e => {
-			const guildLevelRef = firebase.db.collection("Leveling").doc(selectedGuild.id);
-			setLevelUpAnnouncement(e);
-			await guildLevelRef.update({ type: e.value });
-		},
-		[selectedGuild]
-	);
 
-	const handleMessageChange = useCallback(
-		async e => {
-			const guildLevelRef = firebase.db.collection("Leveling").doc(selectedGuild.id);
-			const message = e.target.value;
-			setLevelUpMessage(message);
-			await guildLevelRef.update({ message });
-		},
-		[selectedGuild]
-	);
 
-	const handleAnnoucmentSelect = useCallback(
-		async e => {
-			const guildLevelRef = firebase.db.collection("Leveling").doc(selectedGuild.id);
-			setAnnouncementChannel(e);
-			guildLevelRef.update({ notifications: e.value });
-		},
-		[selectedGuild]
-	);
+
 
 	return (
 		<div>
@@ -292,27 +214,27 @@ const DiscordPage = ({location, history, match}) => {
 						<div className="discord-body">
 							{isLoading ? (
 								<SmallLoader />
-							) : selectedGuild ? (
+							) : userConnectedGuildInfo ? (
 								<>
-									{!selectedGuild.isMember ? (
+									{!userConnectedGuildInfo.isMember ? (
 										<div className="not-member">
 											<span className="error-color">DisStreamBot is not a member of this server</span>
 											<a
-												href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${selectedGuild?.id}`}
+												href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${userConnectedGuildInfo?.id}`}
 											>
 												<button className="invite-link discord-settings-button">Invite it</button>
 											</a>
 										</div>
 									) : (
 										<>
-											{selectedGuild.id === selectedChannel.guild ? (
+											{userConnectedGuildInfo.id === selectedGuild.guild ? (
 												<>
 													<h3>select channels to listen to</h3>
 													<Select
 														closeMenuOnSelect={false}
 														onChange={onChannelSelect}
 														placeholder="Select Channel"
-														value={selectedChannel.channels
+														value={selectedGuild.channels
 															.sort((a, b) => a.parent.localeCompare(b.parent))
 															.map(channel => ({
 																value: channel.id,
@@ -323,7 +245,7 @@ const DiscordPage = ({location, history, match}) => {
 																	</>
 																),
 															}))}
-														options={selectedGuild.channels
+														options={userConnectedGuildInfo.channels
 															.sort((a, b) => a.parent.localeCompare(b.parent))
 															.map(channel => ({
 																value: channel.id,
@@ -360,157 +282,7 @@ const DiscordPage = ({location, history, match}) => {
 									Disconnect Account
 								</button>
 							)}
-							<hr />
-							{selectedGuild?.id === selectedChannel?.guild && (
-								<div className="discord-prefix">
-									<label htmlFor="discord-prefix">
-										<h2 className="prefix-header">Command Prefix</h2>
-										<h3 className="prefix-subheader">Set the prefix used to run DisStreamBot commands in this discord server</h3>
-									</label>
-									<div className="prefix-body">
-										<input value={prefix} onChange={prefixChange} type="text" className="prefix-input" id="discord-prefix" />
-									</div>
-								</div>
-							)}
-							<hr />
-							{selectedGuild && selectedChannel && selectedGuild?.id === selectedChannel?.guild ? (
-								<div className="plugins">
-									<Switch>
-										<Route exact path={`${match.url}/discord`}>
-											<div className="plugin-header">
-												<h2>Plugins</h2>
-												<h3>
-													Add extra functionality to the bot in your server with plugins like leveling, custom commands, and
-													logging
-												</h3>
-											</div>
-
-											<div className="plugin-list">
-												<A href={activePlugins["leveling"] ? `${match.url}/discord/leveling` : null} local>
-													<PluginCard
-														active={activePlugins["leveling"]}
-														title="Leveling"
-														image={`${process.env.PUBLIC_URL}/trophy.svg`}
-														description="Let your users gain XP and levels by participating in the chat!"
-													/>
-												</A>
-												<PluginCard
-													title="Custom Commands"
-													image={`${process.env.PUBLIC_URL}/discord.png`}
-													description="Add awesome custom commands to your server"
-													comingSoon
-												/>
-												<PluginCard
-													title="Logging"
-													image={`${process.env.PUBLIC_URL}/clipboard.svg`}
-													description="Don't miss anything happening in your server when you are not around!"
-													comingSoon
-												/>
-												<PluginCard title="Welcome" image={``} description="Give new users a warm welcome" comingSoon />
-												<PluginCard
-													title="Help"
-													image={``}
-													description="Enables the 'help' command in your server"
-													comingSoon
-												/>
-											</div>
-										</Route>
-										{activePlugins["leveling"] && (
-											<Route path={`${match.url}/discord/leveling`}>
-												<div className="plugin-item-header">
-													<span className="title">
-														<img src={`${process.env.PUBLIC_URL}/trophy.svg`} alt="" />
-														<h2>Leveling</h2>
-													</span>
-													<span className="toggle-button">
-														<button
-															onClick={() => {
-																setActivePlugins(prev => {
-																	const newPlugs = { ...prev, leveling: false };
-																	firebase.db
-																		.collection("DiscordSettings")
-																		.doc(selectedGuild?.id || " ")
-																		.update({
-																			activePlugins: newPlugs,
-																		});
-																	return newPlugs;
-																});
-															}}
-														>
-															Disable
-														</button>
-													</span>
-												</div>
-												<hr />
-												<div className="plugin-item-subheader">
-													<h2>Leveling Up</h2>
-													<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
-												</div>
-												<div className="plugin-item-body">
-													<div className="level-settings">
-														<div className="channels">
-															<div id="announcement-type">
-																<h5 className="bold uppercase">Level up announcement</h5>
-																<Select
-																	closeMenuOnSelect
-																	onChange={handleTypeSelect}
-																	placeholder="Select Annoucement type"
-																	value={levelUpAnnouncement}
-																	options={[
-																		{ value: 1, label: "Disabled" },
-																		{ value: 2, label: "Current Channel" },
-																		{ value: 3, label: "Custom Channel" },
-																	].map(type => type)}
-																	styles={{
-																		...colorStyles,
-																		container: styles => ({ ...styles, ...colorStyles.container }),
-																	}}
-																/>
-															</div>
-															{levelUpAnnouncement?.value === 3 && (
-																<div id="announcement-channel">
-																	<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
-																	<Select
-																		closeMenuOnSelect
-																		onChange={handleAnnoucmentSelect}
-																		placeholder="Select Annoucement Channel"
-																		value={announcementChannel}
-																		options={selectedGuild?.channels
-																			?.sort((a, b) => a.parent.localeCompare(b.parent))
-																			?.map(channel => ({
-																				value: channel.id,
-																				label: (
-																					<>
-																						<span>{channel.name}</span>
-																						<span className="channel-category">{channel.parent}</span>
-																					</>
-																				),
-																			}))}
-																		styles={{
-																			...colorStyles,
-																			container: styles => ({
-																				...styles,
-																				...colorStyles.container,
-																			}),
-																		}}
-																	/>
-																</div>
-															)}
-														</div>
-														<div className="message">
-															<h5>LEVEL UP ANNOUNCEMENT MESSAGE</h5>
-															<textarea value={levelUpMessage} onChange={handleMessageChange}></textarea>
-														</div>
-													</div>
-												</div>
-											</Route>
-										)}
-										<Redirect to={`${match.url}/discord`} />
-									</Switch>
-								</div>
-							) : (
-								<Redirect to={`${match.url}/discord`} />
-							)}
+							<PluginHome/>
 						</div>
 					</>
 				) : (
@@ -528,6 +300,14 @@ const DiscordPage = ({location, history, match}) => {
 			</div>
 		</div>
 	);
+});
+
+const IntermediateDiscordPage = props => {
+	return (
+		<DiscordContextProvider>
+			<DiscordPage {...props} />
+		</DiscordContextProvider>
+	);
 };
 
-export default withRouter(React.memo(DiscordPage));
+export default withRouter(React.memo(IntermediateDiscordPage));
