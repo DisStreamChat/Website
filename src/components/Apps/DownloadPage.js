@@ -21,7 +21,7 @@ const DownloadPage = () => {
 					<div className="heading">
 						<h1>Download for Windows</h1>
 					</div>
-                    <img src={`${process.env.PUBLIC_URL}/windows.webp`} width="100" alt=""/>
+                    <img src={`${process.env.PUBLIC_URL}/windows.webp`}  width="100" alt=""/>
 					<div className="download-links">
 						<A href="https://api.disstreamchat.com/app" newTab>
 							<Button className="download-button">Latest Version</Button>

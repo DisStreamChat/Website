@@ -22,6 +22,7 @@ import Banner from "./components/Shared/Banner";
 import { Button } from "@material-ui/core";
 import A from "./components/Shared/A";
 import useSnapshot from "./hooks/useSnapshot";
+import LeaderBoard from "./components/LeaderBoard/LeaderBoard";
 
 function App(props) {
 	const [userId, setUserId] = useState("");
@@ -132,6 +133,7 @@ function App(props) {
 								<Route path="/privacy" component={PrivacyPolicy} />
 								<Route path="/terms" component={Terms} />
 								<Route path="/apps/download" component={DownloadPage} />
+                                <Route path="/leaderboard/:id" component={LeaderBoard}/>
 								<ProtectedRoute path="/dashboard" component={Dashboard} />
 								<Redirect to="/" />
 							</Switch>

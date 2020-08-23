@@ -10,7 +10,7 @@ const Member = props => {
             <h3 className="team-sub-title">{props.title}</h3>
             <div className="socials">
                 {props.socials?.map(social => (
-                    <A href={social.link}>{social.icon}</A>
+                    <A newTab href={social.link}>{social.icon}</A>
                 ))}
             </div>
         </div>

@@ -1,10 +1,10 @@
 import React from 'react';
 import Loader from "react-loader"
 
-const SmallLoader = () => {
+const SmallLoader = ({loaded}) => {
     return (
         <Loader
-            loaded={false}
+            loaded={loaded}
             lines={15}
             length={0}
             width={15}
