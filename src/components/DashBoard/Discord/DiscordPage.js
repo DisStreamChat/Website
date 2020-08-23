@@ -276,7 +276,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 									Disconnect Account
 								</button>
 							)}
-							{userConnectedGuildInfo?.isMember && <PluginHome match={match} />}
+							{userConnectedGuildInfo?.connected && <PluginHome match={match} />}
 						</div>
 					</>
 				) : (
