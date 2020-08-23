@@ -24,7 +24,7 @@ export const GuildIcon = props => {
 				backgroundColor: "#36393f",
 			}}
 		>
-			{props.name.split(" ").map(w => w[0])}
+			{props?.name?.split?.(" ")?.map(w => w[0])}
 		</span>
 	);
 };

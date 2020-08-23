@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
-import { Route, Redirect, Switch, withRouter } from "react-router-dom";
+import { Route, Redirect, Switch} from "react-router-dom";
 import firebase from "../../../../firebase";
 import A from "../../../Shared/A";
-
 import PluginCard from "./PluginCard";
-import { AppContext } from "../../../../contexts/Appcontext";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 
 const PluginHome = ({match}) => {
@@ -57,7 +55,7 @@ const PluginHome = ({match}) => {
 			<hr />
 				<div className="plugins">
 					<Switch>
-						<Route exact path={`${match.url}/discord`}>
+						<Route exact path={`${match.url}`}>
 							<div className="plugin-header">
 								<h2>Plugins</h2>
 								<h3>Add extra functionality to the bot in your server with plugins like leveling, custom commands, and logging</h3>
@@ -89,11 +87,11 @@ const PluginHome = ({match}) => {
 							</div>
 						</Route>
 						{activePlugins["leveling"] && (
-							<Route path={`${match.url}/discord/leveling`}>
+							<Route path={`${match.url}/leveling`}>
 								
 							</Route>
 						)}
-						<Redirect to={`${match.url}/discord`} />
+						<Redirect to={`${match.url}`} />
 					</Switch>
 				</div>
 		</>

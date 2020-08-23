@@ -14,7 +14,7 @@ import PluginHome from "./Plugins/PluginHome";
 import { useDocument } from 'react-firebase-hooks/firestore';
 
 const DiscordPage = React.memo(({ location, history, match }) => {
-	const [selectedGuild, setSelectedGuild] = useState({});
+	const [selectedGuild, setSelectedGuild] = useState();
 	const [displayGuild, setDisplayGuild] = useState();
 	const [refreshed, setRefreshed] = useState(false);
 	const { isLoading, sendRequest: sendLoadingRequest } = useFetch();
@@ -38,8 +38,10 @@ const DiscordPage = React.memo(({ location, history, match }) => {
     }, [rawDiscordData, discordDataLoading, setUserDiscordInfo])
 
 	useEffect(() => {
-		setDisplayGuild(guildOption(userConnectedGuildInfo));
-	}, [userConnectedGuildInfo]);
+        if(selectedGuild?.name){
+            setDisplayGuild(guildOption(selectedGuild));
+        }
+	}, [selectedGuild]);
 
 	const refreshToken = userDiscordInfo?.refreshToken;
 	useEffect(() => {
@@ -280,7 +282,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 									Disconnect Account
 								</button>
 							)}
-							<PluginHome match={match}/>
+							{userConnectedGuildInfo && <PluginHome match={match}/>}
 						</div>
 					</>
 				) : (
