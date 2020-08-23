@@ -5,7 +5,7 @@ import "./Dashboard.scss";
 import A from "../Shared/A";
 import SettingBox from "./Settings/SettingBox";
 import { AppContext } from "../../contexts/Appcontext";
-import DiscordPage from "./DiscordPage";
+import DiscordPage from "./Discord/DiscordPage";
 
 const Dashboard = props => {
 	const [overlaySettings, setOverlaySettings] = useState();

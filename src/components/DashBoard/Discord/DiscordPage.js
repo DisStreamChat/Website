@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import { Route, Redirect, Switch, withRouter } from "react-router-dom";
-import firebase from "../../firebase";
+import firebase from "../../../firebase";
 import Select from "react-select";
-import useFetch from "../../hooks/useFetch";
-import SmallLoader from "../Shared/SmallLoader";
-import A from "../Shared/A";
-import useSnapshot from "../../hooks/useSnapshot";
+import useFetch from "../../../hooks/useFetch";
+import SmallLoader from "../../Shared/SmallLoader";
+import A from "../../Shared/A";
+import useSnapshot from "../../../hooks/useSnapshot";
 
-import { colorStyles, guildOption } from "../Shared/userUtils";
+import { colorStyles, guildOption } from "../../Shared/userUtils";
 import PluginCard from "./PluginCard";
-import { AppContext } from "../../contexts/Appcontext";
+import { AppContext } from "../../../contexts/Appcontext";
 
 const DiscordPage = ({location, history, match}) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
