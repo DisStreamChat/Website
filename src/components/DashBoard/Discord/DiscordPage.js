@@ -133,7 +133,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	const onGuildSelect = useCallback(
 		async e => {
 			const name = e.value;
-			const guildByName = userDiscordInfo.guilds.filter(guild => guild.name === name)[0];
+			const guildByName = userDiscordInfo.guilds.find(guild => guild.name === name);
 			const guildId = guildByName.id;
 			const { result: isMember } = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
 			const channelReponse = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);

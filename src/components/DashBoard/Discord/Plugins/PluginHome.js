@@ -4,6 +4,7 @@ import firebase from "../../../../firebase";
 import A from "../../../Shared/A";
 import PluginCard from "./PluginCard";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
+import Leveling from "./Leveling"
 
 const PluginHome = ({match}) => {
 
@@ -62,7 +63,7 @@ const PluginHome = ({match}) => {
 							</div>
 
 							<div className="plugin-list">
-								<A href={activePlugins["leveling"] ? `${match.url}/discord/leveling` : null} local>
+								<A href={activePlugins["leveling"] ? `${match.url}/leveling` : null} local>
 									<PluginCard
 										active={activePlugins["leveling"]}
 										title="Leveling"
@@ -88,7 +89,7 @@ const PluginHome = ({match}) => {
 						</Route>
 						{activePlugins["leveling"] && (
 							<Route path={`${match.url}/leveling`}>
-								
+								<Leveling/>
 							</Route>
 						)}
 						<Redirect to={`${match.url}`} />

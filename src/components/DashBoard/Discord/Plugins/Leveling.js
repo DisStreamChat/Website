@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
-import firebase from "../../../firebase";
-import { colorStyles } from "../../Shared/userUtils";
-import { DiscordContext } from "../../../contexts/DiscordContext";
+import firebase from "../../../../firebase";
+import { colorStyles } from "../../../Shared/userUtils";
+import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Select from "react-select";
 
 const Leveing = ({ setActivePlugins, location }) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
 	const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
-    const { userConnectedGuildInfo } = useContext(DiscordContext);
-    const guildId = userConnectedGuildInfo?.id
+	const { userConnectedGuildInfo } = useContext(DiscordContext);
+	const guildId = userConnectedGuildInfo?.id;
 
 	const handleTypeSelect = useCallback(
 		async e => {
@@ -37,38 +37,35 @@ const Leveing = ({ setActivePlugins, location }) => {
 			guildLevelRef.update({ notifications: e.value });
 		},
 		[userConnectedGuildInfo]
-    );
-    
+	);
 
-    useEffect(() => {
+	useEffect(() => {
 		(async () => {
-			if (location.pathname.includes("/leveling")) {
-				const guild = await firebase.db
-					.collection("Leveling")
-					.doc(guildId || " ")
-					.get();
-				const data = guild.data();
-				if (data) {
-					const id = data.notifications;
-					if (id) {
-						const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
-						const response = await fetch(apiUrl);
-						const channel = await response.json();
-						setAnnouncementChannel({
-							value: id,
-							label: (
-								<>
-									<span>{channel.name}</span>
-									<span className="channel-category">{channel.parent}</span>
-								</>
-							),
-						});
-						setLevelUpAnnouncement({
-							value: data.type,
-							label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
-						});
-						setLevelUpMessage(data.message);
-					}
+			const guild = await firebase.db
+				.collection("Leveling")
+				.doc(guildId || " ")
+				.get();
+			const data = guild.data();
+			if (data) {
+				const id = data.notifications;
+				if (id) {
+					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
+					const response = await fetch(apiUrl);
+					const channel = await response.json();
+					setAnnouncementChannel({
+						value: id,
+						label: (
+							<>
+								<span>{channel.name}</span>
+								<span className="channel-category">{channel.parent}</span>
+							</>
+						),
+					});
+					setLevelUpAnnouncement({
+						value: data.type,
+						label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
+					});
+					setLevelUpMessage(data.message);
 				}
 			}
 		})();
