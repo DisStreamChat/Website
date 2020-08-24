@@ -52,7 +52,7 @@ function App(props) {
 	}, []);
 
 	useEffect(() => {
-        if(firebaseInit !== false) return
+        if(firebaseInit === false) return
 		const codeArray = new URLSearchParams(window.location.search);
 		if (codeArray.has("code")) {
 			(async () => {
