@@ -22,30 +22,17 @@ import { AppContext } from "./contexts/Appcontext";
 import Banner from "./components/Shared/Banner";
 import { Button } from "@material-ui/core";
 import A from "./components/Shared/A";
-import useSnapshot from "./hooks/useSnapshot";
 import LeaderBoard from "./components/LeaderBoard/LeaderBoard";
+import { useContext } from "react";
 
 function App(props) {
 	const [userId, setUserId] = useState("");
 	const [dropDownOpen, setDropDownOpen] = useState(false);
-	const [currentUser, setCurrentUser] = useState();
+	const {currentUser, setCurrentUser} = useContext(AppContext);
 	const [firebaseInit, setFirebaseInit] = useState(false);
 	const user = firebase.auth.currentUser;
 
-	useSnapshot(
-		firebase.db.collection("Streamers").doc(userId || " "),
-		async snapshot => {
-            const data = snapshot.data();
-            const discordData = ((await snapshot.ref.collection("discord").doc("data").get()).data())
-			if (data) {
-				setCurrentUser({...data, discordData});
-			}
-		},
-		[userId]
-    );
-    
-
-	useEffect(() => {
+ 	useEffect(() => {
 		(async () => {
 			const result = await firebase.isInitialized();
 			setFirebaseInit(result);
@@ -79,7 +66,7 @@ function App(props) {
 							const json = await response.json();
 							await firebase.db
 								.collection("Streamers")
-								.doc(firebase?.auth?.currentUser?.uid || " ")
+								.doc(currentUser.uid || " ")
 								.collection("discord")
 								.doc("data")
 								.set(json);
