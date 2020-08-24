@@ -35,15 +35,14 @@ function App(props) {
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(userId || " "),
 		async snapshot => {
-            const data = snapshot.data();
-            const discordData = ((await snapshot.ref.collection("discord").doc("data").get()).data())
+			const data = snapshot.data();
+			const discordData = (await snapshot.ref.collection("discord").doc("data").get()).data();
 			if (data) {
-				setCurrentUser({...data, discordData});
+				setCurrentUser({ ...data, discordData });
 			}
 		},
 		[userId]
-    );
-    
+	);
 
 	useEffect(() => {
 		(async () => {
@@ -53,10 +52,9 @@ function App(props) {
 	}, []);
 
 	useEffect(() => {
-        const codeArray = new URLSearchParams(window.location.search);
+		const codeArray = new URLSearchParams(window.location.search);
 		if (codeArray.has("code")) {
 			(async () => {
-                
 				const code = codeArray.get("code");
 				if (!codeArray.has("discord")) {
 					try {
@@ -68,22 +66,22 @@ function App(props) {
 					} catch (err) {}
 				} else {
 					try {
-                        console.log(code)
+						console.log(code);
 						const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token?code=${code}`);
-                        // const response = await fetch("http://localhost:3200/discord/token?code="+code)
+						// const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
-                            console.log(await response.json());
-                            alert("fail")
+							console.log(await response.json());
+							alert("fail");
 						} else {
-                            alert("success")
-                            const json = await response.json();
-                            console.log(user?.uid)
+							console.log(user?.uid);
+							const json = await response.json();
 							await firebase.db
 								.collection("Streamers")
 								.doc(user?.uid || " ")
 								.collection("discord")
 								.doc("data")
 								.set(json);
+							alert("success");
 						}
 					} catch (err) {
 						alert(err.message);
@@ -134,7 +132,7 @@ function App(props) {
 								<Route path="/privacy" component={PrivacyPolicy} />
 								<Route path="/terms" component={Terms} />
 								<Route path="/apps/download" component={DownloadPage} />
-                                <Route path="/leaderboard/:id" component={LeaderBoard}/>
+								<Route path="/leaderboard/:id" component={LeaderBoard} />
 								<ProtectedRoute path="/dashboard" component={Dashboard} />
 								<Redirect to="/" />
 							</Switch>
