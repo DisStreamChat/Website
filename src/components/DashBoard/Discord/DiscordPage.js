@@ -63,16 +63,23 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		})();
 	}, [id, refreshed, refreshToken]);
 
-	const disconnect = useCallback(async () => {
-		setUserConnectedGuildInfo(prev => ({...prev, connected: false}));
-		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
-            connectedGuild: "",
-            liveChatId: []
-		});
-		firebase.db.collection("Streamers").doc(id).update({
-			liveChatId: [],
-		});
-	}, [id]);
+	const disconnect = useCallback(
+		async fullDisconnet => {
+			if (!fullDisconnet) {
+				setUserConnectedGuildInfo(prev => ({ ...prev, connected: false }));
+			} else {
+				setUserConnectedGuildInfo(null);
+			}
+			firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
+				connectedGuild: "",
+				liveChatId: [],
+			});
+			firebase.db.collection("Streamers").doc(id).update({
+				liveChatId: [],
+			});
+		},
+		[id]
+	);
 
 	const disconnectAccount = useCallback(async () => {
 		disconnect();
@@ -86,19 +93,20 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		async snapshot => {
 			const data = snapshot.data();
 			if (data) {
-				const id = data.connectedGuild;
-				const guildByName = guilds?.find?.(guild => guild.id === id);
+                const userData = (await firebase.db.collection("Streamers").doc(id).get()).data()
+				const connectedGuildId = data.connectedGuild;
+				const guildByName = guilds?.find?.(guild => guild.id === connectedGuildId);
 				if (guildByName) {
 					const guildId = guildByName.id;
 					const value = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
-					const channelReponse = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
+                    const channelReponse = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
 					setUserConnectedGuildInfo({
 						name: guildByName.name,
 						isMember: value?.result,
 						icon: guildByName.icon,
 						id: guildByName.id,
-                        channels: channelReponse,
-                        connectedChannels: channelReponse.filter(channel => data.liveChatId?.includes(channel.id)),
+						channels: channelReponse,
+						connectedChannels: channelReponse?.filter(channel => userData.liveChatId?.includes(channel.id)),
 						connected: true,
 					});
 				}
@@ -177,7 +185,6 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		},
 		[id]
 	);
-
 
 	return (
 		<div>
@@ -261,7 +268,10 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 												</>
 											) : (
 												<>
-													<span>This server is not connected to the DisStreamChat chat manager, connect it to get discord messages in your app and adjust your plugin settings</span>
+													<span>
+														This server is not connected to the DisStreamChat chat manager, connect it to get discord
+														messages in your app and adjust your plugin settings
+													</span>
 													<button onClick={Connectguild} className="discord-settings-button warning-button">
 														Connect it
 													</button>
