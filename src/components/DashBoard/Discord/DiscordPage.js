@@ -59,7 +59,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 				.doc(id || " ")
 				.collection("discord")
 				.doc("data")
-				.set(json.userData);
+				.update(json.userData);
 		})();
 	}, [id, refreshed, refreshToken]);
 
