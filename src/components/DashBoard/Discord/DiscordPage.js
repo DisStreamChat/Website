@@ -65,11 +65,11 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 
 	const disconnect = useCallback(
 		async fullDisconnet => {
-			if (!fullDisconnet) {
-				setUserConnectedGuildInfo(prev => ({ ...prev, connected: false }));
-			} else {
-				setUserConnectedGuildInfo(null);
-			}
+			// if (!fullDisconnet) {
+			setUserConnectedGuildInfo(prev => ({ ...prev, connected: false }));
+			// } else {
+			// 	setUserConnectedGuildInfo(null);
+			// }
 			firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
 				connectedGuild: "",
 				liveChatId: [],
@@ -93,13 +93,13 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		async snapshot => {
 			const data = snapshot.data();
 			if (data) {
-                const userData = (await firebase.db.collection("Streamers").doc(id).get()).data()
+				const userData = (await firebase.db.collection("Streamers").doc(id).get()).data();
 				const connectedGuildId = data.connectedGuild;
 				const guildByName = guilds?.find?.(guild => guild.id === connectedGuildId);
 				if (guildByName) {
 					const guildId = guildByName.id;
 					const value = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
-                    const channelReponse = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
+					const channelReponse = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
 					setUserConnectedGuildInfo({
 						name: guildByName.name,
 						isMember: value?.result,
