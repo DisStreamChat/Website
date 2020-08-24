@@ -261,7 +261,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 												</>
 											) : (
 												<>
-													<span>This guild is not connected to the bot</span>
+													<span>This server is not connected to the DisStreamChat chat manager, connect it to get discord messages in your app and adjust your plugin settings</span>
 													<button onClick={Connectguild} className="discord-settings-button warning-button">
 														Connect it
 													</button>
