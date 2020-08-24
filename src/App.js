@@ -52,6 +52,7 @@ function App(props) {
 	}, []);
 
 	useEffect(() => {
+        if(firebaseInit !== false) return
 		const codeArray = new URLSearchParams(window.location.search);
 		if (codeArray.has("code")) {
 			(async () => {
@@ -90,7 +91,7 @@ function App(props) {
 				window.location = "/#/dashboard/discord";
 			})();
 		}
-	}, []);
+	}, [firebaseInit]);
 
 	useEffect(() => {
 		(async () => {
