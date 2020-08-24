@@ -76,7 +76,8 @@ function App(props) {
                             alert("fail")
 						} else {
                             alert("success")
-							const json = await response.json();
+                            const json = await response.json();
+                            console.log(user?.uid)
 							await firebase.db
 								.collection("Streamers")
 								.doc(user?.uid || " ")
