@@ -39,3 +39,6 @@ If you are just editing a single file, you may click the pencil when viewing the
 
 # More on Contributing and Installation
 The site welcomes contributions from the community in a variety of ways! For more information see [CONTRIBUTING.md](CONTRIBUTING.md) and [INSTALLATION.md](INSTALLATION.md). Suggestions are also welcome in the form of an issue.
+
+# Getting help
+If you need help either with an issue using the site or making a contribution feel free to make an issue and we will get to it as soon as we can. You can also get help and give feedback on our [discord](http://discord.disstreamchat.com)
