@@ -20,6 +20,22 @@ These are the steps you will need to take to install it
     the environment variables you will need are shown in the `.env.sample` file in the repo. 
 5. Start up a development server   
     Start it up with `npm start`
+    
+    
+    
+# Contributing
+Contributions to this repository encouraged!
+
+Here are the type of contributions we are looking for:
+ - bug-fixes
+ - making the code easier to read (including code comments!)
+ - website design improvements
+ - adding any missing content
+ - responsiveness improvements
+
+To make a contribution, just fork this repository and create a pull request.
+
+If you are just editing a single file, you may click the pencil when viewing the file to edit in the browser.
 
 # More on Contributing and Installation
 The site welcomes contributions from the community in a variety of ways! For more information see [CONTRIBUTING.md](CONTRIBUTING.md) and [INSTALLATION.md](INSTALLATION.md). Suggestions are also welcome in the form of an issue.
