@@ -4,6 +4,7 @@ Hello and welcome to the GitHub repo for The DisStreamChat website! This houses 
 
 # Tech/framework used
 - React
+  - The whole site is written is react. It is a single page web page web app with react router. It is written with functional components and react hooks
 - Firebase
 
 # Installation
