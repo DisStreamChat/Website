@@ -5,13 +5,11 @@
     margin: 0.5rem;
     cursor: pointer;
     &.disabled{
-        background: darken($background-color, 4);
-        opacity: .65;
+        background: lighten($background-color, 2);
+        opacity: .45;
     }
 	&.coming-soon {
-        background: $background-color;
         position: relative;
-        opacity: .3;
 		&:after {
 			content: "Coming Soon";
 			background: var(--disstreamchat-blue);
