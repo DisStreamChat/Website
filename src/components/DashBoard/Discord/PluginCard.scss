@@ -25,7 +25,7 @@
 		background: lighten($color: $background-color, $amount: 3);
 	}
 	display: flex;
-	width: 300px;
+    width: 300px;
 	height: 100px;
 	padding: 20px;
 	align-items: center;
@@ -52,5 +52,12 @@
 		color: #aaa;
 		margin-top: 0.25rem;
 		line-height: 1.5rem;
-	}
+    }
+    @media screen and (max-width: 440px) {
+        width: 200px;
+        h4{
+            font-size: .75rem;
+            line-height: 1rem;;
+        }
+    }
 }
