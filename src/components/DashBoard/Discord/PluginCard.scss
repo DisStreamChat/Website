@@ -5,10 +5,13 @@
     margin: 0.5rem;
     cursor: pointer;
     &.disabled{
-        opacity: .3;
+        background: darken($background-color, 4);
+        opacity: .65;
     }
 	&.coming-soon {
+        background: $background-color;
         position: relative;
+        opacity: .3;
 		&:after {
 			content: "Coming Soon";
 			background: var(--disstreamchat-blue);
@@ -21,7 +24,7 @@
             border-radius: 5rem;
 		}
 	}
-	&:hover {
+	&:not(.coming-soon):hover {
 		background: lighten($color: $background-color, $amount: 3);
 	}
 	display: flex;
