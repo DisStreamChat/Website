@@ -38,6 +38,9 @@ To make a contribution, just fork this repository and create a pull request.
 
 If you are just editing a single file, you may click the pencil when viewing the file to edit in the browser.
 
+# Feedback and help
+If you want to give feedback or need help with a problem feel free to make an issue here on github or join our [discord](http://discord.disstreamchat.com)
+
 # More on Contributing and Installation
 The site welcomes contributions from the community in a variety of ways! For more information see [CONTRIBUTING.md](CONTRIBUTING.md) and [INSTALLATION.md](INSTALLATION.md). Suggestions are also welcome in the form of an issue.
 
