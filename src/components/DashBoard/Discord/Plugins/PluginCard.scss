@@ -4,12 +4,26 @@
 	transition: 0.25s;
     margin: 0.5rem;
     cursor: pointer;
+    position: relative;
     &.disabled{
         background: lighten($background-color, 2);
         opacity: .45;
+        &:after {
+			content: "Click to Enable";
+			background: #b92838;
+            width: fit-content;
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform: translate(10%, -25%);
+            padding: .25rem .4rem;
+            border-radius: 5rem;
+		}
     }
 	&.coming-soon {
+        cursor: initial;
         position: relative;
+        opacity: .8;
 		&:after {
 			content: "Coming Soon";
 			background: var(--disstreamchat-blue);
@@ -18,7 +32,7 @@
             top: 0;
             right: 0;
             transform: translate(10%, -25%);
-            padding: .25rem;
+            padding: .25rem .4rem;
             border-radius: 5rem;
 		}
 	}
@@ -61,6 +75,10 @@
             line-height: 1rem;;
         }
     }
+}
+
+.plugin-overlay{
+    background: lighten(#21212133, 10) !important;
 }
 
 .plugin-modal{
