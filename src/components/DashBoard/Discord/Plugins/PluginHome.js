@@ -8,8 +8,7 @@ import Leveling from "./Leveling";
 
 const PluginHome = ({ match }) => {
 	const [prefix, setPrefix] = useState("!");
-	const [activePlugins, setActivePlugins] = useState({});
-	const { userConnectedGuildInfo } = useContext(DiscordContext);
+	const { userConnectedGuildInfo, activePlugins, setActivePlugins } = useContext(DiscordContext);
 
 	useEffect(() => {
 		(async () => {
@@ -62,13 +61,13 @@ const PluginHome = ({ match }) => {
 						</div>
 
 						<div className="plugin-list">
-								<PluginCard
-									id="leveling"
-									active={activePlugins["leveling"]}
-									title="Leveling"
-									image={`${process.env.PUBLIC_URL}/trophy.svg`}
-									description="Let your users gain XP and levels by participating in the chat!"
-								/>
+							<PluginCard
+								id="leveling"
+								active={activePlugins["leveling"]}
+								title="Leveling"
+								image={`${process.env.PUBLIC_URL}/trophy.svg`}
+								description="Let your users gain XP and levels by participating in the chat!"
+							/>
 							<PluginCard
 								id="commands"
 								title="Custom Commands"
@@ -99,9 +98,11 @@ const PluginHome = ({ match }) => {
 							/>
 						</div>
 					</Route>
-					<Route path={`${match.url}/leveling`}>
-						<Leveling />
-					</Route>
+					{activePlugins["leveling"] &&
+						<Route path={`${match.url}/leveling`}>
+							<Leveling />
+						</Route>
+					}
 
 					<Redirect to={`${match.url}`} />
 				</Switch>

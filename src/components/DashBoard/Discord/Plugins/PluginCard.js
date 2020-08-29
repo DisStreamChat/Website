@@ -5,21 +5,36 @@ import { useCallback } from "react";
 import ClearTwoToneIcon from "@material-ui/icons/ClearTwoTone";
 import { withRouter } from "react-router";
 import A from "../../../Shared/A";
+import firebase from "../../../../firebase"
+import { useContext } from "react";
+import { DiscordContext } from "../../../../contexts/DiscordContext";
 
 Modal.setAppElement("#root");
 
 const PluginCard = props => {
-	const [modalOpen, setModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const {setActivePlugins, userConnectedGuildInfo} = useContext(DiscordContext)
+    const guildId = userConnectedGuildInfo?.id;
 
 	const handleClick = useCallback(() => {
-		if (!props.active) {
+		if (!props.active && (!props.comingSoon)) {
 			setModalOpen(true);
 		}
 	}, [props]);
 
 	const enable = useCallback(() => {
+        setActivePlugins(prev => {
+            const newPlugs = { ...prev, [props.id]: true };
+            firebase.db
+                .collection("DiscordSettings")
+                .doc(guildId || " ")
+                .update({
+                    activePlugins: newPlugs,
+                });
+            return newPlugs;
+        });
 		props.history.push(`${props.match.url}/${props.id}`);
-	}, [props]);
+	}, [props, guildId]);
 
 	return (
 		<>
@@ -30,7 +45,7 @@ const PluginCard = props => {
 				onRequestClose={() => setModalOpen(false)}
 			>
 				<div className="top-portion">
-					<h2>Enable Plugin: {props.title}</h2>
+					<h2>Enable Plugin: <u>{props.title}</u></h2>
 					<button onClick={() => setModalOpen(false)}>
 						<ClearTwoToneIcon />
 					</button>
@@ -41,7 +56,7 @@ const PluginCard = props => {
 					</button>
 				</div>
 			</Modal>
-			<A href={props.active ? `${props.match.url}/leveling` : null} local>
+			<A href={props.active ? `${props.match.url}/${props.id}` : null} local>
 				<div onClick={handleClick} className={`plugin-card ${props.active ? "active" : "disabled"} ${props.comingSoon ? "coming-soon" : ""}`}>
 					<div className="image">
 						<img src={props.image} alt="" />
