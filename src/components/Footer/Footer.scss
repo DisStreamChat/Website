@@ -72,3 +72,9 @@
 		}
 	}
 }
+
+@media screen and (max-width: 420px) {
+	.column {
+		margin-right: .75rem !important;
+    }
+}

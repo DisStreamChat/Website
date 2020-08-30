@@ -8,8 +8,12 @@
 	word-wrap: break-word;
 	color: #ffffff;
 	@media screen and (max-width: 350px) {
-		margin-bottom: -1rem;
-	}
+        margin-bottom: -1rem;
+        
+    }
+    @media screen and (max-width: 550px) {
+        font-size: 25px;
+    }
 }
 
 .body-subheader {
@@ -21,12 +25,15 @@
 	/* identical to box height */
 
 	text-align: center;
-	color: #aaaaaa;
+    color: #aaaaaa;
+    @media screen and (max-width: 550px) {
+        font-size: 20px;
+    }
 }
 
 .main-view {
 	margin-top: 15rem;
-	@media screen and (max-width: 350px) {
+	@media screen and (max-width: 550px) {
 		margin-top: -2rem;
 	}
 	display: flex;
@@ -96,9 +103,10 @@
 	}
 }
 
+
 .landing {
 	// outline: solid;
-	width: 70%;
+	width: 65%;
 	min-height: 2000px;
 	display: flex;
 	flex-direction: column;
@@ -106,7 +114,10 @@
 	padding-top: 5rem;
 	// padding-bottom: 10rem;
 	&.high-margin {
-		margin-top: 15rem;
+        margin-top: 15rem;
+        @media screen and (max-width: 550px) {
+            margin-top: 1rem;
+        }
 	}
 }
 
@@ -147,7 +158,8 @@
 		width: 100%;
 		max-width: 400px;
 		height: auto;
-		box-shadow: 5px 5px 25px -5px #111;
+        box-shadow: 5px 5px 25px -5px #111;
+        
 	}
 	&:nth-child(odd) .right {
 		text-align: right;
@@ -173,10 +185,13 @@
 				position: absolute;
 				bottom: -12px;
 				left: 0;
-				transform: translateX(0%);
+				transform: translateX(25%);
 				max-width: 400px !important;
 			}
-		}
+        }
+        #root .landing & img{
+            max-width: 150px !important;
+        }
 	}
 }
 

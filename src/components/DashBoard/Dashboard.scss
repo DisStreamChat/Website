@@ -9,7 +9,7 @@
     }
     .prefix-input{
         padding: .5rem;
-        width: 25%;
+        width: 35%;
         border-radius: .5rem;
         border: none;
         outline: none;
@@ -281,7 +281,19 @@
 
 .discord-header {
 	display: flex;
-	justify-content: space-between;
+    justify-content: space-between;
+    @media screen and (max-width: 660px) {
+        flex-direction: column-reverse;
+        align-items: center;
+        & > span{
+            margin-bottom: .5rem;
+            align-self: start;
+        }
+        .css-1sx567g-container{
+            width: 100% !important
+        }
+        // align-items: ;
+    }
 	padding: 0.5rem;
 }
 

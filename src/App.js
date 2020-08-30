@@ -1,5 +1,5 @@
 // production
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import firebase from "./firebase";
 import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import Home from "./components/Home/Home";
@@ -24,6 +24,7 @@ import { Button } from "@material-ui/core";
 import A from "./components/Shared/A";
 import useSnapshot from "./hooks/useSnapshot";
 import LeaderBoard from "./components/LeaderBoard/LeaderBoard";
+import { v4 as uuidv4 } from 'uuid';
 
 function App(props) {
 	const [userId, setUserId] = useState("");
@@ -50,6 +51,17 @@ function App(props) {
 			setFirebaseInit(result);
 		})();
 	}, []);
+
+	const setOTC = useRef(false);
+	useEffect(() => {
+		(async () => {
+			if (setOTC.current) return;
+			if (firebaseInit !== false && user?.uid) {
+                await firebase.db.collection("Secret").doc(user.uid).set({value: uuidv4()});
+                setOTC.current = true
+			}
+		})();
+	}, [firebaseInit, user, setOTC]);
 
 	useEffect(() => {
 		if (firebaseInit === false) return;

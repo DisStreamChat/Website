@@ -47,12 +47,15 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		(async () => {
 			if (!refreshToken || !id) return;
 			if (refreshed) return console.log("already refreshed");
-			console.log("refreshing");
+            console.log("refreshing");
+            const otcData = (await firebase.db.collection("Secret").doc(id).get()).data()
+            const otc = otcData?.value
 			setRefreshed(true);
-			const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${refreshToken}`);
+			const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${refreshToken}&id=${id}&otc=${otc}`);
 			if (!response.ok) return;
 
-			const json = await response.json();
+            const json = await response.json();
+            console.log({json})
 			if (!json) return;
 			await firebase.db
 				.collection("Streamers")

@@ -375,13 +375,7 @@
 		align-items: center;
 	}
 
-	.body-header {
-		font-size: 30px;
-	}
-
-	.body-subheader {
-		font-size: 22px;
-	}
+	
 
 	.footer-top {
 		flex-direction: column;
@@ -428,8 +422,9 @@
 		position: absolute;
 		/* justify-content: center; */
 		top: 100px;
-		/* left: 50%; */
-		transform: translateX(0px);
+        /* left: 50%; */
+        margin: 0 !important;
+		// transform: translateX(0px);
 		height: 0px;
 		overflow: hidden;
 		flex-direction: column;
@@ -438,10 +433,6 @@
 }
 
 @media screen and (max-width: 420px) {
-	.column {
-		margin-right: 1.5rem !important;
-	}
-
 	.made-by {
 		text-align: right;
 	}
