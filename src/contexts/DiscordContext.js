@@ -7,7 +7,6 @@ export const DiscordContextProvider = props => {
 	const [userDiscordInfo, setUserDiscordInfo] = useState();
     const [userConnectedGuildInfo, setUserConnectedGuildInfo] = useState();
     const [userConnectedChannels, setUserConnectedChannels] = useState()
-    const [activePlugins, setActivePlugins] = useState({})
 
 	return (
 		<DiscordContext.Provider
@@ -17,9 +16,7 @@ export const DiscordContextProvider = props => {
                 userConnectedChannels,
 				userConnectedGuildInfo,
                 setUserConnectedChannels,
-                setUserConnectedGuildInfo,
-                activePlugins, 
-                setActivePlugins
+				setUserConnectedGuildInfo,
 			}}
 		>
 			{props.children}
