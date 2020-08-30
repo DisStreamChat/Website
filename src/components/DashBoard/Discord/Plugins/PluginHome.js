@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import React, { useEffect, useState, useCallback, useContext, useMemo } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import firebase from "../../../../firebase";
 import A from "../../../Shared/A";
 import PluginCard from "./PluginCard";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Leveling from "./Leveling";
+import plugins from "./plugins.json"
 
 const PluginHome = ({ match }) => {
 	const [prefix, setPrefix] = useState("!");
@@ -39,6 +40,8 @@ const PluginHome = ({ match }) => {
 		[userConnectedGuildInfo?.id]
 	);
 
+    const displayPlugins = useMemo(() => plugins.sort((a, b) => activePlugins[a.id] ? -1 : 1), [plugins, activePlugins])
+
 	return (
 		<>
 			<hr />
@@ -61,48 +64,9 @@ const PluginHome = ({ match }) => {
 						</div>
 
 						<div className="plugin-list">
-							<PluginCard
-								id="leveling"
-								active={activePlugins["leveling"]}
-								title="Leveling"
-								image={`${process.env.PUBLIC_URL}/trophy.svg`}
-								description="Let your users gain XP and levels by participating in the chat!"
-							/>
-							<PluginCard
-								id="commands"
-								title="Custom Commands"
-								image={`${process.env.PUBLIC_URL}/discord.png`}
-								description="Add awesome custom commands to your server"
-								comingSoon
-							/>
-							<PluginCard
-								id="logging"
-								title="Logging"
-								image={`${process.env.PUBLIC_URL}/clipboard.svg`}
-								description="Don't miss anything happening in your server when you are not around!"
-								comingSoon
-							/>
-							<PluginCard
-								id="welcome"
-								title="Welcome"
-								image={`${process.env.PUBLIC_URL}/wave.svg`}
-								description="Give new users a warm welcome"
-								comingSoon
-							/>
-							<PluginCard
-								id="help"
-								title="Help"
-								image={`${process.env.PUBLIC_URL}/help.svg`}
-								description="Enables the 'help' command in your server"
-								comingSoon
-							/>
-                            <PluginCard
-								id="streamislive"
-								title="Stream Notifications"
-								image={`${process.env.PUBLIC_URL}/twitch.svg`}
-								description="Get notified when your favorite streamers go live"
-								comingSoon
-							/>
+                            {displayPlugins.map(plugin => (
+                                <PluginCard {...plugin} active={activePlugins[plugin.id]}/>
+                            ))}
 						</div>
 					</Route>
 					{activePlugins["leveling"] &&
@@ -110,7 +74,6 @@ const PluginHome = ({ match }) => {
 							<Leveling />
 						</Route>
 					}
-
 					<Redirect to={`${match.url}`} />
 				</Switch>
 			</div>

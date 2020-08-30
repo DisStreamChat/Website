@@ -1,0 +1,44 @@
+[
+	{
+		"id": "leveling",
+		"title": "Leveling",
+		"image": "trophy.svg",
+        "description": "Let your users gain XP and levels by participating in the chat!",
+        "comingSoon": false
+	},
+	{
+		"id": "commands",
+		"title": "Custom Commands",
+		"image": "discord.png",
+        "description": "Let your users gain XP and levels by participating in the chat!",
+        "comingSoon": true
+	},
+	{
+		"id": "logging",
+		"title": "Logging",
+		"image": "clipboard.svg",
+        "description": "Let your users gain XP and levels by participating in the chat!",
+        "comingSoon": true
+	},
+	{
+		"id": "welcome",
+		"title": "Welcome",
+		"image": "wave.svg",
+        "description": "Let your users gain XP and levels by participating in the chat!",
+        "comingSoon": true
+	},
+	{
+		"id": "help",
+		"title": "Help",
+		"image": "help.svg",
+        "description": "Let your users gain XP and levels by participating in the chat!",
+        "comingSoon": true
+	},
+	{
+		"id": "streamislive",
+		"title": "Stream Notifications",
+		"image": "twitch.svg",
+        "description": "Let your users gain XP and levels by participating in the chat!",
+        "comingSoon": true
+	}
+]
