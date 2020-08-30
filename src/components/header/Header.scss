@@ -26,16 +26,18 @@
 	.nav-bar {
 		display: flex;
 		justify-content: space-between;
-		margin-left: 1rem;
+        margin-left: 1rem;
+        padding-left: 1rem;
         width: 90%;
 
 		a {
 			font-style: normal;
 			font-weight: normal;
-			font-size: 30px;
+			font-size: 1.75rem;
 			line-height: 37px;
 
-			text-align: center;
+            text-align: center;
+            margin: 0 .5rem;
 
 			color: #b8b7b4;
 			&:hover {
