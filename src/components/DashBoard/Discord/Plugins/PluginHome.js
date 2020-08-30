@@ -96,6 +96,13 @@ const PluginHome = ({ match }) => {
 								description="Enables the 'help' command in your server"
 								comingSoon
 							/>
+                            <PluginCard
+								id="streamislive"
+								title="Stream Notifications"
+								image={`${process.env.PUBLIC_URL}/twitch.svg`}
+								description="Get notified when your favorite streamers go live"
+								comingSoon
+							/>
 						</div>
 					</Route>
 					{activePlugins["leveling"] &&
