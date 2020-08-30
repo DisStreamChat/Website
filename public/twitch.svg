@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <title>plugin-icon/twitch</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M1.17936708,9.42755524 L0.977044889,5.67302612 L3.22232771,0.237693201 L31.3984065,0.394274631 L31.2661569,19.4600211 L23.2759108,27.6404222 L17.1213686,27.6007876 L13.048771,31.7638963 L8.91251588,31.7311121 L8.81332867,27.8337024 L1.3037212,27.9026961 L1.17936708,9.42755524 Z M5.93130504,3.21261705 L5.86110783,22.7920048 L11.976065,22.8642886 L12.0480621,26.9627497 L16.3291921,22.8473332 L23.7433977,22.8699404 L28.5639063,18.2675751 L28.4490109,3.09125168 L5.93130504,3.21261705 Z" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-1" y="-1" width="32.4213616" height="33.5262031">
+            <rect x="-0.0229551109" y="-0.762306799" width="32.4213616" height="33.5262031" fill="white"></rect>
+            <use xlink:href="#path-1" fill="black"></use>
+        </mask>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="plugin-icon/twitch">
+            <g id="icon-bg/ok">
+                <rect id="Rectangle-19" x="0" y="0" width="50" height="50" rx="4"></rect>
+            </g>
+            <g id="Group-2" transform="translate(9.000000, 9.000000)">
+                <polygon id="Path-11" fill="#6441A4" points="5.93130504 3.21261705 5.86110783 22.7920048 11.976065 22.8642886 12.0480621 26.9627497 16.3291921 22.8473332 23.7433977 22.8699404 28.5639063 18.2675751 28.4490109 3.09125168"></polygon>
+                <g id="Combined-Shape">
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    <use stroke="#000000" mask="url(#mask-2)" stroke-width="2" stroke-dasharray="36,1" xlink:href="#path-1"></use>
+                </g>
+                <path d="M21.0255057,8.52592169 L20.9793075,16.6353893 L23.7478976,16.6939898 L23.661201,8.52116226 L21.0255057,8.52592169 Z M13.512904,8.57619313 L13.5261035,16.6395538 L16.2019972,16.6365792 L16.2091969,8.70559003 L13.512904,8.57619313 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>
