@@ -1,0 +1,39 @@
+.accounts {
+	width: 100%;
+	display: flex;
+}
+
+.account {
+	width: 100%;
+	margin: 3rem 0;
+	overflow: hidden;
+	border-radius: 0.5rem;
+	&:first-child {
+		margin-top: 0;
+	}
+	.account-header {
+		display: flex;
+		align-items: center;
+		padding: .5rem 1rem;
+		img {
+			width: 32px;
+		}
+		height: 50px;
+		&.twitch {
+			background: #503086;
+		}
+		&.discord {
+			background: #6665d2;
+		}
+	}
+
+	.account-body {
+		min-height: 100px;
+		&.twitch {
+			background: #593695;
+		}
+		&.discord {
+			background: #7289da;
+		}
+	}
+}
