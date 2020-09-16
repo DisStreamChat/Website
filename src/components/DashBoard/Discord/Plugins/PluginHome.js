@@ -29,21 +29,22 @@ const PluginHome = ({ match }) => {
 
 	const prefixChange = useCallback(
 		async e => {
-			setPrefix(e.target.value);
+			const value = e?.arget?.value || "!"
+			setPrefix(value);
 			try{
 
 				await firebase.db
 					.collection("DiscordSettings")
 					.doc(userConnectedGuildInfo?.id || " ")
 					.update({
-						prefix: e.target.value,
+						prefix: value,
 					});
 			}catch(err){
 				await firebase.db
 					.collection("DiscordSettings")
 					.doc(userConnectedGuildInfo?.id || " ")
 					.set({
-						prefix: e.target.value,
+						prefix: value,
 					});
 			}
 		},
