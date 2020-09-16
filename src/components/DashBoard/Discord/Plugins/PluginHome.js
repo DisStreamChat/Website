@@ -32,14 +32,14 @@ const PluginHome = ({ match }) => {
 			setPrefix(e.target.value);
 			try{
 
-				firebase.db
+				await firebase.db
 					.collection("DiscordSettings")
 					.doc(userConnectedGuildInfo?.id || " ")
 					.update({
 						prefix: e.target.value,
 					});
 			}catch(err){
-				firebase.db
+				await firebase.db
 					.collection("DiscordSettings")
 					.doc(userConnectedGuildInfo?.id || " ")
 					.set({
