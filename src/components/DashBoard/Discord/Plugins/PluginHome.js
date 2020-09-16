@@ -44,6 +44,7 @@ const PluginHome = ({ match }) => {
 					.collection("DiscordSettings")
 					.doc(userConnectedGuildInfo?.id || " ")
 					.set({
+						activePlugins: {},
 						prefix: value,
 					});
 			}
