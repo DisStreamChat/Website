@@ -29,7 +29,7 @@ const PluginHome = ({ match }) => {
 
 	const prefixChange = useCallback(
 		async e => {
-			const value = e?.arget?.value || "!"
+			const value = e?.target?.value || "!"
 			setPrefix(value);
 			try{
 
