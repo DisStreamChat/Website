@@ -5,6 +5,10 @@ const DiscordComponent = () => {
 		<div className="account discord">
 			<div className="account-header discord">
 				<img src="https://cdn.iconscout.com/icon/free/png-512/discord-3-569463.png" alt="" />
+                <div className="name">
+                    <p></p>
+                    <p>Account Name</p>
+                </div>
 			</div>
 			<div className="account-body discord"></div>
 		</div>
