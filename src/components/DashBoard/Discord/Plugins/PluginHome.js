@@ -5,7 +5,7 @@ import A from "../../../Shared/A";
 import PluginCard from "./PluginCard";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Leveling from "./Leveling";
-import plugins from "./plugins.json"
+import plugins from "./plugins.json";
 
 const PluginHome = ({ match }) => {
 	const [prefix, setPrefix] = useState("!");
@@ -40,7 +40,7 @@ const PluginHome = ({ match }) => {
 		[userConnectedGuildInfo?.id]
 	);
 
-    const displayPlugins = useMemo(() => plugins.sort((a, b) => activePlugins[a.id] ? -1 : 1), [plugins, activePlugins])
+	const displayPlugins = useMemo(() => plugins.sort((a, b) => (activePlugins[a.id] ? -1 : 1)), [plugins, activePlugins]);
 
 	return (
 		<>
@@ -64,16 +64,21 @@ const PluginHome = ({ match }) => {
 						</div>
 
 						<div className="plugin-list">
-                            {displayPlugins.map(plugin => (
-                                <PluginCard {...plugin} active={activePlugins[plugin.id]}/>
-                            ))}
+							{displayPlugins.map(plugin => (
+								<PluginCard {...plugin} active={activePlugins[plugin.id]} />
+							))}
 						</div>
 					</Route>
-					{activePlugins["leveling"] &&
+					{activePlugins["leveling"] && (
 						<Route path={`${match.url}/leveling`}>
 							<Leveling />
 						</Route>
-					}
+					)}
+					{activePlugins["logging"] && (
+						<Route path={`${match.url}/logging`}>
+							<Leveling />
+						</Route>
+					)}
 					<Redirect to={`${match.url}`} />
 				</Switch>
 			</div>
