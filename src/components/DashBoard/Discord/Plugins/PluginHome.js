@@ -5,6 +5,7 @@ import A from "../../../Shared/A";
 import PluginCard from "./PluginCard";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Leveling from "./Leveling";
+import Logging from "./Logging"
 import plugins from "./plugins.json";
 
 const PluginHome = ({ match }) => {
@@ -76,7 +77,7 @@ const PluginHome = ({ match }) => {
 					)}
 					{activePlugins["logging"] && (
 						<Route path={`${match.url}/logging`}>
-							<Leveling />
+							<Logging />
 						</Route>
 					)}
 					<Redirect to={`${match.url}`} />
