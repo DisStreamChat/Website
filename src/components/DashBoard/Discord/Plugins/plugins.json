@@ -10,35 +10,35 @@
 		"id": "commands",
 		"title": "Custom Commands",
 		"image": "discord.png",
-        "description": "Let your users gain XP and levels by participating in the chat!",
+        "description": "Create custom commands for your server",
         "comingSoon": true
 	},
 	{
 		"id": "logging",
 		"title": "Logging",
 		"image": "clipboard.svg",
-        "description": "Let your users gain XP and levels by participating in the chat!",
-        "comingSoon": true
+        "description": "Log the events that take place on your server",
+        "comingSoon": false
 	},
 	{
 		"id": "welcome",
 		"title": "Welcome",
 		"image": "wave.svg",
-        "description": "Let your users gain XP and levels by participating in the chat!",
+        "description": "Send a welcome message to new users",
         "comingSoon": true
 	},
 	{
 		"id": "help",
 		"title": "Help",
 		"image": "help.svg",
-        "description": "Let your users gain XP and levels by participating in the chat!",
+        "description": "Enable the help command in your server",
         "comingSoon": true
 	},
 	{
 		"id": "streamislive",
 		"title": "Stream Notifications",
 		"image": "twitch.svg",
-        "description": "Let your users gain XP and levels by participating in the chat!",
+        "description": "Let your viewers when you go live",
         "comingSoon": true
 	}
 ]
