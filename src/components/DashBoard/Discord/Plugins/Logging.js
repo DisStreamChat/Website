@@ -12,8 +12,37 @@ const Leveling = ({ location }) => {
 	const guildId = userConnectedGuildInfo?.id;
 
 	useEffect(() => {
-		(async () => {})();
+		(async () => {
+            const guildLogRef = firebase.db.collection("loggingChannel").doc(guildId);
+            const data = (await guildLogRef.get()).data()
+            if (data) {
+				const id = data.server;
+				if (id) {
+					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
+					const response = await fetch(apiUrl);
+					const channel = await response.json();
+					setLoggingChannel({
+						value: id,
+						label: (
+							<>
+								<span>{channel.name}</span>
+								<span className="channel-category">{channel.parent}</span>
+							</>
+						),
+					});
+				}
+			}
+        })();
 	}, [location, guildId]);
+
+	const handleAnnoucmentSelect = useCallback(
+		async e => {
+			const guildLevelRef = firebase.db.collection("loggingChannel").doc(guildId);
+			setLoggingChannel(e);
+			guildLevelRef.update({ server: e.value });
+		},
+		[guildId]
+	);
 
 	return (
 		<div>
@@ -47,12 +76,34 @@ const Leveling = ({ location }) => {
 					You can set a channel and events that will be sent to that particular channel. Don't miss anything happening in your server when
 					you are not around!
 				</h4>
-				
 			</div>
 			<div className="plugin-item-body">
-                <h4 className="plugin-section-title">Logging Channel</h4>
+				<h4 className="plugin-section-title">Logging Channel</h4>
 				<div className="plugin-section">
-					
+					<Select
+						closeMenuOnSelect
+						onChange={handleAnnoucmentSelect}
+						placeholder="Select Logging Channel"
+						value={loggingChannel}
+						options={userConnectedGuildInfo?.channels
+							?.sort((a, b) => a.parent.localeCompare(b.parent))
+							?.map(channel => ({
+								value: channel.id,
+								label: (
+									<>
+										<span>{channel.name}</span>
+										<span className="channel-category">{channel.parent}</span>
+									</>
+								),
+							}))}
+						styles={{
+							...colorStyles,
+							container: styles => ({
+								...styles,
+								...colorStyles.container,
+							}),
+						}}
+					/>
 				</div>
 			</div>
 		</div>

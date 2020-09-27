@@ -86,7 +86,10 @@
 		padding: 0.5rem;
 		border-radius: 0.25rem;
 		// height: 210px;
-		border: 0.5px solid lighten($color: #121212, $amount: 20);
+        border: 0.5px solid lighten($color: #121212, $amount: 20);
+        & > div{
+            width: 50%;
+        }
 	}
 
 	.plugin-section-title {
