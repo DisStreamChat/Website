@@ -5,39 +5,12 @@ import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Select from "react-select";
 
 const Leveling = ({ location }) => {
-	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
-	const [announcementChannel, setAnnouncementChannel] = useState(false);
-	const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
-    const {setActivePlugins, userConnectedGuildInfo} = useContext(DiscordContext)
+    const [loggingChannel, setLoggingChannel] = useState("")
+    const [activeEvents, setActiveEvents] = useState({})
+	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
 	const guildId = userConnectedGuildInfo?.id;
 
-	const handleTypeSelect = useCallback(
-		async e => {
-			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
-			setLevelUpAnnouncement(e);
-			await guildLevelRef.update({ type: e.value });
-		},
-		[guildId]
-	);
 
-	const handleMessageChange = useCallback(
-		async e => {
-			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
-			const message = e.target.value;
-			setLevelUpMessage(message);
-			await guildLevelRef.update({ message });
-		},
-		[guildId]
-	);
-
-	const handleAnnoucmentSelect = useCallback(
-		async e => {
-			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
-			setAnnouncementChannel(e);
-			guildLevelRef.update({ notifications: e.value });
-		},
-		[guildId]
-	);
 
 	useEffect(() => {
 		(async () => {
@@ -75,8 +48,8 @@ const Leveling = ({ location }) => {
 		<div>
 			<div className="plugin-item-header">
 				<span className="title">
-					<img src={`${process.env.PUBLIC_URL}/trophy.svg`} alt="" />
-					<h2>Leveling</h2>
+					<img src={`${process.env.PUBLIC_URL}/clipboard.svg`} alt="" />
+					<h2>Logging</h2>
 				</span>
 				<span className="toggle-button">
 					<button
@@ -99,65 +72,14 @@ const Leveling = ({ location }) => {
 			</div>
 			<hr />
 			<div className="plugin-item-subheader">
-				<h2>Leveling Up</h2>
-				<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
+				<h2>Logging Channel</h2>
+				<h4>
+					You can set a channel and events that will be sent to that particular channel. Don't miss anything happening in your server when
+					you are not around!
+				</h4>
 			</div>
 			<div className="plugin-item-body">
-				<div className="level-settings">
-					<div className="channels">
-						<div id="announcement-type">
-							<h5 className="bold uppercase">Level up announcement</h5>
-							<Select
-								closeMenuOnSelect
-								onChange={handleTypeSelect}
-								placeholder="Select Annoucement type"
-								value={levelUpAnnouncement}
-								options={[
-									{ value: 1, label: "Disabled" },
-									{ value: 2, label: "Current Channel" },
-									{ value: 3, label: "Custom Channel" },
-								].map(type => type)}
-								styles={{
-									...colorStyles,
-									container: styles => ({ ...styles, ...colorStyles.container }),
-								}}
-							/>
-						</div>
-						{levelUpAnnouncement?.value === 3 && (
-							<div id="announcement-channel">
-								<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
-								<Select
-									closeMenuOnSelect
-									onChange={handleAnnoucmentSelect}
-									placeholder="Select Annoucement Channel"
-									value={announcementChannel}
-									options={userConnectedGuildInfo?.channels
-										?.sort((a, b) => a.parent.localeCompare(b.parent))
-										?.map(channel => ({
-											value: channel.id,
-											label: (
-												<>
-													<span>{channel.name}</span>
-													<span className="channel-category">{channel.parent}</span>
-												</>
-											),
-										}))}
-									styles={{
-										...colorStyles,
-										container: styles => ({
-											...styles,
-											...colorStyles.container,
-										}),
-									}}
-								/>
-							</div>
-						)}
-					</div>
-					<div className="message">
-						<h5>LEVEL UP ANNOUNCEMENT MESSAGE</h5>
-						<textarea value={levelUpMessage} onChange={handleMessageChange}></textarea>
-					</div>
-				</div>
+				
 			</div>
 		</div>
 	);
