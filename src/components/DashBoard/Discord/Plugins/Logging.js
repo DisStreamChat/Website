@@ -143,7 +143,7 @@ const Leveling = ({ location }) => {
 						}}
 					/>
 				</div>
-				{[...new Set(Object.values(allEvents || {}).map(val => val.category))].map(category => (
+				{[...new Set(Object.values(allEvents || {}).map(val => val.category))].sort().map(category => (
 					<>
 						<h4 className="plugin-section-title">{category}</h4>
 						<div className="plugin-section">

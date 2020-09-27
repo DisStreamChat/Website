@@ -87,13 +87,14 @@
         border-radius: 0.25rem;
         flex-wrap: wrap;
         // height: 210px;
+        justify-content: space-between;
         justify-items: stretch;
         border: 0.5px solid lighten($color: #121212, $amount: 20);
         & > div{
             width: 50%;
         }
         #root & > label{
-            width: 25%;
+            width: 30%;
             margin-left: .5rem;
             margin-top: .25rem;
             margin-bottom: .25rem;
