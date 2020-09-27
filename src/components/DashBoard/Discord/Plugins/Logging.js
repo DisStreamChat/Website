@@ -7,40 +7,13 @@ import Select from "react-select";
 const Leveling = ({ location }) => {
     const [loggingChannel, setLoggingChannel] = useState("")
     const [activeEvents, setActiveEvents] = useState({})
+    const [allEvents, setAllEvents] = useState({})
 	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
 	const guildId = userConnectedGuildInfo?.id;
 
-
-
 	useEffect(() => {
 		(async () => {
-			const guild = await firebase.db
-				.collection("Leveling")
-				.doc(guildId || " ")
-				.get();
-			const data = guild.data();
-			if (data) {
-				const id = data.notifications;
-				if (id) {
-					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
-					const response = await fetch(apiUrl);
-					const channel = await response.json();
-					setAnnouncementChannel({
-						value: id,
-						label: (
-							<>
-								<span>{channel.name}</span>
-								<span className="channel-category">{channel.parent}</span>
-							</>
-						),
-					});
-					setLevelUpAnnouncement({
-						value: data.type,
-						label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
-					});
-					setLevelUpMessage(data.message);
-				}
-			}
+			
 		})();
 	}, [location, guildId]);
 
