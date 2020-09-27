@@ -3,6 +3,39 @@ import firebase from "../../../../firebase";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import { colorStyles } from "../../../Shared/userUtils";
 import Select from "react-select";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { Switch } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import { blueGrey } from "@material-ui/core/colors";
+
+const FancySwitch = withStyles({
+	root: {
+		padding: 7,
+	},
+	thumb: {
+		width: 24,
+		height: 24,
+		backgroundColor: "#fff",
+		boxShadow: "0 0 12px 0 rgba(0,0,0,0.08), 0 0 8px 0 rgba(0,0,0,0.12), 0 0 4px 0 rgba(0,0,0,0.38)",
+	},
+	switchBase: {
+		color: "rgba(0,0,0,0.38)",
+		padding: 7,
+	},
+	track: {
+		borderRadius: 20,
+		backgroundColor: blueGrey[300],
+	},
+	checked: {
+		"& $thumb": {
+			backgroundColor: "#fff",
+		},
+		"& + $track": {
+			opacity: "1 !important",
+		},
+	},
+	focusVisible: {},
+})(Switch);
 
 const Leveling = ({ location }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
@@ -13,9 +46,9 @@ const Leveling = ({ location }) => {
 
 	useEffect(() => {
 		(async () => {
-            const guildLogRef = firebase.db.collection("loggingChannel").doc(guildId);
-            const data = (await guildLogRef.get()).data()
-            if (data) {
+			const guildLogRef = firebase.db.collection("loggingChannel").doc(guildId);
+			const data = (await guildLogRef.get()).data();
+			if (data) {
 				const id = data.server;
 				if (id) {
 					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
@@ -32,7 +65,12 @@ const Leveling = ({ location }) => {
 					});
 				}
 			}
-        })();
+		})();
+		(async () => {
+			const defaultEvents = (await firebase.db.collection("defaults").doc("loggingEvents").get()).data();
+			console.log(defaultEvents);
+			setAllEvents(defaultEvents);
+		})();
 	}, [location, guildId]);
 
 	const handleAnnoucmentSelect = useCallback(
@@ -105,6 +143,33 @@ const Leveling = ({ location }) => {
 						}}
 					/>
 				</div>
+				{[...new Set(Object.values(allEvents || {}).map(val => val.category))].map(category => (
+					<>
+						<h4 className="plugin-section-title">{category}</h4>
+						<div className="plugin-section">
+							{Object.entries(allEvents || {})
+								.filter(([key, event]) => event.category === category)
+								.map(([key, event]) => (
+									<FormControlLabel
+										control={
+											<FancySwitch
+												color="primary"
+												checked={activeEvents[key]}
+												onChange={e => {
+													setActiveEvents(prev => ({
+														...prev,
+														[key]: e.target.checked,
+													}));
+												}}
+												name={event.displayName}
+											/>
+										}
+										label={event.displayName}
+									/>
+								))}
+						</div>
+					</>
+				))}
 			</div>
 		</div>
 	);

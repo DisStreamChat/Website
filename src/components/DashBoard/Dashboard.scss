@@ -84,11 +84,19 @@
 		display: flex;
 		background: lighten($color: #121212, $amount: 10);
 		padding: 0.5rem;
-		border-radius: 0.25rem;
-		// height: 210px;
+        border-radius: 0.25rem;
+        flex-wrap: wrap;
+        // height: 210px;
+        justify-items: stretch;
         border: 0.5px solid lighten($color: #121212, $amount: 20);
         & > div{
             width: 50%;
+        }
+        #root & > label{
+            width: 25%;
+            margin-left: .5rem;
+            margin-top: .25rem;
+            margin-bottom: .25rem;
         }
 	}
 
