@@ -1,20 +1,18 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import firebase from "../../../../firebase";
-import { colorStyles } from "../../../Shared/userUtils";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
+import { colorStyles } from "../../../Shared/userUtils";
 import Select from "react-select";
 
 const Leveling = ({ location }) => {
-    const [loggingChannel, setLoggingChannel] = useState("")
-    const [activeEvents, setActiveEvents] = useState({})
-    const [allEvents, setAllEvents] = useState({})
+	const [loggingChannel, setLoggingChannel] = useState("");
+	const [activeEvents, setActiveEvents] = useState({});
+	const [allEvents, setAllEvents] = useState({});
 	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
 	const guildId = userConnectedGuildInfo?.id;
 
 	useEffect(() => {
-		(async () => {
-			
-		})();
+		(async () => {})();
 	}, [location, guildId]);
 
 	return (
@@ -45,15 +43,13 @@ const Leveling = ({ location }) => {
 			</div>
 			<hr />
 			<div className="plugin-item-subheader">
-				<h2>Logging Channel</h2>
 				<h4>
 					You can set a channel and events that will be sent to that particular channel. Don't miss anything happening in your server when
 					you are not around!
 				</h4>
+				<h2>Logging Channel</h2>
 			</div>
-			<div className="plugin-item-body">
-				
-			</div>
+			<div className="plugin-item-body"></div>
 		</div>
 	);
 };
