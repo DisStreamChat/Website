@@ -47,9 +47,14 @@ const Leveling = ({ location }) => {
 					You can set a channel and events that will be sent to that particular channel. Don't miss anything happening in your server when
 					you are not around!
 				</h4>
-				<h2>Logging Channel</h2>
+				
 			</div>
-			<div className="plugin-item-body"></div>
+			<div className="plugin-item-body">
+                <h4 className="plugin-section-title">Logging Channel</h4>
+				<div className="plugin-section">
+					
+				</div>
+			</div>
 		</div>
 	);
 };
