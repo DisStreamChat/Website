@@ -40,5 +40,12 @@
 		"image": "twitch.svg",
         "description": "Let your viewers when you go live",
         "comingSoon": true
+    },
+    {
+		"id": "moderation",
+		"title": "Moderation",
+		"image": "mod.svg",
+        "description": "Power up your moderation with cool commands and automations!",
+        "comingSoon": true
 	}
 ]
