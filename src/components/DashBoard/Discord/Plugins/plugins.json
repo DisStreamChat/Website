@@ -11,7 +11,7 @@
 		"title": "Custom Commands",
 		"image": "discord.png",
         "description": "Create custom commands for your server",
-        "comingSoon": true
+        "comingSoon": false
 	},
 	{
 		"id": "logging",
@@ -28,13 +28,6 @@
         "comingSoon": true
 	},
 	{
-		"id": "help",
-		"title": "Help",
-		"image": "help.svg",
-        "description": "Enable the help command in your server",
-        "comingSoon": true
-	},
-	{
 		"id": "streamislive",
 		"title": "Stream Notifications",
 		"image": "twitch.svg",
@@ -46,6 +39,13 @@
 		"title": "Moderation",
 		"image": "mod.svg",
         "description": "Power up your moderation with cool commands and automations!",
+        "comingSoon": true
+    },
+    {
+		"id": "reactionroles",
+		"title": "Reaction Roles",
+		"image": "aprove.png",
+        "description": "Let your members get roles by reacting to messages",
         "comingSoon": true
 	}
 ]

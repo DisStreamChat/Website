@@ -5,8 +5,9 @@ import A from "../../../Shared/A";
 import PluginCard from "./PluginCard";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Leveling from "./Leveling";
-import Logging from "./Logging"
+import Logging from "./Logging";
 import plugins from "./plugins.json";
+import CustomCommands from "./CustomCommands";
 
 const PluginHome = ({ match }) => {
 	const [prefix, setPrefix] = useState("!");
@@ -78,6 +79,11 @@ const PluginHome = ({ match }) => {
 					{activePlugins["logging"] && (
 						<Route path={`${match.url}/logging`}>
 							<Logging />
+						</Route>
+					)}
+					{activePlugins["commands"] && (
+						<Route path={`${match.url}/commands`}>
+							<CustomCommands />
 						</Route>
 					)}
 					<Redirect to={`${match.url}`} />
