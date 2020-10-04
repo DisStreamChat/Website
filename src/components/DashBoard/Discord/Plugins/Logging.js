@@ -42,6 +42,7 @@ const Leveling = ({ location }) => {
 	const [activeEvents, setActiveEvents] = useState({});
 	const [allEvents, setAllEvents] = useState({});
 	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
+	const [channelOverrides, setChannelOverrides] = useState({});
 	const guildId = userConnectedGuildInfo?.id;
 
 	useEffect(() => {
@@ -147,6 +148,42 @@ const Leveling = ({ location }) => {
 					<>
 						<h4 className="plugin-section-title">{category}</h4>
 						<div className="plugin-section">
+							<h4 className="plugin-section-title">Channel Override</h4>
+							<div className="plugin-section subtitle" style={{ width: "100%" }}>
+								<Select
+									closeMenuOnSelect
+									onChange={e => {
+                                        setChannelOverrides(prev => ({
+                                            ...prev,
+                                            [category]: e
+                                        }))
+                                    }}
+									placeholder="Logging Channel Override"
+									value={channelOverrides[category] || ""}
+									options={userConnectedGuildInfo?.channels
+										?.sort((a, b) => a.parent.localeCompare(b.parent))
+										?.map(channel => ({
+											value: channel.id,
+											label: (
+												<>
+													<span>{channel.name}</span>
+													<span className="channel-category">{channel.parent}</span>
+												</>
+											),
+										}))}
+									styles={{
+										...colorStyles,
+										container: styles => ({
+											...styles,
+											...colorStyles.container,
+										}),
+									}}
+								/>
+							</div>
+							<h4 className="plugin-section-title" style={{ width: "100%" }}>
+								Events
+							</h4>
+
 							{Object.entries(allEvents || {})
 								.filter(([key, event]) => event.category === category)
 								.map(([key, event]) => (
