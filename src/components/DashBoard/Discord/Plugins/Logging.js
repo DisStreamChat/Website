@@ -153,11 +153,11 @@ const Leveling = ({ location }) => {
 								<Select
 									closeMenuOnSelect
 									onChange={e => {
-                                        setChannelOverrides(prev => ({
-                                            ...prev,
-                                            [category]: e
-                                        }))
-                                    }}
+										setChannelOverrides(prev => ({
+											...prev,
+											[category]: e,
+										}));
+									}}
 									placeholder="Logging Channel Override"
 									value={channelOverrides[category] || ""}
 									options={userConnectedGuildInfo?.channels
@@ -179,6 +179,9 @@ const Leveling = ({ location }) => {
 										}),
 									}}
 								/>
+								<span className="toggle-button">
+									<button onClick={() => {}}>Clear Channel Override</button>
+								</span>
 							</div>
 							<h4 className="plugin-section-title" style={{ width: "100%" }}>
 								Events

@@ -822,4 +822,27 @@ textarea.message {
 
 .plugin-section.subtitle{
     margin-bottom: 1rem;
+    align-items: center;
+    justify-content: left;
+}
+
+span.toggle-button button {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    outline: none !important;
+    background: var(--disstreamchat-blue);
+    color: white;
+    border-radius: 0.5rem;
+    transition: 0.125s;
+    text-transform: uppercase;
+    &:hover,
+    :focus {
+        transform: scale(1.1);
+    }
+    &:active {
+        transform: scale(0.95);
+    }
+    .subtitle & {
+        margin-left: 2rem;
+    }
 }
