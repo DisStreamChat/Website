@@ -7,7 +7,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Switch } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
-import { Category } from "@material-ui/icons";
 
 const FancySwitch = withStyles({
 	root: {
