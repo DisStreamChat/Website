@@ -7,6 +7,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Switch } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
+import { Category } from "@material-ui/icons";
 
 const FancySwitch = withStyles({
 	root: {
@@ -65,6 +66,27 @@ const Leveling = ({ location }) => {
 						),
 					});
 				}
+				const overrides = data.channelOverrides || {};
+				const overridesToSet = {};
+				for (const [key, value] of Object.entries(overrides)) {
+                    if(!value) continue
+					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${value}`;
+					const response = await fetch(apiUrl);
+					const channel = await response.json();
+					overridesToSet[key] = {
+						value: value,
+						label: (
+							<>
+								<span>{channel.name}</span>
+								<span className="channel-category">{channel.parent}</span>
+							</>
+						),
+					};
+				}
+				console.log(overridesToSet);
+				setChannelOverrides(overridesToSet);
+				const active = data.activeEvents;
+				setActiveEvents(active || {});
 			}
 		})();
 		(async () => {
@@ -73,6 +95,26 @@ const Leveling = ({ location }) => {
 			setAllEvents(defaultEvents);
 		})();
 	}, [location, guildId]);
+
+	const handleOverrideSelect = useCallback((e, category) => {
+		setChannelOverrides(prev => ({
+			...prev,
+			[category]: e,
+        }));
+        firebase.db.collection("loggingChannel").doc(guildId).update({
+            [`channelOverrides.${category}`]: (e?.value) || false
+        })
+    }, [guildId]);
+    
+    const handleEventToggle = useCallback((e, id) => {
+        setActiveEvents(prev => ({
+            ...prev,
+            [id]: e.target.checked,
+        }));
+        firebase.db.collection("loggingChannel").doc(guildId).update({
+            [`activeEvents.${id}`]: e.target.checked
+        })
+    })
 
 	const handleAnnoucmentSelect = useCallback(
 		async e => {
@@ -153,10 +195,7 @@ const Leveling = ({ location }) => {
 								<Select
 									closeMenuOnSelect
 									onChange={e => {
-										setChannelOverrides(prev => ({
-											...prev,
-											[category]: e,
-										}));
+										handleOverrideSelect(e, category);
 									}}
 									placeholder="Logging Channel Override"
 									value={channelOverrides[category] || ""}
@@ -180,7 +219,7 @@ const Leveling = ({ location }) => {
 									}}
 								/>
 								<span className="toggle-button">
-									<button onClick={() => {}}>Clear Channel Override</button>
+									<button onClick={() => handleOverrideSelect(null, category)}>Clear Channel Override</button>
 								</span>
 							</div>
 							<h4 className="plugin-section-title" style={{ width: "100%" }}>
@@ -194,12 +233,9 @@ const Leveling = ({ location }) => {
 										control={
 											<FancySwitch
 												color="primary"
-												checked={activeEvents[key]}
+												checked={!!activeEvents[key]}
 												onChange={e => {
-													setActiveEvents(prev => ({
-														...prev,
-														[key]: e.target.checked,
-													}));
+													handleEventToggle(e, key)
 												}}
 												name={event.displayName}
 											/>
