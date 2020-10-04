@@ -711,7 +711,7 @@
 	$background: #242424;
 	box-sizing: border-box !important;
 	background: $background !important;
-	div {
+	& > div {
 		padding: 0.5rem 1.5rem;
 	}
 	.command-header {
@@ -786,8 +786,15 @@
 
 .plugin-section-title {
 	text-transform: uppercase;
-	padding: 0;
-	font-size: 12px;
+    padding: 0;
+    &.bigger{
+
+        font-size: 16px;
+    }
+    span{
+        color: #aaa;
+    }
+    font-size: 12px;
 	font-weight: 600;
 	margin-bottom: 8px;
 }
@@ -846,4 +853,8 @@ span.toggle-button button {
     .subtitle & {
         margin-left: 2rem;
     }
+}
+
+.create-command{
+    cursor: pointer;
 }

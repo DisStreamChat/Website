@@ -2,7 +2,8 @@ import React, { useEffect, useState, useCallback, useContext } from "react";
 import firebase from "../../../../firebase";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Modal from "react-modal";
-import ClearIcon from "@material-ui/icons/Clear";
+import CreateTextCommand from "./CreateTextCommand";
+import CreateRoleCommand from "./CreateRoleCommand";
 
 const CustomCommands = ({ location }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
@@ -56,29 +57,11 @@ const CustomCommands = ({ location }) => {
 				overlayClassName="command-overlay Modal-Overlay"
 				onRequestClose={() => setCreatingCommand(false)}
 			>
-				<div className="command-header">
-					<h1>Create Command</h1>
-					<button onClick={() => setCreatingCommand(false)}>
-						<ClearIcon />
-					</button>
-				</div>
-				<div className="command-body">
-					<h4 className="plugin-section-title">Command Name</h4>
-					<div className="plugin-section">
-						<input placeholder="Command Name (Don't include prefix)" type="text" className="prefix-input" id="discord-prefix" />
-					</div>
-					<h4 className="plugin-section-title">Command Response</h4>
-					<div className="plugin-section">
-						<textarea placeholder="Hi, {user}!" rows="8" className="message"></textarea>
-						<div className="variables">
-							<h4 className="plugin-section-title">Available variables</h4>
-							<ul>
-								<li className="variable">{"{author} - The user who sent the command"}</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div className="command-footer"></div>
+				{creatingCommand === "text" ? (
+					<CreateTextCommand setCreatingCommand={setCreatingCommand} />
+				) : (
+                    <CreateRoleCommand setCreatingCommand={setCreatingCommand}/>
+                )}
 			</Modal>
 			<div className="plugin-item-header">
 				<span className="title">
@@ -114,15 +97,18 @@ const CustomCommands = ({ location }) => {
 			<div className="plugin-item-body">
 				<h4 className="plugin-section-title">Create Command</h4>
 				<div className="command-card-body">
-					<div className="create-command" onClick={() => setCreatingCommand(true)}>
+					<div className="create-command" onClick={() => setCreatingCommand("text")}>
 						<h1>Text Command</h1>
 						<p>A simple command that responds with a custom message in DM or public</p>
 					</div>
-					<div className="create-command" onClick={() => setCreatingCommand(true)}>
-						<h1>Auto Role</h1>
-						<p>A simple command that responds with a custom message in DM or public</p>
+					<div className="create-command" onClick={() => setCreatingCommand("role")}>
+						<h1>Role Command</h1>
+						<p>A simple command that toggles a role for the user</p>
 					</div>
 				</div>
+				<h4 className="plugin-section-title bigger">
+					Your Commands<span> — {5}</span>
+				</h4>
 			</div>
 		</div>
 	);
