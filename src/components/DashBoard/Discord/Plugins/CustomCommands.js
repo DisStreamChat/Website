@@ -4,6 +4,7 @@ import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Modal from "react-modal";
 import CreateTextCommand from "./CreateTextCommand";
 import CreateRoleCommand from "./CreateRoleCommand";
+import CreateCommand from "./CreateCommand";
 
 const CustomCommands = ({ location }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
@@ -57,11 +58,9 @@ const CustomCommands = ({ location }) => {
 				overlayClassName="command-overlay Modal-Overlay"
 				onRequestClose={() => setCreatingCommand(false)}
 			>
-				{creatingCommand === "text" ? (
-					<CreateTextCommand setCreatingCommand={setCreatingCommand} />
-				) : (
-                    <CreateRoleCommand setCreatingCommand={setCreatingCommand}/>
-                )}
+				<CreateCommand setCreatingCommand={setCreatingCommand}>
+					{creatingCommand === "text" ? <CreateTextCommand /> : <CreateRoleCommand />}
+				</CreateCommand>
 			</Modal>
 			<div className="plugin-item-header">
 				<span className="title">
