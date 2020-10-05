@@ -58,7 +58,7 @@ const CustomCommands = ({ location }) => {
 				overlayClassName="command-overlay Modal-Overlay"
 				onRequestClose={() => setCreatingCommand(false)}
 			>
-				<CreateCommand setCreatingCommand={setCreatingCommand}>
+				<CreateCommand role={creatingCommand==="role"} setCreatingCommand={setCreatingCommand}>
 					{creatingCommand === "text" ? <CreateTextCommand /> : <CreateRoleCommand />}
 				</CreateCommand>
 			</Modal>

@@ -4,8 +4,41 @@ import React, { useEffect, useState, useCallback, useContext } from "react";
 import Select from "react-select";
 import { colorStyles } from "../../../Shared/userUtils";
 import RoleItem from "../../../Shared/RoleItem";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { Switch } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import { blueGrey } from "@material-ui/core/colors";
 
-const CreateCommand = ({ setCreatingCommand, children }) => {
+const FancySwitch = withStyles({
+	root: {
+		padding: 7,
+	},
+	thumb: {
+		width: 24,
+		height: 24,
+		backgroundColor: "#fff",
+		boxShadow: "0 0 12px 0 rgba(0,0,0,0.08), 0 0 8px 0 rgba(0,0,0,0.12), 0 0 4px 0 rgba(0,0,0,0.38)",
+	},
+	switchBase: {
+		color: "rgba(0,0,0,0.38)",
+		padding: 7,
+	},
+	track: {
+		borderRadius: 20,
+		backgroundColor: blueGrey[300],
+	},
+	checked: {
+		"& $thumb": {
+			backgroundColor: "#fff",
+		},
+		"& + $track": {
+			opacity: "1 !important",
+		},
+	},
+	focusVisible: {},
+})(Switch);
+
+const CreateCommand = ({ setCreatingCommand, children, role }) => {
 	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
 	console.log(userConnectedGuildInfo);
 	return (
@@ -107,6 +140,26 @@ const CreateCommand = ({ setCreatingCommand, children }) => {
 				<div className="plugin-section">
 					<input placeholder="Cooldown" type="number" className="prefix-input" id="command-cooldown" />
 				</div>
+				{role && (
+					<>
+						<h4 className="plugin-section-title">Delete After use</h4>
+						<div className="plugin-section" style={{ paddingLeft: ".75rem" }}>
+							<FormControlLabel
+								control={
+									<FancySwitch
+										color="primary"
+										// checked={!!activeEvents[key]}
+										onChange={e => {
+											// handleEventToggle(e, key)
+										}}
+										name={"Delete_after_usage"}
+									/>
+								}
+								label={"Delete After Usage"}
+							/>
+						</div>
+					</>
+				)}
 			</div>
 			<div className="command-footer">
 				<button>Create</button>
