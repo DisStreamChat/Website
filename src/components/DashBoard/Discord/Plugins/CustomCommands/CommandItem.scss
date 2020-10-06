@@ -1,0 +1,55 @@
+.command-item {
+	box-sizing: border-box !important;
+	width: 100%;
+	height: 85px;
+	border-radius: 0.25rem;
+	border: 1px solid black;
+	background: darken(#2c2c2c, 5);
+	margin: 1rem 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	position: relative;
+	padding: 0.5rem 1rem;
+	.delete-button {
+		position: absolute;
+		color: #b33a3a;
+		width: 24px;
+		height: 24px;
+		top: -12px;
+        right: -12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        &:hover{
+            filter: saturate(1.5);
+        }
+	}
+	h1,
+	h2,
+	h3,
+	h4 {
+		margin: 0;
+	}
+	h4 {
+        color: #aaa;
+        font-weight: 600;
+	}
+	button {
+		padding: 0.5rem 1.5rem;
+		border-radius: 0.25rem;
+		border: 1px solid rgba(170, 170, 170, 0.75);
+		background: #00000000;
+		color: white;
+		transition: 0.25s;
+		outline: none !important;
+		&:focus,
+		&:hover {
+			border-color: #bbb;
+		}
+		&:active {
+			background: #97979744;
+		}
+	}
+}

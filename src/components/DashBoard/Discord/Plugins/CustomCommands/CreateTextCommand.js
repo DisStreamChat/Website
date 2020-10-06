@@ -1,7 +1,6 @@
-import { DiscordContext } from "../../../../contexts/DiscordContext";
-import React, { useEffect, useState, useCallback, useContext } from "react";
-import ClearIcon from "@material-ui/icons/Clear";
-import { CommandContext } from "../../../../contexts/CommandContext";
+import { DiscordContext } from "../../../../../contexts/DiscordContext";
+import React, { useContext } from "react";
+import { CommandContext } from "../../../../../contexts/CommandContext";
 
 const CreateTextCommand = () => {
 	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);

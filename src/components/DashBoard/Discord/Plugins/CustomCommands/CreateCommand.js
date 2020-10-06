@@ -1,15 +1,15 @@
 import ClearIcon from "@material-ui/icons/Clear";
-import { DiscordContext } from "../../../../contexts/DiscordContext";
+import { DiscordContext } from "../../../../../contexts/DiscordContext";
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import Select from "react-select";
-import { colorStyles } from "../../../Shared/userUtils";
-import RoleItem from "../../../Shared/RoleItem";
+import { colorStyles } from "../../../../Shared/userUtils";
+import RoleItem from "../../../../Shared/RoleItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Switch } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
-import { CommandContext } from "../../../../contexts/CommandContext";
-import firebase from "../../../../firebase";
+import { CommandContext } from "../../../../../contexts/CommandContext";
+import firebase from "../../../../../firebase";
 
 const FancySwitch = withStyles({
 	root: {
@@ -241,6 +241,7 @@ const CreateCommand = ({ setCreatingCommand, children, role }) => {
                         if (!role && response.length === 0) return setError({ message: "The Command must have a response" });
                         const commands = (await firebase.db.collection("customCommands").doc(userConnectedGuildInfo.id).get()).data()
                         console.log(commands)
+                        if(commands[name]) return setError({message: "A Command with that name already exists"})
 						const parsedAllowedRoles = parseSelectValue(allowedRoles);
 						const parsedBannedRoles = parseSelectValue(bannedRoles);
 						const parsedAllowedChannels = parseSelectValue(allowedChannels);

@@ -1,46 +1,26 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
-import firebase from "../../../../firebase";
-import { DiscordContext } from "../../../../contexts/DiscordContext";
+import firebase from "../../../../../firebase";
+import { DiscordContext } from "../../../../../contexts/DiscordContext";
 import Modal from "react-modal";
 import CreateTextCommand from "./CreateTextCommand";
 import CreateRoleCommand from "./CreateRoleCommand";
 import CreateCommand from "./CreateCommand";
-import { CommandContextProvider } from "../../../../contexts/CommandContext";
+import { CommandContextProvider } from "../../../../../contexts/CommandContext";
+import CommandItem from "./CommandItem";
 
 const CustomCommands = ({ location }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
 	const [activeEvents, setActiveEvents] = useState({});
 	const [allEvents, setAllEvents] = useState({});
 	const [creatingCommand, setCreatingCommand] = useState(false);
+	const [commands, setCommands] = useState({});
 	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
 	const guildId = userConnectedGuildInfo?.id;
 
 	useEffect(() => {
 		(async () => {
-			const guildLogRef = firebase.db.collection("loggingChannel").doc(guildId);
-			const data = (await guildLogRef.get()).data();
-			if (data) {
-				const id = data.server;
-				if (id) {
-					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
-					const response = await fetch(apiUrl);
-					const channel = await response.json();
-					setLoggingChannel({
-						value: id,
-						label: (
-							<>
-								<span>{channel.name}</span>
-								<span className="channel-category">{channel.parent}</span>
-							</>
-						),
-					});
-				}
-			}
-		})();
-		(async () => {
-			const defaultEvents = (await firebase.db.collection("defaults").doc("loggingEvents").get()).data();
-			console.log(defaultEvents);
-			setAllEvents(defaultEvents);
+			const c = (await firebase.db.collection("customCommands").doc(guildId).get()).data();
+			setCommands(c);
 		})();
 	}, [location, guildId]);
 
@@ -109,8 +89,13 @@ const CustomCommands = ({ location }) => {
 					</div>
 				</div>
 				<h4 className="plugin-section-title bigger">
-					Your Commands<span> — {5}</span>
+					Your Commands<span> — {Object.keys(commands).length}</span>
 				</h4>
+				{Object.entries(commands)
+					.sort((a, b) => a[0].localeCompare(b[0]))
+					.map(([key, value]) => (
+						<CommandItem {...value} name={key} />
+					))}
 			</div>
 		</div>
 	);

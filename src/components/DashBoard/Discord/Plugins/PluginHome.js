@@ -7,7 +7,7 @@ import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Leveling from "./Leveling";
 import Logging from "./Logging";
 import plugins from "./plugins.json";
-import CustomCommands from "./CustomCommands";
+import CustomCommands from "./CustomCommands/CustomCommands";
 
 const PluginHome = ({ match }) => {
 	const [prefix, setPrefix] = useState("!");
