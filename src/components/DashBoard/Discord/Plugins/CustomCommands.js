@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import CreateTextCommand from "./CreateTextCommand";
 import CreateRoleCommand from "./CreateRoleCommand";
 import CreateCommand from "./CreateCommand";
+import { CommandContextProvider } from "../../../../contexts/CommandContext";
 
 const CustomCommands = ({ location }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
@@ -58,9 +59,11 @@ const CustomCommands = ({ location }) => {
 				overlayClassName="command-overlay Modal-Overlay"
 				onRequestClose={() => setCreatingCommand(false)}
 			>
-				<CreateCommand role={creatingCommand==="role"} setCreatingCommand={setCreatingCommand}>
-					{creatingCommand === "text" ? <CreateTextCommand /> : <CreateRoleCommand />}
-				</CreateCommand>
+				<CommandContextProvider>
+					<CreateCommand role={creatingCommand === "role"} setCreatingCommand={setCreatingCommand}>
+						{creatingCommand === "text" ? <CreateTextCommand /> : <CreateRoleCommand />}
+					</CreateCommand>
+				</CommandContextProvider>
 			</Modal>
 			<div className="plugin-item-header">
 				<span className="title">

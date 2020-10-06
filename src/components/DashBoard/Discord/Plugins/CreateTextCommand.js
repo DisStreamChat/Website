@@ -1,14 +1,22 @@
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
+import { CommandContext } from "../../../../contexts/CommandContext";
 
-const CreateTextCommand = ({ setCreatingCommand }) => {
+const CreateTextCommand = () => {
 	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
+	const { response, setResponse } = useContext(CommandContext);
 	return (
 		<>
 			<h4 className="plugin-section-title">Command Response</h4>
 			<div className="plugin-section">
-				<textarea placeholder="Hi, {user}!" rows="8" className="message"></textarea>
+				<textarea
+					placeholder="Hi, {user}!"
+					value={response}
+					onChange={e => setResponse(e.target.value)}
+					rows="8"
+					className="message"
+				></textarea>
 				<div className="variables">
 					<h4 className="plugin-section-title">Available variables</h4>
 					<ul>
