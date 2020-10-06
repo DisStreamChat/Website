@@ -12,12 +12,15 @@ export const CommandContextProvider = props => {
 	const [bannedRoles, setBannedRoles] = useState([]);
 	const [allowedChannels, setAllowedChannels] = useState([]);
 	const [cooldown, setCooldown] = useState(0);
-    const [deleteUsage, setDeleteUsage] = useState(false);
-    const [error, setError] = useState({})
+	const [deleteUsage, setDeleteUsage] = useState(false);
+	const [editing, setEditing] = useState(false);
+	const [error, setError] = useState({});
 
 	return (
 		<CommandContext.Provider
 			value={{
+				editing,
+				setEditing,
 				name,
 				setName,
 				response,
@@ -35,8 +38,9 @@ export const CommandContextProvider = props => {
 				cooldown,
 				setCooldown,
 				deleteUsage,
-                setDeleteUsage,
-                error, setError
+				setDeleteUsage,
+				error,
+				setError,
 			}}
 		>
 			{props.children}

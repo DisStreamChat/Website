@@ -4,8 +4,22 @@ import firebase from "../../../../../firebase";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
 import { DiscordContext } from "../../../../../contexts/DiscordContext";
 import { CommandContext } from "../../../../../contexts/CommandContext";
+import RoleItem from "../../../../Shared/RoleItem";
 
-const CommandItem = ({ name, message, description, type, setCommands, bannedRoles, allowedRoles, allowedChannels, cooldown, deleteUsage }) => {
+const CommandItem = ({
+	name,
+	message,
+	type,
+	description,
+	setCommands,
+	bannedRoles,
+	allowedRoles,
+	allowedChannels,
+	cooldown,
+	deleteUsage,
+	setCreatingCommand,
+	role,
+}) => {
 	const { userConnectedGuildInfo } = useContext(DiscordContext);
 	const {
 		setName,
@@ -18,6 +32,7 @@ const CommandItem = ({ name, message, description, type, setCommands, bannedRole
 		setCooldown,
 		setDeleteUsage,
 		setError,
+		setEditing,
 	} = useContext(CommandContext);
 	const guildId = userConnectedGuildInfo.id;
 	const deleteMe = useCallback(async () => {
@@ -32,10 +47,16 @@ const CommandItem = ({ name, message, description, type, setCommands, bannedRole
 		});
 	}, [guildId, name, setCommands]);
 
-	const edit = useCallback(async () => {
+	const edit = async () => {
 		setName(name);
 		setResponse(message);
-		setRoleToGive();
+		if (type === "role") {
+			const roleToGive = userConnectedGuildInfo.roles.find(r => r.id === role);
+			setRoleToGive({
+				value: `${roleToGive.name}=${JSON.stringify(roleToGive)}`,
+				label: <RoleItem {...roleToGive}>{roleToGive.name}</RoleItem>,
+			});
+		}
 		setDescription(description);
 		setAllowedRoles(allowedRoles || []);
 		setAllowedChannels(allowedChannels || []);
@@ -43,7 +64,9 @@ const CommandItem = ({ name, message, description, type, setCommands, bannedRole
 		setCooldown(cooldown || 0);
 		setDeleteUsage(deleteUsage);
 		setError({});
-	});
+		setEditing(true);
+		setCreatingCommand(type || "text");
+	};
 
 	return (
 		<div className="command-item">
@@ -55,7 +78,7 @@ const CommandItem = ({ name, message, description, type, setCommands, bannedRole
 				<h4>{description}</h4>
 			</div>
 			<div className="command-item--options">
-				<button>Edit</button>
+				<button onClick={edit}>Edit</button>
 			</div>
 		</div>
 	);

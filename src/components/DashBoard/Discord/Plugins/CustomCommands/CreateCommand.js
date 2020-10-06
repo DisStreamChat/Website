@@ -45,19 +45,23 @@ const parseSelectValue = value => {
 		if (value.length === 0) return value;
 		return value.map(role => JSON.parse(role.value.split("=")[1])).map(val => val.id);
 	} else {
-		return JSON.parse(value.value.split("=")[1]).id;
+		try {
+			return JSON.parse(value.value.split("=")[1]).id;
+		} catch (err) {
+			return null;
+		}
 	}
 };
 
 const CreateCommand = ({ setCreatingCommand, children, role }) => {
-    const { userConnectedGuildInfo } = useContext(DiscordContext);
+	const { userConnectedGuildInfo } = useContext(DiscordContext);
 	const {
+		editing,
+		setEditing,
 		name,
 		setName,
 		response,
-		setResponse,
 		roleToGive,
-		setRoleToGive,
 		description,
 		setDescription,
 		allowedRoles,
@@ -75,15 +79,17 @@ const CreateCommand = ({ setCreatingCommand, children, role }) => {
 	} = useContext(CommandContext);
 
 	useEffect(() => {
-		setAllowedRoles(
-			userConnectedGuildInfo?.roles
-				?.filter(role => role.name === "@everyone")
-				?.map(role => ({
-					value: `${role.name}=${JSON.stringify(role)}`,
-					label: <RoleItem {...role}>{role.name}</RoleItem>,
-				}))
-		);
-	}, []);
+		if (!editing) {
+			setAllowedRoles(
+				userConnectedGuildInfo?.roles
+					?.filter(role => role.name === "@everyone")
+					?.map(role => ({
+						value: `${role.name}=${JSON.stringify(role)}`,
+						label: <RoleItem {...role}>{role.name}</RoleItem>,
+					}))
+			);
+		}
+	}, [editing]);
 
 	return (
 		<>
@@ -97,6 +103,7 @@ const CreateCommand = ({ setCreatingCommand, children, role }) => {
 				<h4 className="plugin-section-title">Command Name</h4>
 				<div className="plugin-section">
 					<input
+						disabled={editing}
 						value={name}
 						onChange={e => setName(e.target.value.replace(/\s/, "-"))}
 						placeholder="Command Name (Don't include prefix)"
@@ -238,28 +245,44 @@ const CreateCommand = ({ setCreatingCommand, children, role }) => {
 					onClick={async () => {
 						setError({});
 						if (name.length === 0) return setError({ message: "The Command must have name" });
-                        if (!role && response.length === 0) return setError({ message: "The Command must have a response" });
-                        const commands = (await firebase.db.collection("customCommands").doc(userConnectedGuildInfo.id).get()).data()
-                        console.log(commands)
-                        if(commands[name]) return setError({message: "A Command with that name already exists"})
+						if (!role && response.length === 0) return setError({ message: "The Command must have a response" });
+						const commandRef = firebase.db.collection("customCommands").doc(userConnectedGuildInfo.id);
+						if (!editing) {
+							const commands = (await commandRef.get()).data();
+							if (commands[name]) return setError({ message: "A Command with that name already exists" });
+						}
 						const parsedAllowedRoles = parseSelectValue(allowedRoles);
 						const parsedBannedRoles = parseSelectValue(bannedRoles);
 						const parsedAllowedChannels = parseSelectValue(allowedChannels);
 						const parsedRoleToGive = parseSelectValue(roleToGive);
-						console.log({
+						const commandObj = {
 							name,
-							response,
-							parsedRoleToGive,
-							description,
-							parsedAllowedRoles,
-							parsedBannedRoles,
-							parsedAllowedChannels,
+							message: response || false,
+							deleteUsage: deleteUsage || false,
+							role: parsedRoleToGive || false,
+							type: role ? "role" : "text",
+							bannedRoles: parsedBannedRoles,
+							permittedRoles: parsedAllowedRoles,
+							allowedChannels: parsedAllowedChannels,
 							cooldown,
-							deleteUsage,
-						});
+							DM: false,
+							description,
+                        };
+						commandRef.update({ [name]: commandObj });
+						setEditing(false);
+						setName("");
+						setDescription("");
+						setAllowedRoles([]);
+						setBannedRoles([]);
+						setAllowedChannels([]);
+						setCooldown(0);
+						setDeleteUsage(false);
+						setError({});
+
+						setCreatingCommand(false);
 					}}
 				>
-					Create
+					{editing ? "Update" : "Create"}
 				</button>
 			</div>
 		</>
