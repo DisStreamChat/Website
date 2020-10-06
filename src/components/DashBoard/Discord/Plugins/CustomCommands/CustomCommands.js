@@ -94,7 +94,7 @@ const CustomCommands = ({ location }) => {
 				{Object.entries(commands)
 					.sort((a, b) => a[0].localeCompare(b[0]))
 					.map(([key, value]) => (
-						<CommandItem {...value} name={key} />
+						<CommandItem setCommands={setCommands} {...value} name={key} />
 					))}
 			</div>
 		</div>
