@@ -813,16 +813,27 @@ textarea.message {
 	width: 48% !important;
 	padding: 0 !important;
 	margin: 0;
+	max-height: 175px;
+	overflow: auto;
+	&::-webkit-scrollbar{
+		width: .5rem;
+	}
 	h4 {
 		margin: 0;
 	}
 	ul {
 		list-style: none;
 		padding: 0;
-		li {
+		ul{
+			padding-left: .5rem;
+		}
+		li.variable {
 			background: #202225;
 			padding: 0.25rem;
 			border-radius: 0.25rem;
+			margin-top: .25rem;
+			margin-bottom: .25rem;
+			margin-right: .25rem;
 		}
 	}
 }
