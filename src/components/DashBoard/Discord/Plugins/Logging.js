@@ -227,6 +227,7 @@ const Leveling = ({ location }) => {
 
 							{Object.entries(allEvents || {})
 								.filter(([key, event]) => event.category === category)
+								.sort()
 								.map(([key, event]) => (
 									<FormControlLabel
 										control={
