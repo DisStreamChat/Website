@@ -8,6 +8,8 @@ import Leveling from "./Leveling";
 import Logging from "./Logging";
 import plugins from "./plugins.json";
 import CustomCommands from "./CustomCommands/CustomCommands";
+import { CommandContextProvider } from "../../../../contexts/CommandContext";
+
 
 const PluginHome = ({ match }) => {
 	const [prefix, setPrefix] = useState("!");
@@ -83,7 +85,9 @@ const PluginHome = ({ match }) => {
 					)}
 					{activePlugins["commands"] && (
 						<Route path={`${match.url}/commands`}>
-							<CustomCommands />
+							<CommandContextProvider>
+								<CustomCommands />
+							</CommandContextProvider>
 						</Route>
 					)}
 					<Redirect to={`${match.url}`} />

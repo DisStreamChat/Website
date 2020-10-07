@@ -7,6 +7,7 @@ import CreateRoleCommand from "./CreateRoleCommand";
 import CreateCommand from "./CreateCommand";
 import { CommandContextProvider } from "../../../../../contexts/CommandContext";
 import CommandItem from "./CommandItem";
+import { CommandContext } from "../../../../../contexts/CommandContext";
 
 const CustomCommands = ({ location }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
@@ -16,6 +17,19 @@ const CustomCommands = ({ location }) => {
 	const [commands, setCommands] = useState({});
 	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
 	const guildId = userConnectedGuildInfo?.id;
+	const {
+		setName,
+		setResponse,
+		setRoleToGive,
+		setDescription,
+		setAllowedRoles,
+		setBannedRoles,
+		setAllowedChannels,
+		setCooldown,
+		setDeleteUsage,
+		setError,
+		setEditing,
+	} = useContext(CommandContext);
 
 	useEffect(() => {
 		const unsub = firebase.db
@@ -30,6 +44,21 @@ const CustomCommands = ({ location }) => {
 		return unsub;
 	}, [location, guildId]);
 
+	const setupCommand = () => {
+		console.log(setName)
+		setName("");
+		setResponse("");
+		setRoleToGive("");
+		setDescription("");
+		setAllowedRoles([]);
+		setBannedRoles([]);
+		setAllowedChannels([]);
+		setCooldown(0);
+		setDeleteUsage(false);
+		setError({});
+		setEditing(false);
+	};
+
 	useEffect(() => {
 		document.body.style.overflow = creatingCommand ? "hidden" : "initial";
 		return () => {
@@ -38,7 +67,6 @@ const CustomCommands = ({ location }) => {
 	}, [creatingCommand]);
 
 	return (
-		<CommandContextProvider>
 			<div>
 				<Modal
 					isOpen={creatingCommand}
@@ -84,11 +112,23 @@ const CustomCommands = ({ location }) => {
 				<div className="plugin-item-body">
 					<h4 className="plugin-section-title">Create Command</h4>
 					<div className="command-card-body">
-						<div className="create-command" onClick={() => setCreatingCommand("text")}>
+						<div
+							className="create-command"
+							onClick={() => {
+								setupCommand();
+								setCreatingCommand("text");
+							}}
+						>
 							<h1>Text Command</h1>
 							<p>A simple command that responds with a custom message in DM or public</p>
 						</div>
-						<div className="create-command" onClick={() => setCreatingCommand("role")}>
+						<div
+							className="create-command"
+							onClick={() => {
+								setupCommand();
+								setCreatingCommand("role");
+							}}
+						>
 							<h1>Role Command</h1>
 							<p>A simple command that toggles a role for the user</p>
 						</div>
@@ -104,7 +144,6 @@ const CustomCommands = ({ location }) => {
 						))}
 				</div>
 			</div>
-		</CommandContextProvider>
 	);
 };
 
