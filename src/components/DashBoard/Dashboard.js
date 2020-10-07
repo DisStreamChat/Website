@@ -6,7 +6,6 @@ import A from "../Shared/A";
 import SettingBox from "./Settings/SettingBox";
 import { AppContext } from "../../contexts/Appcontext";
 import DiscordPage from "./Discord/DiscordPage";
-import AccountSettings from "./Account/Account"
 
 const Dashboard = props => {
 	const [overlaySettings, setOverlaySettings] = useState();
@@ -76,7 +75,7 @@ const Dashboard = props => {
 			</div>
 			<div className="settings">
 				<Switch>
-					<Route path={`${props.match.url}/account`} component={AccountSettings}></Route>
+					<Route path={`${props.match.url}/account`}></Route>
 					<Route path={`${props.match.url}/discord`} component={DiscordPage}></Route>
 					{/* <Route path={`${props.match.url}/overlaysettings`}>
 						<SettingBox
