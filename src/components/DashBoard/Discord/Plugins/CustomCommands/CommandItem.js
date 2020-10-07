@@ -67,25 +67,34 @@ const CommandItem = ({
 		setEditing(true);
 		setCreatingCommand(type || "text");
 	};
-	
-	const [displayRole, setDisplayRole] = useState()
-	useEffect(() => {
-		setDisplayRole(userConnectedGuildInfo.roles.find(r => r.id === role))
-	}, [])
 
-	console.log(displayRole)
-	
+	const [displayRole, setDisplayRole] = useState();
+	useEffect(() => {
+		setDisplayRole(userConnectedGuildInfo.roles.find(r => r.id === role));
+	}, []);
+
+	console.log(displayRole);
+
 	return (
 		<div className="command-item">
 			<div className="delete-button" onClick={deleteMe}>
 				<CancelTwoToneIcon />
 			</div>
-			<div className="command-item--info">
-				<h3>{name}</h3>
-				<h4>{description}</h4>
-			</div>
+			<span style={{display: "flex"}}>
+				<div className="display-image">
+					<img width="50px" src={type == "role" ? "/role.svg" : "/speech.svg"} />
+				</div>
+				<div className="command-item--info">
+					<h3>{name}</h3>
+					<h4>{description}</h4>
+				</div>
+			</span>
 			<div className="command-item--options">
-				{type === "role" && displayRole && <div className="command-role"><RoleItem {...displayRole}>{displayRole.name}</RoleItem></div>}
+				{type === "role" && displayRole && (
+					<div className="command-role">
+						<RoleItem {...displayRole}>{displayRole.name}</RoleItem>
+					</div>
+				)}
 				<button onClick={edit}>Edit</button>
 			</div>
 		</div>

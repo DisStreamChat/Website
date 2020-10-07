@@ -11,6 +11,9 @@
 	justify-content: space-between;
 	position: relative;
 	padding: 0.5rem 1rem;
+	.command-item--info{
+		margin-left: 1rem;
+	}
 	.delete-button {
 		position: absolute;
 		color: #b33a3a;
