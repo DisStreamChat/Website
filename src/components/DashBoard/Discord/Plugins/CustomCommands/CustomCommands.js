@@ -98,6 +98,7 @@ const CustomCommands = ({ location }) => {
 					</h4>
 					{Object.entries(commands)
 						.sort((a, b) => a[0].localeCompare(b[0]))
+						.sort((a, b) => (a[1].type === "role" ? -1 : 1))
 						.map(([key, value]) => (
 							<CommandItem setCommands={setCommands} setCreatingCommand={setCreatingCommand} {...value} name={key} key={key} />
 						))}

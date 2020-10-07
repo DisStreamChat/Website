@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import "./CommandItem.scss";
 import firebase from "../../../../../firebase";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
@@ -67,7 +67,14 @@ const CommandItem = ({
 		setEditing(true);
 		setCreatingCommand(type || "text");
 	};
+	
+	const [displayRole, setDisplayRole] = useState()
+	useEffect(() => {
+		setDisplayRole(userConnectedGuildInfo.roles.find(r => r.id === role))
+	}, [])
 
+	console.log(displayRole)
+	
 	return (
 		<div className="command-item">
 			<div className="delete-button" onClick={deleteMe}>
@@ -78,6 +85,7 @@ const CommandItem = ({
 				<h4>{description}</h4>
 			</div>
 			<div className="command-item--options">
+				{type === "role" && displayRole && <div className="command-role"><RoleItem {...displayRole}>{displayRole.name}</RoleItem></div>}
 				<button onClick={edit}>Edit</button>
 			</div>
 		</div>
