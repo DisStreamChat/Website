@@ -33,13 +33,25 @@ const PluginHome = ({ match }) => {
 
 	const prefixChange = useCallback(
 		async e => {
-			setPrefix(e.target.value);
-			firebase.db
-				.collection("DiscordSettings")
-				.doc(userConnectedGuildInfo?.id || " ")
-				.update({
-					prefix: e.target.value,
-				});
+			const value = e?.target?.value || "!"
+			setPrefix(value);
+			try{
+
+				await firebase.db
+					.collection("DiscordSettings")
+					.doc(userConnectedGuildInfo?.id || " ")
+					.update({
+						prefix: value,
+					});
+			}catch(err){
+				await firebase.db
+					.collection("DiscordSettings")
+					.doc(userConnectedGuildInfo?.id || " ")
+					.set({
+						activePlugins: {},
+						prefix: value,
+					});
+			}
 		},
 		[userConnectedGuildInfo?.id]
 	);
