@@ -102,16 +102,13 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 				if (guildByName) {
 					const guildId = guildByName.id;
 					const value = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
-					const response = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
-                    const channelReponse = response.channels
-                    console.log(response.roles)
-                    setUserConnectedGuildInfo({
+					const channelReponse = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
+					setUserConnectedGuildInfo({
 						name: guildByName.name,
 						isMember: value?.result,
 						icon: guildByName.icon,
 						id: guildByName.id,
-                        channels: channelReponse,
-                        roles: response.roles,
+						channels: channelReponse,
 						connectedChannels: channelReponse?.filter(channel => userData.liveChatId?.includes(channel.id)),
 						connected: true,
 					});

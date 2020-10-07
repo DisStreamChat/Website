@@ -10,42 +10,35 @@
 		"id": "commands",
 		"title": "Custom Commands",
 		"image": "discord.png",
-        "description": "Create custom commands for your server",
-        "comingSoon": false
+        "description": "Let your users gain XP and levels by participating in the chat!",
+        "comingSoon": true
 	},
 	{
 		"id": "logging",
 		"title": "Logging",
 		"image": "clipboard.svg",
-        "description": "Log the events that take place on your server",
-        "comingSoon": false
+        "description": "Let your users gain XP and levels by participating in the chat!",
+        "comingSoon": true
 	},
 	{
 		"id": "welcome",
 		"title": "Welcome",
 		"image": "wave.svg",
-        "description": "Send a welcome message to new users",
+        "description": "Let your users gain XP and levels by participating in the chat!",
+        "comingSoon": true
+	},
+	{
+		"id": "help",
+		"title": "Help",
+		"image": "help.svg",
+        "description": "Let your users gain XP and levels by participating in the chat!",
         "comingSoon": true
 	},
 	{
 		"id": "streamislive",
 		"title": "Stream Notifications",
 		"image": "twitch.svg",
-        "description": "Let your viewers when you go live",
-        "comingSoon": true
-    },
-    {
-		"id": "moderation",
-		"title": "Moderation",
-		"image": "mod.svg",
-        "description": "Power up your moderation with cool commands and automations!",
-        "comingSoon": true
-    },
-    {
-		"id": "reactionroles",
-		"title": "Reaction Roles",
-		"image": "aprove.png",
-        "description": "Let your members get roles by reacting to messages",
+        "description": "Let your users gain XP and levels by participating in the chat!",
         "comingSoon": true
 	}
 ]
