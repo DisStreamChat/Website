@@ -68,7 +68,7 @@ const Leveling = ({ location }) => {
 				const overrides = data.channelOverrides || {};
 				const overridesToSet = {};
 				for (const [key, value] of Object.entries(overrides)) {
-                    if(!value) continue
+					if (!value) continue;
 					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${value}`;
 					const response = await fetch(apiUrl);
 					const channel = await response.json();
@@ -86,6 +86,12 @@ const Leveling = ({ location }) => {
 				setChannelOverrides(overridesToSet);
 				const active = data.activeEvents;
 				setActiveEvents(active || {});
+			} else {
+				try {
+					firebase.db.collection("loggingChannel").doc(guildId).update({});
+				} catch (err) {
+					firebase.db.collection("loggingChannel").doc(guildId).set({});
+				}
 			}
 		})();
 		(async () => {
@@ -95,25 +101,34 @@ const Leveling = ({ location }) => {
 		})();
 	}, [location, guildId]);
 
-	const handleOverrideSelect = useCallback((e, category) => {
-		setChannelOverrides(prev => ({
+	const handleOverrideSelect = useCallback(
+		(e, category) => {
+			setChannelOverrides(prev => ({
+				...prev,
+				[category]: e,
+			}));
+			firebase.db
+				.collection("loggingChannel")
+				.doc(guildId)
+				.update({
+					[`channelOverrides.${category}`]: e?.value || false,
+				});
+		},
+		[guildId]
+	);
+
+	const handleEventToggle = useCallback((e, id) => {
+		setActiveEvents(prev => ({
 			...prev,
-			[category]: e,
-        }));
-        firebase.db.collection("loggingChannel").doc(guildId).update({
-            [`channelOverrides.${category}`]: (e?.value) || false
-        })
-    }, [guildId]);
-    
-    const handleEventToggle = useCallback((e, id) => {
-        setActiveEvents(prev => ({
-            ...prev,
-            [id]: e.target.checked,
-        }));
-        firebase.db.collection("loggingChannel").doc(guildId).update({
-            [`activeEvents.${id}`]: e.target.checked
-        })
-    })
+			[id]: e.target.checked,
+		}));
+		firebase.db
+			.collection("loggingChannel")
+			.doc(guildId)
+			.update({
+				[`activeEvents.${id}`]: e.target.checked,
+			});
+	});
 
 	const handleAnnoucmentSelect = useCallback(
 		async e => {
@@ -235,7 +250,7 @@ const Leveling = ({ location }) => {
 												color="primary"
 												checked={!!activeEvents[key]}
 												onChange={e => {
-													handleEventToggle(e, key)
+													handleEventToggle(e, key);
 												}}
 												name={event.displayName}
 											/>
