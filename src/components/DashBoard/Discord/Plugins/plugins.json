@@ -19,6 +19,13 @@
 		"image": "clipboard.svg",
         "description": "Log the events that take place on your server",
         "comingSoon": false
+    },
+    {
+		"id": "timers",
+		"title": "Timers",
+		"image": "timer.svg",
+        "description": "Send custom messages on repeat every few minutes or hours",
+        "comingSoon": false
 	},
 	{
 		"id": "welcome",
