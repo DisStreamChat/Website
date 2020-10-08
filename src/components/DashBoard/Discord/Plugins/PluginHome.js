@@ -5,7 +5,11 @@ import A from "../../../Shared/A";
 import PluginCard from "./PluginCard";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Leveling from "./Leveling";
-import plugins from "./plugins.json"
+import Logging from "./Logging";
+import plugins from "./plugins.json";
+import CustomCommands from "./CustomCommands/CustomCommands";
+import { CommandContextProvider } from "../../../../contexts/CommandContext";
+
 
 const PluginHome = ({ match }) => {
 	const [prefix, setPrefix] = useState("!");
@@ -29,18 +33,30 @@ const PluginHome = ({ match }) => {
 
 	const prefixChange = useCallback(
 		async e => {
-			setPrefix(e.target.value);
-			firebase.db
-				.collection("DiscordSettings")
-				.doc(userConnectedGuildInfo?.id || " ")
-				.update({
-					prefix: e.target.value,
-				});
+			const value = e?.target?.value || "!"
+			setPrefix(value);
+			try{
+
+				await firebase.db
+					.collection("DiscordSettings")
+					.doc(userConnectedGuildInfo?.id || " ")
+					.update({
+						prefix: value,
+					});
+			}catch(err){
+				await firebase.db
+					.collection("DiscordSettings")
+					.doc(userConnectedGuildInfo?.id || " ")
+					.set({
+						activePlugins: {},
+						prefix: value,
+					});
+			}
 		},
 		[userConnectedGuildInfo?.id]
 	);
 
-    const displayPlugins = useMemo(() => plugins.sort((a, b) => activePlugins[a.id] ? -1 : 1), [plugins, activePlugins])
+	const displayPlugins = useMemo(() => plugins.sort((a, b) => (activePlugins[a.id] ? -1 : 1)), [plugins, activePlugins]);
 
 	return (
 		<>
@@ -64,16 +80,28 @@ const PluginHome = ({ match }) => {
 						</div>
 
 						<div className="plugin-list">
-                            {displayPlugins.map(plugin => (
-                                <PluginCard {...plugin} active={activePlugins[plugin.id]}/>
-                            ))}
+							{displayPlugins.map(plugin => (
+								<PluginCard {...plugin} active={activePlugins[plugin.id]} />
+							))}
 						</div>
 					</Route>
-					{activePlugins["leveling"] &&
+					{activePlugins["leveling"] && (
 						<Route path={`${match.url}/leveling`}>
 							<Leveling />
 						</Route>
-					}
+					)}
+					{activePlugins["logging"] && (
+						<Route path={`${match.url}/logging`}>
+							<Logging />
+						</Route>
+					)}
+					{activePlugins["commands"] && (
+						<Route path={`${match.url}/commands`}>
+							<CommandContextProvider>
+								<CustomCommands />
+							</CommandContextProvider>
+						</Route>
+					)}
 					<Redirect to={`${match.url}`} />
 				</Switch>
 			</div>
