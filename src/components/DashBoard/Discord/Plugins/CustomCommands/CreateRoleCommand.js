@@ -21,7 +21,8 @@ const CreateRoleCommand = ({ setCreatingCommand }) => {
 					placeholder="Select Command Role"
 					value={roleToGive}
 					options={userConnectedGuildInfo?.roles
-						?.filter(role => role.name !== "@everyone")
+                        ?.filter(role => role.name !== "@everyone")
+                        ?.filter(role => !role.managed)
 						?.sort((a, b) => b.rawPosition - a.rawPosition)
 						?.map(role => ({
 							value: `${role.name}=${JSON.stringify(role)}`,
