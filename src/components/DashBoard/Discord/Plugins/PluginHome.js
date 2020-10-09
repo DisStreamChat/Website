@@ -9,7 +9,7 @@ import Logging from "./Logging";
 import plugins from "./plugins.json";
 import CustomCommands from "./CustomCommands/CustomCommands";
 import { CommandContextProvider } from "../../../../contexts/CommandContext";
-
+import App from "./App"
 
 const PluginHome = ({ match }) => {
 	const [prefix, setPrefix] = useState("!");
@@ -33,17 +33,16 @@ const PluginHome = ({ match }) => {
 
 	const prefixChange = useCallback(
 		async e => {
-			const value = e?.target?.value || "!"
+			const value = e?.target?.value || "!";
 			setPrefix(value);
-			try{
-
+			try {
 				await firebase.db
 					.collection("DiscordSettings")
 					.doc(userConnectedGuildInfo?.id || " ")
 					.update({
 						prefix: value,
 					});
-			}catch(err){
+			} catch (err) {
 				await firebase.db
 					.collection("DiscordSettings")
 					.doc(userConnectedGuildInfo?.id || " ")
@@ -80,6 +79,13 @@ const PluginHome = ({ match }) => {
 						</div>
 
 						<div className="plugin-list">
+							<PluginCard
+								active
+								id="app"
+								title="DisStreamChat App"
+								image="logo.png"
+								description="Get discord chats from your server in the DisStreamChat app"
+							/>
 							{displayPlugins.map(plugin => (
 								<PluginCard {...plugin} active={activePlugins[plugin.id]} />
 							))}
@@ -102,6 +108,9 @@ const PluginHome = ({ match }) => {
 							</CommandContextProvider>
 						</Route>
 					)}
+					<Route path={`${match.url}/app`}>
+						<App />
+					</Route>
 					<Redirect to={`${match.url}`} />
 				</Switch>
 			</div>
