@@ -37,11 +37,11 @@ const FancySwitch = withStyles({
 	focusVisible: {},
 })(Switch);
 
-const Leveling = ({ location }) => {
+const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
 	const [activeEvents, setActiveEvents] = useState({});
 	const [allEvents, setAllEvents] = useState({});
-	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
+	const { setActivePlugins } = useContext(DiscordContext);
 	const [channelOverrides, setChannelOverrides] = useState({});
 	const guildId = userConnectedGuildInfo?.id;
 
@@ -134,7 +134,11 @@ const Leveling = ({ location }) => {
 		async e => {
 			const guildLevelRef = firebase.db.collection("loggingChannel").doc(guildId);
 			setLoggingChannel(e);
-			guildLevelRef.update({ server: e.value });
+			try {
+				await guildLevelRef.update({ server: e.value });
+			} catch (err) {
+				await guildLevelRef.set({ server: e.value });
+			}
 		},
 		[guildId]
 	);
@@ -150,7 +154,7 @@ const Leveling = ({ location }) => {
 					<button
 						onClick={() => {
 							setActivePlugins(prev => {
-								const newPlugs = { ...prev, leveling: false };
+								const newPlugs = { ...prev, logging: false };
 								firebase.db
 									.collection("DiscordSettings")
 									.doc(guildId || " ")
