@@ -6,9 +6,9 @@ import { colorStyles } from "../../../../Shared/userUtils";
 import RoleItem from "../../../../Shared/RoleItem";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 
-const CreateRoleCommand = ({ setCreatingCommand, guild: userConnectedGuildInfo }) => {
-	const { setActivePlugins } = useContext(DiscordContext);
-    const { roleToGive, setRoleToGive } = useContext(CommandContext);
+const CreateRoleCommand = ({ setCreatingCommand }) => {
+	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
+	const { roleToGive, setRoleToGive } = useContext(CommandContext);
 	return (
 		<>
 			<h4 className="plugin-section-title">Role To give</h4>
@@ -16,13 +16,13 @@ const CreateRoleCommand = ({ setCreatingCommand, guild: userConnectedGuildInfo }
 				<Select
 					closeMenuOnSelect
 					onChange={e => {
-						setRoleToGive(e);
-					}}
+                        setRoleToGive(e)
+                    }}
 					placeholder="Select Command Role"
 					value={roleToGive}
 					options={userConnectedGuildInfo?.roles
-						?.filter(role => role.name !== "@everyone")
-						?.filter(role => !role.managed)
+                        ?.filter(role => role.name !== "@everyone")
+                        ?.filter(role => !role.managed)
 						?.sort((a, b) => b.rawPosition - a.rawPosition)
 						?.map(role => ({
 							value: `${role.name}=${JSON.stringify(role)}`,

@@ -13,14 +13,14 @@ const CommandItem = ({
 	description,
 	setCommands,
 	bannedRoles,
-	permittedRoles,
+	allowedRoles,
 	allowedChannels,
 	cooldown,
 	deleteUsage,
 	setCreatingCommand,
 	role,
-	guild: userConnectedGuildInfo,
 }) => {
+	const { userConnectedGuildInfo } = useContext(DiscordContext);
 	const {
 		setName,
 		setResponse,
@@ -34,7 +34,6 @@ const CommandItem = ({
 		setError,
 		setEditing,
 	} = useContext(CommandContext);
-	const [allowedRoles, setPermittedRoles] = useState([]);
 	const guildId = userConnectedGuildInfo.id;
 	const deleteMe = useCallback(async () => {
 		setCommands(prev => {
@@ -48,18 +47,6 @@ const CommandItem = ({
 		});
 	}, [guildId, name, setCommands]);
 
-	useEffect(() => {
-		setPermittedRoles(
-			permittedRoles.map(id => {
-				const role = userConnectedGuildInfo?.roles?.find?.(r => r.id === id);
-				return {
-					value: `${role.name}=${JSON.stringify(role)}`,
-					label: <RoleItem {...role}>{role.name}</RoleItem>,
-				};
-			})
-		);
-	}, [permittedRoles, userConnectedGuildInfo]);
-
 	const edit = async () => {
 		setName(name);
 		setResponse(message);
@@ -71,7 +58,6 @@ const CommandItem = ({
 			});
 		}
 		setDescription(description);
-		console.log({ allowedRoles });
 		setAllowedRoles(allowedRoles || []);
 		setAllowedChannels(allowedChannels || []);
 		setBannedRoles(bannedRoles || []);
@@ -87,13 +73,14 @@ const CommandItem = ({
 		setDisplayRole(userConnectedGuildInfo.roles.find(r => r.id === role));
 	}, []);
 
+	console.log(displayRole);
 
 	return (
 		<div className="command-item">
 			<div className="delete-button" onClick={deleteMe}>
 				<CancelTwoToneIcon />
 			</div>
-			<span style={{ display: "flex" }}>
+			<span style={{display: "flex"}}>
 				<div className="display-image">
 					<img width="50px" src={type == "role" ? "/role.svg" : "/speech.svg"} />
 				</div>
