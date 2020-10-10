@@ -77,6 +77,7 @@ const Dashboard = props => {
 			<div className="settings">
 				<Switch>
 					<Route path={`${props.match.url}/account`} component={AccountSettings}></Route>
+					<Route path={`${props.match.url}/discord/:id`} component={DiscordPage}></Route>
 					<Route path={`${props.match.url}/discord`} component={DiscordPage}></Route>
 					{/* <Route path={`${props.match.url}/overlaysettings`}>
 						<SettingBox

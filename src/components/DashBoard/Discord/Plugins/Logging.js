@@ -37,11 +37,11 @@ const FancySwitch = withStyles({
 	focusVisible: {},
 })(Switch);
 
-const Leveling = ({ location }) => {
+const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
 	const [activeEvents, setActiveEvents] = useState({});
 	const [allEvents, setAllEvents] = useState({});
-	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
+	const { setActivePlugins } = useContext(DiscordContext);
 	const [channelOverrides, setChannelOverrides] = useState({});
 	const guildId = userConnectedGuildInfo?.id;
 

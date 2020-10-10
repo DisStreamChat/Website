@@ -59,7 +59,7 @@ const PluginCard = props => {
 			<A href={props.active ? `${props.match.url}/${props.id}` : null} local>
 				<div onClick={handleClick} className={`plugin-card ${props.active ? "active" : "disabled"} ${props.comingSoon ? "coming-soon" : ""}`}>
 					<div className="image">
-						<img src={props.image} alt="" />
+						<img src={`${process.env.PUBLIC_URL}/${props.image}`} alt="" />
 					</div>
 					<div className="text">
 						<h2>{props.title}</h2>

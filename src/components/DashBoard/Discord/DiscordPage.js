@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
-import { Route, Redirect, Switch, withRouter } from "react-router-dom";
+import { Route, Redirect, Switch, withRouter, useParams } from "react-router-dom";
 import firebase from "../../../firebase";
 import Select from "react-select";
 import useFetch from "../../../hooks/useFetch";
@@ -18,6 +18,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	const [refreshed, setRefreshed] = useState(false);
 	const { isLoading, sendRequest: sendLoadingRequest } = useFetch();
 	const id = firebase.auth.currentUser.uid;
+	const { id: guildId } = useParams();
 	const { sendRequest } = useFetch();
 	const { currentUser, setCurrentUser } = useContext(AppContext);
 	const {
@@ -37,10 +38,13 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	}, [rawDiscordData, discordDataLoading, setUserDiscordInfo]);
 
 	useEffect(() => {
-		if (userConnectedGuildInfo?.name) {
-			setDisplayGuild(guildOption(userConnectedGuildInfo));
-		}
-	}, [userConnectedGuildInfo]);
+		(async () => {
+			const guild = userDiscordInfo?.guilds?.find?.(guild => guild.id === guildId);
+			if (guild) {
+				setDisplayGuild(guildOption(guild));
+			}
+		})();
+	}, [userDiscordInfo, guildId]);
 
 	const refreshToken = userDiscordInfo?.refreshToken;
 	useEffect(() => {
@@ -91,6 +95,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	}, [id, disconnect, setCurrentUser]);
 
 	const guilds = userDiscordInfo?.guilds;
+
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
 		async snapshot => {
@@ -148,17 +153,27 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		async e => {
 			const name = e.value;
 			const guildByName = userDiscordInfo.guilds.find(guild => guild.name === name);
-			const guildId = guildByName.id;
-			const { result: isMember } = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
-			const channelReponse = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
+			const selectedGuildId = guildByName.id;
+			if (guildId) {
+				const path = match.url.split("/");
+				if (path.length > 3) {
+					history.push(`${path.slice(0, 3).join("/")}/${selectedGuildId}`);
+				} else {
+					history.push(`${selectedGuildId}`);
+				}
+			} else {
+				history.push(`${match.url}/${selectedGuildId}`);
+			}
+			const { result: isMember } = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + selectedGuildId);
+			// const channelReponse = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + selectedGuildId);
 
-			setUserConnectedGuildInfo({
-				name,
-				isMember,
-				icon: guildByName.icon,
-				id: guildByName.id,
-				channels: channelReponse,
-			});
+			// setUserConnectedGuildInfo({
+			// 	name,
+			// 	isMember,
+			// 	icon: guildByName.icon,
+			// 	id: guildByName.id,
+			// 	channels: channelReponse,
+			// });
 		},
 		[userDiscordInfo, sendLoadingRequest]
 	);
@@ -201,8 +216,10 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 												<button className="invite-link discord-settings-button">Invite it</button>
 											</a>
 										</div>
+									) : guildId ? (
+										<PluginHome guildId={guildId} match={match} />
 									) : (
-										<PluginHome match={match} />
+										<></>
 									)}
 								</>
 							) : (

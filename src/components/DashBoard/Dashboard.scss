@@ -815,8 +815,8 @@ textarea.message {
 	margin: 0;
 	max-height: 175px;
 	overflow: auto;
-	&::-webkit-scrollbar{
-		width: .5rem;
+	&::-webkit-scrollbar {
+		width: 0.5rem;
 	}
 	h4 {
 		margin: 0;
@@ -824,16 +824,16 @@ textarea.message {
 	ul {
 		list-style: none;
 		padding: 0;
-		ul{
-			padding-left: .5rem;
+		ul {
+			padding-left: 0.5rem;
 		}
 		li.variable {
 			background: #202225;
 			padding: 0.25rem;
 			border-radius: 0.25rem;
-			margin-top: .25rem;
-			margin-bottom: .25rem;
-			margin-right: .25rem;
+			margin-top: 0.25rem;
+			margin-bottom: 0.25rem;
+			margin-right: 0.25rem;
 		}
 	}
 }
@@ -870,7 +870,7 @@ span.toggle-button button {
 }
 
 .command-footer {
-    height: 50px !important;
+	height: 50px !important;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
@@ -903,6 +903,23 @@ span.toggle-button button {
 		}
 		.subtitle & {
 			margin-left: 2rem;
+		}
+	}
+}
+
+.ping-info {
+	margin-left: 1rem;
+	.ping {
+		padding: 0.25rem;
+		color: #7289da;
+		background: rgba(114, 137, 218, 0.1);
+		border-radius: 0.25rem;
+		font-weight: 500;
+        margin-left: 0.5rem;
+        transition: .1s;
+		&:hover {
+			color: #fff;
+			background-color: #7289da;
 		}
 	}
 }

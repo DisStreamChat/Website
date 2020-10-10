@@ -4,11 +4,11 @@ import { colorStyles } from "../../../Shared/userUtils";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Select from "react-select";
 
-const Leveling = ({ location }) => {
+const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
 	const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
-    const {setActivePlugins, userConnectedGuildInfo} = useContext(DiscordContext)
+    const {setActivePlugins, } = useContext(DiscordContext)
 	const guildId = userConnectedGuildInfo?.id;
 
 	const handleTypeSelect = useCallback(
