@@ -53,8 +53,8 @@ const parseSelectValue = value => {
 	}
 };
 
-const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnectedGuildInfo }) => {
-    console.log(userConnectedGuildInfo)
+const CreateCommand = ({ setCreatingCommand, children, role }) => {
+	const { userConnectedGuildInfo } = useContext(DiscordContext);
 	const {
 		editing,
 		setEditing,
@@ -89,8 +89,7 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 					}))
 			);
 		}
-    }, [editing]);
-    
+	}, [editing]);
 
 	return (
 		<>
@@ -265,8 +264,7 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 							bannedRoles: parsedBannedRoles,
 							permittedRoles: parsedAllowedRoles,
 							allowedChannels: parsedAllowedChannels,
-                            cooldownTime: cooldown*60000,
-                            cooldown,
+							cooldown,
 							DM: false,
 							description,
                         };

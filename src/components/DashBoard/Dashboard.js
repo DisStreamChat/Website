@@ -13,16 +13,7 @@ const Dashboard = props => {
 	const [appSettings, setAppSettings] = useState();
 	const [defaultSettings, setDefaultSettings] = useState();
 	const { currentUser } = useContext(AppContext);
-    const id = firebase.auth.currentUser.uid;
-    const [discordId, setDiscordId] = useState("")
-    useEffect(() => {
-        const idRegex = new RegExp("/\\d{17,19}[/\\b]")
-        const path = props.location.pathname+"/"
-        const id = path.match(idRegex)
-        if(id){
-            setDiscordId(id[0].replace(/\//g, ""))
-        }
-    }, [props])
+	const id = firebase.auth.currentUser.uid;
 
 	useEffect(() => {
 		(async () => {
@@ -76,7 +67,7 @@ const Dashboard = props => {
 				{/* <NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/overlaysettings`}>
 					overlay Settings
 				</NavLink> */}
-				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord${discordId ? `/${discordId}` : ""}`}>
+				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord`}>
 					Discord Settings
 				</NavLink>
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/account`}>
@@ -86,7 +77,6 @@ const Dashboard = props => {
 			<div className="settings">
 				<Switch>
 					<Route path={`${props.match.url}/account`} component={AccountSettings}></Route>
-					<Route path={`${props.match.url}/discord/:id`} component={DiscordPage}></Route>
 					<Route path={`${props.match.url}/discord`} component={DiscordPage}></Route>
 					{/* <Route path={`${props.match.url}/overlaysettings`}>
 						<SettingBox
