@@ -134,7 +134,11 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 		async e => {
 			const guildLevelRef = firebase.db.collection("loggingChannel").doc(guildId);
 			setLoggingChannel(e);
-			guildLevelRef.update({ server: e.value });
+			try {
+				await guildLevelRef.update({ server: e.value });
+			} catch (err) {
+				await guildLevelRef.set({ server: e.value });
+			}
 		},
 		[guildId]
 	);
@@ -150,7 +154,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<button
 						onClick={() => {
 							setActivePlugins(prev => {
-								const newPlugs = { ...prev, leveling: false };
+								const newPlugs = { ...prev, logging: false };
 								firebase.db
 									.collection("DiscordSettings")
 									.doc(guildId || " ")

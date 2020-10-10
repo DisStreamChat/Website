@@ -87,7 +87,7 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 					<button
 						onClick={() => {
 							setActivePlugins(prev => {
-								const newPlugs = { ...prev, leveling: false };
+								const newPlugs = { ...prev, commands: false };
 								firebase.db
 									.collection("DiscordSettings")
 									.doc(guildId || " ")

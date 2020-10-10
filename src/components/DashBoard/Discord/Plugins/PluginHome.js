@@ -20,10 +20,11 @@ const PluginHome = ({ match, guildId }) => {
 		(async () => {
 			const guild = userDiscordInfo?.guilds?.find?.(guild => guild.id === guildId);
 			if (guild) {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
-                const json = await response.json()
-				const roles = json.roles;
-				setConnectedGuild({...guild, roles});
+				const response = await fetch(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
+				const json = await response.json();
+                const roles = json.roles;
+                const channels = json.channels
+				setConnectedGuild({ ...guild, roles, channels });
 			}
 		})();
 	}, [guildId, userDiscordInfo?.guilds]);
@@ -96,6 +97,7 @@ const PluginHome = ({ match, guildId }) => {
 
 						<div className="plugin-list">
 							<PluginCard
+								guild={guildId}
 								active
 								id="app"
 								title="DisStreamChat App"
@@ -103,7 +105,7 @@ const PluginHome = ({ match, guildId }) => {
 								description="Get discord chats from your server in the DisStreamChat app"
 							/>
 							{displayPlugins.map(plugin => (
-								<PluginCard {...plugin} active={activePlugins[plugin.id]} />
+								<PluginCard guild={guildId} {...plugin} active={activePlugins[plugin.id]} />
 							))}
 						</div>
 					</Route>
