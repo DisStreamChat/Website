@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
-import { Route, Redirect, Switch, withRouter } from "react-router-dom";
+import { Route, Redirect, Switch, withRouter, useParams } from "react-router-dom";
 import firebase from "../../../firebase";
 import Select from "react-select";
 import useFetch from "../../../hooks/useFetch";
@@ -18,6 +18,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	const [refreshed, setRefreshed] = useState(false);
 	const { isLoading, sendRequest: sendLoadingRequest } = useFetch();
 	const id = firebase.auth.currentUser.uid;
+	const { id: guildId } = useParams();
 	const { sendRequest } = useFetch();
 	const { currentUser, setCurrentUser } = useContext(AppContext);
 	const {
@@ -28,6 +29,30 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		setUserConnectedChannels,
 		setUserConnectedGuildInfo,
 	} = useContext(DiscordContext);
+	const [connectedGuild, setConnectedGuild] = useState();
+
+	useEffect(() => {
+		(async () => {
+			const guild = userDiscordInfo?.guilds?.find?.(guild => guild.id === guildId);
+			if (guild) {
+				const response = await fetch(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
+				const memberResponse = await fetch(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
+				const json = await response.json();
+				const memberJson = await memberResponse.json();
+				const roles = json.roles;
+				const channels = json.channels;
+				const userData = (await firebase.db.collection("Streamers").doc(id).get()).data();
+				setConnectedGuild({ ...guild, roles, channels, isMember: memberJson?.result });
+				setUserConnectedGuildInfo({
+					...guild,
+					roles,
+					channels,
+					isMember: memberJson?.result,
+					connectedChannels: channels?.filter(channel => userData.liveChatId?.includes(channel.id)),
+				});
+			}
+		})();
+	}, [guildId, userDiscordInfo?.guilds, setUserConnectedGuildInfo]);
 
 	const [rawDiscordData, discordDataLoading, DiscordDataError] = useDocument(firebase.db.doc(`Streamers/${id}/discord/data`));
 
@@ -37,25 +62,28 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	}, [rawDiscordData, discordDataLoading, setUserDiscordInfo]);
 
 	useEffect(() => {
-		if (userConnectedGuildInfo?.name) {
-			setDisplayGuild(guildOption(userConnectedGuildInfo));
-		}
-	}, [userConnectedGuildInfo]);
+		(async () => {
+			const guild = userDiscordInfo?.guilds?.find?.(guild => guild.id === guildId);
+			if (guild) {
+				setDisplayGuild(guildOption(guild));
+			}
+		})();
+	}, [userDiscordInfo, guildId]);
 
 	const refreshToken = userDiscordInfo?.refreshToken;
 	useEffect(() => {
 		(async () => {
 			if (!refreshToken || !id) return;
 			if (refreshed) return console.log("already refreshed");
-            console.log("refreshing");
-            const otcData = (await firebase.db.collection("Secret").doc(id).get()).data()
-            const otc = otcData?.value
+			console.log("refreshing");
+			const otcData = (await firebase.db.collection("Secret").doc(id).get()).data();
+			const otc = otcData?.value;
 			setRefreshed(true);
 			const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${refreshToken}&id=${id}&otc=${otc}`);
 			if (!response.ok) return;
 
-            const json = await response.json();
-            console.log({json})
+			const json = await response.json();
+			console.log({ json });
 			if (!json) return;
 			await firebase.db
 				.collection("Streamers")
@@ -91,32 +119,36 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	}, [id, disconnect, setCurrentUser]);
 
 	const guilds = userDiscordInfo?.guilds;
-	useSnapshot(
-		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
-		async snapshot => {
-			const data = snapshot.data();
-			if (data) {
-				const userData = (await firebase.db.collection("Streamers").doc(id).get()).data();
-				const connectedGuildId = data.connectedGuild;
-				const guildByName = guilds?.find?.(guild => guild.id === connectedGuildId);
-				if (guildByName) {
-					const guildId = guildByName.id;
-					const value = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
-					const channelReponse = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
-					setUserConnectedGuildInfo({
-						name: guildByName.name,
-						isMember: value?.result,
-						icon: guildByName.icon,
-						id: guildByName.id,
-						channels: channelReponse,
-						connectedChannels: channelReponse?.filter(channel => userData.liveChatId?.includes(channel.id)),
-						connected: true,
-					});
-				}
-			}
-		},
-		[id, guilds]
-	);
+
+	// useSnapshot(
+	// 	firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
+	// 	async snapshot => {
+	// 		const data = snapshot.data();
+	// 		if (data) {
+	// 			const userData = (await firebase.db.collection("Streamers").doc(id).get()).data();
+	// 			const connectedGuildId = data.connectedGuild;
+	// 			const guildByName = guilds?.find?.(guild => guild.id === connectedGuildId);
+	// 			if (guildByName) {
+	// 				const guildId = guildByName.id;
+	// 				const value = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
+	// 				const response = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
+	// 				const channelReponse = response.channels;
+	// 				console.log(response.roles);
+	// 				setUserConnectedGuildInfo({
+	// 					name: guildByName.name,
+	// 					isMember: value?.result,
+	// 					icon: guildByName.icon,
+	// 					id: guildByName.id,
+	// 					channels: channelReponse,
+	// 					roles: response.roles,
+	// 					connectedChannels: channelReponse?.filter(channel => userData.liveChatId?.includes(channel.id)),
+	// 					connected: true,
+	// 				});
+	// 			}
+	// 		}
+	// 	},
+	// 	[id, guilds]
+	// );
 
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
@@ -145,48 +177,31 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		async e => {
 			const name = e.value;
 			const guildByName = userDiscordInfo.guilds.find(guild => guild.name === name);
-			const guildId = guildByName.id;
-			const { result: isMember } = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
-			const channelReponse = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + guildId);
+			const selectedGuildId = guildByName.id;
+			try {
+				if (guildId) {
+					const path = match.url.split("/");
+					if (path.length > 3) {
+						history.push(`${path.slice(0, 3).join("/")}/${selectedGuildId}`);
+					} else {
+						history.push(`${selectedGuildId}`);
+					}
+				} else {
+					history.push(`${match.url}/${selectedGuildId}`);
+				}
+			} catch (err) {}
+			const { result: isMember } = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + selectedGuildId);
+			// const channelReponse = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + selectedGuildId);
 
-			setUserConnectedGuildInfo({
-				name,
-				isMember,
-				icon: guildByName.icon,
-				id: guildByName.id,
-				channels: channelReponse,
-			});
+			// setUserConnectedGuildInfo({
+			// 	name,
+			// 	isMember,
+			// 	icon: guildByName.icon,
+			// 	id: guildByName.id,
+			// 	channels: channelReponse,
+			// });
 		},
 		[userDiscordInfo, sendLoadingRequest]
-	);
-
-	const onChannelSelect = useCallback(
-		async e => {
-			setUserConnectedGuildInfo(s => ({
-				...s,
-				connectedChannels:
-					e?.map(c => ({
-						id: c.value,
-						name: c.label.props.children[0].props.children,
-						parent: c.label.props.children[1].props.children,
-					})) || [],
-			}));
-			await firebase.db
-				.collection("Streamers")
-				.doc(id)
-				.update({
-					liveChatId: e?.map(c => c.value) || [],
-				});
-			await firebase.db
-				.collection("Streamers")
-				.doc(id)
-				.collection("discord")
-				.doc("data")
-				.update({
-					liveChatId: e?.map(c => c.value) || [],
-				});
-		},
-		[id]
 	);
 
 	return (
@@ -207,7 +222,6 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 								placeholder="Select Guild"
 								options={userDiscordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
 								styles={colorStyles}
-								isDisabled={!!userConnectedGuildInfo?.connected}
 							/>
 							<span>
 								<img className="discord-profile" src={userDiscordInfo?.profilePicture} alt="" />
@@ -228,67 +242,15 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 												<button className="invite-link discord-settings-button">Invite it</button>
 											</a>
 										</div>
+									) : guildId ? (
+										<PluginHome connectedGuild={connectedGuild} guildId={guildId} match={match} />
 									) : (
-										<>
-											{userConnectedGuildInfo.connected ? (
-												<>
-													<h3>select channels to listen to</h3>
-													<Select
-														closeMenuOnSelect={false}
-														onChange={onChannelSelect}
-														placeholder="Select Channel"
-														value={userConnectedGuildInfo.connectedChannels
-															?.sort((a, b) => a.parent.localeCompare(b.parent))
-															?.map(channel => ({
-																value: channel.id,
-																label: (
-																	<>
-																		<span>{channel.name}</span>
-																		<span className="channel-category">{channel.parent}</span>
-																	</>
-																),
-															}))}
-														options={userConnectedGuildInfo.channels
-															.sort((a, b) => a.parent.localeCompare(b.parent))
-															.map(channel => ({
-																value: channel.id,
-																label: (
-																	<>
-																		<span>{channel.name}</span>
-																		<span className="channel-category">{channel.parent}</span>
-																	</>
-																),
-															}))}
-														styles={{
-															...colorStyles,
-															container: styles => ({ ...styles, ...colorStyles.container }),
-														}}
-														isMulti
-													/>
-													<button onClick={disconnect} className="discord-settings-button ml-0 mt-1 warning-button">
-														Disconnect Guild
-													</button>
-												</>
-											) : (
-												<>
-													<span>
-														This server is not connected to the DisStreamChat chat manager, connect it to get discord
-														messages in your app and adjust your plugin settings
-													</span>
-													<button onClick={Connectguild} className="discord-settings-button warning-button">
-														Connect it
-													</button>
-												</>
-											)}
-										</>
+										<></>
 									)}
 								</>
 							) : (
-								<button onClick={disconnectAccount} className="discord-settings-button ml-0 mt-1 warning-button">
-									Disconnect Account
-								</button>
+								<></>
 							)}
-							{userConnectedGuildInfo?.connected && <PluginHome match={match} />}
 						</div>
 					</>
 				) : (

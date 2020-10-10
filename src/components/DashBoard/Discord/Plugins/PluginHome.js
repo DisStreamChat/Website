@@ -5,17 +5,21 @@ import A from "../../../Shared/A";
 import PluginCard from "./PluginCard";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Leveling from "./Leveling";
-import plugins from "./plugins.json"
+import Logging from "./Logging";
+import plugins from "./plugins.json";
+import CustomCommands from "./CustomCommands/CustomCommands";
+import { CommandContextProvider } from "../../../../contexts/CommandContext";
+import App from "./App";
 
-const PluginHome = ({ match }) => {
+const PluginHome = ({ match, guildId, connectedGuild }) => {
 	const [prefix, setPrefix] = useState("!");
-	const { userConnectedGuildInfo, activePlugins, setActivePlugins } = useContext(DiscordContext);
+	const { userDiscordInfo, activePlugins, setActivePlugins } = useContext(DiscordContext);
 
 	useEffect(() => {
 		(async () => {
 			const guild = await firebase.db
 				.collection("DiscordSettings")
-				.doc(userConnectedGuildInfo?.id || " ")
+				.doc(connectedGuild?.id || " ")
 				.get();
 			const data = guild.data();
 			if (data) {
@@ -25,22 +29,33 @@ const PluginHome = ({ match }) => {
 				setPrefix("!");
 			}
 		})();
-	}, [userConnectedGuildInfo]);
+	}, [connectedGuild]);
 
 	const prefixChange = useCallback(
 		async e => {
-			setPrefix(e.target.value);
-			firebase.db
-				.collection("DiscordSettings")
-				.doc(userConnectedGuildInfo?.id || " ")
-				.update({
-					prefix: e.target.value,
-				});
+			const value = e?.target?.value || "!";
+			setPrefix(value);
+			try {
+				await firebase.db
+					.collection("DiscordSettings")
+					.doc(connectedGuild?.id || " ")
+					.update({
+						prefix: value,
+					});
+			} catch (err) {
+				await firebase.db
+					.collection("DiscordSettings")
+					.doc(connectedGuild?.id || " ")
+					.set({
+						activePlugins: {},
+						prefix: value,
+					});
+			}
 		},
-		[userConnectedGuildInfo?.id]
+		[connectedGuild?.id]
 	);
 
-    const displayPlugins = useMemo(() => plugins.sort((a, b) => activePlugins[a.id] ? -1 : 1), [plugins, activePlugins])
+	const displayPlugins = useMemo(() => plugins.sort((a, b) => (activePlugins[a.id] ? -1 : 1)), [plugins, activePlugins]);
 
 	return (
 		<>
@@ -52,6 +67,9 @@ const PluginHome = ({ match }) => {
 				</label>
 				<div className="prefix-body">
 					<input value={prefix} onChange={prefixChange} type="text" className="prefix-input" id="discord-prefix" />
+					<span className="ping-info">
+						or <span className="ping">@DisStreamBot</span>
+					</span>
 				</div>
 			</div>
 			<hr />
@@ -64,16 +82,39 @@ const PluginHome = ({ match }) => {
 						</div>
 
 						<div className="plugin-list">
-                            {displayPlugins.map(plugin => (
-                                <PluginCard {...plugin} active={activePlugins[plugin.id]}/>
-                            ))}
+							<PluginCard
+								guild={guildId}
+								active
+								id="app"
+								title="DisStreamChat App"
+								image="logo.png"
+								description="Get discord chats from your server in the DisStreamChat app"
+							/>
+							{displayPlugins.map(plugin => (
+								<PluginCard guild={guildId} {...plugin} active={activePlugins[plugin.id]} />
+							))}
 						</div>
 					</Route>
-					{activePlugins["leveling"] &&
+					{activePlugins["leveling"] && (
 						<Route path={`${match.url}/leveling`}>
-							<Leveling />
+							<Leveling guild={connectedGuild} />
 						</Route>
-					}
+					)}
+					{activePlugins["logging"] && (
+						<Route path={`${match.url}/logging`}>
+							<Logging guild={connectedGuild} />
+						</Route>
+					)}
+					{activePlugins["commands"] && (
+						<Route path={`${match.url}/commands`}>
+							<CommandContextProvider>
+								<CustomCommands guild={connectedGuild} />
+							</CommandContextProvider>
+						</Route>
+					)}
+					<Route path={`${match.url}/app`}>
+						<App />
+					</Route>
 					<Redirect to={`${match.url}`} />
 				</Switch>
 			</div>
