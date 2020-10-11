@@ -85,7 +85,7 @@ function App(props) {
 						// const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
 							console.log(await response.json());
-							alert("fail");
+							console.log("fail");
 						} else {
 							console.log(user?.uid);
 							const json = await response.json();
@@ -100,10 +100,10 @@ function App(props) {
 								.collection("discord")
 								.doc("data")
 								.set(json);
-							alert("success");
+							console.log("success");
 						}
 					} catch (err) {
-						alert(err.message);
+						console.log(err.message);
 					}
 				}
 				window.location = "/#/dashboard/discord";
