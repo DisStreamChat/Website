@@ -52,19 +52,19 @@
 		"id": "music",
 		"title": "Music",
 		"image": "music.svg",
-        "description": "Let your members get roles by reacting to messages",
+        "description": "Listen to music directly on Discord",
         "comingSoon": true
 	},{
 		"id": "polls",
 		"title": "Polls",
 		"image": "poll.svg",
-        "description": "Let your members get roles by reacting to messages",
+        "description": "Hold polls within your server",
         "comingSoon": true
 	},{
 		"id": "giveaways",
 		"title": "Giveaways",
 		"image": "gift.svg",
-        "description": "Let your members get roles by reacting to messages",
+        "description": "Host giveaways within your server",
         "comingSoon": true
         
 	}
