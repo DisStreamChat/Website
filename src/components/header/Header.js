@@ -6,7 +6,6 @@ import { CSSTransition } from "react-transition-group";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { useCallback } from "react";
 import Modal from "react-modal";
-import YouTubeIcon from "@material-ui/icons/YouTube";
 import A from "../Shared/A";
 import ClearIcon from "@material-ui/icons/Clear";
 import firebase from "../../firebase";
@@ -38,7 +37,7 @@ const Header = props => {
 					if (data) {
 						const { displayName, profilePicture } = data;
 						setCurrentUser(prev => ({
-                            ...prev,
+							...prev,
 							name: displayName,
 							profilePicture,
 						}));
@@ -133,10 +132,26 @@ const Header = props => {
 							Twitch
 						</A>
 					</button>
-					{/* <button disabled={!readTerms} type="submit" className="modal-button youtube" onClick={readTerms ? signInWithGoogle : () => {}}>
-						<YouTubeIcon className="logo-icon yt-icon" />
-						YouTube
-					</button> */}
+					<button type="submit">
+						<A
+							href={
+								readTerms
+									? `https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20guilds`
+									: null
+							}
+							className="modal-button discord"
+							disabled={!readTerms}
+						>
+							<img
+								style={{ filter: "grayscale(1) brightness(10000%)" }}
+								src={`${process.env.PUBLIC_URL}/discord_logo.png`}
+								alt=""
+								width="20"
+								className="logo-icon"
+							/>
+							Discord
+						</A>
+					</button>
 					<div className="legal">
 						<input
 							required
@@ -178,7 +193,9 @@ const Header = props => {
 					<Link to="/apps/download">Chat Manager</Link>
 					<Link to="/bot">Discord Bot</Link>
 					<Link to="/community">Community</Link>
-                    <A href="https://www.patreon.com/disstreamchat?fan_landing=true" newTab>Support Us</A>
+					<A href="https://www.patreon.com/disstreamchat?fan_landing=true" newTab>
+						Support Us
+					</A>
 					{/* <Link to="/about">About</Link> */}
 				</nav>
 			</span>

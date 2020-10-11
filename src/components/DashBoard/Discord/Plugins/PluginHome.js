@@ -10,6 +10,7 @@ import plugins from "./plugins.json";
 import CustomCommands from "./CustomCommands/CustomCommands";
 import { CommandContextProvider } from "../../../../contexts/CommandContext";
 import App from "./App";
+import Roles from "./Roles";
 
 const PluginHome = ({ match, guildId, connectedGuild }) => {
 	const [prefix, setPrefix] = useState("!");
@@ -109,6 +110,13 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 						<Route path={`${match.url}/commands`}>
 							<CommandContextProvider>
 								<CustomCommands guild={connectedGuild} />
+							</CommandContextProvider>
+						</Route>
+					)}
+                    {activePlugins["roles"] && (
+						<Route path={`${match.url}/roles`}>
+							<CommandContextProvider>
+								<Roles guild={connectedGuild} />
 							</CommandContextProvider>
 						</Route>
 					)}

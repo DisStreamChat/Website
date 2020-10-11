@@ -177,19 +177,22 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		async e => {
 			const name = e.value;
 			const guildByName = userDiscordInfo.guilds.find(guild => guild.name === name);
-			const selectedGuildId = guildByName.id;
-			try {
-				if (guildId) {
-					const path = match.url.split("/");
-					if (path.length > 3) {
-						history.push(`${path.slice(0, 3).join("/")}/${selectedGuildId}`);
-					} else {
-						history.push(`${selectedGuildId}`);
-					}
-				} else {
-					history.push(`${match.url}/${selectedGuildId}`);
-				}
-			} catch (err) {}
+            const selectedGuildId = guildByName.id;
+            try{
+
+                if (guildId) {
+                    const path = match.url.split("/");
+                    if (path.length > 3) {
+                        history.push(`${path.slice(0, 3).join("/")}/${selectedGuildId}`);
+                    } else {
+                        history.push(`${selectedGuildId}`);
+                    }
+                } else {
+                    history.push(`${match.url}/${selectedGuildId}`);
+                }
+            }catch(err){
+                
+            }
 			const { result: isMember } = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + selectedGuildId);
 			// const channelReponse = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + selectedGuildId);
 

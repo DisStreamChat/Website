@@ -115,7 +115,7 @@ const CommandItem = ({
 			</div>
 			<span style={{ display: "flex" }}>
 				<div className="display-image">
-					<img width="50px" src={type == "role" ? "/role.svg" : "/speech.svg"} />
+					<img alt="" width="50px" src={type === "role" ? "/role.svg" : "/speech.svg"} />
 				</div>
 				<div className="command-item--info">
 					<h3>{name}</h3>
