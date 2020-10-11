@@ -89,7 +89,7 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 					}))
 			);
 		}
-    }, [editing, userConnectedGuildInfo?.roles, setAllowedRoles]);
+    }, [editing]);
     
 
 	return (
