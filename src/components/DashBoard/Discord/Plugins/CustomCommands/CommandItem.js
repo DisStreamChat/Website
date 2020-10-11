@@ -73,8 +73,29 @@ const CommandItem = ({
 		setDescription(description);
 		console.log({ allowedRoles });
 		setAllowedRoles(allowedRoles || []);
-		setAllowedChannels(allowedChannels || []);
-		setBannedRoles(bannedRoles || []);
+		setAllowedChannels(
+			(allowedChannels || []).map(id => {
+				const channel = userConnectedGuildInfo.channels.find(r => r.id === id);
+				return {
+					value: `${channel.name}=${JSON.stringify(channel)}`,
+					label: (
+						<>
+							<span>{channel.name}</span>
+							<span className="channel-category">{channel.parent}</span>
+						</>
+					),
+				};
+			})
+		);
+		setBannedRoles(
+			(bannedRoles || []).map(id => {
+				const role = userConnectedGuildInfo?.roles?.find?.(r => r.id === id);
+				return {
+					value: `${role.name}=${JSON.stringify(role)}`,
+					label: <RoleItem {...role}>{role.name}</RoleItem>,
+				};
+			})
+		);
 		setCooldown(cooldown || 0);
 		setDeleteUsage(deleteUsage);
 		setError({});
@@ -86,7 +107,6 @@ const CommandItem = ({
 	useEffect(() => {
 		setDisplayRole(userConnectedGuildInfo.roles.find(r => r.id === role));
 	}, []);
-
 
 	return (
 		<div className="command-item">

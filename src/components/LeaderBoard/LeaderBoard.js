@@ -6,7 +6,7 @@ import LeaderBoardCard from "./LeaderBoardCard";
 import "./LeaderBoard.scss";
 import { useDocumentOnce } from "react-firebase-hooks/firestore";
 
-const LeaderBoard = ({history}) => {
+const LeaderBoard = ({ history }) => {
 	const [leaderBoardInfo, setLeaderBoardInfo] = useState([]);
 	const [guildInfo, setGuildInfo] = useState({});
 	const { id } = useParams();
@@ -15,13 +15,15 @@ const LeaderBoard = ({history}) => {
 	useEffect(() => {
 		(async () => {
 			if (loading) return;
-            const data = rawLeaderBoardData.data();
-            if(!data){
-                history.push("/")
-            }
+			const data = rawLeaderBoardData.data();
+			if (!data) {
+				history.push("/");
+			}
 			const leaderBoardData = Object.keys(data || {})
+
 				.filter(key => data[key].xp)
-				.sort((a, b) => data[b].xp - data[a].xp);
+				.sort((a, b) => data[b].xp - data[a].xp)
+				.slice(0, 101);
 			const leaderBoardDashBoard = await Promise.all(
 				leaderBoardData.map(async id => {
 					const response = await fetch(`${process.env.REACT_APP_API_URL}/resolveuser?user=${id}&platform=discord`);
@@ -35,8 +37,8 @@ const LeaderBoard = ({history}) => {
 				setGuildInfo(prev => guildJson || prev);
 			} catch (err) {}
 		})();
-    }, [id, rawLeaderBoardData, loading, history]);
-    
+	}, [id, rawLeaderBoardData, loading, history]);
+
 	return (
 		<div className="leaderboard">
 			<SmallLoader loaded={!loading} />
@@ -44,13 +46,15 @@ const LeaderBoard = ({history}) => {
 				<img src={guildInfo.iconURL} alt="" />
 				<h1>{guildInfo.name}</h1>
 			</div>
-			{!loading && <div className="leaderboard-body">
-				<ul>
-					{leaderBoardInfo.map((user, idx) => (
-						<LeaderBoardCard place={idx + 1} {...user} />
-					))}
-				</ul>
-			</div>}
+			{!loading && (
+				<div className="leaderboard-body">
+					<ul>
+						{leaderBoardInfo.map((user, idx) => (
+							<LeaderBoardCard place={idx + 1} {...user} />
+						))}
+					</ul>
+				</div>
+			)}
 		</div>
 	);
 };
