@@ -47,5 +47,24 @@
 		"image": "aprove.png",
         "description": "Let your members get roles by reacting to messages",
         "comingSoon": true
+    },
+    {
+		"id": "music",
+		"title": "Music",
+		"image": "music.svg",
+        "description": "Let your members get roles by reacting to messages",
+        "comingSoon": true
+	},{
+		"id": "polls",
+		"title": "Polls",
+		"image": "poll.svg",
+        "description": "Let your members get roles by reacting to messages",
+        "comingSoon": true
+	},{
+		"id": "giveaways",
+		"title": "Giveaways",
+		"image": "gift.svg",
+        "description": "Let your members get roles by reacting to messages",
+        "comingSoon": true
 	}
 ]
