@@ -24,7 +24,7 @@ import { Button } from "@material-ui/core";
 import A from "./components/Shared/A";
 import useSnapshot from "./hooks/useSnapshot";
 import LeaderBoard from "./components/LeaderBoard/LeaderBoard";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 function App(props) {
 	const [userId, setUserId] = useState("");
@@ -57,8 +57,8 @@ function App(props) {
 		(async () => {
 			if (setOTC.current) return;
 			if (firebaseInit !== false && user?.uid) {
-                await firebase.db.collection("Secret").doc(user.uid).set({value: uuidv4()});
-                setOTC.current = true
+				await firebase.db.collection("Secret").doc(user.uid).set({ value: uuidv4() });
+				setOTC.current = true;
 			}
 		})();
 	}, [firebaseInit, user, setOTC]);
@@ -80,24 +80,30 @@ function App(props) {
 				} else {
 					try {
 						console.log(code);
-						const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token?code=${code}`);
+						const isSignedIn = !!firebase.auth.currentUser;
+						const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token?code=${code}&create=${!isSignedIn}`);
 						// const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
 							console.log(await response.json());
-							console.log("fail");
+							alert("fail");
 						} else {
 							console.log(user?.uid);
 							const json = await response.json();
+							let discordUser;
+							if (!isSignedIn) {
+								discordUser = await firebase.auth.signInWithCustomToken(json.token);
+							}
+
 							await firebase.db
 								.collection("Streamers")
-								.doc(user?.uid || " ")
+								.doc(user?.uid || discordUser?.uid || " ")
 								.collection("discord")
 								.doc("data")
 								.set(json);
-							console.log("success");
+							alert("success");
 						}
 					} catch (err) {
-						console.log(err.message);
+						alert(err.message);
 					}
 				}
 				window.location = "/#/dashboard/discord";
@@ -110,7 +116,14 @@ function App(props) {
 			if (firebaseInit !== false && user) {
 				setUserId(user.uid);
 				const userData = (await firebase.db.collection("Streamers").doc(user.uid).get()).data();
-				const profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
+				let profilePictureResponse;
+				if (!userData.twitchAuthenticated) {
+					profilePictureResponse = await fetch(
+						`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.discordId}&platform=discord`
+					);
+				} else {
+					profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
+				}
 				const profilePicture = await profilePictureResponse.json();
 				firebase.db.collection("Streamers").doc(user.uid).update({
 					profilePicture,

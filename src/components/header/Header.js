@@ -133,7 +133,15 @@ const Header = props => {
 						</A>
 					</button>
 					<button type="submit">
-						<A href={"#"} className="modal-button discord" disabled={!readTerms}>
+						<A
+							href={
+								readTerms
+									? `https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20guilds`
+									: null
+							}
+							className="modal-button discord"
+							disabled={!readTerms}
+						>
 							<img
 								style={{ filter: "grayscale(1) brightness(10000%)" }}
 								src={`${process.env.PUBLIC_URL}/discord_logo.png`}
