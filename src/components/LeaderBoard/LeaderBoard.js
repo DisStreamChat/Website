@@ -19,7 +19,8 @@ const LeaderBoard = ({history}) => {
             if(!data){
                 history.push("/")
             }
-			const leaderBoardData = Object.keys(data || {})
+            const leaderBoardData = Object.keys(data || {})
+            .slice(0, 101)
 				.filter(key => data[key].xp)
 				.sort((a, b) => data[b].xp - data[a].xp);
 			const leaderBoardDashBoard = await Promise.all(
