@@ -132,6 +132,18 @@ const Header = props => {
 							Twitch
 						</A>
 					</button>
+					<button type="submit">
+						<A href={"#"} className="modal-button discord" disabled={!readTerms}>
+							<img
+								style={{ filter: "grayscale(1) brightness(10000%)" }}
+								src={`${process.env.PUBLIC_URL}/discord_logo.png`}
+								alt=""
+								width="20"
+								className="logo-icon"
+							/>
+							Discord
+						</A>
+					</button>
 					<div className="legal">
 						<input
 							required

@@ -198,7 +198,7 @@
 		justify-content: center;
         align-items: center;
         
-        & > button:first-child{
+        & > button[type="submit"]{
             all: unset;
             box-sizing: content-box !important;
             width: 100%;
@@ -242,6 +242,9 @@
         width: 70%;
         flex: 1;
         box-sizing: content-box !important;
+        &.discord{
+            background: #6f86d4;
+        }
 		cursor: pointer;
 		&:hover {
 			filter: brightness(0.85);
