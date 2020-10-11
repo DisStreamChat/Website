@@ -6,7 +6,6 @@ import { CSSTransition } from "react-transition-group";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { useCallback } from "react";
 import Modal from "react-modal";
-import YouTubeIcon from "@material-ui/icons/YouTube";
 import A from "../Shared/A";
 import ClearIcon from "@material-ui/icons/Clear";
 import firebase from "../../firebase";
@@ -38,7 +37,7 @@ const Header = props => {
 					if (data) {
 						const { displayName, profilePicture } = data;
 						setCurrentUser(prev => ({
-                            ...prev,
+							...prev,
 							name: displayName,
 							profilePicture,
 						}));
@@ -133,10 +132,6 @@ const Header = props => {
 							Twitch
 						</A>
 					</button>
-					{/* <button disabled={!readTerms} type="submit" className="modal-button youtube" onClick={readTerms ? signInWithGoogle : () => {}}>
-						<YouTubeIcon className="logo-icon yt-icon" />
-						YouTube
-					</button> */}
 					<div className="legal">
 						<input
 							required
@@ -178,7 +173,9 @@ const Header = props => {
 					<Link to="/apps/download">Chat Manager</Link>
 					<Link to="/bot">Discord Bot</Link>
 					<Link to="/community">Community</Link>
-                    <A href="https://www.patreon.com/disstreamchat?fan_landing=true" newTab>Support Us</A>
+					<A href="https://www.patreon.com/disstreamchat?fan_landing=true" newTab>
+						Support Us
+					</A>
 					{/* <Link to="/about">About</Link> */}
 				</nav>
 			</span>

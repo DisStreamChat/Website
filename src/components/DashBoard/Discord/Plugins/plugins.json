@@ -42,10 +42,10 @@
         "comingSoon": true
     },
     {
-		"id": "reactionroles",
-		"title": "Reaction Roles",
+		"id": "roles",
+		"title": "Role Management",
 		"image": "aprove.png",
-        "description": "Let your members get roles by reacting to messages",
+        "description": "Let the bot manage members roles in different ways like reaction roles",
         "comingSoon": true
     },
     {
@@ -66,5 +66,6 @@
 		"image": "gift.svg",
         "description": "Let your members get roles by reacting to messages",
         "comingSoon": true
+        
 	}
 ]
