@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import RoleItem from "../../../../Shared/RoleItem";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
+import Twemoji from "react-twemoji";
 
 const ChannelParent = styled.span`
 	color: #aaa;
@@ -29,7 +30,11 @@ const ActionBody = styled.div`
 	background: #1a1a1a;
 	position: relative;
 	align-items: center;
-	h3, h2, h4, h1, p {
+	h3,
+	h2,
+	h4,
+	h1,
+	p {
 		margin: 0;
 	}
 	& > div:not(:first-child) {
@@ -60,8 +65,10 @@ const ActionItem = ({ role, guild, emoji, type }) => {
 			<div className="delete-button">
 				<CancelTwoToneIcon />
 			</div>
-			<span style={{ marginRight: ".5rem" }}>{emoji?.replace("catch-all", "All")}</span> -{" "}
-			{displayRole && <RoleItem {...displayRole}>{displayRole.name}</RoleItem>}
+			<Twemoji options={{ className: "twemoji" }}>
+				<span style={{ marginRight: ".5rem" }}>{emoji?.replace("catch-all", "All")}</span>
+			</Twemoji>
+			- {displayRole && <RoleItem {...displayRole}>{displayRole.name}</RoleItem>}
 			<h4>Type: {types[type]}</h4>
 		</ActionBody>
 	);
