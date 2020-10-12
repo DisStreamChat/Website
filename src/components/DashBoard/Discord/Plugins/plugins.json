@@ -3,69 +3,70 @@
 		"id": "leveling",
 		"title": "Leveling",
 		"image": "trophy.svg",
-        "description": "Let your users gain XP and levels by participating in the chat!",
-        "comingSoon": false
+		"description": "Let your users gain XP and levels by participating in the chat!",
+		"comingSoon": false
 	},
 	{
 		"id": "commands",
 		"title": "Custom Commands",
 		"image": "discord.png",
-        "description": "Create custom commands for your server",
-        "comingSoon": false
+		"description": "Create custom commands for your server",
+		"comingSoon": false
 	},
 	{
 		"id": "logging",
 		"title": "Logging",
 		"image": "clipboard.svg",
-        "description": "Log the events that take place on your server",
-        "comingSoon": false
+		"description": "Log the events that take place on your server",
+		"comingSoon": false
+	},
+	{
+		"id": "roles",
+		"title": "Role Management",
+		"image": "aprove.png",
+		"description": "Let the bot manage members roles in different ways like reaction roles"
 	},
 	{
 		"id": "welcome",
 		"title": "Welcome",
 		"image": "wave.svg",
-        "description": "Send a welcome message to new users",
-        "comingSoon": true
+		"description": "Send a welcome message to new users",
+		"comingSoon": true
 	},
 	{
 		"id": "streamislive",
 		"title": "Stream Notifications",
 		"image": "twitch.svg",
-        "description": "Let your viewers when you go live",
-        "comingSoon": true
-    },
-    {
+		"description": "Let your viewers when you go live",
+		"comingSoon": true
+	},
+	{
 		"id": "moderation",
 		"title": "Moderation",
 		"image": "mod.svg",
-        "description": "Power up your moderation with cool commands and automations!",
-        "comingSoon": true
-    },
-    {
-		"id": "roles",
-		"title": "Role Management",
-		"image": "aprove.png",
-        "description": "Let the bot manage members roles in different ways like reaction roles",
-        "comingSoon": true
-    },
-    {
+		"description": "Power up your moderation with cool commands and automations!",
+		"comingSoon": true
+	},
+
+	{
 		"id": "music",
 		"title": "Music",
 		"image": "music.svg",
-        "description": "Listen to music directly on Discord",
-        "comingSoon": true
-	},{
+		"description": "Listen to music directly on Discord",
+		"comingSoon": true
+	},
+	{
 		"id": "polls",
 		"title": "Polls",
 		"image": "poll.svg",
-        "description": "Hold polls within your server",
-        "comingSoon": true
-	},{
+		"description": "Hold polls within your server",
+		"comingSoon": true
+	},
+	{
 		"id": "giveaways",
 		"title": "Giveaways",
 		"image": "gift.svg",
-        "description": "Host giveaways within your server",
-        "comingSoon": true
-        
+		"description": "Host giveaways within your server",
+		"comingSoon": true
 	}
 ]

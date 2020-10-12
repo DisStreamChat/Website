@@ -95,7 +95,7 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 	return (
 		<>
 			<div className="command-header">
-				<h1>Create Role Command</h1>
+				<h1>Create {role ? "Role" : "Text"} Command</h1>
 				<button onClick={() => setCreatingCommand(false)}>
 					<ClearIcon />
 				</button>
