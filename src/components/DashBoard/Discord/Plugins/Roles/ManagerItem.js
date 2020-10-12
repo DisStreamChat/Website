@@ -60,9 +60,9 @@ const ActionItem = ({ role, guild, emoji, type }) => {
 			<div className="delete-button">
 				<CancelTwoToneIcon />
 			</div>
-			<span style={{ marginRight: ".5rem" }}>{emoji?.replace("catch-all", "*")}</span> -{" "}
+			<span style={{ marginRight: ".5rem" }}>{emoji?.replace("catch-all", "All")}</span> -{" "}
 			{displayRole && <RoleItem {...displayRole}>{displayRole.name}</RoleItem>}
-			<h3>Type: {types[type]}</h3>
+			<h4>Type: {types[type]}</h4>
 		</ActionBody>
 	);
 };
