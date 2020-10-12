@@ -71,7 +71,7 @@ const CommandItem = ({
 			});
 		}
 		setDescription(description);
-		console.log({ allowedRoles });
+		// console.log({ allowedRoles });
 		setAllowedRoles(allowedRoles || []);
 		setAllowedChannels(
 			(allowedChannels || []).map(id => {

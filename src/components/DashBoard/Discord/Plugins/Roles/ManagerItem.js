@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import RoleItem from "../../../../Shared/RoleItem";
+import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
 
 const ChannelParent = styled.span`
 	color: #aaa;
@@ -21,17 +22,31 @@ const ManagerBody = styled.div`
 `;
 
 const ActionBody = styled.div`
-    display: flex;
-    padding: .5rem .5rem;
-    margin: .25rem;
-    margin-left: .75rem;
-    background: #1a1a1a;
-	& > *:last-child {
+	display: flex;
+	padding: 0.5rem 0.5rem;
+	margin: 0.25rem;
+	margin-left: 0.75rem;
+	background: #1a1a1a;
+	position: relative;
+	align-items: center;
+	h3, h2, h4, h1, p {
+		margin: 0;
+	}
+	& > div:not(:first-child) {
 		margin-left: 0.5rem;
+		margin-right: 0.5rem;
 	}
 `;
 
-const ActionItem = ({ role, guild, emoji }) => {
+const types = {
+	ADD_ON_ADD: "Add",
+	REMOVE_ON_REMOVE: "Remove",
+	ADD_ON_REMOVE: "Add (reversed)",
+	REMOVE_ON_ADD: "Remove (reversed)",
+	TOGGLE: "Toggle",
+};
+
+const ActionItem = ({ role, guild, emoji, type }) => {
 	const [displayRole, setDisplayRole] = useState();
 
 	useEffect(() => {
@@ -42,8 +57,12 @@ const ActionItem = ({ role, guild, emoji }) => {
 
 	return (
 		<ActionBody>
+			<div className="delete-button">
+				<CancelTwoToneIcon />
+			</div>
 			<span style={{ marginRight: ".5rem" }}>{emoji?.replace("catch-all", "*")}</span> -{" "}
 			{displayRole && <RoleItem {...displayRole}>{displayRole.name}</RoleItem>}
+			<h3>Type: {types[type]}</h3>
 		</ActionBody>
 	);
 };
