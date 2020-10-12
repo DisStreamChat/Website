@@ -3,6 +3,7 @@ import styled from "styled-components";
 import RoleItem from "../../../../Shared/RoleItem";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
 import Twemoji from "react-twemoji";
+import AddCircleTwoToneIcon from "@material-ui/icons/AddCircleTwoTone";
 
 const ChannelParent = styled.span`
 	color: #aaa;
@@ -51,30 +52,45 @@ const types = {
 	TOGGLE: "Toggle",
 };
 
-const ActionItem = ({ role, guild, emoji, type }) => {
+const ActionItem = ({ role, guild, emoji, type, deleteAble, add }) => {
 	const [displayRole, setDisplayRole] = useState();
 
 	useEffect(() => {
-		setDisplayRole(guild.roles.find(r => r.id === role));
-	}, [guild, role]);
+		if (!add) {
+			setDisplayRole(guild.roles.find(r => r.id === role));
+		}
+	}, [guild, role, add]);
 
 	console.log(displayRole);
 
 	return (
 		<ActionBody>
-			<div className="delete-button">
-				<CancelTwoToneIcon />
-			</div>
-			<Twemoji options={{ className: "twemoji" }}>
-				<span style={{ marginRight: ".5rem" }}>{emoji?.replace("catch-all", "All")}</span>
-			</Twemoji>
-			- {displayRole && <RoleItem {...displayRole}>{displayRole.name}</RoleItem>}
-			<h4>Type: {types[type]}</h4>
+			{deleteAble && (
+				<div className="delete-button">
+					<CancelTwoToneIcon />
+				</div>
+			)}
+			{!add ? (
+				<>
+					<Twemoji options={{ className: "twemoji" }}>
+						<span style={{ marginRight: ".5rem", textTransform: "capitalize" }}>
+							{emoji?.replace("catch-all", "All").replace("-", " ")}
+						</span>
+					</Twemoji>
+					- {displayRole && <RoleItem {...displayRole}>{displayRole.name}</RoleItem>}
+					<h4>Type: {types[type]}</h4>
+				</>
+			) : (
+				<span style={{ cursor: "pointer", display: "flex", alignItems: "center" }}>
+					<AddCircleTwoToneIcon />
+					<h4 style={{ marginLeft: ".5rem" }}>Add Action</h4>
+				</span>
+			)}
 		</ActionBody>
 	);
 };
 
-const ManagerItem = ({ guild, channel, actions }) => {
+const ManagerItem = ({ guild, channel, actions, channelOveride }) => {
 	const [displayChannel, setDisplayChannel] = useState();
 
 	useEffect(() => {
@@ -83,12 +99,16 @@ const ManagerItem = ({ guild, channel, actions }) => {
 
 	return (
 		<ManagerBody>
+			<div className="delete-button">
+				<CancelTwoToneIcon />
+			</div>
 			<h4>
-				{displayChannel?.name} <ChannelParent> {displayChannel?.parent}</ChannelParent>
+				{displayChannel?.name || channelOveride} <ChannelParent> {displayChannel?.parent}</ChannelParent>
 			</h4>
 			{Object.entries(actions || {}).map(([key, value]) => (
-				<ActionItem {...value} emoji={key} guild={guild} />
+				<ActionItem deleteAble={!channelOveride} {...value} emoji={key} guild={guild} />
 			))}
+			<ActionItem deleteAble={false} add></ActionItem>
 		</ManagerBody>
 	);
 };

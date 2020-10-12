@@ -86,13 +86,17 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 						</div>
 					)}
 				</div>
-				{JoinManager && <h4 className="plugin-section-title bigger">Member Join Manager</h4>}
+				{JoinManager && (
+					<>
+						<h4 className="plugin-section-title bigger">Member Join Manager</h4>
+						<ManagerItem guild={userConnectedGuildInfo} {...JoinManager} join channelOveride="Member Join" />
+					</>
+				)}
 				<h4 className="plugin-section-title bigger">
 					Message Managers<span> — {MessageManagers.length}</span>
 				</h4>
 				{MessageManagers.sort((a, b) => a.message.localeCompare(b.message)).map(manager => (
 					<ManagerItem {...manager} guild={userConnectedGuildInfo} />
-					// <CommandItem guild={userConnectedGuildInfo} setCommands={setCommands} setCreatingCommand={setCreatingCommand} allowedRoles={value.permittedRoles} {...value} name={key} key={key} />
 				))}
 			</div>
 		</div>
