@@ -54,13 +54,13 @@ const parseSelectValue = value => {
 };
 
 const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) => {
-	const { state, update, error } = useContext(RoleContext);
+	const { state, update, error, setup } = useContext(RoleContext);
 
 	return (
 		<>
 			<div className="command-header">
 				<h1>Create {state.type === "message" ? "Message" : "Member Join"} Manager</h1>
-				<button onClick={() => setCreatingCommand(false)}>
+				<button onClick={setup}>
 					<ClearIcon />
 				</button>
 			</div>
