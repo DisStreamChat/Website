@@ -12,6 +12,40 @@ import { colorStyles } from "../../../../Shared/userUtils";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { Switch } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import { blueGrey } from "@material-ui/core/colors";
+
+const FancySwitch = withStyles({
+	root: {
+		padding: 7,
+	},
+	thumb: {
+		width: 24,
+		height: 24,
+		backgroundColor: "#fff",
+		boxShadow: "0 0 12px 0 rgba(0,0,0,0.08), 0 0 8px 0 rgba(0,0,0,0.12), 0 0 4px 0 rgba(0,0,0,0.38)",
+	},
+	switchBase: {
+		color: "rgba(0,0,0,0.38)",
+		padding: 7,
+	},
+	track: {
+		borderRadius: 20,
+		backgroundColor: blueGrey[300],
+	},
+	checked: {
+		"& $thumb": {
+			backgroundColor: "#fff",
+		},
+		"& + $track": {
+			opacity: "1 !important",
+		},
+	},
+	focusVisible: {},
+})(Switch);
+
 const ChannelParent = styled.span`
 	color: #aaa;
 	font-size: 14px;
@@ -33,6 +67,7 @@ const ManagerBody = styled.div`
 const ActionBody = styled.div`
 	display: flex;
 	padding: 1rem;
+	justify-content: space-between;
 	margin: 0.25rem;
 	margin-left: 0.75rem;
 	background: #1a1a1a;
@@ -57,6 +92,11 @@ const ActionButton = styled.div`
 	cursor: pointer;
 `;
 
+const FlexContainer = styled.span`
+	display: flex;
+	align-items: center;
+`;
+
 const types = {
 	ADD_ON_ADD: "Add",
 	REMOVE_ON_REMOVE: "Remove",
@@ -65,7 +105,7 @@ const types = {
 	TOGGLE: "Toggle",
 };
 
-export const ActionItem = React.memo(({ index, role, guild, adding, emoji, type, deleteAble, add, onClick, close }) => {
+export const ActionItem = React.memo(({ DMuser, role, guild, adding, emoji, type, deleteAble, add, onClick, close }) => {
 	const [displayRole, setDisplayRole] = useState();
 	const { state, update } = useContext(RoleContext);
 	const [action, setAction] = useState({});
@@ -76,6 +116,18 @@ export const ActionItem = React.memo(({ index, role, guild, adding, emoji, type,
 		}
 	}, [adding, guild, role, add]);
 
+	const submit = () => {
+		const roleID = JSON.parse(action.role.value.split("=")[1]).id;
+		console.log(roleID);
+		const actionObj = {
+			role: roleID,
+            type: action.type,
+            DMuser: action.DMuser
+		};
+		update(`manager.actions[${action.emoji}]`, actionObj);
+		return close?.();
+	};
+
 	return (
 		<ActionBody adding={adding}>
 			{deleteAble && (
@@ -85,13 +137,23 @@ export const ActionItem = React.memo(({ index, role, guild, adding, emoji, type,
 			)}
 			{!add && !adding ? (
 				<>
-					<Twemoji options={{ className: "twemoji" }}>
-						<span style={{ marginRight: ".5rem", textTransform: "capitalize" }}>
-							{emoji?.replace("catch-all", "All").replace("-", " ")}
-						</span>
-					</Twemoji>
-					- {displayRole && <RoleItem {...displayRole}>{displayRole.name}</RoleItem>}
-					<h4>Type: {types[type]}</h4>
+					<FlexContainer>
+						<Twemoji options={{ className: "twemoji" }}>
+							<span style={{ marginRight: ".5rem", textTransform: "capitalize" }}>
+								{emoji?.replace("catch-all", "All").replace("-", " ")}
+							</span>
+						</Twemoji>
+						-{" "}
+						{displayRole && (
+							<RoleItem style={{ marginLeft: ".5rem" }} {...displayRole}>
+								{displayRole.name}
+							</RoleItem>
+						)}
+					</FlexContainer>
+					<FlexContainer>
+						<h4>Type: {types[type]}</h4>
+						<h4 style={{ marginLeft: "2rem", textTransform: "capitalize" }}>DM: {(!!DMuser).toString()}</h4>
+					</FlexContainer>
 				</>
 			) : !adding ? (
 				<span onClick={() => onClick?.()} style={{ cursor: "pointer", display: "flex", alignItems: "center" }}>
@@ -160,9 +222,26 @@ export const ActionItem = React.memo(({ index, role, guild, adding, emoji, type,
 							}}
 						/>
 					</div>
-					<ActionButton>
-						<CheckIcon />
-					</ActionButton>
+					<div style={{ paddingLeft: ".75rem" }}>
+						<FormControlLabel
+							control={
+								<FancySwitch
+									color="primary"
+									checked={!!action.DMuser}
+									onChange={e => {
+										setAction(prev => ({ ...prev, DMuser: e.target.checked }));
+									}}
+									name={"dm_user"}
+								/>
+							}
+							label={"DM"}
+						/>
+					</div>
+					{action.role && action.type && action.emoji && (
+						<ActionButton onClick={submit}>
+							<CheckIcon />
+						</ActionButton>
+					)}
 					<ActionButton onClick={() => close?.()}>
 						<CloseIcon />
 					</ActionButton>

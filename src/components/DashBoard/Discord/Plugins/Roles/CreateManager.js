@@ -4,42 +4,11 @@ import React, { useEffect, useState, useCallback, useContext } from "react";
 import Select from "react-select";
 import { colorStyles } from "../../../../Shared/userUtils";
 import RoleItem from "../../../../Shared/RoleItem";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { Switch } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import { blueGrey } from "@material-ui/core/colors";
+
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import firebase from "../../../../../firebase";
 import { ActionItem } from "./ManagerItem";
 
-const FancySwitch = withStyles({
-	root: {
-		padding: 7,
-	},
-	thumb: {
-		width: 24,
-		height: 24,
-		backgroundColor: "#fff",
-		boxShadow: "0 0 12px 0 rgba(0,0,0,0.08), 0 0 8px 0 rgba(0,0,0,0.12), 0 0 4px 0 rgba(0,0,0,0.38)",
-	},
-	switchBase: {
-		color: "rgba(0,0,0,0.38)",
-		padding: 7,
-	},
-	track: {
-		borderRadius: 20,
-		backgroundColor: blueGrey[300],
-	},
-	checked: {
-		"& $thumb": {
-			backgroundColor: "#fff",
-		},
-		"& + $track": {
-			opacity: "1 !important",
-		},
-	},
-	focusVisible: {},
-})(Switch);
 
 const parseSelectValue = value => {
 	if (value instanceof Array) {
@@ -81,8 +50,8 @@ const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) =>
 				</div>
 				<h4 className="plugin-section-title">Manager Actions</h4>
 				<div className="plugin-section">
-					{state?.manager?.actions?.map(action => (
-						<ActionItem {...action} guild={userConnectedGuildInfo} deleteAble={false}></ActionItem>
+					{Object.entries(state?.manager?.actions || {})?.map(([key, action]) => (
+						<ActionItem {...action} emoji={key} guild={userConnectedGuildInfo} deleteAble={false}></ActionItem>
 					))}
 					{addingAction && (
 						<ActionItem
@@ -101,22 +70,7 @@ const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) =>
 						deleteAble={false}
 					/>
 				</div>
-				<h4 className="plugin-section-title">DM User</h4>
-				<div className="plugin-section" style={{ paddingLeft: ".75rem" }}>
-					<FormControlLabel
-						control={
-							<FancySwitch
-								color="primary"
-								checked={!!state.manager.DMuser}
-								onChange={e => {
-									update("manager.DMuser", e.target.checked);
-								}}
-								name={"dm_user"}
-							/>
-						}
-						label={"DM User"}
-					/>
-				</div>
+				
 			</div>
 			<div className={`command-footer ${state.error?.message ? "error" : ""}`}>
 				{state.error?.message && <span className="error-message">{state.error?.message}</span>}
@@ -128,7 +82,7 @@ const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) =>
 
 						commandRef.update({ [state.manager.message]: state.manager });
 
-						setCreatingCommand(false);
+						setup();
 					}}
 				>
 					{state.editing ? "Update" : "Create"}
