@@ -3,12 +3,14 @@ import firebase from "../../../../../firebase";
 import { DiscordContext } from "../../../../../contexts/DiscordContext";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import ManagerItem from "./ManagerItem";
+import Modal from "react-modal";
+import CreateManager from "./CreateManager";
 
 const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	const [MessageManagers, setMessageManagers] = useState([]);
 	const [JoinManager, setJoinManager] = useState();
 	const { setActivePlugins } = useContext(DiscordContext);
-	const { state, create } = useContext(RoleContext);
+	const { state, create, setup } = useContext(RoleContext);
 	const guildId = userConnectedGuildInfo?.id;
 
 	useEffect(() => {
@@ -32,6 +34,9 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 
 	return (
 		<div>
+			<Modal isOpen={state.type} className="command-modal Modal" overlayClassName="command-overlay Modal-Overlay" onRequestClose={setup}>
+				<CreateManager guild={userConnectedGuildInfo}></CreateManager>
+			</Modal>
 			<div className="plugin-item-header">
 				<span className="title">
 					<img src={`${process.env.PUBLIC_URL}/trophy.svg`} alt="" />
