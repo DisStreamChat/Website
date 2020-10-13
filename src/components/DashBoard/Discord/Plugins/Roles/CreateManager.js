@@ -10,6 +10,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import firebase from "../../../../../firebase";
+import { ActionItem } from "./ManagerItem";
 
 const FancySwitch = withStyles({
 	root: {
@@ -54,7 +55,8 @@ const parseSelectValue = value => {
 };
 
 const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) => {
-	const { state, update, error, setup } = useContext(RoleContext);
+    const { state, update, error, setup } = useContext(RoleContext);
+    const [addingAction, setAddingAction] = useState(false);
 
 	return (
 		<>
@@ -77,7 +79,16 @@ const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) =>
 						id="manager-message"
 					/>
 				</div>
-
+				<h4 className="plugin-section-title">Manager Actions</h4>
+				<div className="plugin-section">
+					{state?.manager?.actions?.map(action => (
+						<ActionItem {...action} guild={userConnectedGuildInfo} deleteAble={false}></ActionItem>
+					))}
+                    {addingAction && (
+                        <ActionItem adding deleteAble={false}/>
+                    )}
+					<ActionItem onClick={() => setAddingAction(true)} add deleteAble={false} />
+				</div>
 				<h4 className="plugin-section-title">DM User</h4>
 				<div className="plugin-section" style={{ paddingLeft: ".75rem" }}>
 					<FormControlLabel

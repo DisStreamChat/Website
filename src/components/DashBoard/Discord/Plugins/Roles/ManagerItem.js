@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import RoleItem from "../../../../Shared/RoleItem";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
 import Twemoji from "react-twemoji";
 import AddCircleTwoToneIcon from "@material-ui/icons/AddCircleTwoTone";
+import { RoleContext } from "../../../../../contexts/RoleContext";
+import { Picker } from "emoji-mart";
+import 'emoji-mart/css/emoji-mart.css'
 
 const ChannelParent = styled.span`
 	color: #aaa;
@@ -31,6 +34,8 @@ const ActionBody = styled.div`
 	background: #1a1a1a;
 	position: relative;
 	align-items: center;
+    border-radius: 0.25rem;
+    z-index: ${props => props.adding ? 10 : 1};
 	h3,
 	h2,
 	h4,
@@ -52,23 +57,24 @@ const types = {
 	TOGGLE: "Toggle",
 };
 
-const ActionItem = React.memo(({ role, guild, emoji, type, deleteAble, add }) => {
+export const ActionItem = React.memo(({ index, role, guild, adding, emoji, type, deleteAble, add, onClick }) => {
 	const [displayRole, setDisplayRole] = useState();
+	const { state, update } = useContext(RoleContext);
 
 	useEffect(() => {
-		if (!add) {
+		if (!add && !adding) {
 			setDisplayRole(guild.roles.find(r => r.id === role));
 		}
-	}, [guild, role, add]);
+	}, [adding, guild, role, add]);
 
 	return (
-		<ActionBody>
+		<ActionBody adding={adding}>
 			{deleteAble && (
 				<div className="delete-button">
 					<CancelTwoToneIcon />
 				</div>
 			)}
-			{!add ? (
+			{!add && !adding ? (
 				<>
 					<Twemoji options={{ className: "twemoji" }}>
 						<span style={{ marginRight: ".5rem", textTransform: "capitalize" }}>
@@ -78,11 +84,17 @@ const ActionItem = React.memo(({ role, guild, emoji, type, deleteAble, add }) =>
 					- {displayRole && <RoleItem {...displayRole}>{displayRole.name}</RoleItem>}
 					<h4>Type: {types[type]}</h4>
 				</>
-			) : (
-				<span style={{ cursor: "pointer", display: "flex", alignItems: "center" }}>
+			) : !adding ? (
+				<span onClick={() => onClick?.()} style={{ cursor: "pointer", display: "flex", alignItems: "center" }}>
 					<AddCircleTwoToneIcon />
 					<h4 style={{ marginLeft: ".5rem" }}>Add Action</h4>
 				</span>
+			) : (
+				<>
+					<Picker theme="dark" style={{position: "absolute", top: 0, zIndex: 100}} set="twitter" title="Pick your emoji…" emoji="point_up" />-{" "}
+					{displayRole && <RoleItem {...displayRole}>{displayRole.name}</RoleItem>}
+					<h4>Type: <input type="text"/></h4>
+				</>
 			)}
 		</ActionBody>
 	);
