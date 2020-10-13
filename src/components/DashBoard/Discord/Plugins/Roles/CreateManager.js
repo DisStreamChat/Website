@@ -55,8 +55,8 @@ const parseSelectValue = value => {
 };
 
 const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) => {
-    const { state, update, error, setup, addReaction } = useContext(RoleContext);
-    const [addingAction, setAddingAction] = useState(false);
+	const { state, update, error, setup, addReaction } = useContext(RoleContext);
+	const [addingAction, setAddingAction] = useState(false);
 
 	return (
 		<>
@@ -84,10 +84,22 @@ const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) =>
 					{state?.manager?.actions?.map(action => (
 						<ActionItem {...action} guild={userConnectedGuildInfo} deleteAble={false}></ActionItem>
 					))}
-                    {addingAction && (
-                        <ActionItem index={(state.manager?.actions?.length || -1) + 1} guild={userConnectedGuildInfo} adding deleteAble={false}/>
-                    )}
-					<ActionItem onClick={() => {setAddingAction(true)}} add deleteAble={false} />
+					{addingAction && (
+						<ActionItem
+							close={() => setAddingAction(false)}
+							index={(state.manager?.actions?.length || -1) + 1}
+							guild={userConnectedGuildInfo}
+							adding
+							deleteAble={false}
+						/>
+					)}
+					<ActionItem
+						onClick={() => {
+							setAddingAction(true);
+						}}
+						add
+						deleteAble={false}
+					/>
 				</div>
 				<h4 className="plugin-section-title">DM User</h4>
 				<div className="plugin-section" style={{ paddingLeft: ".75rem" }}>
