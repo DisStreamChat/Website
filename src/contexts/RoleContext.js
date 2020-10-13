@@ -16,7 +16,7 @@ const initialState = {
 	editing: false,
 	error: null,
 	manager: {},
-	type: "",
+	type: null,
 };
 
 const RoleReducer = (state, action) => {
@@ -30,7 +30,9 @@ const RoleReducer = (state, action) => {
 		case Actions.UPDATE:
 			const newState = { ...state };
 			lodash.set(newState, action.path, action.value);
-			return newState;
+            return newState;
+        case Actions.ERROR: 
+            return {...state, error: {message: action.message}}
 		default:
 			return state;
 	}
@@ -52,7 +54,11 @@ export const RoleContextProvider = props => {
 
 	const update = (path, value) => {
 		dispatch({ action: Actions.UPDATE, path, value });
-	};
+    };
+    
+    const error = message => {
+        dispatch({action: Actions.ERROR, message})
+    }
 
 	return (
 		<RoleContext.Provider
@@ -62,7 +68,8 @@ export const RoleContextProvider = props => {
 				setup,
 				create,
 				edit,
-				update,
+                update,
+                error
 			}}
 		>
 			{props.children}
