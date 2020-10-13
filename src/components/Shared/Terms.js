@@ -356,8 +356,7 @@ const Terms = () => {
 
 			<h2>Contact Information</h2>
 
-			<p>Address: 839 ivy trail way</p>
-			<p>Email: davidgraygs4@gmail.com</p>
+			<p>Email: contact@disstreamchat.com</p>
 		</div>
 	);
 };
