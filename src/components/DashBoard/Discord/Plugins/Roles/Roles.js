@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import firebase from "../../../../../firebase";
-import { colorStyles } from "../../../../Shared/userUtils";
 import { DiscordContext } from "../../../../../contexts/DiscordContext";
-import Select from "react-select";
+import { RoleContext } from "../../../../../contexts/RoleContext";
 import ManagerItem from "./ManagerItem";
 
-const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
+const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	const [MessageManagers, setMessageManagers] = useState([]);
 	const [JoinManager, setJoinManager] = useState();
 	const { setActivePlugins } = useContext(DiscordContext);
+	const { state, create } = useContext(RoleContext);
 	const guildId = userConnectedGuildInfo?.id;
 
 	useEffect(() => {
@@ -28,7 +28,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 		})();
 	}, [location, guildId]);
 
-	console.log(MessageManagers);
+	console.log(state);
 
 	return (
 		<div>
@@ -66,8 +66,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<div
 						className="create-command"
 						onClick={() => {
-							// setupCommand();
-							// setCreatingCommand("text");
+							create("message");
 						}}
 					>
 						<h1>Message Manager</h1>
@@ -95,12 +94,12 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				<h4 className="plugin-section-title bigger">
 					Message Managers<span> — {MessageManagers.length}</span>
 				</h4>
-				{MessageManagers.sort((a, b) => a.message.localeCompare(b.message)).map(manager => (
-					<ManagerItem {...manager} guild={userConnectedGuildInfo} />
+				{MessageManagers.sort((a, b) => a.message.localeCompare(b.message)).map((manager, i) => (
+					<ManagerItem key={i} {...manager} guild={userConnectedGuildInfo} />
 				))}
 			</div>
 		</div>
 	);
 };
 
-export default React.memo(Leveling);
+export default React.memo(Roles);

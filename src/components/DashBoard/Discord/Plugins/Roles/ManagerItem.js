@@ -52,7 +52,7 @@ const types = {
 	TOGGLE: "Toggle",
 };
 
-const ActionItem = ({ role, guild, emoji, type, deleteAble, add }) => {
+const ActionItem = React.memo(({ role, guild, emoji, type, deleteAble, add }) => {
 	const [displayRole, setDisplayRole] = useState();
 
 	useEffect(() => {
@@ -60,8 +60,6 @@ const ActionItem = ({ role, guild, emoji, type, deleteAble, add }) => {
 			setDisplayRole(guild.roles.find(r => r.id === role));
 		}
 	}, [guild, role, add]);
-
-	console.log(displayRole);
 
 	return (
 		<ActionBody>
@@ -88,9 +86,9 @@ const ActionItem = ({ role, guild, emoji, type, deleteAble, add }) => {
 			)}
 		</ActionBody>
 	);
-};
+});
 
-const ManagerItem = ({ guild, channel, actions, channelOveride }) => {
+const ManagerItem = React.memo(({ guild, channel, actions, channelOveride }) => {
 	const [displayChannel, setDisplayChannel] = useState();
 
 	useEffect(() => {
@@ -111,6 +109,6 @@ const ManagerItem = ({ guild, channel, actions, channelOveride }) => {
 			<ActionItem deleteAble={false} add></ActionItem>
 		</ManagerBody>
 	);
-};
+});
 
 export default ManagerItem;
