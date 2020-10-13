@@ -36,10 +36,10 @@ const RoleReducer = (state, action) => {
 			return { ...state, error: { message: action.message } };
 		case Actions.ADD_REACTION:
 			if (state.manager?.actions) {
-				return { ...state, manager: { ...state.manager, actions: [...state.manager.actions, {}] } };
-			}else{
-                return { ...state, manager: { ...state.manager, actions: [{}] } };
-            }
+				return { ...state, manager: { ...state.manager, actions: [...state.manager.actions, action.reaction] } };
+			} else {
+				return { ...state, manager: { ...state.manager, actions: [action.reaction] } };
+			}
 		default:
 			return state;
 	}
@@ -56,15 +56,19 @@ export const RoleContextProvider = props => {
 	};
 
 	const edit = (manager, type) => {
-		dispatch({ action: Actions.EDIT, manager, creatingType: type });
+		dispatch({ type: Actions.EDIT, manager, creatingType: type });
 	};
 
 	const update = (path, value) => {
-		dispatch({ action: Actions.UPDATE, path, value });
+		dispatch({ type: Actions.UPDATE, path, value });
 	};
 
 	const error = message => {
-		dispatch({ action: Actions.ERROR, message });
+		dispatch({ type: Actions.ERROR, message });
+	};
+
+	const addReaction = reaction => {
+		dispatch({ type: Actions.ADD_REACTION, reaction });
 	};
 
 	return (
@@ -77,6 +81,7 @@ export const RoleContextProvider = props => {
 				edit,
 				update,
 				error,
+				addReaction,
 			}}
 		>
 			{props.children}
