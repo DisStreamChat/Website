@@ -28,7 +28,14 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 				}
 			}
 		})();
-	}, [location, guildId]);
+    }, [location, guildId]);
+    
+    useEffect(() => {
+		document.body.style.overflow = state.type ? "hidden" : "initial";
+		return () => {
+			document.body.style.overflow = "initial";
+		};
+	}, [state]);
 
 	console.log(state);
 
@@ -89,7 +96,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 						</div>
 					)}
 				</div>
-				{JoinManager && (
+				{(!state.type && JoinManager) && (
 					<>
 						<h4 className="plugin-section-title bigger">Member Join Manager</h4>
 						<ManagerItem guild={userConnectedGuildInfo} {...JoinManager} join channelOveride="Member Join" />
@@ -98,7 +105,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 				<h4 className="plugin-section-title bigger">
 					Message Managers<span> — {MessageManagers.length}</span>
 				</h4>
-				{MessageManagers.sort((a, b) => a.message.localeCompare(b.message)).map((manager, i) => (
+				{!state.type && MessageManagers.sort((a, b) => a.message.localeCompare(b.message)).map((manager, i) => (
 					<ManagerItem key={i} {...manager} guild={userConnectedGuildInfo} />
 				))}
 			</div>

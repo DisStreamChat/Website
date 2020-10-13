@@ -6,7 +6,9 @@ import Twemoji from "react-twemoji";
 import AddCircleTwoToneIcon from "@material-ui/icons/AddCircleTwoTone";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import { Picker } from "emoji-mart";
-import 'emoji-mart/css/emoji-mart.css'
+import "emoji-mart/css/emoji-mart.css";
+import Select from "react-select";
+import { colorStyles } from "../../../../Shared/userUtils";
 
 const ChannelParent = styled.span`
 	color: #aaa;
@@ -34,8 +36,8 @@ const ActionBody = styled.div`
 	background: #1a1a1a;
 	position: relative;
 	align-items: center;
-    border-radius: 0.25rem;
-    z-index: ${props => props.adding ? 10 : 1};
+	border-radius: 0.25rem;
+	z-index: ${props => (props.adding ? 10 : 1)};
 	h3,
 	h2,
 	h4,
@@ -60,6 +62,7 @@ const types = {
 export const ActionItem = React.memo(({ index, role, guild, adding, emoji, type, deleteAble, add, onClick }) => {
 	const [displayRole, setDisplayRole] = useState();
 	const { state, update } = useContext(RoleContext);
+	const [action, setAction] = useState({});
 
 	useEffect(() => {
 		if (!add && !adding) {
@@ -91,9 +94,70 @@ export const ActionItem = React.memo(({ index, role, guild, adding, emoji, type,
 				</span>
 			) : (
 				<>
-					<Picker theme="dark" style={{position: "absolute", top: 0, zIndex: 100}} set="twitter" title="Pick your emoji…" emoji="point_up" />-{" "}
-					{displayRole && <RoleItem {...displayRole}>{displayRole.name}</RoleItem>}
-					<h4>Type: <input type="text"/></h4>
+					{action.emoji ? (
+						<span style={{ marginRight: ".5rem", textTransform: "capitalize" }}>
+							<Twemoji options={{ className: "twemoji" }}>{action.emoji}</Twemoji>
+						</span>
+					) : (
+						<Picker
+							
+							theme="dark"
+							style={{ position: "absolute", top: ".25rem", zIndex: 100 }}
+							set="twitter"
+							title="Pick your emoji…"
+							emoji="point_up"
+							onSelect={emoji => setAction(prev => ({ ...action, emoji: emoji.native }))}
+						/>
+					)}
+					-{" "}
+					{action.role ? (
+						<RoleItem {...action.role}>{action.role.name}</RoleItem>
+					) : (
+						<div style={{ marginLeft: ".5rem", width: "50%" }}>
+							<Select
+								onChange={e => {
+									setAction(prev => ({ ...prev, role: e }));
+								}}
+								placeholder="Select Reaction Role"
+								value={action.role}
+								options={guild?.roles
+									?.filter(role => role.name !== "@everyone" && !role.managed)
+									?.sort((a, b) => b.rawPosition - a.rawPosition)
+									?.map(role => ({
+										value: `${role.name}=${JSON.stringify(role)}`,
+										label: <RoleItem {...role}>{role.name}</RoleItem>,
+									}))}
+								styles={{
+									...colorStyles,
+									container: styles => ({
+										...styles,
+										...colorStyles.container,
+									}),
+								}}
+							/>
+						</div>
+					)}
+					<div style={{ marginLeft: ".5rem", width: "50%" }}>
+						<Select
+							// closeMenuOnSelect={false}
+							onChange={e => {
+								setAction(prev => ({ ...prev, type: e.value }));
+							}}
+							placeholder="Select Action Type"
+							value={action?.type ? { value: action?.type, label: types[action?.type] } : ""}
+							options={Object.entries(types || {})?.map(([key, value]) => ({
+								value: key,
+								label: value,
+							}))}
+							styles={{
+								...colorStyles,
+								container: styles => ({
+									...styles,
+									...colorStyles.container,
+								}),
+							}}
+						/>
+					</div>
 				</>
 			)}
 		</ActionBody>
