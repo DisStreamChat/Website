@@ -81,8 +81,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 						<div
 							className="create-command"
 							onClick={() => {
-								// setupCommand();
-								// setCreatingCommand("role");
+								create("join")
 							}}
 						>
 							<h1>Member Join Manager</h1>
