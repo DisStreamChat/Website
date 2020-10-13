@@ -29,30 +29,6 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		setUserConnectedChannels,
 		setUserConnectedGuildInfo,
 	} = useContext(DiscordContext);
-	const [connectedGuild, setConnectedGuild] = useState();
-
-	useEffect(() => {
-		(async () => {
-			const guild = userDiscordInfo?.guilds?.find?.(guild => guild.id === guildId);
-			if (guild) {
-				const response = await fetch(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
-				const memberResponse = await fetch(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
-				const json = await response.json();
-				const memberJson = await memberResponse.json();
-				const roles = json.roles;
-				const channels = json.channels;
-				const userData = (await firebase.db.collection("Streamers").doc(id).get()).data();
-				setConnectedGuild({ ...guild, roles, channels, isMember: memberJson?.result });
-				setUserConnectedGuildInfo({
-					...guild,
-					roles,
-					channels,
-					isMember: memberJson?.result,
-					connectedChannels: channels?.filter(channel => userData.liveChatId?.includes(channel.id)),
-				});
-			}
-		})();
-	}, [guildId, userDiscordInfo?.guilds, setUserConnectedGuildInfo]);
 
 	const [rawDiscordData, discordDataLoading, DiscordDataError] = useDocument(firebase.db.doc(`Streamers/${id}/discord/data`));
 
@@ -120,35 +96,35 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 
 	const guilds = userDiscordInfo?.guilds;
 
-	// useSnapshot(
-	// 	firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
-	// 	async snapshot => {
-	// 		const data = snapshot.data();
-	// 		if (data) {
-	// 			const userData = (await firebase.db.collection("Streamers").doc(id).get()).data();
-	// 			const connectedGuildId = data.connectedGuild;
-	// 			const guildByName = guilds?.find?.(guild => guild.id === connectedGuildId);
-	// 			if (guildByName) {
-	// 				const guildId = guildByName.id;
-	// 				const value = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
-	// 				const response = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
-	// 				const channelReponse = response.channels;
-	// 				console.log(response.roles);
-	// 				setUserConnectedGuildInfo({
-	// 					name: guildByName.name,
-	// 					isMember: value?.result,
-	// 					icon: guildByName.icon,
-	// 					id: guildByName.id,
-	// 					channels: channelReponse,
-	// 					roles: response.roles,
-	// 					connectedChannels: channelReponse?.filter(channel => userData.liveChatId?.includes(channel.id)),
-	// 					connected: true,
-	// 				});
-	// 			}
-	// 		}
-	// 	},
-	// 	[id, guilds]
-	// );
+	useSnapshot(
+		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
+		async snapshot => {
+			const data = snapshot.data();
+			if (data) {
+				const userData = (await firebase.db.collection("Streamers").doc(id).get()).data();
+				const connectedGuildId = data.connectedGuild;
+				const guildByName = guilds?.find?.(guild => guild.id === connectedGuildId);
+				if (guildByName) {
+					const guildId = guildByName.id;
+					const value = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
+					const response = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
+					const channelReponse = response.channels;
+					console.log(response.roles);
+					setUserConnectedGuildInfo({
+						name: guildByName.name,
+						isMember: value?.result,
+						icon: guildByName.icon,
+						id: guildByName.id,
+						channels: channelReponse,
+						roles: response.roles,
+						connectedChannels: channelReponse?.filter(channel => userData.liveChatId?.includes(channel.id)),
+						connected: true,
+					});
+				}
+			}
+		},
+		[id, guilds]
+	);
 
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
@@ -246,7 +222,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 											</a>
 										</div>
 									) : guildId ? (
-										<PluginHome connectedGuild={connectedGuild} guildId={guildId} match={match} />
+										<PluginHome guildId={guildId} match={match} />
 									) : (
 										<></>
 									)}

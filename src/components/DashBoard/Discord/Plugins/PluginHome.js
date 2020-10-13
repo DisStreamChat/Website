@@ -12,9 +12,23 @@ import { CommandContextProvider } from "../../../../contexts/CommandContext";
 import App from "./App";
 import Roles from "./Roles";
 
-const PluginHome = ({ match, guildId, connectedGuild }) => {
+const PluginHome = ({ match, guildId }) => {
 	const [prefix, setPrefix] = useState("!");
 	const { userDiscordInfo, activePlugins, setActivePlugins } = useContext(DiscordContext);
+	const [connectedGuild, setConnectedGuild] = useState();
+
+	useEffect(() => {
+		(async () => {
+			const guild = userDiscordInfo?.guilds?.find?.(guild => guild.id === guildId);
+			if (guild) {
+				const response = await fetch(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
+				const json = await response.json();
+                const roles = json.roles;
+                const channels = json.channels
+				setConnectedGuild({ ...guild, roles, channels });
+			}
+		})();
+	}, [guildId, userDiscordInfo?.guilds]);
 
 	useEffect(() => {
 		(async () => {
