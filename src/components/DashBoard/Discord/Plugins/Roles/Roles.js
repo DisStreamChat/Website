@@ -14,23 +14,23 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	const guildId = userConnectedGuildInfo?.id;
 
 	useEffect(() => {
-		(async () => {
-			const guild = await firebase.db
-				.collection("reactions")
-				.doc(guildId || " ")
-				.get();
-			const data = guild.data();
-			if (data) {
-				const managerKeys = Object.keys(data).filter(key => key !== "member-join");
-				setMessageManagers(managerKeys.map(key => ({ message: key, ...data[key] })));
-				if (data["member-join"]) {
-					setJoinManager(data["member-join"]);
+		const unsub = firebase.db
+			.collection("reactions")
+			.doc(guildId || " ")
+			.onSnapshot(snapshot => {
+				const data = snapshot.data();
+				if (data) {
+					const managerKeys = Object.keys(data).filter(key => key !== "member-join");
+					setMessageManagers(managerKeys.map(key => ({ message: key, ...data[key] })));
+					if (data["member-join"]) {
+						setJoinManager(data["member-join"]);
+					}
 				}
-			}
-		})();
-    }, [location, guildId]);
-    
-    useEffect(() => {
+			});
+		return unsub;
+	}, [location, guildId]);
+
+	useEffect(() => {
 		document.body.style.overflow = state.type ? "hidden" : "initial";
 		return () => {
 			document.body.style.overflow = "initial";
@@ -88,15 +88,15 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 						<div
 							className="create-command"
 							onClick={() => {
-								create("join")
+								create("join");
 							}}
 						>
 							<h1>Member Join Manager</h1>
-							<p>Automatically Give a user a roll when they join your server</p>
+							<p>Automatically Give a user a role when they join your server</p>
 						</div>
 					)}
 				</div>
-				{(!state.type && JoinManager) && (
+				{!state.type && JoinManager && (
 					<>
 						<h4 className="plugin-section-title bigger">Member Join Manager</h4>
 						<ManagerItem guild={userConnectedGuildInfo} {...JoinManager} join channelOveride="Member Join" />
@@ -105,9 +105,10 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 				<h4 className="plugin-section-title bigger">
 					Message Managers<span> — {MessageManagers.length}</span>
 				</h4>
-				{!state.type && MessageManagers.sort((a, b) => a.message.localeCompare(b.message)).map((manager, i) => (
-					<ManagerItem key={i} {...manager} guild={userConnectedGuildInfo} />
-				))}
+				{!state.type &&
+					MessageManagers.sort((a, b) => a.message.localeCompare(b.message)).map((manager, i) => (
+						<ManagerItem key={i} {...manager} guild={userConnectedGuildInfo} />
+					))}
 			</div>
 		</div>
 	);

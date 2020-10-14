@@ -11,7 +11,7 @@ import Select from "react-select";
 import { colorStyles } from "../../../../Shared/userUtils";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
-
+import firebase from "../../../../../firebase";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Switch } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
@@ -105,7 +105,7 @@ const types = {
 	TOGGLE: "Toggle",
 };
 
-export const ActionItem = React.memo(({ DMuser, role, guild, adding, emoji, type, deleteAble, add, onClick, close }) => {
+export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, adding, emoji, type, deleteAble, add, onClick, close }) => {
 	const [displayRole, setDisplayRole] = useState();
 	const { state, update } = useContext(RoleContext);
 	const [action, setAction] = useState({});
@@ -121,17 +121,29 @@ export const ActionItem = React.memo(({ DMuser, role, guild, adding, emoji, type
 		console.log(roleID);
 		const actionObj = {
 			role: roleID,
-            type: action.type,
-            DMuser: action.DMuser
+			type: action.type,
+			DMuser: action.DMuser,
 		};
-		update(`manager.actions[${action.emoji}]`, actionObj);
+		if (onSubmit) {
+			onSubmit(action.emoji, actionObj);
+		} else {
+			update(`manager.actions[${action.emoji}]`, actionObj);
+		}
 		return close?.();
+	};
+
+	const deleteMe = async () => {
+		if (!deleteAble) return;
+		await firebase.db
+			.collection("reactions")
+			.doc(guild.id)
+			.update({ [`${message}.actions.${emoji}`]: firebase.delete() });
 	};
 
 	return (
 		<ActionBody adding={adding}>
 			{deleteAble && (
-				<div className="delete-button">
+				<div className="delete-button" onClick={deleteMe}>
 					<CancelTwoToneIcon />
 				</div>
 			)}
@@ -251,25 +263,57 @@ export const ActionItem = React.memo(({ DMuser, role, guild, adding, emoji, type
 	);
 });
 
-const ManagerItem = React.memo(({ guild, channel, actions, channelOveride }) => {
+const ManagerItem = React.memo(({ guild, channel, actions, channelOveride, message, join }) => {
 	const [displayChannel, setDisplayChannel] = useState();
+	const [addingAction, setAddingAction] = useState(false);
 
 	useEffect(() => {
 		setDisplayChannel(guild.channels.find(c => c.id === channel));
 	}, [channel, guild]);
 
+	const deleteMe = async () => {
+		await firebase.db
+			.collection("reactions")
+			.doc(guild.id)
+			.update({ [`${message}`]: firebase.delete() });
+	};
+
 	return (
 		<ManagerBody>
-			<div className="delete-button">
+			<div className="delete-button" onClick={deleteMe}>
 				<CancelTwoToneIcon />
 			</div>
 			<h4>
 				{displayChannel?.name || channelOveride} <ChannelParent> {displayChannel?.parent}</ChannelParent>
 			</h4>
-			{Object.entries(actions || {}).map(([key, value]) => (
-				<ActionItem deleteAble={!channelOveride} {...value} emoji={key} guild={guild} />
-			))}
-			<ActionItem deleteAble={false} add></ActionItem>
+			{Object.entries(actions || {})
+				.sort()
+				.map(([key, value]) => (
+					<ActionItem deleteAble={!channelOveride} message={message} {...value} emoji={key} guild={guild} />
+				))}
+			{addingAction && (
+				<ActionItem
+					onSubmit={async (emoji, action) => {
+						await firebase.db
+							.collection("reactions")
+							.doc(guild.id)
+							.update({ [`${message}.actions.${emoji}`]: action });
+					}}
+					close={() => setAddingAction(false)}
+					guild={guild}
+					adding
+					deleteAble={false}
+				/>
+			)}
+			{!join && (
+				<ActionItem
+					onClick={() => {
+						setAddingAction(true);
+					}}
+					deleteAble={false}
+					add
+				></ActionItem>
+			)}
 		</ManagerBody>
 	);
 });
