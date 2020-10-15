@@ -16,12 +16,20 @@
 		align-items: center;
         padding: .5rem 1rem;
         .name{
-            margin-left: 2rem;
+			margin-left: .5rem;
+			p{
+				margin: 0;
+			}
             p:nth-child(2){
-                color: #aaa;
+				color: #aaa;
+				font-size: .75rem;
             }
         }
 		img {
+			&:first-child{
+				margin-right: 1rem;
+				filter: grayscale(1) brightness(1000%);
+			}
 			width: 32px;
 		}
 		height: 50px;
