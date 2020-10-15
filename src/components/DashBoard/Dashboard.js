@@ -6,23 +6,26 @@ import A from "../Shared/A";
 import SettingBox from "./Settings/SettingBox";
 import { AppContext } from "../../contexts/Appcontext";
 import DiscordPage from "./Discord/DiscordPage";
-import AccountSettings from "./Account/Account"
+import AccountSettings from "./Account/Account";
+import plugins from "./Discord/Plugins/plugins.json";
+import { DiscordContextProvider, DiscordContext } from "../../contexts/DiscordContext";
 
 const Dashboard = props => {
 	const [overlaySettings, setOverlaySettings] = useState();
 	const [appSettings, setAppSettings] = useState();
 	const [defaultSettings, setDefaultSettings] = useState();
 	const { currentUser } = useContext(AppContext);
-    const id = firebase.auth.currentUser.uid;
-    const [discordId, setDiscordId] = useState("")
-    useEffect(() => {
-        const idRegex = new RegExp("/\\d{17,19}[/\\b]")
-        const path = props.location.pathname+"/"
-        const id = path.match(idRegex)
-        if(id){
-            setDiscordId(id[0].replace(/\//g, ""))
-        }
-    }, [props])
+	const id = firebase.auth.currentUser.uid;
+	const [discordId, setDiscordId] = useState("");
+	const { activePlugins } = useContext(DiscordContext);
+	useEffect(() => {
+		const idRegex = new RegExp("/\\d{17,19}[/\\b]");
+		const path = props.location.pathname + "/";
+		const id = path.match(idRegex);
+		if (id) {
+			setDiscordId(id[0].replace(/\//g, ""));
+		}
+	}, [props]);
 
 	useEffect(() => {
 		(async () => {
@@ -79,6 +82,20 @@ const Dashboard = props => {
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord${discordId ? `/${discordId}` : ""}`}>
 					Discord Settings
 				</NavLink>
+				<ul>
+					{Object.keys(activePlugins || {}).sort().map(key => {
+						const plugin = plugins.find(plugin => plugin.id === key);
+						return (
+							<NavLink
+								className="setting-link smaller"
+								activeClassName="active"
+								to={`${props.match.url}/discord/${discordId}/${plugin?.id}`}
+							>
+								{plugin?.title}
+							</NavLink>
+						);
+					})}
+				</ul>
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/account`}>
 					Account Settings
 				</NavLink>
@@ -132,4 +149,12 @@ const Dashboard = props => {
 	);
 };
 
-export default Dashboard;
+const IntermediateDashboard = props => {
+	return (
+		<DiscordContextProvider>
+			<Dashboard {...props} />
+		</DiscordContextProvider>
+	);
+};
+
+export default IntermediateDashboard;

@@ -273,12 +273,5 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	);
 });
 
-const IntermediateDiscordPage = props => {
-	return (
-		<DiscordContextProvider>
-			<DiscordPage {...props} />
-		</DiscordContextProvider>
-	);
-};
 
-export default withRouter(React.memo(IntermediateDiscordPage));
+export default withRouter(React.memo(DiscordPage));
