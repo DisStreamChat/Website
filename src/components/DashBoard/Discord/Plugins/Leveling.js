@@ -3,12 +3,13 @@ import firebase from "../../../../firebase";
 import { colorStyles } from "../../../Shared/userUtils";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Select from "react-select";
+import { Link } from "react-router-dom";
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
 	const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
-    const {setActivePlugins, } = useContext(DiscordContext)
+	const { setActivePlugins } = useContext(DiscordContext);
 	const guildId = userConnectedGuildInfo?.id;
 
 	const handleTypeSelect = useCallback(
@@ -98,9 +99,12 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				</span>
 			</div>
 			<hr />
-			<div className="plugin-item-subheader">
-				<h2>Leveling Up</h2>
-				<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
+			<div className="plugin-item-subheader flex">
+				<span>
+					<h2>Leveling Up</h2>
+					<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
+				</span>
+				<Link className="leader-board-link" to={`/leaderboard/${userConnectedGuildInfo.id}`}>Go To Leaderboard</Link>
 			</div>
 			<div className="plugin-item-body">
 				<div className="level-settings">
