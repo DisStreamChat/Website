@@ -8,6 +8,7 @@ const Account = () => {
 	const currentUser = firebase.auth.currentUser;
 	const [discordAccount, setDiscordAccount] = useState();
 	const [twitchAccount, setTwitchAccount] = useState();
+	const [mainAccount, setMainAccount] = useState();
 
 	useEffect(() => {
 		(async () => {
@@ -15,26 +16,31 @@ const Account = () => {
 			const discordRef = userRef.collection("discord").doc("data");
 			const twitchRef = userRef.collection("twitch").doc("data");
 			const userData = (await userRef.get()).data();
+
 			if (!userData) return;
-			const discordData = (await discordRef.get()).data();
 			const twitchData = (await twitchRef.get()).data();
-			if (discordData) {
-				const {name, profilePicture} = discordData
-				setDiscordAccount({name, profilePicture});
-			} else {
-				setDiscordAccount(null);
+			discordRef.onSnapshot(snapshot => {
+				const discordData = snapshot.data()
+				if (discordData) {
+					const { name, profilePicture } = discordData;
+					setDiscordAccount({ name, profilePicture });
+				} else {
+					setDiscordAccount(null);
+				}
+			});
+			if (twitchData) {
+				const { name, profilePicture } = userData;
+				setTwitchAccount({ name, profilePicture });
 			}
-			if(twitchData){
-				const {name, profilePicture} = userData
-				setTwitchAccount({name, profilePicture});
-			}
+			if(userData.discordLinked) setMainAccount("discord")
+			else if(userData.twitchAuthenticated) setMainAccount("twitch")
 		})();
 	}, [currentUser]);
 
 	return (
 		<div classname="accounts" style={{ width: "100%" }}>
-			{twitchAccount && <AccountComponent {...twitchAccount} platform="twitch" />}
-			{discordAccount && <AccountComponent {...discordAccount} platform="discord" />}
+			{twitchAccount && <AccountComponent main={mainAccount} {...twitchAccount} platform="twitch" />}
+			{discordAccount && <AccountComponent main={mainAccount} {...discordAccount} platform="discord" />}
 		</div>
 	);
 };

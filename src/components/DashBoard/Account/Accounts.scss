@@ -42,12 +42,24 @@
 	}
 
 	.account-body {
+		box-sizing: border-box !important;
 		min-height: 100px;
 		&.twitch {
 			background: #593695;
 		}
 		&.discord {
 			background: #7289da;
+		}
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		padding: 2rem;
+		button{
+			padding: .5rem 1rem;
+			background: #ee1111;
+			border: none;
+			font-weight: 600;
+			border-radius: .5rem;
 		}
 	}
 }
