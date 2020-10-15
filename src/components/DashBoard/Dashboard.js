@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import React, { useEffect, useState, useCallback, useContext, useMemo } from "react";
 import { NavLink, Route, Redirect, Switch } from "react-router-dom";
 import firebase from "../../firebase";
 import "./Dashboard.scss";
@@ -70,6 +70,14 @@ const Dashboard = props => {
 		})();
 	}, [currentUser]);
 
+	const displayPlugins = useMemo(
+		() =>
+			Object.keys(activePlugins || {})
+				.filter(key => activePlugins[key])
+				.sort(),
+		[activePlugins]
+	);
+
 	return (
 		<div className="settings-container">
 			<div className="setting-options">
@@ -82,20 +90,22 @@ const Dashboard = props => {
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord${discordId ? `/${discordId}` : ""}`}>
 					Discord Settings
 				</NavLink>
-				<ul>
-					{Object.keys(activePlugins || {}).sort().map(key => {
-						const plugin = plugins.find(plugin => plugin.id === key);
-						return (
-							<NavLink
-								className="setting-link smaller"
-								activeClassName="active"
-								to={`${props.match.url}/discord/${discordId}/${plugin?.id}`}
-							>
-								{plugin?.title}
-							</NavLink>
-						);
-					})}
-				</ul>
+				{!!displayPlugins.length &&  window?.location?.pathname?.includes?.("discord") && (
+					<ul>
+						{displayPlugins.map(key => {
+							const plugin = plugins.find(plugin => plugin.id === key);
+							return (
+								<NavLink
+									className="setting-link smaller"
+									activeClassName="active"
+									to={`${props.match.url}/discord/${discordId}/${plugin?.id}`}
+								>
+									{plugin?.title}
+								</NavLink>
+							);
+						})}
+					</ul>
+				)}
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/account`}>
 					Account Settings
 				</NavLink>
