@@ -33,13 +33,13 @@ const LeaderBoardCard = ({ place, level, xp, username, displayAvatarURL }) => {
 					{xp > 1000 ? `${(xp / 1000).toFixed(2)}k` : xp}
 				</div>
 				<div className="level-data">
-					<svg class="progress-ring" width="120" height="120">
+					<svg className="progress-ring" width="120" height="120">
 						<circle
                             strokeDashoffset={progression}
                             strokeDasharray={`${circ} ${circ}`}
-							class="progress-ring__circle"
+							className="progress-ring__circle"
 							stroke="#347aa5"
-							stroke-width="4"
+							strokeWidth="4"
 							fill="transparent"
 							r={radius}
 							cx="60"
