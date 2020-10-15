@@ -9,9 +9,8 @@ import Logging from "./Logging";
 import plugins from "./plugins.json";
 import CustomCommands from "./CustomCommands/CustomCommands";
 import { CommandContextProvider } from "../../../../contexts/CommandContext";
-import { RoleContextProvider } from "../../../../contexts/RoleContext";
 import App from "./App";
-import Roles from "./Roles/Roles";
+import Roles from "./Roles";
 
 const PluginHome = ({ match, guildId, connectedGuild }) => {
 	const [prefix, setPrefix] = useState("!");
@@ -93,7 +92,7 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 								description="Get discord chats from your server in the DisStreamChat app"
 							/>
 							{displayPlugins.map(plugin => (
-								<PluginCard guild={guildId} key={plugin.id} {...plugin} active={activePlugins[plugin.id]} />
+								<PluginCard guild={guildId} {...plugin} active={activePlugins[plugin.id]} />
 							))}
 						</div>
 					</Route>
@@ -116,9 +115,9 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 					)}
                     {activePlugins["roles"] && (
 						<Route path={`${match.url}/roles`}>
-							<RoleContextProvider>
+							<CommandContextProvider>
 								<Roles guild={connectedGuild} />
-							</RoleContextProvider>
+							</CommandContextProvider>
 						</Route>
 					)}
 					<Route path={`${match.url}/app`}>

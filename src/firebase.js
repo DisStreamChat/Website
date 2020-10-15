@@ -65,10 +65,6 @@ class Firebase {
     getCurrentUsername() {
         return this.auth.currentUser.displayName
     }
-
-    delete(){
-        return this.app.firestore.FieldValue.delete()
-    }
 }
 
 
