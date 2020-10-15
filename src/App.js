@@ -16,7 +16,7 @@ import Loader from "react-loader";
 import DownloadPage from "./components/Apps/DownloadPage";
 import PrivacyPolicy from "./components/Shared/PrivacyPolicy";
 import Terms from "./components/Shared/Terms";
-
+import { QueryParamProvider } from "use-query-params";
 import "./App.scss";
 import { AppContext } from "./contexts/Appcontext";
 import Banner from "./components/Shared/Banner";
@@ -134,45 +134,47 @@ function App(props) {
 
 	return firebaseInit !== false && !new URLSearchParams(window.location.search).has("code") ? (
 		<Router>
-			<AppContext.Provider
-				value={{
-					userId,
-					setUserId,
-					dropDownOpen,
-					setDropDownOpen,
-					currentUser,
-					setCurrentUser,
-				}}
-			>
-				<Switch>
-					<div className="App">
-						<Header />
-						<main className={`main ${dropDownOpen && "open"}`}>
-							<Switch>
-								<Route exact path="/" component={Home} />
-								<Route path="/bot" component={Bot} />
-								<Route exact path="/apps" component={Apps} />
-								<Route path="/community" component={Community} />
-								<Route path="/about" component={About} />
-								<Route path="/members" component={Team} />
-								<Route path="/privacy" component={PrivacyPolicy} />
-								<Route path="/terms" component={Terms} />
-								<Route path="/apps/download" component={DownloadPage} />
-								<Route path="/leaderboard/:id" component={LeaderBoard} />
-								<ProtectedRoute path="/dashboard" component={Dashboard} />
-								<Redirect to="/" />
-							</Switch>
-						</main>
-						<Footer />
-					</div>{" "}
-					: <></>
-				</Switch>
-				<Banner message="DisStreamChat is in early alpha and we would like your help to test it">
-					<A newTab href="https://api.disstreamchat.com/discord">
-						<Button className="banner-button">Join the Discord</Button>
-					</A>
-				</Banner>
-			</AppContext.Provider>
+			<QueryParamProvider ReactRouterRoute={Route}>
+				<AppContext.Provider
+					value={{
+						userId,
+						setUserId,
+						dropDownOpen,
+						setDropDownOpen,
+						currentUser,
+						setCurrentUser,
+					}}
+				>
+					<Switch>
+						<div className="App">
+							<Header />
+							<main className={`main ${dropDownOpen && "open"}`}>
+								<Switch>
+									<Route exact path="/" component={Home} />
+									<Route path="/bot" component={Bot} />
+									<Route exact path="/apps" component={Apps} />
+									<Route path="/community" component={Community} />
+									<Route path="/about" component={About} />
+									<Route path="/members" component={Team} />
+									<Route path="/privacy" component={PrivacyPolicy} />
+									<Route path="/terms" component={Terms} />
+									<Route path="/apps/download" component={DownloadPage} />
+									<Route path="/leaderboard/:id" component={LeaderBoard} />
+									<ProtectedRoute path="/dashboard" component={Dashboard} />
+									<Redirect to="/" />
+								</Switch>
+							</main>
+							<Footer />
+						</div>{" "}
+						: <></>
+					</Switch>
+					<Banner message="DisStreamChat is in early alpha and we would like your help to test it">
+						<A newTab href="https://api.disstreamchat.com/discord">
+							<Button className="banner-button">Join the Discord</Button>
+						</A>
+					</Banner>
+				</AppContext.Provider>
+			</QueryParamProvider>
 		</Router>
 	) : (
 		<main className="App">
