@@ -157,11 +157,7 @@
 	align-items: center;
 	padding: 0 1rem;
 	border-radius: 0.5rem;
-    text-transform: capitalize;
-    &.smaller{
-        height: 35px;
-        padding: 0 .5rem;
-    }
+	text-transform: capitalize;
 }
 
 .setting-link.active {
