@@ -21,7 +21,7 @@ const LeaderBoardCard = ({ place, level, xp, username, displayAvatarURL }) => {
 	}, [level, xp]);
 
 	return (
-		<div className="leaderboard-item">
+		<div className="leaderboard-item" id={`place-${place}`}>
 			<div className="user-info">
 				<span className={`place-card`}>{place}</span>
 				<img src={displayAvatarURL} alt="" />
