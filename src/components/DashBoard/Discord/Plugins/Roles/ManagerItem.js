@@ -74,7 +74,7 @@ const ActionBody = styled.div`
 	position: relative;
 	align-items: center;
 	border-radius: 0.25rem;
-	z-index: ${props => (props.adding ? 10 : 1)};
+	z-index: ${props => (props.adding ? 10 : 0)};
 	h3,
 	h2,
 	h4,
@@ -174,14 +174,33 @@ export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, 
 				</span>
 			) : (
 				<>
+					<span>
+						<FormControlLabel
+							control={
+								<FancySwitch
+									color="primary"
+									checked={action.emoji === "catch-all"}
+									onChange={e => {
+										if (e.target.checked) {
+											setAction(prev => ({ ...prev, emoji: "catch-all" }));
+										} else {
+											setAction(prev => ({ ...prev, emoji: null }));
+										}
+									}}
+									name={"catch-all"}
+								/>
+							}
+							label={"ALL"}
+						/>
+					</span>
 					{action.emoji ? (
 						<span style={{ marginRight: ".5rem", textTransform: "capitalize" }}>
-							<Twemoji options={{ className: "twemoji" }}>{action.emoji}</Twemoji>
+							<Twemoji options={{ className: "twemoji" }}>{action.emoji?.replace("catch-all", "All").replace("-", " ")}</Twemoji>
 						</span>
 					) : (
 						<Picker
 							theme="dark"
-							style={{ position: "absolute", top: ".25rem", zIndex: 100 }}
+							style={{ position: "absolute", top: ".25rem", left: "6rem", zIndex: 100 }}
 							set="twitter"
 							title="Pick your emoji…"
 							emoji="point_up"
@@ -267,6 +286,8 @@ const ManagerItem = React.memo(({ guild, channel, actions, channelOveride, messa
 	const [displayChannel, setDisplayChannel] = useState();
 	const [addingAction, setAddingAction] = useState(false);
 
+	console.log(message);
+
 	useEffect(() => {
 		setDisplayChannel(guild.channels.find(c => c.id === channel));
 	}, [channel, guild]);
@@ -297,7 +318,7 @@ const ManagerItem = React.memo(({ guild, channel, actions, channelOveride, messa
 						await firebase.db
 							.collection("reactions")
 							.doc(guild.id)
-							.update({ [`${message}.actions.${emoji}`]: action });
+							.update({ [`${message}.actions.${emoji}`]: { ...action, DMuser: !!action.DMuser } });
 					}}
 					close={() => setAddingAction(false)}
 					guild={guild}

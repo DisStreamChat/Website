@@ -5,6 +5,7 @@ import { RoleContext } from "../../../../../contexts/RoleContext";
 import ManagerItem from "./ManagerItem";
 import Modal from "react-modal";
 import CreateManager from "./CreateManager";
+import CreateJoinManager from "./CreateJoinManager";
 
 const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	const [MessageManagers, setMessageManagers] = useState([]);
@@ -23,7 +24,9 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 					const managerKeys = Object.keys(data).filter(key => key !== "member-join");
 					setMessageManagers(managerKeys.map(key => ({ message: key, ...data[key] })));
 					if (data["member-join"]) {
-						setJoinManager(data["member-join"]);
+						setJoinManager({ message: "member-join", ...data["member-join"] });
+					} else {
+						setJoinManager(null);
 					}
 				}
 			});
@@ -37,12 +40,14 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 		};
 	}, [state]);
 
-	console.log(state);
-
 	return (
 		<div>
 			<Modal isOpen={state.type} className="command-modal Modal" overlayClassName="command-overlay Modal-Overlay" onRequestClose={setup}>
-				<CreateManager guild={userConnectedGuildInfo}></CreateManager>
+				{state.type === "message" ? (
+					<CreateManager guild={userConnectedGuildInfo}></CreateManager>
+				) : (
+					<CreateJoinManager guild={userConnectedGuildInfo}></CreateJoinManager>
+				)}
 			</Modal>
 			<div className="plugin-item-header">
 				<span className="title">
