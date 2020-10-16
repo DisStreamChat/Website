@@ -25,6 +25,21 @@
 	padding: 1rem 1.25rem;
     margin-bottom: 4rem;
     box-shadow: 0px 0px 16px -6px darken(#686464, 10);
+    .leaderboard-footer{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        a{
+            margin: 0 .5rem;
+            padding: .5rem 1rem;
+            background: var(--disstreamchat-purple);
+            border-radius: .35rem;
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+    }
 }
 
 .leaderboard-item {
@@ -85,13 +100,13 @@
 	align-items: center;
 	justify-content: center;
 	border-radius: 50%;
-	.leaderboard-item:first-child & {
+	.leaderboard-item#place-1 & {
 		background: #da9e3b;
 	}
-	.leaderboard-item:nth-child(2) & {
+	.leaderboard-item#place-2 & {
 		background: #989898;
 	}
-	.leaderboard-item:nth-child(3) & {
+	.leaderboard-item#place-3 & {
 		background: #ae7441;
 	}
 }
