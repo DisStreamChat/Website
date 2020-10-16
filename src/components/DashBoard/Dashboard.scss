@@ -789,8 +789,10 @@
 	ul{
 		transition: .25s;
 		transform-origin: top;
+		max-height: 3000px;
+		overflow: hidden;
 		&.closed{
-			transform: scaleY(0);
+			max-height: 0px;
 		}
 
 		list-style: none;
@@ -829,6 +831,11 @@
 }
 
 .plugin-section-title {
+	&.flex{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;		
+	}
 	text-transform: uppercase;
 	padding: 0;
 	&.bigger {

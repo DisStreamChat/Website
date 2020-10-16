@@ -8,6 +8,15 @@ import Slider from "@material-ui/core/Slider";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import RoleItem from "../../../Shared/RoleItem";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import styled from "styled-components";
+
+const ToggleChevron = styled.span`
+	& > * {
+		transition: .25s;
+		transform: rotate(${props => (!props.closed ? "180deg" : "0deg")});
+	}
+`;
 
 const useStyles = makeStyles({
 	root: {
@@ -52,6 +61,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
 	const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
 	const { setActivePlugins } = useContext(DiscordContext);
+	const [ranksClosed, setRanksClosed] = useState(false);
 	const guildId = userConnectedGuildInfo?.id;
 
 	const handleTypeSelect = useCallback(
@@ -226,8 +236,13 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					/>
 				</div>
 				<hr />
-				<h4 className="plugin-section-title">Role XP Scaling</h4>
-				<ul>
+				<h4 className="plugin-section-title flex">
+					Role XP Scaling{" "}
+					<ToggleChevron closed={ranksClosed} onClick={() => setRanksClosed(prev => !prev)}>
+						<KeyboardArrowDownIcon />
+					</ToggleChevron>
+				</h4>
+				<ul className={ranksClosed ? "closed" : ""}>
 					{userConnectedGuildInfo.roles.map(role => (
 						<li>
 							<RoleItem {...role}>{role.name}</RoleItem>
@@ -246,6 +261,62 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 						</li>
 					))}
 				</ul>
+				<hr />
+				<h4 className="plugin-section-title">No Rank Items</h4>
+				<div className="no-rank-items">
+					<div>
+						<Select
+							closeMenuOnSelect
+							onChange={() => {}}
+							placeholder="No XP Roles"
+							value={""}
+							options={userConnectedGuildInfo?.channels
+								?.sort((a, b) => a.parent.localeCompare(b.parent))
+								?.map(channel => ({
+									value: channel.id,
+									label: (
+										<>
+											<span>{channel.name}</span>
+											<span className="channel-category">{channel.parent}</span>
+										</>
+									),
+								}))}
+							styles={{
+								...colorStyles,
+								container: styles => ({
+									...styles,
+									...colorStyles.container,
+								}),
+							}}
+						/>
+					</div>
+					<div>
+						<Select
+							closeMenuOnSelect
+							onChange={() => {}}
+							placeholder="No XP Channels"
+							value={""}
+							options={userConnectedGuildInfo?.channels
+								?.sort((a, b) => a.parent.localeCompare(b.parent))
+								?.map(channel => ({
+									value: channel.id,
+									label: (
+										<>
+											<span>{channel.name}</span>
+											<span className="channel-category">{channel.parent}</span>
+										</>
+									),
+								}))}
+							styles={{
+								...colorStyles,
+								container: styles => ({
+									...styles,
+									...colorStyles.container,
+								}),
+							}}
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

@@ -150,3 +150,19 @@
 
     }
 }
+
+.no-rank-items{
+    display: flex;
+    justify-content: space-between;
+    width: 100% !important;
+    & > div{
+        margin: 0 1rem;
+        &:first-child{
+            margin-left: 0;
+        }
+        &:last-child{
+            margin-right: 0;
+        }
+        width: 100%
+    }
+}
