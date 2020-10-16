@@ -16,7 +16,7 @@ import Loader from "react-loader";
 import DownloadPage from "./components/Apps/DownloadPage";
 import PrivacyPolicy from "./components/Shared/PrivacyPolicy";
 import Terms from "./components/Shared/Terms";
-import { QueryParamProvider } from "use-query-params";
+
 import "./App.scss";
 import { AppContext } from "./contexts/Appcontext";
 import Banner from "./components/Shared/Banner";
@@ -134,17 +134,17 @@ function App(props) {
 
 	return firebaseInit !== false && !new URLSearchParams(window.location.search).has("code") ? (
 		<Router>
-			<QueryParamProvider ReactRouterRoute={Route}>
-				<AppContext.Provider
-					value={{
-						userId,
-						setUserId,
-						dropDownOpen,
-						setDropDownOpen,
-						currentUser,
-						setCurrentUser,
-					}}
-				>
+			<AppContext.Provider
+				value={{
+					userId,
+					setUserId,
+					dropDownOpen,
+					setDropDownOpen,
+					currentUser,
+					setCurrentUser,
+				}}
+			>
+				<Switch>
 					<div className="App">
 						<Header />
 						<main className={`main ${dropDownOpen && "open"}`}>
@@ -166,13 +166,13 @@ function App(props) {
 						<Footer />
 					</div>{" "}
 					: <></>
-					<Banner message="DisStreamChat is in early alpha and we would like your help to test it">
-						<A newTab href="https://api.disstreamchat.com/discord">
-							<Button className="banner-button">Join the Discord</Button>
-						</A>
-					</Banner>
-				</AppContext.Provider>
-			</QueryParamProvider>
+				</Switch>
+				<Banner message="DisStreamChat is in early alpha and we would like your help to test it">
+					<A newTab href="https://api.disstreamchat.com/discord">
+						<Button className="banner-button">Join the Discord</Button>
+					</A>
+				</Banner>
+			</AppContext.Provider>
 		</Router>
 	) : (
 		<main className="App">

@@ -21,7 +21,7 @@ const LeaderBoardCard = ({ place, level, xp, username, displayAvatarURL }) => {
 	}, [level, xp]);
 
 	return (
-		<div className="leaderboard-item" id={`place-${place}`}>
+		<div className="leaderboard-item">
 			<div className="user-info">
 				<span className={`place-card`}>{place}</span>
 				<img src={displayAvatarURL} alt="" />
@@ -33,13 +33,13 @@ const LeaderBoardCard = ({ place, level, xp, username, displayAvatarURL }) => {
 					{xp > 1000 ? `${(xp / 1000).toFixed(2)}k` : xp}
 				</div>
 				<div className="level-data">
-					<svg className="progress-ring" width="120" height="120">
+					<svg class="progress-ring" width="120" height="120">
 						<circle
                             strokeDashoffset={progression}
                             strokeDasharray={`${circ} ${circ}`}
-							className="progress-ring__circle"
+							class="progress-ring__circle"
 							stroke="#347aa5"
-							strokeWidth="4"
+							stroke-width="4"
 							fill="transparent"
 							r={radius}
 							cx="60"
