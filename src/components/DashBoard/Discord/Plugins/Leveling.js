@@ -4,6 +4,48 @@ import { colorStyles } from "../../../Shared/userUtils";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Select from "react-select";
 import { Link } from "react-router-dom";
+import Slider from "@material-ui/core/Slider";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import RoleItem from "../../../Shared/RoleItem";
+
+const useStyles = makeStyles({
+	root: {
+		width: 300,
+	},
+});
+
+const PrettoSlider = withStyles({
+	root: {
+		color: "#2d688d",
+		height: 8,
+	},
+	thumb: {
+		height: 24,
+		width: 24,
+		backgroundColor: "#fff",
+		border: "2px solid currentColor",
+		marginTop: -8,
+		marginLeft: -12,
+		"&:focus, &:hover, &$active": {
+			boxShadow: "inherit",
+		},
+	},
+	active: {},
+	valueLabel: {
+		left: "calc(-50% + 4px)",
+	},
+	track: {
+		height: 8,
+		borderRadius: 4,
+	},
+	rail: {
+		height: 8,
+		borderRadius: 4,
+	},
+})(Slider);
+
+const marks = [...Array(7)].map((item, index) => ({ value: index / 2, label: `x${index / 2}` }));
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
@@ -104,7 +146,9 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<h2>Leveling Up</h2>
 					<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
 				</span>
-				<Link className="leader-board-link" to={`/leaderboard/${userConnectedGuildInfo.id}`}>Go To Leaderboard</Link>
+				<Link className="leader-board-link" to={`/leaderboard/${userConnectedGuildInfo.id}`}>
+					Go To Leaderboard
+				</Link>
 			</div>
 			<div className="plugin-item-body">
 				<div className="level-settings">
@@ -162,6 +206,46 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 						<textarea value={levelUpMessage} onChange={handleMessageChange}></textarea>
 					</div>
 				</div>
+			</div>
+			<h4 className="plugin-section-title">Other Settings</h4>
+			<div className="plugin-section no-flex" style={{ color: "white" }}>
+				<div className="scaling-div" style={{ width: "100%" }}>
+					<Typography id="scaling-slider" gutterBottom>
+						General XP Scaling
+					</Typography>
+					<PrettoSlider
+						defaultValue={1}
+						getAriaValueText={value => `${value}xp`}
+						aria-labelledby="discrete-slider"
+						valueLabelDisplay="auto"
+						step={0.5}
+						marks
+						min={0}
+						max={3}
+						marks={marks}
+					/>
+				</div>
+				<hr />
+				<h4 className="plugin-section-title">Role XP Scaling</h4>
+				<ul>
+					{userConnectedGuildInfo.roles.map(role => (
+						<li>
+							<RoleItem {...role}>{role.name}</RoleItem>
+
+							<PrettoSlider
+								defaultValue={1}
+								getAriaValueText={value => `${value}xp`}
+								aria-labelledby="discrete-slider"
+								valueLabelDisplay="auto"
+								step={0.5}
+								marks
+								min={0}
+								max={3}
+								marks={marks}
+							/>
+						</li>
+					))}
+				</ul>
 			</div>
 		</div>
 	);

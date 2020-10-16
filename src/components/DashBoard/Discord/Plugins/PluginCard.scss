@@ -136,3 +136,17 @@
         }
     }
 }
+
+.scaling-div{
+    padding: 0 1.5rem
+}
+
+#root {
+    .MuiSlider-markLabelActive, .MuiSlider-markLabel{
+        color: white;
+    }
+    .MuiSlider-markActive, .MuiSlider-mark{
+        opacity: 0;
+
+    }
+}

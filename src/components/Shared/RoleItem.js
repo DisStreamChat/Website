@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const colorify = number => `#${number === 0 ? "#99aab5" : number?.toString?.(16)?.padStart?.(6, "0") || "black"}`;
+const colorify = number => `#${number === 0 ? "99aab5" : number?.toString?.(16)?.padStart?.(6, "0") || "black"}`;
 
 const RoleItem = styled.div`
 	height: 12px;
@@ -11,7 +11,7 @@ const RoleItem = styled.div`
 	width: max-content;
 	display: flex;
 	align-items: center;
-	background: #2f3136aa;
+	background: #2f3136cc;
 	border: 2px solid ${props => colorify(props.color)};
 	line-height: 1;
 	position: relative;
