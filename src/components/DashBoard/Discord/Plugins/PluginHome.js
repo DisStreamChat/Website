@@ -16,9 +16,11 @@ import Roles from "./Roles/Roles";
 const PluginHome = ({ match, guildId, connectedGuild }) => {
 	const [prefix, setPrefix] = useState("!");
 	const { userDiscordInfo, activePlugins, setActivePlugins } = useContext(DiscordContext);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		(async () => {
+			setLoading(true);
 			const guild = await firebase.db
 				.collection("DiscordSettings")
 				.doc(connectedGuild?.id || " ")
@@ -30,6 +32,9 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 			} else {
 				setPrefix("!");
 			}
+			setTimeout(() => {
+				setLoading(false);
+			}, 100);
 		})();
 	}, [connectedGuild]);
 
@@ -97,24 +102,24 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 							))}
 						</div>
 					</Route>
-					{activePlugins["leveling"] && (
+					{(activePlugins["leveling"] || loading) && (
 						<Route path={`${match.url}/leveling`}>
 							<Leveling guild={connectedGuild} />
 						</Route>
 					)}
-					{activePlugins["logging"] && (
+					{(activePlugins["logging"] || loading) && (
 						<Route path={`${match.url}/logging`}>
 							<Logging guild={connectedGuild} />
 						</Route>
 					)}
-					{activePlugins["commands"] && (
+					{(activePlugins["commands"] || loading) && (
 						<Route path={`${match.url}/commands`}>
 							<CommandContextProvider>
 								<CustomCommands guild={connectedGuild} />
 							</CommandContextProvider>
 						</Route>
 					)}
-                    {activePlugins["roles"] && (
+					{(activePlugins["roles"] || loading) && (
 						<Route path={`${match.url}/roles`}>
 							<RoleContextProvider>
 								<Roles guild={connectedGuild} />
