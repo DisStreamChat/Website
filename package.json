@@ -30,6 +30,7 @@
     "react-use": "^15.1.0",
     "styled-components": "^5.2.0",
     "uid": "^1.0.0",
+    "use-pagination-firestore": "0.0.2",
     "use-query-params": "^1.1.8",
     "uuid": "^8.3.0"
   },
