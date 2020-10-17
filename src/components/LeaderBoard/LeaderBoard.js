@@ -4,9 +4,7 @@ import { useParams } from "react-router";
 import SmallLoader from "../Shared/SmallLoader";
 import LeaderBoardCard from "./LeaderBoardCard";
 import "./LeaderBoard.scss";
-import { useDocumentOnce, useCollectionOnce } from "react-firebase-hooks/firestore";
 import { useQueryParam, NumberParam, StringParam } from "use-query-params";
-import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { usePagination } from "use-pagination-firestore";
 
