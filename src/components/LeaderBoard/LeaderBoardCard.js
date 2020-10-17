@@ -9,7 +9,7 @@ const getXp = level => (5 / 6) * level * (2 * level * level + 27 * level + 91);
 
 const map = (n, start1, stop1, start2, stop2) => ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
 
-const LeaderBoardCard = ({ place, level, xp, username, displayAvatarURL }) => {
+const LeaderBoardCard = ({ place, level, xp, name, avatar }) => {
 	const [progression, setProgression] = useState(0);
 
 	useEffect(() => {
@@ -24,8 +24,8 @@ const LeaderBoardCard = ({ place, level, xp, username, displayAvatarURL }) => {
 		<div className="leaderboard-item" id={`place-${place}`}>
 			<div className="user-info">
 				<span className={`place-card`}>{place}</span>
-				<img src={displayAvatarURL} alt="" />
-				{username}
+				<img src={avatar} alt="" />
+				{name}
 			</div>
 			<div className="level-info">
 				<div className="xp data">
