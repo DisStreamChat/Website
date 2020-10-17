@@ -165,7 +165,6 @@ function App(props) {
 						</main>
 						<Footer />
 					</div>{" "}
-					: <></>
 					<Banner message="DisStreamChat is in early alpha and we would like your help to test it">
 						<A newTab href="https://api.disstreamchat.com/discord">
 							<Button className="banner-button">Join the Discord</Button>
