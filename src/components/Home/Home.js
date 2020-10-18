@@ -23,7 +23,9 @@ const Home = () => {
 					<A href="#features" className="main-button dashboard-button">
 						See Features
 					</A>
-
+					<A href="https://api.disstreamchat.com/invite" className="main-button dashboard-button">
+						Add to Discord
+					</A>
 					{currentUser && (
 						<Link to={`/dashboard`} className="dashboard-button">
 							My DashBoard
@@ -86,7 +88,7 @@ const Home = () => {
 				></Feature> */}
 				</div>
 			</div>
-            <img src={`${process.env.PUBLIC_URL}/wave_invert.svg`} alt="" />
+			<img id="bottom-img" src={`${process.env.PUBLIC_URL}/wave_invert.svg`} alt="" />
 		</>
 	);
 };

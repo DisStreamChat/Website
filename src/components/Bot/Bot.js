@@ -10,7 +10,7 @@ const Bot = () => {
 				title="Use our discord bot to handle moderation, leveling users up and so much more."
 				body={
 					<>
-						<A href="https://api.disstreamchat.com/invite" newTab>
+						<A className="invite" href="https://api.disstreamchat.com/invite" newTab>
 							Invite
 						</A>{" "}
 						our bot to unlock your server's full potential and allow people to level up, moderate the chat, get info about users and so
