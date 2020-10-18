@@ -16,20 +16,12 @@
 		align-items: center;
         padding: .5rem 1rem;
         .name{
-			margin-left: .5rem;
-			p{
-				margin: 0;
-			}
+            margin-left: 2rem;
             p:nth-child(2){
-				color: #aaa;
-				font-size: .75rem;
+                color: #aaa;
             }
         }
 		img {
-			&:first-child{
-				margin-right: 1rem;
-				filter: grayscale(1) brightness(1000%);
-			}
 			width: 32px;
 		}
 		height: 50px;
@@ -42,24 +34,12 @@
 	}
 
 	.account-body {
-		box-sizing: border-box !important;
 		min-height: 100px;
 		&.twitch {
 			background: #593695;
 		}
 		&.discord {
 			background: #7289da;
-		}
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		padding: 2rem;
-		button{
-			padding: .5rem 1rem;
-			background: #ee1111;
-			border: none;
-			font-weight: 600;
-			border-radius: .5rem;
 		}
 	}
 }
