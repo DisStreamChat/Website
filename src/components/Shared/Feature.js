@@ -1,4 +1,5 @@
 import React from "react";
+import "./Feature.scss"
 
 const Feature = React.memo(props => {
 	const innerBody = [
