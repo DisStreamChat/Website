@@ -13,7 +13,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 import firebase from "../../../../../firebase";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { Switch } from "@material-ui/core";
+import { Switch, useMediaQuery } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
 
@@ -61,7 +61,8 @@ const ManagerBody = styled.div`
 	padding: 0.5rem 1rem;
 	border: 1px solid black;
 	background: #1f1f1f;
-	flex-direction: column;
+    flex-direction: column;
+    width: 100%;
 `;
 
 const ActionBody = styled.div`
@@ -140,6 +141,8 @@ export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, 
 			.update({ [`${message}.actions.${emoji}`]: firebase.delete() });
 	};
 
+    const smallScreen = useMediaQuery("(max-width: 500px)")
+
 	return (
 		<ActionBody adding={adding}>
 			{deleteAble && (
@@ -162,10 +165,10 @@ export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, 
 							</RoleItem>
 						)}
 					</FlexContainer>
-					<FlexContainer>
+					{!smallScreen && <FlexContainer>
 						<h4>Type: {types[type]}</h4>
 						<h4 style={{ marginLeft: "2rem", textTransform: "capitalize" }}>DM: {(!!DMuser).toString()}</h4>
-					</FlexContainer>
+					</FlexContainer>}
 				</>
 			) : !adding ? (
 				<span onClick={() => onClick?.()} style={{ cursor: "pointer", display: "flex", alignItems: "center" }}>

@@ -9,12 +9,13 @@ import DiscordPage from "./Discord/DiscordPage";
 import AccountSettings from "./Account/Account";
 import plugins from "./Discord/Plugins/plugins.json";
 import { DiscordContextProvider, DiscordContext } from "../../contexts/DiscordContext";
+import { useMediaQuery } from "@material-ui/core";
 
 const Dashboard = props => {
 	const [overlaySettings, setOverlaySettings] = useState();
 	const [appSettings, setAppSettings] = useState();
 	const [defaultSettings, setDefaultSettings] = useState();
-	const { currentUser } = useContext(AppContext);
+	const { currentUser, dropDownOpen: open } = useContext(AppContext);
 	const id = firebase.auth.currentUser.uid;
 	const [discordId, setDiscordId] = useState("");
 	const { activePlugins } = useContext(DiscordContext);
@@ -76,11 +77,13 @@ const Dashboard = props => {
 				.filter(key => activePlugins[key])
 				.sort(),
 		[activePlugins]
-	);
+    );
+    
+    const showDropdown = useMediaQuery("(min-width: 900px)")
 
 	return (
 		<div className="settings-container">
-			<div className="setting-options">
+			<div className={`${open ? "dashboard-open" : "" } setting-options`}>
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/appsettings`}>
 					App Settings
 				</NavLink>
@@ -90,7 +93,7 @@ const Dashboard = props => {
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord${discordId ? `/${discordId}` : ""}`}>
 					Discord Settings
 				</NavLink>
-				{!!displayPlugins.length &&  window?.location?.pathname?.includes?.("discord") && (
+				{showDropdown && !!displayPlugins.length &&  window?.location?.pathname?.includes?.("discord") && (
 					<ul>
 						{displayPlugins.map(key => {
 							const plugin = plugins.find(plugin => plugin.id === key);
