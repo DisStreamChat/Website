@@ -47,62 +47,6 @@ const Header = props => {
 		}
 	}, [user, setCurrentUser]);
 
-	const signInWithGoogle = useCallback(async () => {
-		const provider = new firebase.app.auth.GoogleAuthProvider();
-		try {
-			const result = await firebase.auth.signInWithPopup(provider);
-			const user = result.user;
-			console.log(user);
-			const { displayName, photoURL: profilePicture } = user;
-			firebase.auth.currentUser.updateProfile({
-				displayName: user.displayName,
-			});
-			setLoginOpen(false);
-			try {
-				await firebase.db.collection("Streamers").doc(user.uid).update({
-					displayName,
-					profilePicture,
-				});
-			} catch (err) {
-				await firebase.db
-					.collection("Streamers")
-					.doc(user.uid)
-					.set({
-						displayName,
-						uid: user.uid,
-						profilePicture,
-						ModChannels: [],
-						TwitchName: displayName.toLowerCase(),
-						appSettings: {
-							TwitchColor: "",
-							YoutubeColor: "",
-							discordColor: "",
-							displayPlatformColors: false,
-							displayPlatformIcons: false,
-							highlightedMessageColor: "",
-							showHeader: true,
-							showSourceButton: false,
-						},
-						discordLinked: false,
-						guildId: "",
-						liveChatId: "",
-						overlaySettings: {
-							TwitchColor: "",
-							YoutubeColor: "",
-							discordColor: "",
-							displayPlatformColors: false,
-							displayPlatformIcons: false,
-							highlightedMessageColor: "",
-						},
-						twitchAuthenticated: true,
-						youtubeAuthenticated: false,
-					});
-			}
-		} catch (err) {
-			console.log(err.message);
-		}
-	}, []);
-
 	return (
 		<header className="header">
 			<Modal isOpen={loginOpen} className="Modal" overlayClassName="Modal-Overlay" onRequestClose={() => setLoginOpen(false)}>

@@ -52,7 +52,7 @@ export const types = {
 };
 
 export const colorStyles = {
-	container: styles => ({ ...styles, width: "50%", minHeight: 50 }),
+	container: styles => ({ ...styles, width: "80%", minHeight: 50 }),
 	control: (styles, { isDisabled }) => ({
 		...styles,
 		backgroundColor: isDisabled ? "black" : "#17181b",

@@ -67,4 +67,7 @@ hr {
 
 .twemoji{
     width: 25px;
+    @media screen {
+        width: 15px;
+    }
 }

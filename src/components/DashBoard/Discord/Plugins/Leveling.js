@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import RoleItem from "../../../Shared/RoleItem";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import styled from "styled-components";
+import { useMediaQuery } from "@material-ui/core";
 
 const ToggleChevron = styled.span`
 	& > * {
@@ -124,6 +125,8 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 		})();
 	}, [location, guildId]);
 
+    const smallScreen = useMediaQuery("(max-width: 500px)")
+
 	return (
 		<div>
 			<div className="plugin-item-header">
@@ -157,7 +160,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
 				</span>
 				<Link className="leader-board-link" to={`/leaderboard/${userConnectedGuildInfo.id}`}>
-					Go To Leaderboard
+					Leaderboard
 				</Link>
 			</div>
 			<div className="plugin-item-body">
@@ -253,11 +256,11 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 								aria-labelledby="discrete-slider"
 								valueLabelDisplay="auto"
 								step={0.5}
-								marks
 								min={0}
 								max={3}
 								marks={marks}
 							/>
+                            {smallScreen && <hr/>}
 						</li>
 					))}
 				</ul>
