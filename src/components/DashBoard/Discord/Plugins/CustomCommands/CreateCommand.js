@@ -37,7 +37,7 @@ const FancySwitch = withStyles({
 			opacity: "1 !important",
 		},
 	},
-	
+	focusVisible: {},
 })(Switch);
 
 const parseSelectValue = value => {

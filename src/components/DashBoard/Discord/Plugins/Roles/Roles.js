@@ -10,7 +10,7 @@ import CreateJoinManager from "./CreateJoinManager";
 const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	const [MessageManagers, setMessageManagers] = useState([]);
 	const [JoinManager, setJoinManager] = useState();
-	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
+	const { setActivePlugins } = useContext(DiscordContext);
 	const { state, create, setup } = useContext(RoleContext);
 	const guildId = userConnectedGuildInfo?.id;
 
@@ -67,7 +67,6 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 									});
 								return newPlugs;
 							});
-							setDashboardOpen(true)
 						}}
 					>
 						Disable
