@@ -107,7 +107,8 @@ const Dashboard = props => {
 				{showDropdown && !!displayPlugins.length && window?.location?.pathname?.includes?.("discord") && (
 					<ul>
 						{displayPlugins.map(key => {
-							const plugin = plugins.find(plugin => plugin.id === key);
+                            const plugin = plugins.find(plugin => plugin.id === key);
+                            if(!plugin) return null;
 							return (
 								<NavLink
 									key={plugin?.id}
