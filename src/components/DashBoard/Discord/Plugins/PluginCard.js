@@ -13,7 +13,7 @@ Modal.setAppElement("#root");
 
 const PluginCard = ({ guild: guildId, ...props }) => {
 	const [modalOpen, setModalOpen] = useState(false);
-	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
+	const { setActivePlugins } = useContext(DiscordContext);
 
 	const handleClick = useCallback(() => {
 		if (!props.active && !props.comingSoon) {
@@ -32,7 +32,6 @@ const PluginCard = ({ guild: guildId, ...props }) => {
 				});
 			return newPlugs;
 		});
-		setDashboardOpen(true)
 		props.history.push(`${props.match.url}/${props.id}`);
 	};
 

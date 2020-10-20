@@ -7,6 +7,7 @@ import RoleItem from "../../../../Shared/RoleItem";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 
 const CreateRoleCommand = ({ setCreatingCommand, guild: userConnectedGuildInfo }) => {
+	const { setActivePlugins } = useContext(DiscordContext);
     const { roleToGive, setRoleToGive } = useContext(CommandContext);
 	return (
 		<>
