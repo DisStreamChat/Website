@@ -41,7 +41,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
 	const [activeEvents, setActiveEvents] = useState({});
 	const [allEvents, setAllEvents] = useState({});
-	const { setActivePlugins } = useContext(DiscordContext);
+	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
 	const [channelOverrides, setChannelOverrides] = useState({});
 	const guildId = userConnectedGuildInfo?.id;
 
@@ -113,6 +113,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				.update({
 					[`channelOverrides.${category}`]: e?.value || false,
 				});
+			setDashboardOpen(true);
 		},
 		[guildId]
 	);
@@ -128,8 +129,9 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			.update({
 				[`activeEvents.${id}`]: e.target.checked,
 			});
+		setDashboardOpen(true);
 	});
-
+	
 	const handleAnnoucmentSelect = useCallback(
 		async e => {
 			const guildLevelRef = firebase.db.collection("loggingChannel").doc(guildId);
@@ -139,6 +141,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			} catch (err) {
 				await guildLevelRef.set({ server: e.value });
 			}
+			setDashboardOpen(true);
 		},
 		[guildId]
 	);
@@ -163,6 +166,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									});
 								return newPlugs;
 							});
+							setDashboardOpen(true)
 						}}
 					>
 						Disable

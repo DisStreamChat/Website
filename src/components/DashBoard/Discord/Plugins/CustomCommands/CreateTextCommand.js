@@ -3,7 +3,6 @@ import React, { useContext } from "react";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 
 const CreateTextCommand = () => {
-	const { setActivePlugins, userConnectedGuildInfo } = useContext(DiscordContext);
 	const { response, setResponse } = useContext(CommandContext);
 	return (
 		<>

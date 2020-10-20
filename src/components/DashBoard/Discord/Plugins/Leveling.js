@@ -14,7 +14,7 @@ import { useMediaQuery } from "@material-ui/core";
 
 const ToggleChevron = styled.span`
 	& > * {
-		transition: .25s;
+		transition: 0.25s;
 		transform: rotate(${props => (!props.closed ? "180deg" : "0deg")});
 	}
 `;
@@ -61,7 +61,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
 	const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
-	const { setActivePlugins } = useContext(DiscordContext);
+	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
 	const [ranksClosed, setRanksClosed] = useState(false);
 	const guildId = userConnectedGuildInfo?.id;
 
@@ -70,6 +70,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
 			setLevelUpAnnouncement(e);
 			await guildLevelRef.update({ type: e.value });
+			setDashboardOpen(true);
 		},
 		[guildId]
 	);
@@ -80,6 +81,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			const message = e.target.value;
 			setLevelUpMessage(message);
 			await guildLevelRef.update({ message });
+			setDashboardOpen(true);
 		},
 		[guildId]
 	);
@@ -89,6 +91,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
 			setAnnouncementChannel(e);
 			guildLevelRef.update({ notifications: e.value });
+			setDashboardOpen(true);
 		},
 		[guildId]
 	);
@@ -125,7 +128,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 		})();
 	}, [location, guildId]);
 
-    const smallScreen = useMediaQuery("(max-width: 500px)")
+	const smallScreen = useMediaQuery("(max-width: 500px)");
 
 	return (
 		<div>
@@ -147,6 +150,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									});
 								return newPlugs;
 							});
+							setDashboardOpen(true);
 						}}
 					>
 						Disable

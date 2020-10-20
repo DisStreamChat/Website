@@ -10,12 +10,9 @@ import CommandItem from "./CommandItem";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 
 const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
-	const [loggingChannel, setLoggingChannel] = useState("");
-	const [activeEvents, setActiveEvents] = useState({});
-	const [allEvents, setAllEvents] = useState({});
 	const [creatingCommand, setCreatingCommand] = useState(false);
 	const [commands, setCommands] = useState({});
-	const { setActivePlugins } = useContext(DiscordContext);
+	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
 	const guildId = userConnectedGuildInfo?.id;
 	const {
 		setName,
@@ -96,6 +93,7 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 									});
 								return newPlugs;
 							});
+							setDashboardOpen(true)
 						}}
 					>
 						Disable
