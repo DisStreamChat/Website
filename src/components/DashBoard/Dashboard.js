@@ -110,6 +110,7 @@ const Dashboard = props => {
 							const plugin = plugins.find(plugin => plugin.id === key);
 							return (
 								<NavLink
+									key={plugin?.id}
 									className="setting-link smaller"
 									activeClassName="active"
 									to={`${props.match.url}/discord/${discordId}/${plugin?.id}`}

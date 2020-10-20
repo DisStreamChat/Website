@@ -34,7 +34,6 @@ const FancySwitch = withStyles({
 			opacity: "1 !important",
 		},
 	},
-	focusVisible: {},
 })(Switch);
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
@@ -88,9 +87,9 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				setActiveEvents(active || {});
 			} else {
 				try {
-					firebase.db.collection("loggingChannel").doc(guildId).update({});
+					await firebase.db.collection("loggingChannel").doc(guildId).update({});
 				} catch (err) {
-					firebase.db.collection("loggingChannel").doc(guildId).set({});
+					await firebase.db.collection("loggingChannel").doc(guildId).set({});
 				}
 			}
 		})();
@@ -227,7 +226,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					/>
 				</div>
 				{[...new Set(Object.values(allEvents || {}).map(val => val.category))].sort().map(category => (
-					<>
+					<React.Fragment key={category}>
 						<h4 className="plugin-section-title">{category}</h4>
 						<div className="plugin-section">
 							<h4 className="plugin-section-title">Channel Override</h4>
@@ -271,6 +270,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 								.sort()
 								.map(([key, event]) => (
 									<FormControlLabel
+										key={key}
 										control={
 											<FancySwitch
 												color="primary"
@@ -285,7 +285,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									/>
 								))}
 						</div>
-					</>
+					</React.Fragment>
 				))}
 			</div>
 		</div>
