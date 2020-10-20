@@ -41,7 +41,7 @@ const FancySwitch = withStyles({
 			opacity: "1 !important",
 		},
 	},
-	focusVisible: {},
+	
 })(Switch);
 
 const Setting = props => {

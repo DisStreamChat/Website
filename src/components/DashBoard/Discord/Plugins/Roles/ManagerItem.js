@@ -43,7 +43,7 @@ const FancySwitch = withStyles({
 			opacity: "1 !important",
 		},
 	},
-	focusVisible: {},
+	
 })(Switch);
 
 const ChannelParent = styled.span`

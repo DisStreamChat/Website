@@ -10,6 +10,9 @@ import AccountSettings from "./Account/Account";
 import plugins from "./Discord/Plugins/plugins.json";
 import { DiscordContextProvider, DiscordContext } from "../../contexts/DiscordContext";
 import { useMediaQuery } from "@material-ui/core";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 const Dashboard = props => {
 	const [overlaySettings, setOverlaySettings] = useState();
@@ -18,7 +21,15 @@ const Dashboard = props => {
 	const { currentUser, dropDownOpen: open } = useContext(AppContext);
 	const id = firebase.auth.currentUser.uid;
 	const [discordId, setDiscordId] = useState("");
-	const { activePlugins } = useContext(DiscordContext);
+	const { activePlugins, dashboardOpen, setDashboardOpen } = useContext(DiscordContext);
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+		setDashboardOpen(false);
+	};
+
 	useEffect(() => {
 		const idRegex = new RegExp("/\\d{17,19}[/\\b]");
 		const path = props.location.pathname + "/";
@@ -77,13 +88,13 @@ const Dashboard = props => {
 				.filter(key => activePlugins[key])
 				.sort(),
 		[activePlugins]
-    );
-    
-    const showDropdown = useMediaQuery("(min-width: 900px)")
+	);
+
+	const showDropdown = useMediaQuery("(min-width: 900px)");
 
 	return (
 		<div className="settings-container">
-			<div className={`${open ? "dashboard-open" : "" } setting-options`}>
+			<div className={`${open ? "dashboard-open" : ""} setting-options`}>
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/appsettings`}>
 					App Settings
 				</NavLink>
@@ -93,12 +104,13 @@ const Dashboard = props => {
 				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord${discordId ? `/${discordId}` : ""}`}>
 					Discord Settings
 				</NavLink>
-				{showDropdown && !!displayPlugins.length &&  window?.location?.pathname?.includes?.("discord") && (
+				{showDropdown && !!displayPlugins.length && window?.location?.pathname?.includes?.("discord") && (
 					<ul>
 						{displayPlugins.map(key => {
 							const plugin = plugins.find(plugin => plugin.id === key);
 							return (
 								<NavLink
+									key={plugin?.id}
 									className="setting-link smaller"
 									activeClassName="active"
 									to={`${props.match.url}/discord/${discordId}/${plugin?.id}`}
@@ -157,6 +169,23 @@ const Dashboard = props => {
 					</Route>
 					<Redirect to={`${props.match.url}/appsettings`} />
 				</Switch>
+				<Snackbar
+					anchorOrigin={{
+						vertical: "bottom",
+						horizontal: "left",
+					}}
+					open={dashboardOpen}
+					autoHideDuration={6000}
+					onClose={handleClose}
+					message="Saved"
+					action={
+						<React.Fragment>
+							<IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+								<CloseIcon fontSize="small" />
+							</IconButton>
+						</React.Fragment>
+					}
+				/>
 			</div>
 		</div>
 	);

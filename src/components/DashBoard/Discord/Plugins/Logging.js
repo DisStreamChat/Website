@@ -4,9 +4,10 @@ import { DiscordContext } from "../../../../contexts/DiscordContext";
 import { colorStyles } from "../../../Shared/userUtils";
 import Select from "react-select";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { Switch } from "@material-ui/core";
+import { Switch, Tooltip } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
+import InfoTwoToneIcon from "@material-ui/icons/InfoTwoTone";
 
 const FancySwitch = withStyles({
 	root: {
@@ -34,14 +35,13 @@ const FancySwitch = withStyles({
 			opacity: "1 !important",
 		},
 	},
-	focusVisible: {},
 })(Switch);
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
 	const [activeEvents, setActiveEvents] = useState({});
 	const [allEvents, setAllEvents] = useState({});
-	const { setActivePlugins } = useContext(DiscordContext);
+	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
 	const [channelOverrides, setChannelOverrides] = useState({});
 	const guildId = userConnectedGuildInfo?.id;
 
@@ -88,9 +88,9 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				setActiveEvents(active || {});
 			} else {
 				try {
-					firebase.db.collection("loggingChannel").doc(guildId).update({});
+					await firebase.db.collection("loggingChannel").doc(guildId).update({});
 				} catch (err) {
-					firebase.db.collection("loggingChannel").doc(guildId).set({});
+					await firebase.db.collection("loggingChannel").doc(guildId).set({});
 				}
 			}
 		})();
@@ -102,32 +102,52 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	}, [location, guildId]);
 
 	const handleOverrideSelect = useCallback(
-		(e, category) => {
+		async (e, category) => {
 			setChannelOverrides(prev => ({
 				...prev,
 				[category]: e,
 			}));
-			firebase.db
-				.collection("loggingChannel")
-				.doc(guildId)
-				.update({
-					[`channelOverrides.${category}`]: e?.value || false,
-				});
+			try {
+				await firebase.db
+					.collection("loggingChannel")
+					.doc(guildId)
+					.update({
+						[`channelOverrides.${category}`]: e?.value || false,
+					});
+			} catch (err) {
+				await firebase.db
+					.collection("loggingChannel")
+					.doc(guildId)
+					.set({
+						[`channelOverrides.${category}`]: e?.value || false,
+					});
+			}
+			setDashboardOpen(true);
 		},
 		[guildId]
 	);
 
-	const handleEventToggle = useCallback((e, id) => {
+	const handleEventToggle = useCallback(async (e, id) => {
 		setActiveEvents(prev => ({
 			...prev,
 			[id]: e.target.checked,
 		}));
-		firebase.db
-			.collection("loggingChannel")
-			.doc(guildId)
-			.update({
-				[`activeEvents.${id}`]: e.target.checked,
-			});
+		try {
+			await firebase.db
+				.collection("loggingChannel")
+				.doc(guildId)
+				.update({
+					[`activeEvents.${id}`]: e.target.checked,
+				});
+		} catch (err) {
+			await firebase.db
+				.collection("loggingChannel")
+				.doc(guildId)
+				.set({
+					[`activeEvents.${id}`]: e.target.checked,
+				});
+		}
+		setDashboardOpen(true);
 	});
 
 	const handleAnnoucmentSelect = useCallback(
@@ -139,6 +159,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			} catch (err) {
 				await guildLevelRef.set({ server: e.value });
 			}
+			setDashboardOpen(true);
 		},
 		[guildId]
 	);
@@ -163,6 +184,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									});
 								return newPlugs;
 							});
+							setDashboardOpen(true);
 						}}
 					>
 						Disable
@@ -205,10 +227,15 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					/>
 				</div>
 				{[...new Set(Object.values(allEvents || {}).map(val => val.category))].sort().map(category => (
-					<>
+					<React.Fragment key={category}>
 						<h4 className="plugin-section-title">{category}</h4>
 						<div className="plugin-section">
-							<h4 className="plugin-section-title">Channel Override</h4>
+							<h4 className="plugin-section-title">
+								Category Logging Channel Override{" "}
+								<Tooltip placement="top" arrow title="If set, events in this category will be logged in this channel instead of the default">
+									<InfoTwoToneIcon />
+								</Tooltip>
+							</h4>
 							<div className="plugin-section subtitle" style={{ width: "100%" }}>
 								<Select
 									closeMenuOnSelect
@@ -237,7 +264,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									}}
 								/>
 								<span className="toggle-button">
-									<button onClick={() => handleOverrideSelect(null, category)}>Clear Channel Override</button>
+									<button onClick={() => handleOverrideSelect(null, category)}>Clear Category Override</button>
 								</span>
 							</div>
 							<h4 className="plugin-section-title" style={{ width: "100%" }}>
@@ -249,6 +276,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 								.sort()
 								.map(([key, event]) => (
 									<FormControlLabel
+										key={key}
 										control={
 											<FancySwitch
 												color="primary"
@@ -263,7 +291,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									/>
 								))}
 						</div>
-					</>
+					</React.Fragment>
 				))}
 			</div>
 		</div>
