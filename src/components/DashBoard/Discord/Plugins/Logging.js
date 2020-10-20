@@ -4,9 +4,10 @@ import { DiscordContext } from "../../../../contexts/DiscordContext";
 import { colorStyles } from "../../../Shared/userUtils";
 import Select from "react-select";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { Switch } from "@material-ui/core";
+import { Switch, Tooltip } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
+import InfoTwoToneIcon from "@material-ui/icons/InfoTwoTone";
 
 const FancySwitch = withStyles({
 	root: {
@@ -229,7 +230,12 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<React.Fragment key={category}>
 						<h4 className="plugin-section-title">{category}</h4>
 						<div className="plugin-section">
-							<h4 className="plugin-section-title">Channel Override</h4>
+							<h4 className="plugin-section-title">
+								Category Logging Channel Override{" "}
+								<Tooltip placement="top" arrow title="If set, events in this category will be logged in this channel instead of the default">
+									<InfoTwoToneIcon />
+								</Tooltip>
+							</h4>
 							<div className="plugin-section subtitle" style={{ width: "100%" }}>
 								<Select
 									closeMenuOnSelect
@@ -258,7 +264,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									}}
 								/>
 								<span className="toggle-button">
-									<button onClick={() => handleOverrideSelect(null, category)}>Clear Channel Override</button>
+									<button onClick={() => handleOverrideSelect(null, category)}>Clear Category Override</button>
 								</span>
 							</div>
 							<h4 className="plugin-section-title" style={{ width: "100%" }}>
