@@ -102,36 +102,54 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	}, [location, guildId]);
 
 	const handleOverrideSelect = useCallback(
-		(e, category) => {
+		async (e, category) => {
 			setChannelOverrides(prev => ({
 				...prev,
 				[category]: e,
 			}));
-			firebase.db
-				.collection("loggingChannel")
-				.doc(guildId)
-				.update({
-					[`channelOverrides.${category}`]: e?.value || false,
-				});
+			try {
+				await firebase.db
+					.collection("loggingChannel")
+					.doc(guildId)
+					.update({
+						[`channelOverrides.${category}`]: e?.value || false,
+					});
+			} catch (err) {
+				await firebase.db
+					.collection("loggingChannel")
+					.doc(guildId)
+					.set({
+						[`channelOverrides.${category}`]: e?.value || false,
+					});
+			}
 			setDashboardOpen(true);
 		},
 		[guildId]
 	);
 
-	const handleEventToggle = useCallback((e, id) => {
+	const handleEventToggle = useCallback(async (e, id) => {
 		setActiveEvents(prev => ({
 			...prev,
 			[id]: e.target.checked,
 		}));
-		firebase.db
-			.collection("loggingChannel")
-			.doc(guildId)
-			.update({
-				[`activeEvents.${id}`]: e.target.checked,
-			});
+		try {
+			await firebase.db
+				.collection("loggingChannel")
+				.doc(guildId)
+				.update({
+					[`activeEvents.${id}`]: e.target.checked,
+				});
+		} catch (err) {
+			await firebase.db
+				.collection("loggingChannel")
+				.doc(guildId)
+				.set({
+					[`activeEvents.${id}`]: e.target.checked,
+				});
+		}
 		setDashboardOpen(true);
 	});
-	
+
 	const handleAnnoucmentSelect = useCallback(
 		async e => {
 			const guildLevelRef = firebase.db.collection("loggingChannel").doc(guildId);
@@ -166,7 +184,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									});
 								return newPlugs;
 							});
-							setDashboardOpen(true)
+							setDashboardOpen(true);
 						}}
 					>
 						Disable

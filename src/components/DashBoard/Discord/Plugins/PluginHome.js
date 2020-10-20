@@ -12,10 +12,11 @@ import { CommandContextProvider } from "../../../../contexts/CommandContext";
 import { RoleContextProvider } from "../../../../contexts/RoleContext";
 import App from "./App";
 import Roles from "./Roles/Roles";
+import _ from "lodash";
 
 const PluginHome = ({ match, guildId, connectedGuild }) => {
 	const [prefix, setPrefix] = useState("!");
-	const { userDiscordInfo, activePlugins, setActivePlugins } = useContext(DiscordContext);
+	const { userDiscordInfo, activePlugins, setActivePlugins, saveOnType } = useContext(DiscordContext);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -43,6 +44,7 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 		})();
 	}, [connectedGuild]);
 
+
 	const prefixChange = useCallback(
 		async e => {
 			const value = e?.target?.value || "!";
@@ -63,6 +65,7 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 						prefix: value,
 					});
 			}
+			saveOnType();
 		},
 		[connectedGuild?.id]
 	);

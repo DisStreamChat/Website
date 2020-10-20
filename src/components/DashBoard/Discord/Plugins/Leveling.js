@@ -61,7 +61,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
 	const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
-	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
+	const { setActivePlugins, setDashboardOpen, saveOnType } = useContext(DiscordContext);
 	const [ranksClosed, setRanksClosed] = useState(false);
 	const guildId = userConnectedGuildInfo?.id;
 
@@ -69,7 +69,11 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 		async e => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
 			setLevelUpAnnouncement(e);
-			await guildLevelRef.update({ type: e.value });
+			try {
+				await guildLevelRef.update({ type: e.value });
+			} catch (err) {
+				await guildLevelRef.set({ type: e.value });
+			}
 			setDashboardOpen(true);
 		},
 		[guildId]
@@ -80,8 +84,12 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
 			const message = e.target.value;
 			setLevelUpMessage(message);
-			await guildLevelRef.update({ message });
-			setDashboardOpen(true);
+			try {
+				await guildLevelRef.update({ message });
+			} catch (err) {
+				await guildLevelRef.set({ message });
+			}
+			saveOnType();
 		},
 		[guildId]
 	);
@@ -90,7 +98,11 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 		async e => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
 			setAnnouncementChannel(e);
-			guildLevelRef.update({ notifications: e.value });
+			try {
+				guildLevelRef.update({ notifications: e.value });
+			} catch (err) {
+				guildLevelRef.set({ notifications: e.value });
+			}
 			setDashboardOpen(true);
 		},
 		[guildId]
@@ -142,12 +154,22 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 						onClick={() => {
 							setActivePlugins(prev => {
 								const newPlugs = { ...prev, leveling: false };
+
 								firebase.db
 									.collection("DiscordSettings")
 									.doc(guildId || " ")
 									.update({
 										activePlugins: newPlugs,
+									})
+									.catch(err => {
+										firebase.db
+											.collection("DiscordSettings")
+											.doc(guildId || " ")
+											.set({
+												activePlugins: newPlugs,
+											});
 									});
+
 								return newPlugs;
 							});
 							setDashboardOpen(true);

@@ -1,5 +1,6 @@
 import React, { createContext } from "react";
 import { useState } from "react";
+import _ from "lodash"
 
 export const DiscordContext = createContext({});
 
@@ -9,6 +10,9 @@ export const DiscordContextProvider = props => {
 	const [userConnectedChannels, setUserConnectedChannels] = useState();
 	const [activePlugins, setActivePlugins] = useState({});
 	const [dashboardOpen, setDashboardOpen] = useState(false);
+	const saveOnType = _.debounce(() => {
+		setDashboardOpen(true);
+	}, 100)
 
 	return (
 		<DiscordContext.Provider
@@ -23,6 +27,7 @@ export const DiscordContextProvider = props => {
 				setActivePlugins,
 				dashboardOpen,
 				setDashboardOpen,
+				saveOnType
 			}}
 		>
 			{props.children}
