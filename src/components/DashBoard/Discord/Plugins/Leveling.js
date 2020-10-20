@@ -220,7 +220,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					</div>
 				</div>
 			</div>
-			<h4 className="plugin-section-title">Other Settings</h4>
+			{/* <h4 className="plugin-section-title">Other Settings</h4>
 			<div className="plugin-section no-flex" style={{ color: "white" }}>
 				<div className="scaling-div" style={{ width: "100%" }}>
 					<Typography id="scaling-slider" gutterBottom>
@@ -319,8 +319,8 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 							}}
 						/>
 					</div>
-				</div>
-			</div>
+				</div> */}
+			{/* </div> */}
 		</div>
 	);
 };

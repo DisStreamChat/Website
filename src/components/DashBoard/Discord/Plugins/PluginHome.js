@@ -30,6 +30,11 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 				setPrefix(data.prefix || "!");
 				setActivePlugins(data.activePlugins);
 			} else {
+				await firebase.db
+					.collection("DiscordSettings")
+					.doc(connectedGuild?.id || " ")
+					.set({ activePlugins: {}, prefix: "!" });
+				setActivePlugins({});
 				setPrefix("!");
 			}
 			setTimeout(() => {
