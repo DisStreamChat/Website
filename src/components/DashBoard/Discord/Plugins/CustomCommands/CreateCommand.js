@@ -54,7 +54,6 @@ const parseSelectValue = value => {
 };
 
 const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnectedGuildInfo }) => {
-    console.log(userConnectedGuildInfo)
 	const {
 		editing,
 		setEditing,
