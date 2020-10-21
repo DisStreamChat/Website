@@ -9,7 +9,6 @@ import { DiscordContext } from "../../../contexts/DiscordContext";
 const SettingList = props => {
 	const { key } = useParams();
 	const [index, setIndex] = useState(key);
-	const [settings, setSettings] = useState([]);
 
 	useEffect(() => {
 		if (props.index) {
@@ -32,6 +31,7 @@ const SettingList = props => {
 					return !!categoryOrder ? categoryOrder : nameOrder;
 				})
 				.map(([key, value]) => {
+                    if(!props.settings) return <></>
 					return (
 						<Setting
 							default={value.value}
