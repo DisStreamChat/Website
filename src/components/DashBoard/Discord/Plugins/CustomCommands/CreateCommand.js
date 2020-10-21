@@ -37,7 +37,6 @@ const FancySwitch = withStyles({
 			opacity: "1 !important",
 		},
 	},
-	
 })(Switch);
 
 const parseSelectValue = value => {
@@ -88,8 +87,7 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 					}))
 			);
 		}
-    }, [editing, userConnectedGuildInfo?.roles, setAllowedRoles]);
-    
+	}, [editing, userConnectedGuildInfo?.roles, setAllowedRoles]);
 
 	return (
 		<>
@@ -264,12 +262,16 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 							bannedRoles: parsedBannedRoles,
 							permittedRoles: parsedAllowedRoles,
 							allowedChannels: parsedAllowedChannels,
-                            cooldownTime: cooldown*60000,
-                            cooldown,
+							cooldownTime: cooldown * 60000,
+							cooldown,
 							DM: false,
 							description,
-                        };
-						commandRef.update({ [name]: commandObj });
+						};
+						try {
+							await commandRef.update({ [name]: commandObj });
+						} catch (err) {
+							await commandRef.set({ [name]: commandObj });
+						}
 						setEditing(false);
 						setName("");
 						setDescription("");
