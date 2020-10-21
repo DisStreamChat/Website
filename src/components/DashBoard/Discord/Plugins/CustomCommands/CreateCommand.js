@@ -250,7 +250,7 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 						const commandRef = firebase.db.collection("customCommands").doc(userConnectedGuildInfo.id);
 						if (!editing) {
 							const commands = (await commandRef.get()).data();
-							if (commands[name]) return setError({ message: "A Command with that name already exists" });
+							if (commands?.[name]) return setError({ message: "A Command with that name already exists" });
 						}
 						const parsedAllowedRoles = parseSelectValue(allowedRoles);
 						const parsedBannedRoles = parseSelectValue(bannedRoles);
