@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import { ChromePicker } from "react-color";
 import { Switch } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
@@ -13,7 +13,12 @@ import chroma from "chroma-js";
 import InputSlider from "../../Shared/InputSlider";
 import lodash from "lodash";
 import uid from "uid";
+import Select from "react-select";
 import AnimateHeight from "react-animate-height";
+import { colorStyles, guildOption } from "../../Shared/userUtils";
+import firebase from "../../../firebase";
+import { DiscordContext } from "../../../contexts/DiscordContext";
+import DiscordSetting from "./DiscordSetting";
 
 const FancySwitch = withStyles({
 	root: {
@@ -41,10 +46,10 @@ const FancySwitch = withStyles({
 			opacity: "1 !important",
 		},
 	},
-	
 })(Switch);
 
 const Setting = props => {
+	const id = firebase.auth.currentUser.uid;
 	const [value, setValue] = useState(props.value);
 	const [open, setOpen] = useState(props.open);
 	const [displayName, setDisplayName] = useState();
@@ -219,7 +224,7 @@ const Setting = props => {
 						</div>
 					</AnimateHeight>
 				</>
-			) : (
+			) : props.type === "selector" ? (
 				<>
 					<span className="color-header flex" onClick={() => props.onClick(props.name)}>
 						<span>
@@ -254,6 +259,8 @@ const Setting = props => {
 						</div>
 					</AnimateHeight>
 				</>
+			) : (
+				<DiscordSetting {...props}/>
 			)}
 		</div>
 	);

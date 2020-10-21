@@ -11,7 +11,7 @@ import { colorStyles, guildOption } from "../../Shared/userUtils";
 import { AppContext } from "../../../contexts/Appcontext";
 import { DiscordContextProvider, DiscordContext } from "../../../contexts/DiscordContext";
 import PluginHome from "./Plugins/PluginHome";
-import { useDocument } from "react-firebase-hooks/firestore";
+
 
 const DiscordPage = React.memo(({ location, history, match }) => {
 	const [displayGuild, setDisplayGuild] = useState();
@@ -53,13 +53,6 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 			}
 		})();
 	}, [guildId, userDiscordInfo?.guilds, setUserConnectedGuildInfo]);
-
-	const [rawDiscordData, discordDataLoading, DiscordDataError] = useDocument(firebase.db.doc(`Streamers/${id}/discord/data`));
-
-	useEffect(() => {
-		if (discordDataLoading) return;
-		setUserDiscordInfo(rawDiscordData?.data());
-	}, [rawDiscordData, discordDataLoading, setUserDiscordInfo]);
 
 	useEffect(() => {
 		(async () => {

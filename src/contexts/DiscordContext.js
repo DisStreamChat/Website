@@ -4,6 +4,8 @@ import _ from "lodash"
 
 export const DiscordContext = createContext({});
 
+DiscordContext.displayName = "Discord Context"
+
 export const DiscordContextProvider = props => {
 	const [userDiscordInfo, setUserDiscordInfo] = useState();
 	const [userConnectedGuildInfo, setUserConnectedGuildInfo] = useState();

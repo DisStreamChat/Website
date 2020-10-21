@@ -13,6 +13,7 @@ import { useMediaQuery } from "@material-ui/core";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import { useDocument } from "react-firebase-hooks/firestore";
 
 const Dashboard = props => {
 	const [overlaySettings, setOverlaySettings] = useState();
@@ -21,7 +22,7 @@ const Dashboard = props => {
 	const { currentUser, dropDownOpen: open } = useContext(AppContext);
 	const id = firebase.auth.currentUser.uid;
 	const [discordId, setDiscordId] = useState("");
-	const { activePlugins, dashboardOpen, setDashboardOpen } = useContext(DiscordContext);
+	const { activePlugins, dashboardOpen, setDashboardOpen, setUserDiscordInfo } = useContext(DiscordContext);
 
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
@@ -90,7 +91,14 @@ const Dashboard = props => {
 		[activePlugins]
 	);
 
-	const showDropdown = useMediaQuery("(min-width: 900px)");
+    const showDropdown = useMediaQuery("(min-width: 900px)");
+    
+    const [rawDiscordData, discordDataLoading, DiscordDataError] = useDocument(firebase.db.doc(`Streamers/${id}/discord/data`));
+
+	useEffect(() => {
+		if (discordDataLoading) return;
+		setUserDiscordInfo(rawDiscordData?.data());
+	}, [rawDiscordData, discordDataLoading, setUserDiscordInfo]);
 
 	return (
 		<div className="settings-container">

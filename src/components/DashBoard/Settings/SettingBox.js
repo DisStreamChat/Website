@@ -3,6 +3,8 @@ import { Switch, NavLink, Route, Redirect, useParams } from "react-router-dom";
 import SettingAccordion from "./SettingAccordion";
 import Setting from "./Setting";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
+import { useContext } from "react";
+import { DiscordContext } from "../../../contexts/DiscordContext";
 
 const SettingList = props => {
 	const { key } = useParams();
@@ -22,12 +24,12 @@ const SettingList = props => {
 			{Object.entries(props.defaultSettings || {})
 				.filter(([name]) => (!props.search ? true : name?.toLowerCase()?.includes(props.search?.toLowerCase())))
 				.filter(([, details]) => details.category?.toLowerCase() === index?.toLowerCase() || props.all)
-                .filter(([, details]) => (props.app ? true : !details.appOnly))
-                .filter(([, details]) => details.type !== "keybind")
+				.filter(([, details]) => (props.app ? true : !details.appOnly))
+				.filter(([, details]) => details.type !== "keybind")
 				.sort((a, b) => {
-                    const categoryOrder = (a[1].type.localeCompare(b[1].type));
-                    const nameOrder = a[0].localeCompare(b[0])
-					return !!categoryOrder ? categoryOrder : nameOrder
+					const categoryOrder = a[1].type.localeCompare(b[1].type);
+					const nameOrder = a[0].localeCompare(b[0]);
+					return !!categoryOrder ? categoryOrder : nameOrder;
 				})
 				.map(([key, value]) => {
 					return (
@@ -41,9 +43,9 @@ const SettingList = props => {
 							type={value.type}
 							min={value.min}
 							max={value.max}
-                            step={value.step}
-                            placeholder={value.placeholder}
-                            options={value.options}
+							step={value.step}
+							placeholder={value.placeholder}
+							options={value.options}
 						/>
 					);
 				})}
@@ -52,7 +54,8 @@ const SettingList = props => {
 };
 
 const SettingBox = props => {
-	const [search, setSearch] = useState("");
+    const {userDiscordInfo} = useContext(DiscordContext)
+    const [search, setSearch] = useState("");
 
 	const handleChange = useCallback(e => {
 		setSearch(e.target.value);
@@ -81,9 +84,12 @@ const SettingBox = props => {
 					<NavLink activeClassName="active-category" className="category" to={`${props.parenturl}/${props.path}/all`}>
 						All
 					</NavLink>
+					{userDiscordInfo && <NavLink activeClassName="active-category" className="category" to={`${props.parenturl}/${props.path}/discord`}>
+						Discord
+					</NavLink>}
 					{[...new Set(Object.values(props.defaultSettings || {}).map(val => val.category))]
 						.sort()
-                        .filter(cat => cat ? (props.app ? true : cat.toLowerCase() !== "visibility") : false)
+						.filter(cat => (cat ? (props.app ? true : cat.toLowerCase() !== "visibility") : false))
 						.map(key => (
 							<NavLink activeClassName="active-category" className="category" to={`${props.parenturl}/${props.path}/${key}`} key={key}>
 								{key}
@@ -101,6 +107,11 @@ const SettingBox = props => {
 							app={props.app}
 						/>
 					</Route>
+					{userDiscordInfo && <Route path={`${props.parenturl}/${props.path}/discord`}>
+						<SettingAccordion>
+							<Setting name={"Discord Connection"} type={"Discord"} />
+						</SettingAccordion>
+					</Route>}
 					{Object.keys(props.settings || {}).map(key => (
 						<Route path={`${props.parenturl}/${props.path}/:key`}>
 							<SettingList

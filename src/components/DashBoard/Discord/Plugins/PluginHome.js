@@ -44,7 +44,6 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 		})();
 	}, [connectedGuild]);
 
-
 	const prefixChange = useCallback(
 		async e => {
 			const value = e?.target?.value || "!";
@@ -97,14 +96,6 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 						</div>
 
 						<div className="plugin-list">
-							<PluginCard
-								guild={guildId}
-								active
-								id="app"
-								title="DisStreamChat App"
-								image="logo.png"
-								description="Get discord chats from your server in the DisStreamChat app"
-							/>
 							{displayPlugins.map(plugin => (
 								<PluginCard guild={guildId} key={plugin.id} {...plugin} active={activePlugins[plugin.id]} />
 							))}
@@ -134,9 +125,6 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 							</RoleContextProvider>
 						</Route>
 					)}
-					<Route path={`${match.url}/app`}>
-						<App />
-					</Route>
 					<Redirect to={`${match.url}`} />
 				</Switch>
 			</div>

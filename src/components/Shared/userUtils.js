@@ -17,6 +17,7 @@ export const GuildIcon = props => {
 		<span
 			className="no-icon"
 			style={{
+                maxWidth: props.size,
 				minWidth: props.size,
 				height: props.size,
 				borderRadius: "50%",
@@ -110,7 +111,7 @@ export const guildOption = guild => {
 	return {
 		value: guild.name,
 		label: (
-			<span style={{ height: size }}>
+			<span style={{ height: size, display: "flex", alignItems: "center" }}>
 				<GuildIcon size={size} {...guild} />
 				{guild.name}
 			</span>
