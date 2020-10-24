@@ -5,14 +5,17 @@ import { AppContext } from "../../contexts/Appcontext";
 import { CSSTransition } from "react-transition-group";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { useCallback } from "react";
-import Modal from "react-modal";
+// import Modal from "react-modal";
 import A from "../Shared/A";
 import ClearIcon from "@material-ui/icons/Clear";
 import firebase from "../../firebase";
 import HamburgerMenu from "react-hamburger-menu";
 import { Checkbox } from "@material-ui/core";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
 
-Modal.setAppElement("#root");
+// Modal.setAppElement("#root");
 
 const Header = props => {
 	const { currentUser, setCurrentUser } = useContext(AppContext);
@@ -49,74 +52,76 @@ const Header = props => {
 
 	return (
 		<header className="header">
-			<Modal isOpen={loginOpen} className="Modal" overlayClassName="Modal-Overlay" onRequestClose={() => setLoginOpen(false)}>
-				<button className="exit-button" onClick={() => setLoginOpen(false)}>
-					<ClearIcon />
-				</button>
-				<h1 className="modal-heading">Login to DisStreamChat</h1>
-				<h2 className="modal-subheading">Connect with:</h2>
+			<Modal isOpen={loginOpen} BackdropComponent={Backdrop} className="Modal" overlayClassName="Modal-Overlay" onRequestClose={() => setLoginOpen(false)}>
+				<Fade in={loginOpen}>
+					<button className="exit-button" onClick={() => setLoginOpen(false)}>
+						<ClearIcon />
+					</button>
+					<h1 className="modal-heading">Login to DisStreamChat</h1>
+					<h2 className="modal-subheading">Connect with:</h2>
 
-				<form
-					className="modal-buttons"
-					onSubmit={e => {
-						e.preventDefault();
-					}}
-				>
-					<button type="submit">
-						<A
-							href={
-								readTerms
-									? `https://id.twitch.tv/oauth2/authorize?client_id=ip3igc72c6wu7j00nqghb24duusmbr&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code&scope=openid%20moderation:read%20chat:edit%20chat:read%20channel:moderate%20channel:read:redemptions%20user_subscriptions`
-									: null
-							}
-							className="modal-button twitch"
-							disabled={!readTerms}
-						>
-							<img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="20" className="logo-icon" />
-							Twitch
-						</A>
-					</button>
-					<button type="submit">
-						<A
-							href={
-								readTerms
-									? `https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20guilds`
-									: null
-							}
-							className="modal-button discord"
-							disabled={!readTerms}
-						>
-							<img
-								style={{ filter: "grayscale(1) brightness(10000%)" }}
-								src={`${process.env.PUBLIC_URL}/discord_logo.png`}
-								alt=""
-								width="20"
-								className="logo-icon"
-							/>
-							Discord
-						</A>
-					</button>
-					<div className="legal">
-						<input
-							required
-							value={readTerms}
-							onChange={e => setReadTerms(e.target.checked)}
-							id="terms-check"
-							type="checkbox"
-							name="terms"
-						/>
-						<label htmlFor="terms-check">
-							I accept the{" "}
-							<A href="/terms" local newTab>
-								terms and conditions
-							</A>{" "}
-							and{" "}
-							<A href="/privacy" local newTab>
-								privacy policy
+					<form
+						className="modal-buttons"
+						onSubmit={e => {
+							e.preventDefault();
+						}}
+					>
+						<button type="submit">
+							<A
+								href={
+									readTerms
+										? `https://id.twitch.tv/oauth2/authorize?client_id=ip3igc72c6wu7j00nqghb24duusmbr&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code&scope=openid%20moderation:read%20chat:edit%20chat:read%20channel:moderate%20channel:read:redemptions%20user_subscriptions`
+										: null
+								}
+								className="modal-button twitch"
+								disabled={!readTerms}
+							>
+								<img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="20" className="logo-icon" />
+								Twitch
 							</A>
-						</label>
-					</div>
-				</form>
+						</button>
+						<button type="submit">
+							<A
+								href={
+									readTerms
+										? `https://discord.com/api/oauth2/authorize?client_id=702929032601403482&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}%2F%3Fdiscord%3Dtrue&response_type=code&scope=identify%20guilds`
+										: null
+								}
+								className="modal-button discord"
+								disabled={!readTerms}
+							>
+								<img
+									style={{ filter: "grayscale(1) brightness(10000%)" }}
+									src={`${process.env.PUBLIC_URL}/discord_logo.png`}
+									alt=""
+									width="20"
+									className="logo-icon"
+								/>
+								Discord
+							</A>
+						</button>
+						<div className="legal">
+							<input
+								required
+								value={readTerms}
+								onChange={e => setReadTerms(e.target.checked)}
+								id="terms-check"
+								type="checkbox"
+								name="terms"
+							/>
+							<label htmlFor="terms-check">
+								I accept the{" "}
+								<A href="/terms" local newTab>
+									terms and conditions
+								</A>{" "}
+								and{" "}
+								<A href="/privacy" local newTab>
+									privacy policy
+								</A>
+							</label>
+						</div>
+					</form>
+				</Fade>
 			</Modal>
 			<div className="hamburger-holder">
 				<HamburgerMenu
