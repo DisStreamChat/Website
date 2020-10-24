@@ -773,6 +773,9 @@
 }
 
 .command-modal {
+    *{
+        color: white !important
+    }
 	width: 100vw !important;
 	min-height: 100vh;
 	display: block !important;

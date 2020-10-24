@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import firebase from "../../../../../firebase";
 import { DiscordContext } from "../../../../../contexts/DiscordContext";
-import Modal from "react-modal";
 import CreateTextCommand from "./CreateTextCommand";
 import CreateRoleCommand from "./CreateRoleCommand";
 import CreateCommand from "./CreateCommand";
 import { CommandContextProvider } from "../../../../../contexts/CommandContext";
 import CommandItem from "./CommandItem";
 import { CommandContext } from "../../../../../contexts/CommandContext";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Grow from "@material-ui/core/Grow";
 
 const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 	const [creatingCommand, setCreatingCommand] = useState(false);
@@ -31,7 +33,7 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 	useEffect(() => {
 		const unsub = firebase.db
 			.collection("customCommands")
-			.doc(guildId)
+			.doc(guildId || " ")
 			.onSnapshot(snapshot => {
 				const data = snapshot.data();
 				if (data) {
@@ -65,15 +67,16 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 
 	return (
 		<div>
-			<Modal
-				isOpen={creatingCommand}
-				className="command-modal Modal"
-				overlayClassName="command-overlay Modal-Overlay"
-				onRequestClose={() => setCreatingCommand(false)}
-			>
-				<CreateCommand guild={userConnectedGuildInfo}  role={creatingCommand === "role"} setCreatingCommand={setCreatingCommand}>
-					{creatingCommand === "text" ? <CreateTextCommand guild={userConnectedGuildInfo} /> : <CreateRoleCommand guild={userConnectedGuildInfo} />}
-				</CreateCommand>
+			<Modal closeAfterTransition open={creatingCommand} onClose={() => setCreatingCommand(false)} BackdropComponent={Backdrop}>
+				<Grow in={creatingCommand}>
+					<CreateCommand guild={userConnectedGuildInfo} role={creatingCommand === "role"} setCreatingCommand={setCreatingCommand}>
+						{creatingCommand === "text" ? (
+							<CreateTextCommand guild={userConnectedGuildInfo} />
+						) : (
+							<CreateRoleCommand guild={userConnectedGuildInfo} />
+						)}
+					</CreateCommand>
+				</Grow>
 			</Modal>
 			<div className="plugin-item-header">
 				<span className="title">
@@ -119,7 +122,15 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 					.sort((a, b) => a[0].localeCompare(b[0]))
 					.sort((a, b) => (a[1].type === "role" ? -1 : 1))
 					.map(([key, value]) => (
-						<CommandItem guild={userConnectedGuildInfo} setCommands={setCommands} setCreatingCommand={setCreatingCommand} allowedRoles={value.permittedRoles} {...value} name={key} key={key} />
+						<CommandItem
+							guild={userConnectedGuildInfo}
+							setCommands={setCommands}
+							setCreatingCommand={setCreatingCommand}
+							allowedRoles={value.permittedRoles}
+							{...value}
+							name={key}
+							key={key}
+						/>
 					))}
 			</div>
 		</div>

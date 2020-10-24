@@ -52,7 +52,7 @@ const parseSelectValue = value => {
 	}
 };
 
-const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnectedGuildInfo }) => {
+const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnectedGuildInfo, ...props }) => {
 	const {
 		editing,
 		setEditing,
@@ -90,7 +90,7 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 	}, [editing, userConnectedGuildInfo?.roles, setAllowedRoles]);
 
 	return (
-		<>
+		<div className="command-modal" {...props}>
 			<div className="command-header">
 				<h1>Create {role ? "Role" : "Text"} Command</h1>
 				<button onClick={() => setCreatingCommand(false)}>
@@ -288,7 +288,7 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 					{editing ? "Update" : "Create"}
 				</button>
 			</div>
-		</>
+		</div>
 	);
 };
 
