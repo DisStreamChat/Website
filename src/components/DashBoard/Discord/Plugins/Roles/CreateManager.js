@@ -79,8 +79,9 @@ const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) =>
 						error(null);
 						if (!state?.manager?.message?.length) return error("The Manager have a message id");
 						const commandRef = firebase.db.collection("reactions").doc(userConnectedGuildInfo.id);
-                        const manager = {...state.manager}
-                        manager.actions = manager.actions.map(action => ({...action, DMuser: !!action.DMuser}))
+						const manager = {...state.manager}
+						console.log(manager)
+                        // manager.actions = manager.actions.map(action => ({...action, DMuser: !!action.DMuser}))
 
 						commandRef.update({ [state.manager.message]: manager });
 

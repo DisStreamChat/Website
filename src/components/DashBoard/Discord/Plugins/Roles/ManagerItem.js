@@ -123,7 +123,7 @@ export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, 
 		const actionObj = {
 			role: roleID,
 			type: action.type,
-			DMuser: action.DMuser,
+			DMuser: !!action.DMuser,
 		};
 		if (onSubmit) {
 			onSubmit(action.emoji, actionObj);
