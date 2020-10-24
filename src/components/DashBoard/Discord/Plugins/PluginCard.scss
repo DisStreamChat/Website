@@ -38,10 +38,16 @@
 	}
 	&:not(.coming-soon):hover {
 		background: lighten($color: $background-color, $amount: 3);
-	}
-	display: flex;
+    }
+    a{
+
+        display: flex;
+        width: 300px;
+        height: 100px;
+    }
+    display: flex;
     width: 300px;
-	height: 100px;
+    height: 100px;
 	padding: 20px;
 	align-items: center;
 	box-sizing: content-box !important;
@@ -177,4 +183,10 @@
 .MuiSvgIcon-root{
     font-size: inherit !important
     ;
+}
+
+.plugin-switch{
+    position: absolute;
+    top: -16px;
+    right: -25px;
 }

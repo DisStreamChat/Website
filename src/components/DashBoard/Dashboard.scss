@@ -1056,3 +1056,17 @@ span.toggle-button button {
 
 
 
+
+.blank-home{
+	*{
+		cursor: not-allowed;
+	}
+	*:not(div), .prefix-body, .plugin-card{
+		color: #121212 !important;
+		background: #121212 !important;
+		border-color: #121212 !important;
+	}
+	*::after, .plugin-switch, .image, hr{
+		display: none;
+	}
+}

@@ -80,25 +80,6 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 					<img src={`${process.env.PUBLIC_URL}/aprove.png`} alt="" />
 					<h2>Custom Commands</h2>
 				</span>
-				<span className="toggle-button">
-					<button
-						onClick={() => {
-							setActivePlugins(prev => {
-								const newPlugs = { ...prev, commands: false };
-								firebase.db
-									.collection("DiscordSettings")
-									.doc(guildId || " ")
-									.update({
-										activePlugins: newPlugs,
-									});
-								return newPlugs;
-							});
-							setDashboardOpen(true)
-						}}
-					>
-						Disable
-					</button>
-				</span>
 			</div>
 			<hr />
 			{/* <div className="plugin-item-subheader">

@@ -171,25 +171,6 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<img src={`${process.env.PUBLIC_URL}/clipboard.svg`} alt="" />
 					<h2>Logging</h2>
 				</span>
-				<span className="toggle-button">
-					<button
-						onClick={() => {
-							setActivePlugins(prev => {
-								const newPlugs = { ...prev, logging: false };
-								firebase.db
-									.collection("DiscordSettings")
-									.doc(guildId || " ")
-									.update({
-										activePlugins: newPlugs,
-									});
-								return newPlugs;
-							});
-							setDashboardOpen(true);
-						}}
-					>
-						Disable
-					</button>
-				</span>
 			</div>
 			<hr />
 			<div className="plugin-item-subheader">

@@ -149,35 +149,6 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<img src={`${process.env.PUBLIC_URL}/trophy.svg`} alt="" />
 					<h2>Leveling</h2>
 				</span>
-				<span className="toggle-button">
-					<button
-						onClick={() => {
-							setActivePlugins(prev => {
-								const newPlugs = { ...prev, leveling: false };
-
-								firebase.db
-									.collection("DiscordSettings")
-									.doc(guildId || " ")
-									.update({
-										activePlugins: newPlugs,
-									})
-									.catch(err => {
-										firebase.db
-											.collection("DiscordSettings")
-											.doc(guildId || " ")
-											.set({
-												activePlugins: newPlugs,
-											});
-									});
-
-								return newPlugs;
-							});
-							setDashboardOpen(true);
-						}}
-					>
-						Disable
-					</button>
-				</span>
 			</div>
 			<hr />
 			<div className="plugin-item-subheader flex">

@@ -12,7 +12,6 @@ import { AppContext } from "../../../contexts/Appcontext";
 import { DiscordContextProvider, DiscordContext } from "../../../contexts/DiscordContext";
 import PluginHome from "./Plugins/PluginHome";
 
-
 const DiscordPage = React.memo(({ location, history, match }) => {
 	const [displayGuild, setDisplayGuild] = useState();
 	const [refreshed, setRefreshed] = useState(false);
@@ -170,22 +169,19 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		async e => {
 			const name = e.value;
 			const guildByName = userDiscordInfo.guilds.find(guild => guild.name === name);
-            const selectedGuildId = guildByName.id;
-            try{
-
-                if (guildId) {
-                    const path = match.url.split("/");
-                    if (path.length > 3) {
-                        history.push(`${path.slice(0, 3).join("/")}/${selectedGuildId}`);
-                    } else {
-                        history.push(`${selectedGuildId}`);
-                    }
-                } else {
-                    history.push(`${match.url}/${selectedGuildId}`);
-                }
-            }catch(err){
-                
-            }
+			const selectedGuildId = guildByName.id;
+			try {
+				if (guildId) {
+					const path = match.url.split("/");
+					if (path.length > 3) {
+						history.push(`${path.slice(0, 3).join("/")}/${selectedGuildId}`);
+					} else {
+						history.push(`${selectedGuildId}`);
+					}
+				} else {
+					history.push(`${match.url}/${selectedGuildId}`);
+				}
+			} catch (err) {}
 			const { result: isMember } = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + selectedGuildId);
 			// const channelReponse = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + selectedGuildId);
 
@@ -219,10 +215,10 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 								options={userDiscordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
 								styles={colorStyles}
 							/>
-							<span>
+							{/* <span>
 								<img className="discord-profile" src={userDiscordInfo?.profilePicture} alt="" />
-								<span className="discord-name">{userDiscordInfo?.name}</span>
-							</span>
+								<span className="discord-name">{currentUser?.displayName}</span>
+							</span> */}
 						</div>
 						<div className="discord-body">
 							{isLoading ? (
@@ -245,7 +241,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 									)}
 								</>
 							) : (
-								<></>
+								<PluginHome connectedGuild={connectedGuild} guildId={guildId} match={match} blank />
 							)}
 						</div>
 					</>
@@ -265,6 +261,5 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 		</div>
 	);
 });
-
 
 export default withRouter(React.memo(DiscordPage));

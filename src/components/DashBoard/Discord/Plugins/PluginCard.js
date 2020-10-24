@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./PluginCard.scss";
 import Modal from "react-modal";
 import { useCallback } from "react";
@@ -8,69 +8,81 @@ import A from "../../../Shared/A";
 import firebase from "../../../../firebase";
 import { useContext } from "react";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
+import Switch from "@material-ui/core/Switch";
+import { withStyles } from "@material-ui/core/styles";
+import chroma from "chroma-js";
 
 Modal.setAppElement("#root");
 
-const PluginCard = ({ guild: guildId, ...props }) => {
-	const [modalOpen, setModalOpen] = useState(false);
+const BlueSwitch = withStyles({
+	switchBase: {
+		color: "#84b7d7",
+		"&$checked": {
+			color: "#2d688d",
+		},
+		"&$checked + $track": {
+			backgroundColor: "#2d688d",
+		},
+	},
+	checked: {},
+	track: {},
+})(Switch);
+
+const PluginCard = React.memo(({ guild: guildId, id, active, ...props }) => {
 	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
+	const [enabled, setEnabled] = useState(true);
 
-	const handleClick = useCallback(() => {
-		if (!props.active && !props.comingSoon) {
-			setModalOpen(true);
-		}
-	}, [props]);
+	useEffect(() => {
+		setEnabled(!!active);
+	}, [active]);
 
-	const enable = () => {
+	const handleChange = e => {
+		const checked = e.target.checked;
+		setEnabled(checked);
+
 		setActivePlugins(prev => {
-			const newPlugs = { ...prev, [props.id]: true };
+			const newPlugs = { ...prev, [id]: checked };
 			firebase.db
 				.collection("DiscordSettings")
 				.doc(guildId || " ")
 				.update({
 					activePlugins: newPlugs,
+				})
+				.then(() => setDashboardOpen(true))
+				.catch(err => {
+					firebase.db
+						.collection("DiscordSettings")
+						.doc(guildId || " ")
+						.set({
+							activePlugins: newPlugs,
+						});
 				});
 			return newPlugs;
 		});
-		setDashboardOpen(true)
-		props.history.push(`${props.match.url}/${props.id}`);
 	};
 
 	return (
-		<>
-			<Modal
-				isOpen={modalOpen}
-				className="plugin-modal Modal"
-				overlayClassName="plugin-overlay Modal-Overlay"
-				onRequestClose={() => setModalOpen(false)}
-			>
-				<div className="top-portion">
-					<h2>
-						Enable Plugin: <u>{props.title}</u>
-					</h2>
-					<button onClick={() => setModalOpen(false)}>
-						<ClearTwoToneIcon />
-					</button>
+		<div className={`plugin-card ${props.comingSoon ? "coming-soon" : ""}`}>
+			<span className="plugin-switch">
+				<BlueSwitch
+					checked={enabled}
+					onChange={handleChange}
+					color="primary"
+					name={id}
+					inputProps={{ "aria-label": "primary checkbox" }}
+				/>
+			</span>
+			<A className="plugin-card-a" href={active ? `${props.match.url}/${id}` : `#`} local>
+				<div className="image">
+					<img src={`${process.env.PUBLIC_URL}/${props.image}`} alt="" />
 				</div>
-				<div className="bottom-buttons">
-					<button onClick={enable} className="enable-plugin">
-						Enable
-					</button>
-				</div>
-			</Modal>
-			<A href={props.active ? `${props.match.url}/${props.id}` : `#`} local>
-				<div onClick={handleClick} className={`plugin-card ${props.active ? "active" : "disabled"} ${props.comingSoon ? "coming-soon" : ""}`}>
-					<div className="image">
-						<img src={`${process.env.PUBLIC_URL}/${props.image}`} alt="" />
-					</div>
-					<div className="text">
-						<h2>{props.title}</h2>
-						<h4>{props.description}</h4>
-					</div>
+				<div className="text">
+					<h2>{props.title}</h2>
+					<h4>{props.description}</h4>
 				</div>
 			</A>
-		</>
+		</div>
 	);
-};
+});
 
 export default withRouter(PluginCard);

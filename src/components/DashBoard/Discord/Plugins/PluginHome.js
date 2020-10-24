@@ -14,7 +14,7 @@ import App from "./App";
 import Roles from "./Roles/Roles";
 import _ from "lodash";
 
-const PluginHome = ({ match, guildId, connectedGuild }) => {
+const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 	const [prefix, setPrefix] = useState("!");
 	const { userDiscordInfo, activePlugins, setActivePlugins, saveOnType } = useContext(DiscordContext);
 	const [loading, setLoading] = useState(true);
@@ -69,10 +69,8 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 		[connectedGuild?.id]
 	);
 
-	const displayPlugins = useMemo(() => plugins.sort((a, b) => (activePlugins[a.id] ? -1 : 1)), [plugins, activePlugins]);
-
 	return (
-		<>
+		<span className={blank ? "blank-home" : ""}>
 			<hr />
 			<div className="discord-prefix">
 				<label htmlFor="discord-prefix">
@@ -96,7 +94,7 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 						</div>
 
 						<div className="plugin-list">
-							{displayPlugins.map(plugin => (
+							{plugins.map(plugin => (
 								<PluginCard guild={guildId} key={plugin.id} {...plugin} active={activePlugins[plugin.id]} />
 							))}
 						</div>
@@ -128,7 +126,7 @@ const PluginHome = ({ match, guildId, connectedGuild }) => {
 					<Redirect to={`${match.url}`} />
 				</Switch>
 			</div>
-		</>
+		</span>
 	);
 };
 
