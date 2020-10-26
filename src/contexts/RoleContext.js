@@ -13,21 +13,22 @@ const Actions = {
 	ADD_REACTION: "add_reaction",
 };
 
-const initialState = {
+const initialState = () => ({
 	editing: false,
 	error: null,
 	manager: {},
 	type: null,
-};
+});
 
 const RoleReducer = (state, action) => {
 	switch (action.type) {
 		case Actions.SETUP:
-			return initialState;
+			console.log("reseting to ", initialState())
+			return {...initialState()};
 		case Actions.EDIT:
 			return { ...state, manager: action.manager, type: action.creatingType, editing: true };
 		case Actions.CREATE:
-			return { ...state, type: action.creatingType };
+			return { ...initialState(), type: action.creatingType };
 		case Actions.UPDATE:
 			const newState = { ...state };
 			lodash.set(newState, action.path, action.value);
@@ -46,8 +47,7 @@ const RoleReducer = (state, action) => {
 };
 
 export const RoleContextProvider = props => {
-	const [state, dispatch] = useReducer(RoleReducer, initialState);
-
+	const [state, dispatch] = useReducer(RoleReducer, {...initialState()});
 	const setup = () => dispatch({ type: Actions.SETUP });
 
 	const create = type => {

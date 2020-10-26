@@ -62,10 +62,11 @@ const ManagerBody = styled.div`
 	border: 1px solid black;
 	background: #1f1f1f;
     flex-direction: column;
-    width: 100%;
+    // width: 100%;
 `;
 
 const ActionBody = styled.div`
+	width: 75% !important;
 	display: flex;
 	padding: 1rem;
 	justify-content: space-between;
@@ -108,30 +109,12 @@ const types = {
 
 export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, adding, emoji, type, deleteAble, add, onClick, close }) => {
 	const [displayRole, setDisplayRole] = useState();
-	const { state, update } = useContext(RoleContext);
-	const [action, setAction] = useState({});
-
+	
 	useEffect(() => {
 		if (!add && !adding) {
 			setDisplayRole(guild.roles.find(r => r.id === role));
 		}
 	}, [adding, guild, role, add]);
-
-	const submit = () => {
-		const roleID = JSON.parse(action.role.value.split("=")[1]).id;
-		console.log(roleID);
-		const actionObj = {
-			role: roleID,
-			type: action.type,
-			DMuser: !!action.DMuser,
-		};
-		if (onSubmit) {
-			onSubmit(action.emoji, actionObj);
-		} else {
-			update(`manager.actions[${action.emoji}]`, actionObj);
-		}
-		return close?.();
-	};
 
 	const deleteMe = async () => {
 		if (!deleteAble) return;
@@ -176,110 +159,7 @@ export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, 
 					<h4 style={{ marginLeft: ".5rem" }}>Add Action</h4>
 				</span>
 			) : (
-				<>
-					<span>
-						<FormControlLabel
-							control={
-								<FancySwitch
-									color="primary"
-									checked={action.emoji === "catch-all"}
-									onChange={e => {
-										if (e.target.checked) {
-											setAction(prev => ({ ...prev, emoji: "catch-all" }));
-										} else {
-											setAction(prev => ({ ...prev, emoji: null }));
-										}
-									}}
-									name={"catch-all"}
-								/>
-							}
-							label={"ALL"}
-						/>
-					</span>
-					{action.emoji ? (
-						<span style={{ marginRight: ".5rem", textTransform: "capitalize" }}>
-							<Twemoji options={{ className: "twemoji" }}>{action.emoji?.replace("catch-all", "All").replace("-", " ")}</Twemoji>
-						</span>
-					) : (
-						<Picker
-							theme="dark"
-							style={{ position: "absolute", top: ".25rem", left: "6rem", zIndex: 100 }}
-							set="twitter"
-							title="Pick your emoji…"
-							emoji="point_up"
-							onSelect={emoji => setAction(prev => ({ ...action, emoji: emoji.native }))}
-						/>
-					)}
-					Role:{" "}
-					<div style={{ marginLeft: ".5rem", width: "50%" }}>
-						<Select
-							onChange={e => {
-								setAction(prev => ({ ...prev, role: e }));
-							}}
-							placeholder="Select Reaction Role"
-							value={action.role || ""}
-							options={guild?.roles
-								?.filter(role => role.name !== "@everyone" && !role.managed)
-								?.sort((a, b) => b.rawPosition - a.rawPosition)
-								?.map(role => ({
-									value: `${role.name}=${JSON.stringify(role)}`,
-									label: <RoleItem {...role}>{role.name}</RoleItem>,
-								}))}
-							styles={{
-								...colorStyles,
-								container: styles => ({
-									...styles,
-									...colorStyles.container,
-								}),
-							}}
-						/>
-					</div>
-					Type:{" "}
-					<div style={{ marginLeft: ".5rem", width: "50%" }}>
-						<Select
-							// closeMenuOnSelect={false}
-							onChange={e => {
-								setAction(prev => ({ ...prev, type: e.value }));
-							}}
-							placeholder="Select Action Type"
-							value={action?.type ? { value: action?.type, label: types[action?.type] } : ""}
-							options={Object.entries(types || {})?.map(([key, value]) => ({
-								value: key,
-								label: value,
-							}))}
-							styles={{
-								...colorStyles,
-								container: styles => ({
-									...styles,
-									...colorStyles.container,
-								}),
-							}}
-						/>
-					</div>
-					<div style={{ paddingLeft: ".75rem" }}>
-						<FormControlLabel
-							control={
-								<FancySwitch
-									color="primary"
-									checked={!!action.DMuser}
-									onChange={e => {
-										setAction(prev => ({ ...prev, DMuser: e.target.checked }));
-									}}
-									name={"dm_user"}
-								/>
-							}
-							label={"DM"}
-						/>
-					</div>
-					{action.role && action.type && action.emoji && (
-						<ActionButton onClick={submit}>
-							<CheckIcon />
-						</ActionButton>
-					)}
-					<ActionButton onClick={() => close?.()}>
-						<CloseIcon />
-					</ActionButton>
-				</>
+				<></>
 			)}
 		</ActionBody>
 	);

@@ -7,40 +7,24 @@ import RoleItem from "../../../../Shared/RoleItem";
 
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import firebase from "../../../../../firebase";
-import { ActionItem } from "./ManagerItem";
-
-const parseSelectValue = value => {
-	if (value instanceof Array) {
-		if (value.length === 0) return value;
-		return value.map(role => JSON.parse(role.value.split("=")[1])).map(val => val.id);
-	} else {
-		try {
-			return JSON.parse(value.value.split("=")[1]).id;
-		} catch (err) {
-			return null;
-		}
-	}
-};
 
 const CreateJoinManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) => {
-	const { state, update, error, setup, addReaction } = useContext(RoleContext);
-	const [addingAction, setAddingAction] = useState(false);
+	const { state, update, error, setup } = useContext(RoleContext);
 
-	useEffect(() => {
-		update("manager.message", "member-join");
-	}, []);
 	return (
 		<>
 			<div className="command-header">
-				<h1>Create Join Manager</h1>
+				<h1>Create Join Roles</h1>
 				<button onClick={setup}>
 					<ClearIcon />
 				</button>
 			</div>
 			<div className="command-body">
-				<h4 className="plugin-section-title">Member Join Role</h4>
+				<h4 className="plugin-section-title">Member Join Roles</h4>
 				<div className="plugin-section">
 					<Select
+						isMulti
+						closeMenuOnSelect={false}
 						onChange={e => {
 							update(`manager.actions["user-join"]`, e);
 						}}
@@ -71,7 +55,7 @@ const CreateJoinManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }
 						if (!state?.manager?.message?.length) return error("The Manager have a message id");
 						const commandRef = firebase.db.collection("reactions").doc(userConnectedGuildInfo.id);
 						const manager = { ...state.manager };
-						manager.actions["user-join"] = {role: JSON.parse(state.manager.actions["user-join"].value.split("=")[1]).id};
+						manager.actions["user-join"] = { role: JSON.parse(state.manager.actions["user-join"].value.split("=")[1]).id };
 						commandRef.update({ [state.manager.message]: manager });
 
 						setup();

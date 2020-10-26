@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import firebase from "../../../../../firebase";
-import { DiscordContext } from "../../../../../contexts/DiscordContext";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import ManagerItem from "./ManagerItem";
 import Modal from "react-modal";
@@ -10,7 +9,6 @@ import CreateJoinManager from "./CreateJoinManager";
 const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	const [MessageManagers, setMessageManagers] = useState([]);
 	const [JoinManager, setJoinManager] = useState();
-	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
 	const { state, create, setup } = useContext(RoleContext);
 	const guildId = userConnectedGuildInfo?.id;
 
@@ -60,7 +58,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 				<h4>Different ways to have the bot manage user roles. Give a role on join, toggle roles with reactions, etc.</h4>
 			</div>
 			<div className="plugin-item-body">
-				<h4 className="plugin-section-title">Create Manager</h4>
+				<h4 className="plugin-section-title">Create Role Manager</h4>
 				<div className="command-card-body">
 					<div
 						className="create-command"
@@ -68,8 +66,17 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 							create("message");
 						}}
 					>
-						<h1>Message Manager</h1>
-						<p>allow users to give/remove roles from themeselves by reacting to a message</p>
+						<h1>Reaction Role</h1>
+						<p>allow users to give/remove roles from themselves by reacting to a message</p>
+					</div>
+					<div
+						className="create-command"
+						onClick={() => {
+							// create("message");
+						}}
+					>
+						<h1>Command Role</h1>
+						<p>allow users to give/remove roles from themselves by sending a command</p>
 					</div>
 					{!JoinManager && (
 						<div
@@ -78,19 +85,19 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 								create("join");
 							}}
 						>
-							<h1>Member Join Manager</h1>
-							<p>Automatically Give a user a role when they join your server</p>
+							<h1>Join Role</h1>
+							<p>Automatically give a user a role when they join your server</p>
 						</div>
 					)}
 				</div>
 				{!state.type && JoinManager && (
 					<>
-						<h4 className="plugin-section-title bigger">Member Join Manager</h4>
+						<h4 className="plugin-section-title bigger">Join Roles</h4>
 						<ManagerItem guild={userConnectedGuildInfo} {...JoinManager} join channelOveride="Member Join" />
 					</>
 				)}
 				<h4 className="plugin-section-title bigger">
-					Message Managers<span> — {MessageManagers.length}</span>
+					Reaction Roles<span> — {MessageManagers.length}</span>
 				</h4>
 				{!state.type &&
 					MessageManagers.sort((a, b) => a.message.localeCompare(b.message)).map((manager, i) => (
