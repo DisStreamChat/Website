@@ -48,7 +48,7 @@ const FancySwitch = withStyles({
 
 const ActionButton = styled.div`
 	cursor: pointer;
-	&:first-child{
+	&:first-child {
 		transform: scale(1.5);
 	}
 `;
@@ -103,14 +103,19 @@ const ActionHead = styled.div`
 			display: flex;
 			justify-content: space-between;
 			margin-left: 1.5rem;
-			
 		}
 	}
 `;
 const ActionFooter = styled.div`
 	overflow: hidden;
-	height: ${props => props.open ? "100px" : "0px"};
+	height: ${props => (props.open ? "100px" : "0px")};
+	margin-top: 0.5rem;
 	display: flex;
+	padding: 0.5rem;
+	align-items: center;
+	margin-left: 0;
+	justify-content: space-between;
+	transition: height 0.25s;
 `;
 
 const types = {
@@ -125,6 +130,7 @@ const types = {
 const CreateAction = ({ guild, onSubmit, close }) => {
 	const [action, setAction] = useState({});
 	const { update } = useContext(RoleContext);
+	const [open, setOpen] = useState(false);
 
 	const submit = () => {
 		const roleID = JSON.parse(action.role.value.split("=")[1]).id;
@@ -203,7 +209,7 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 					</ActionButton>
 				</div>
 			</ActionHead>
-			<ActionFooter open>
+			<ActionFooter open={open}>
 				<span>
 					<FormControlLabel
 						control={
