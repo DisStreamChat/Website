@@ -40,7 +40,7 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 			}
 			setTimeout(() => {
 				setLoading(false);
-			}, 100);
+			}, 300);
 		})();
 	}, [connectedGuild]);
 
