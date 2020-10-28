@@ -43,7 +43,6 @@ const FancySwitch = withStyles({
 			opacity: "1 !important",
 		},
 	},
-	
 })(Switch);
 
 const ChannelParent = styled.span`
@@ -106,6 +105,7 @@ const types = {
 	ADD_ON_REMOVE: "Add (reversed)",
 	REMOVE_ON_ADD: "Remove (reversed)",
 	TOGGLE: "Toggle",
+	TOGGLE_REVERSED: "Toggle (reversed)",
 };
 
 export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, adding, emoji, type, deleteAble, add, onClick, close }) => {
@@ -113,7 +113,11 @@ export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, 
 	
 	useEffect(() => {
 		if (!add && !adding) {
-			setDisplayRole(guild.roles.find(r => r.id === role));
+			if (!Array.isArray(role)) {
+				setDisplayRole([guild.roles.find(r => r.id === role)]);
+			} else {
+				setDisplayRole(role.map(id => guild.roles.find(r => r.id === id)));
+			}
 		}
 	}, [adding, guild, role, add]);
 
@@ -125,7 +129,7 @@ export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, 
 			.update({ [`${message}.actions.${emoji}`]: firebase.delete() });
 	};
 
-    const smallScreen = useMediaQuery("(max-width: 500px)")
+	const smallScreen = useMediaQuery("(max-width: 500px)");
 
 	return (
 		<ActionBody adding={adding}>
@@ -143,16 +147,19 @@ export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, 
 							</span>
 						</Twemoji>
 						-{" "}
-						{displayRole && (
-							<RoleItem style={{ marginLeft: ".5rem" }} {...displayRole}>
-								{displayRole.name}
-							</RoleItem>
-						)}
+						{displayRole &&
+							displayRole.map(role => (
+								<RoleItem style={{ marginLeft: ".5rem" }} {...role}>
+									{role.name}
+								</RoleItem>
+							))}
 					</FlexContainer>
-					{!smallScreen && <FlexContainer>
-						<h4>Type: {types[type]}</h4>
-						<h4 style={{ marginLeft: "2rem", textTransform: "capitalize" }}>DM: {(!!DMuser).toString()}</h4>
-					</FlexContainer>}
+					{!smallScreen && (
+						<FlexContainer>
+							<h4>Type: {types[type]}</h4>
+							<h4 style={{ marginLeft: "2rem", textTransform: "capitalize" }}>DM: {(!!DMuser).toString()}</h4>
+						</FlexContainer>
+					)}
 				</>
 			) : !adding ? (
 				<span onClick={() => onClick?.()} style={{ cursor: "pointer", display: "flex", alignItems: "center" }}>

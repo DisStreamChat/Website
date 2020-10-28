@@ -1,10 +1,99 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import A from "../Shared/A";
 import { Button } from "@material-ui/core";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import Feature from "../Shared/Feature";
+import { getOS, ArrayAny } from "../../utils/functions";
+
+const OsDownloadPage = ({ os }) => {
+	switch (os) {
+		case "Mac OS":
+		case "IOS":
+			return (
+				<div className="download-item">
+					<div className="heading">
+						<h1>Download for Mac</h1>
+					</div>
+					<img src={`${process.env.PUBLIC_URL}/apple.png`} width="64" style={{ filter: "invert(1)" }} alt="" />
+					<div className="download-links">
+						<A href="https://i.lungers.com/disstreamchat/darwin" newTab>
+							<Button className="download-button">Latest Version</Button>
+						</A>
+					</div>
+				</div>
+			);
+		case "Windows":
+		case "Android":
+			return (
+				<div className="download-item">
+					<div className="heading">
+						<h1>Download for Windows</h1>
+					</div>
+					<img src={`${process.env.PUBLIC_URL}/windows.webp`} width="100" alt="" />
+					<div className="download-links">
+						<A href="https://api.disstreamchat.com/app" newTab>
+							<Button className="download-button">Latest Version</Button>
+						</A>
+					</div>
+				</div>
+			);
+		case "Linux":
+			return (
+				<div className="download-item">
+					<div className="heading">
+						<h1>Download for Linux</h1>
+					</div>
+					<img src={`${process.env.PUBLIC_URL}/linux.png`} width="100" alt="" />
+					<div className="download-links">
+						<A href="https://i.lungers.com/disstreamchat/linux" newTab>
+							<Button className="download-button">Latest Version</Button>
+						</A>
+					</div>
+				</div>
+			);
+		default:
+			return (
+				<>
+					<div className="download-item">
+						<div className="heading">
+							<h1>Download for Windows</h1>
+						</div>
+						<img src={`${process.env.PUBLIC_URL}/windows.webp`} width="100" alt="" />
+						<div className="download-links">
+							<A href="https://api.disstreamchat.com/app" newTab>
+								<Button className="download-button">Latest Version</Button>
+							</A>
+						</div>
+					</div>
+					<div className="download-item">
+						<div className="heading">
+							<h1>Download for Linux</h1>
+						</div>
+						<img src={`${process.env.PUBLIC_URL}/linux.png`} width="100" alt="" />
+						<div className="download-links">
+							<A href="https://i.lungers.com/disstreamchat/linux" newTab>
+								<Button className="download-button">Latest Version</Button>
+							</A>
+						</div>
+					</div>
+					<div className="download-item">
+						<div className="heading">
+							<h1>Download for Mac</h1>
+						</div>
+						<img src={`${process.env.PUBLIC_URL}/apple.png`} width="64" style={{ filter: "invert(1)" }} alt="" />
+						<div className="download-links">
+							<A href="https://i.lungers.com/disstreamchat/darwin" newTab>
+								<Button className="download-button">Latest Version</Button>
+							</A>
+						</div>
+					</div>
+				</>
+			);
+	}
+};
 
 const DownloadPage = () => {
+	const os = useMemo(getOS, []);
 	return (
 		<div className="download-page">
 			<div className="left">
@@ -13,43 +102,11 @@ const DownloadPage = () => {
 					subtitle="All your stream chats in one place"
 					body="Keeping track of your stream can be really difficult, especially if you are streaming cross platform and have large discord
 					community. DisStreamChat allows you have all your chats in one place so you can easily view and moderate the chat."
-                    images={["https://panels-images.twitch.tv/panel-40229165-image-1b8f110f-2370-4af4-9610-a6bcb9ee8872"]}
-                ></Feature>
+					images={["https://panels-images.twitch.tv/panel-40229165-image-1b8f110f-2370-4af4-9610-a6bcb9ee8872"]}
+				></Feature>
 			</div>
 			<div className="right downloads">
-				<div className="download-item">
-					<div className="heading">
-						<h1>Download for Windows</h1>
-					</div>
-                    <img src={`${process.env.PUBLIC_URL}/windows.webp`}  width="100" alt=""/>
-					<div className="download-links">
-						<A href="https://api.disstreamchat.com/app" newTab>
-							<Button className="download-button">Latest Version</Button>
-						</A>
-					</div>
-				</div>
-				<div className="download-item">
-					<div className="heading">
-						<h1>Download for Linux</h1>
-					</div>
-                    <img src={`${process.env.PUBLIC_URL}/linux.png`} width="100" alt=""/>
-					<div className="download-links">
-						<A href="https://i.lungers.com/disstreamchat/linux" newTab>
-							<Button className="download-button">Latest Version</Button>
-						</A>
-					</div>
-				</div>
-				<div className="download-item">
-					<div className="heading">
-						<h1>Download for Mac</h1>
-					</div>
-                    <img src={`${process.env.PUBLIC_URL}/apple.png`} width="64" style={{filter: "invert(1)"}} alt=""/>
-					<div className="download-links">
-						<A href="https://i.lungers.com/disstreamchat/darwin" newTab>
-							<Button className="download-button">Latest Version</Button>
-						</A>
-					</div>
-				</div>
+				<OsDownloadPage os={os} />
 			</div>
 		</div>
 	);
