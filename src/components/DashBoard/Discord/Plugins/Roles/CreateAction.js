@@ -54,7 +54,7 @@ const ActionButton = styled.div`
 `;
 
 const ActionBody = styled.div`
-	width: 75% !important;
+	width: 100% !important;
 	box-sizing: border-box;
 	padding: 1rem;
 	justify-content: space-between;
