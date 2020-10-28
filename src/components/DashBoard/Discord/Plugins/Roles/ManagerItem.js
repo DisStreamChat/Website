@@ -66,12 +66,13 @@ const ManagerBody = styled.div`
 `;
 
 const ActionBody = styled.div`
-	width: 75% !important;
+	width: 100% !important;
+	box-sizing: border-box !important;
 	display: flex;
 	padding: 1rem;
 	justify-content: space-between;
 	margin: 0.25rem;
-	margin-left: 0.75rem;
+	margin-left: 0rem;
 	background: #1a1a1a;
 	position: relative;
 	align-items: center;

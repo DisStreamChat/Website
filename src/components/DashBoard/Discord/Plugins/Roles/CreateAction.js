@@ -55,11 +55,11 @@ const ActionButton = styled.div`
 
 const ActionBody = styled.div`
 	width: 75% !important;
-	// display: flex;
+	box-sizing: border-box;
 	padding: 1rem;
 	justify-content: space-between;
 	margin: 0.25rem;
-	margin-left: 0.75rem;
+	margin-left: 0rem;
 	background: #1a1a1a;
 	position: relative;
 	align-items: center;
@@ -106,16 +106,40 @@ const ActionHead = styled.div`
 		}
 	}
 `;
+
 const ActionFooter = styled.div`
-	overflow: hidden;
+	overflow: ${props => props.open ? "visible" : "hidden"};
 	height: ${props => (props.open ? "100px" : "0px")};
 	margin-top: 0.5rem;
 	display: flex;
-	padding: 0.5rem;
+	// padding: ${props => (props.open ? "0.5rem" : "0px")};
+	padding-left: .5rem;
+	// padding-right: .5rem;
 	align-items: center;
 	margin-left: 0;
 	justify-content: space-between;
 	transition: height 0.25s;
+	& > div {
+		flex: 1;
+		&:last-child,
+		&:first-child {
+			flex: 0.1;
+		}
+		&:first-child {
+			display: flex;
+			align-items: center;
+			.twemoji {
+				width: 50px;
+			}
+		}
+
+		&:last-child {
+			align-items: center;
+			display: flex;
+			justify-content: space-between;
+			margin-left: 1.5rem;
+		}
+	}
 `;
 
 const types = {
@@ -133,10 +157,10 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 	const [open, setOpen] = useState(false);
 
 	const submit = () => {
-		const roleID = JSON.parse(action.role.value.split("=")[1]).id;
-		console.log(roleID);
+		const roleIDs = action.role.map(role => JSON.parse(role.value.split("=")[1]).id);
+		console.log(roleIDs);
 		const actionObj = {
-			role: roleID,
+			role: roleIDs,
 			type: action.type,
 			DMuser: !!action.DMuser,
 		};
@@ -196,7 +220,7 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 					</div>
 				</div>
 				<div>
-					<ActionButton>
+					<ActionButton onClick={() => setOpen(prev => !prev)}>
 						<KeyboardArrowDownIcon />
 					</ActionButton>
 					{action.role && action.type && action.emoji && (
@@ -229,7 +253,6 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 						label={"ALL"}
 					/>
 				</span>
-				Type:{" "}
 				<div style={{ marginLeft: ".5rem", width: "50%" }}>
 					<Select
 						// closeMenuOnSelect={false}
