@@ -20,3 +20,5 @@ export function getOS() {
 
 	return os;
 }
+
+export const ArrayAny = (arr1, arr2) => arr1.some(v => arr2.indexOf(v) >= 0);
