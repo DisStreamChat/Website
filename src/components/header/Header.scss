@@ -20,8 +20,18 @@
 	}
 
 	.header--right {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: fit-content;
 		padding: 0 2vw;
+		font-size: 1.25rem;
+		.user--name{
+			font-size: 1.25rem;
+		}
+		.login-button{
+			font-size: 1.25rem;
+		}
 	}
 
 	.nav-bar {

@@ -140,6 +140,11 @@ const Header = props => {
 					<A href="https://www.patreon.com/disstreamchat?fan_landing=true" newTab>
 						Support Us
 					</A>
+					{firebase.auth.currentUser && (
+						<Link to={`/dashboard/${firebase.auth.currentUser.uid}`}>
+							Dashboard
+						</Link>
+					)}
 					{/* <Link to="/about">About</Link> */}
 				</nav>
 			</span>
