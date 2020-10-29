@@ -1,3 +1,5 @@
+import React from "react"
+
 export const GuildIcon = props => {
 	return props.icon ? (
 		<img

@@ -1,3 +1,4 @@
+import React from "react"
 import GuildIcon from "../styled-components/GuildIcon"
 
 export function getOS() {
