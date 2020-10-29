@@ -11,7 +11,5 @@
 		"camelcase": 0,
 		"quotes": [2, "double", { "avoidEscape": true }],
 		"indent": ["error", "tab"],
-		"react/jsx-uses-react": "off",
-    "react/react-in-jsx-scope": "off"
 	}
 }
