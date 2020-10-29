@@ -6,6 +6,7 @@ import { CommandContext } from "../../../../../contexts/CommandContext";
 import firebase from "../../../../../firebase";
 import StyledSelect from "../../../../../styled-components/StyledSelect";
 import FancySwitch from "../../../../../styled-components/FancySwitch"
+import { parseSelectValue } from "../../../../../utils/functions"
 
 const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnectedGuildInfo }) => {
 	const {

@@ -5,13 +5,13 @@ import Twemoji from "react-twemoji";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
-import Select from "react-select";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import FancySwitch from "../../../../../styled-components/FancySwitch"
-import {REACTION_ROLE_ACTION_TYPES} from "../../../../../utils/constants"
+import FancySwitch from "../../../../../styled-components/FancySwitch";
+import { REACTION_ROLE_ACTION_TYPES } from "../../../../../utils/constants";
+import StyledSelect from "../../../../../styled-components/StyledSelect";
 
 const ActionButton = styled.div`
 	cursor: pointer;
@@ -73,11 +73,11 @@ const ActionHead = styled.div`
 `;
 
 const ActionFooter = styled.div`
-	overflow: ${props => props.open ? "visible" : "hidden"};
+	overflow: ${props => (props.open ? "visible" : "hidden")};
 	height: ${props => (props.open ? "100px" : "0px")};
 	margin-top: 0.5rem;
 	display: flex;
-	padding-left: .5rem;
+	padding-left: 0.5rem;
 	align-items: center;
 	margin-left: 0;
 	justify-content: space-between;
@@ -148,7 +148,7 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 				<div>
 					{/* Roles:{" "} */}
 					<div style={{ marginLeft: ".5rem", width: "100%" }}>
-						<Select
+						<StyledSelect
 							isMulti
 							closeMenuOnSelect={false}
 							onChange={e => {
@@ -163,13 +163,6 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 									value: `${role.name}=${JSON.stringify(role)}`,
 									label: <RoleItem {...role}>{role.name}</RoleItem>,
 								}))}
-							styles={{
-								...colorStyles,
-								container: styles => ({
-									...styles,
-									...colorStyles.container,
-								}),
-							}}
 						/>
 					</div>
 				</div>
@@ -208,8 +201,7 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 					/>
 				</span>
 				<div style={{ marginLeft: ".5rem", width: "50%" }}>
-					<Select
-						// closeMenuOnSelect={false}
+					<StyledSelect
 						onChange={e => {
 							setAction(prev => ({ ...prev, type: e.value }));
 						}}
@@ -219,13 +211,6 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 							value: key,
 							label: value,
 						}))}
-						styles={{
-							...colorStyles,
-							container: styles => ({
-								...styles,
-								...colorStyles.container,
-							}),
-						}}
 					/>
 				</div>
 				<div style={{ paddingLeft: ".75rem" }}>
