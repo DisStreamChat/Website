@@ -1,47 +1,17 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import firebase from "../../../../firebase";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
-import { colorStyles } from "../../../Shared/userUtils";
-import Select from "react-select";
+import { Tooltip } from "@material-ui/core";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { Switch, Tooltip } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import { blueGrey } from "@material-ui/core/colors";
 import InfoTwoToneIcon from "@material-ui/icons/InfoTwoTone";
-
-const FancySwitch = withStyles({
-	root: {
-		padding: 7,
-	},
-	thumb: {
-		width: 24,
-		height: 24,
-		backgroundColor: "#fff",
-		boxShadow: "0 0 12px 0 rgba(0,0,0,0.08), 0 0 8px 0 rgba(0,0,0,0.12), 0 0 4px 0 rgba(0,0,0,0.38)",
-	},
-	switchBase: {
-		color: "rgba(0,0,0,0.38)",
-		padding: 7,
-	},
-	track: {
-		borderRadius: 20,
-		backgroundColor: blueGrey[300],
-	},
-	checked: {
-		"& $thumb": {
-			backgroundColor: "#fff",
-		},
-		"& + $track": {
-			opacity: "1 !important",
-		},
-	},
-})(Switch);
+import StyledSelect from "../../../../styled-components/StyledSelect";
+import FancySwitch from "../../../../styled-components/FancySwitch";
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
 	const [activeEvents, setActiveEvents] = useState({});
 	const [allEvents, setAllEvents] = useState({});
-	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
+	const { setDashboardOpen } = useContext(DiscordContext);
 	const [channelOverrides, setChannelOverrides] = useState({});
 	const guildId = userConnectedGuildInfo?.id;
 
@@ -182,7 +152,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			<div className="plugin-item-body">
 				<h4 className="plugin-section-title">Logging Channel</h4>
 				<div className="plugin-section">
-					<Select
+					<StyledSelect
 						closeMenuOnSelect
 						onChange={handleAnnoucmentSelect}
 						placeholder="Select Logging Channel"
@@ -198,13 +168,6 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									</>
 								),
 							}))}
-						styles={{
-							...colorStyles,
-							container: styles => ({
-								...styles,
-								...colorStyles.container,
-							}),
-						}}
 					/>
 				</div>
 				{[...new Set(Object.values(allEvents || {}).map(val => val.category))].sort().map(category => (
@@ -213,12 +176,16 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 						<div className="plugin-section">
 							<h4 className="plugin-section-title">
 								Category Logging Channel Override{" "}
-								<Tooltip placement="top" arrow title="If set, events in this category will be logged in this channel instead of the default">
+								<Tooltip
+									placement="top"
+									arrow
+									title="If set, events in this category will be logged in this channel instead of the default"
+								>
 									<InfoTwoToneIcon />
 								</Tooltip>
 							</h4>
 							<div className="plugin-section subtitle" style={{ width: "100%" }}>
-								<Select
+								<StyledSelect
 									closeMenuOnSelect
 									onChange={e => {
 										handleOverrideSelect(e, category);
@@ -236,13 +203,6 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 												</>
 											),
 										}))}
-									styles={{
-										...colorStyles,
-										container: styles => ({
-											...styles,
-											...colorStyles.container,
-										}),
-									}}
 								/>
 								<span className="toggle-button">
 									<button onClick={() => handleOverrideSelect(null, category)}>Clear Category Override</button>

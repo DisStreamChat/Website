@@ -1,50 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import RoleItem from "../../../../Shared/RoleItem";
-import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
 import Twemoji from "react-twemoji";
-import AddCircleTwoToneIcon from "@material-ui/icons/AddCircleTwoTone";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
 import Select from "react-select";
-import { colorStyles } from "../../../../Shared/userUtils";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
-import firebase from "../../../../../firebase";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { blueGrey } from "@material-ui/core/colors";
-import { Switch } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-
-const FancySwitch = withStyles({
-	root: {
-		padding: 7,
-	},
-	thumb: {
-		width: 24,
-		height: 24,
-		backgroundColor: "#fff",
-		boxShadow: "0 0 12px 0 rgba(0,0,0,0.08), 0 0 8px 0 rgba(0,0,0,0.12), 0 0 4px 0 rgba(0,0,0,0.38)",
-	},
-	switchBase: {
-		color: "rgba(0,0,0,0.38)",
-		padding: 7,
-	},
-	track: {
-		borderRadius: 20,
-		backgroundColor: blueGrey[300],
-	},
-	checked: {
-		"& $thumb": {
-			backgroundColor: "#fff",
-		},
-		"& + $track": {
-			opacity: "1 !important",
-		},
-	},
-})(Switch);
+import FancySwitch from "../../../../../styled-components/FancySwitch"
+import {REACTION_ROLE_ACTION_TYPES} from "../../../../../utils/constants"
 
 const ActionButton = styled.div`
 	cursor: pointer;
@@ -65,8 +32,6 @@ const ActionBody = styled.div`
 	align-items: center;
 	border-radius: 0.25rem;
 	z-index: 100;
-	// overflow: hidden;
-	// flex-direction: column;
 	h3,
 	h2,
 	h4,
@@ -112,9 +77,7 @@ const ActionFooter = styled.div`
 	height: ${props => (props.open ? "100px" : "0px")};
 	margin-top: 0.5rem;
 	display: flex;
-	// padding: ${props => (props.open ? "0.5rem" : "0px")};
 	padding-left: .5rem;
-	// padding-right: .5rem;
 	align-items: center;
 	margin-left: 0;
 	justify-content: space-between;
@@ -141,15 +104,6 @@ const ActionFooter = styled.div`
 		}
 	}
 `;
-
-const types = {
-	ADD_ON_ADD: "Add",
-	REMOVE_ON_REMOVE: "Remove",
-	ADD_ON_REMOVE: "Add (reversed)",
-	REMOVE_ON_ADD: "Remove (reversed)",
-	TOGGLE: "Toggle",
-	TOGGLE_REVERSE: "Toggle (reversed)",
-};
 
 const CreateAction = ({ guild, onSubmit, close }) => {
 	const [action, setAction] = useState({});
@@ -260,8 +214,8 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 							setAction(prev => ({ ...prev, type: e.value }));
 						}}
 						placeholder="Select Action Type"
-						value={action?.type ? { value: action?.type, label: types[action?.type] } : ""}
-						options={Object.entries(types || {})?.map(([key, value]) => ({
+						value={action?.type ? { value: action?.type, label: REACTION_ROLE_ACTION_TYPES[action?.type] } : ""}
+						options={Object.entries(REACTION_ROLE_ACTION_TYPES || {})?.map(([key, value]) => ({
 							value: key,
 							label: value,
 						}))}

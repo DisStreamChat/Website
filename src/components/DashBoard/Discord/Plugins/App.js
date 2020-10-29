@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import firebase from "../../../../firebase";
-import { colorStyles } from "../../../Shared/userUtils";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
-import Select from "react-select";
 
 const App = ({ location }) => {
 	const {

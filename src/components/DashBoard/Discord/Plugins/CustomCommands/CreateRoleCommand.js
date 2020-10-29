@@ -2,7 +2,6 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { DiscordContext } from "../../../../../contexts/DiscordContext";
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import Select from "react-select";
-import { colorStyles } from "../../../../Shared/userUtils";
 import RoleItem from "../../../../Shared/RoleItem";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 

@@ -42,7 +42,7 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 	}, [location, guildId]);
 
 	const setupCommand = () => {
-		console.log(setName);
+	    console.log(setName)
 		setName("");
 		setResponse("");
 		setRoleToGive("");

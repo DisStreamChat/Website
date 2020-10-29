@@ -1,56 +1,11 @@
+import React, { useEffect, useContext } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
-import { DiscordContext } from "../../../../../contexts/DiscordContext";
-import React, { useEffect, useState, useCallback, useContext } from "react";
-import Select from "react-select";
-import { colorStyles } from "../../../../Shared/userUtils";
 import RoleItem from "../../../../Shared/RoleItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { Switch } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import { blueGrey } from "@material-ui/core/colors";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 import firebase from "../../../../../firebase";
-
-const FancySwitch = withStyles({
-	root: {
-		padding: 7,
-	},
-	thumb: {
-		width: 24,
-		height: 24,
-		backgroundColor: "#fff",
-		boxShadow: "0 0 12px 0 rgba(0,0,0,0.08), 0 0 8px 0 rgba(0,0,0,0.12), 0 0 4px 0 rgba(0,0,0,0.38)",
-	},
-	switchBase: {
-		color: "rgba(0,0,0,0.38)",
-		padding: 7,
-	},
-	track: {
-		borderRadius: 20,
-		backgroundColor: blueGrey[300],
-	},
-	checked: {
-		"& $thumb": {
-			backgroundColor: "#fff",
-		},
-		"& + $track": {
-			opacity: "1 !important",
-		},
-	},
-})(Switch);
-
-const parseSelectValue = value => {
-	if (value instanceof Array) {
-		if (value.length === 0) return value;
-		return value.map(role => JSON.parse(role.value.split("=")[1])).map(val => val.id);
-	} else {
-		try {
-			return JSON.parse(value.value.split("=")[1]).id;
-		} catch (err) {
-			return null;
-		}
-	}
-};
+import StyledSelect from "../../../../../styled-components/StyledSelect";
+import FancySwitch from "../../../../../styled-components/FancySwitch"
 
 const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnectedGuildInfo }) => {
 	const {
@@ -124,7 +79,7 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 				</div>
 				<h4 className="plugin-section-title">Allowed Roles</h4>
 				<div className="plugin-section">
-					<Select
+					<StyledSelect
 						closeMenuOnSelect={false}
 						isMulti
 						onChange={e => {
@@ -138,18 +93,11 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 								value: `${role.name}=${JSON.stringify(role)}`,
 								label: <RoleItem {...role}>{role.name}</RoleItem>,
 							}))}
-						styles={{
-							...colorStyles,
-							container: styles => ({
-								...styles,
-								...colorStyles.container,
-							}),
-						}}
 					/>
 				</div>
 				<h4 className="plugin-section-title">Banned Roles</h4>
 				<div className="plugin-section">
-					<Select
+					<StyledSelect
 						closeMenuOnSelect={false}
 						isMulti
 						onChange={e => {
@@ -164,18 +112,11 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 								value: `${role.name}=${JSON.stringify(role)}`,
 								label: <RoleItem {...role}>{role.name}</RoleItem>,
 							}))}
-						styles={{
-							...colorStyles,
-							container: styles => ({
-								...styles,
-								...colorStyles.container,
-							}),
-						}}
 					/>
 				</div>
 				<h4 className="plugin-section-title">Allowed Channels</h4>
 				<div className="plugin-section">
-					<Select
+					<StyledSelect
 						closeMenuOnSelect={false}
 						isMulti
 						onChange={e => {
@@ -194,13 +135,6 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 									</>
 								),
 							}))}
-						styles={{
-							...colorStyles,
-							container: styles => ({
-								...styles,
-								...colorStyles.container,
-							}),
-						}}
 					/>
 				</div>
 				<h4 className="plugin-section-title">Command Cooldown (in minutes)</h4>

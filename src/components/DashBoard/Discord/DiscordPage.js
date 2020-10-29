@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
-import { Route, Redirect, Switch, withRouter, useParams } from "react-router-dom";
+import { withRouter, useParams } from "react-router-dom";
 import firebase from "../../../firebase";
-import Select from "react-select";
 import useFetch from "../../../hooks/useFetch";
 import SmallLoader from "../../Shared/SmallLoader";
 import A from "../../Shared/A";
 import useSnapshot from "../../../hooks/useSnapshot";
-
-import { colorStyles, guildOption } from "../../Shared/userUtils";
+import { guildOption } from "../../../utils/functions";
 import { AppContext } from "../../../contexts/Appcontext";
-import { DiscordContextProvider, DiscordContext } from "../../../contexts/DiscordContext";
+import { DiscordContext } from "../../../contexts/DiscordContext";
 import PluginHome from "./Plugins/PluginHome";
+import StyledSelect from "../../../styled-components/StyledSelect";
 
 const DiscordPage = React.memo(({ location, history, match }) => {
 	const [displayGuild, setDisplayGuild] = useState();
@@ -18,16 +17,8 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	const { isLoading, sendRequest: sendLoadingRequest } = useFetch();
 	const id = firebase.auth.currentUser.uid;
 	const { id: guildId } = useParams();
-	const { sendRequest } = useFetch();
-	const { currentUser, setCurrentUser } = useContext(AppContext);
-	const {
-		userDiscordInfo,
-		setUserDiscordInfo,
-		userConnectedChannels,
-		userConnectedGuildInfo,
-		setUserConnectedChannels,
-		setUserConnectedGuildInfo,
-	} = useContext(DiscordContext);
+	const { setCurrentUser } = useContext(AppContext);
+	const { userDiscordInfo, userConnectedGuildInfo, setUserConnectedGuildInfo } = useContext(DiscordContext);
 	const [connectedGuild, setConnectedGuild] = useState();
 
 	useEffect(() => {
@@ -208,12 +199,11 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 				{Object.keys(userDiscordInfo || {}).length ? (
 					<>
 						<div className="discord-header">
-							<Select
+							<StyledSelect
 								value={displayGuild}
 								onChange={onGuildSelect}
 								placeholder="Select Guild"
 								options={userDiscordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
-								styles={colorStyles}
 							/>
 							{/* <span>
 								<img className="discord-profile" src={userDiscordInfo?.profilePicture} alt="" />
