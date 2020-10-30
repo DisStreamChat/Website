@@ -9,6 +9,13 @@ export const REACTION_ROLE_ACTION_TYPES = {
 	TOGGLE_REVERSE: "Toggle (reversed)",
 };
 
+export const DEFAULT_COLORS = {
+	TwitchColor: "#462b45",
+	YoutubeColor: "#c4302b",
+	DiscordColor: "#2d688d",
+	HighlightedMessageColor: "#6e022e",
+};
+
 export const colorStyles = {
 	container: styles => ({ ...styles, width: "80%", minHeight: 50 }),
 	control: (styles, { isDisabled }) => ({
