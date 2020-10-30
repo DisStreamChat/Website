@@ -12,7 +12,7 @@ import lodash from "lodash";
 import uid from "uid";
 import AnimateHeight from "react-animate-height";
 import DiscordSetting from "./DiscordSetting";
-import FancySwitch from "../../../styled-components/FancySwitch"
+import FancySwitch from "../../../styled-components/FancySwitch";
 import { defined } from "../../../utils/functions";
 
 const Setting = props => {
@@ -37,9 +37,7 @@ const Setting = props => {
 		if (props.type === "color") {
 			setValue(props.value || props.default);
 		} else {
-			setValue(prev => {
-				return defined(props.value) ? props.default : props.value;
-			});
+			setValue(!defined(props.value) ? props.default : props.value);
 		}
 	}, [props]);
 
@@ -93,7 +91,7 @@ const Setting = props => {
 						control={
 							<FancySwitch
 								color="primary"
-								checked={value}
+								checked={!!value}
 								onChange={e => {
 									setValue(e.target.checked);
 									changeHandler(e.target.checked);
@@ -226,7 +224,7 @@ const Setting = props => {
 					</AnimateHeight>
 				</>
 			) : (
-				<DiscordSetting {...props}/>
+				<DiscordSetting {...props} />
 			)}
 		</div>
 	);
