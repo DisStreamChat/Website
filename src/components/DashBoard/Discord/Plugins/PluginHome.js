@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useCallback, useContext, useMemo } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import firebase from "../../../../firebase";
-import A from "../../../Shared/A";
 import PluginCard from "./PluginCard";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Leveling from "./Leveling";
@@ -10,13 +9,12 @@ import plugins from "./plugins.json";
 import CustomCommands from "./CustomCommands/CustomCommands";
 import { CommandContextProvider } from "../../../../contexts/CommandContext";
 import { RoleContextProvider } from "../../../../contexts/RoleContext";
-import App from "./App";
 import Roles from "./Roles/Roles";
-import _ from "lodash";
 
 const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 	const [prefix, setPrefix] = useState("!");
-	const { userDiscordInfo, activePlugins, setActivePlugins, saveOnType } = useContext(DiscordContext);
+	const { activePlugins, setActivePlugins, saveOnType } = useContext(DiscordContext);
+	const connectedGuildId = connectedGuild?.id || " ";
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -42,7 +40,7 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 				setLoading(false);
 			}, 300);
 		})();
-	}, [connectedGuild]);
+	}, [connectedGuild, setActivePlugins]);
 
 	const prefixChange = useCallback(
 		async e => {
@@ -51,14 +49,14 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 			try {
 				await firebase.db
 					.collection("DiscordSettings")
-					.doc(connectedGuild?.id || " ")
+					.doc(connectedGuildId || " ")
 					.update({
 						prefix: value,
 					});
 			} catch (err) {
 				await firebase.db
 					.collection("DiscordSettings")
-					.doc(connectedGuild?.id || " ")
+					.doc(connectedGuildId || " ")
 					.set({
 						activePlugins: {},
 						prefix: value,
@@ -66,7 +64,7 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 			}
 			saveOnType();
 		},
-		[connectedGuild?.id]
+		[connectedGuildId, saveOnType]
 	);
 
 	return (

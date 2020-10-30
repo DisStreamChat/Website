@@ -1,18 +1,15 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import React, { useEffect, useState,  useContext } from "react";
 import firebase from "../../../../../firebase";
-import { DiscordContext } from "../../../../../contexts/DiscordContext";
 import Modal from "react-modal";
 import CreateTextCommand from "./CreateTextCommand";
 import CreateRoleCommand from "./CreateRoleCommand";
 import CreateCommand from "./CreateCommand";
-import { CommandContextProvider } from "../../../../../contexts/CommandContext";
 import CommandItem from "./CommandItem";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 
 const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 	const [creatingCommand, setCreatingCommand] = useState(false);
 	const [commands, setCommands] = useState({});
-	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
 	const guildId = userConnectedGuildInfo?.id;
 	const {
 		setName,
