@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { memo, useState, useEffect } from "react";
 import styled from "styled-components";
 import RoleItem from "../../../../Shared/RoleItem";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
@@ -57,7 +57,7 @@ const FlexContainer = styled.span`
 	align-items: center;
 `;
 
-export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, adding, emoji, type, deleteAble, add, onClick, close }) => {
+export const ActionItem = memo(({ message, onSubmit, DMuser, role, guild, adding, emoji, type, deleteAble, add, onClick, close }) => {
 	const [displayRole, setDisplayRole] = useState();
 	
 	useEffect(() => {
@@ -122,7 +122,7 @@ export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, 
 	);
 });
 
-const ManagerItem = React.memo(({ guild, channel, actions, channelOveride, message, join }) => {
+const ManagerItem = memo(({ guild, channel, actions, channelOveride, message, join }) => {
 	const [displayChannel, setDisplayChannel] = useState();
 	const [addingAction, setAddingAction] = useState(false);
 

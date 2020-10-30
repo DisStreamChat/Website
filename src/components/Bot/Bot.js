@@ -1,4 +1,3 @@
-import React from "react";
 import "./Bot.scss";
 import A from "../Shared/A";
 import Feature from "../Shared/Feature";

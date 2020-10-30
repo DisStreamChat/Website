@@ -1,5 +1,4 @@
-import React from "react";
-import { useCallback, useState } from "react";
+import { Children, cloneElement, useCallback, useState } from "react";
 
 const SettingAccordion = props => {
 	const [openItem, setOpenItem] = useState();
@@ -16,8 +15,8 @@ const SettingAccordion = props => {
 
 	return (
 		<div style={{ width: "100%" }}>
-			{React.Children.map(props.children, Element =>
-				React.cloneElement(Element, {
+			{Children.map(props.children, Element =>
+				cloneElement(Element, {
 					onClick: clickHandler,
 					open: Element.props?.name === openItem,
 				})

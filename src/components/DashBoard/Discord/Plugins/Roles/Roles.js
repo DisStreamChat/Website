@@ -1,4 +1,4 @@
-import React, { useEffect, useState,  useContext } from "react";
+import { memo, useEffect, useState, useContext } from "react";
 import firebase from "../../../../../firebase";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import ManagerItem from "./ManagerItem";
@@ -108,4 +108,4 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	);
 };
 
-export default React.memo(Roles);
+export default memo(Roles);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./Banner.scss";
 import { CSSTransition } from "react-transition-group";
 import { Button } from "@material-ui/core";

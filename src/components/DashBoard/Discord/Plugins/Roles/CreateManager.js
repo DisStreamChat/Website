@@ -1,6 +1,6 @@
 import ClearIcon from "@material-ui/icons/Clear";
 
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import firebase from "../../../../../firebase";

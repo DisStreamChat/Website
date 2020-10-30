@@ -1,5 +1,3 @@
-import React from "react";
-
 import "./Apps.scss";
 import ApplicationItem from "./ApplicationItem";
 

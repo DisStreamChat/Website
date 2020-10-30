@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { memo, useEffect, useState, useContext } from "react";
 import "./PluginCard.scss";
 import { withRouter } from "react-router";
 import A from "../../../Shared/A";
 import firebase from "../../../../firebase";
-import { useContext } from "react";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import BlueSwitch from "../../../../styled-components/BlueSwitch";
 
-const PluginCard = React.memo(({ guild: guildId, id, active, ...props }) => {
+const PluginCard = memo(({ guild: guildId, id, active, ...props }) => {
 	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
 	const [enabled, setEnabled] = useState(true);
 

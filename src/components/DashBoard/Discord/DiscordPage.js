@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import { memo, useEffect, useState, useCallback, useContext } from "react";
 import { withRouter, useParams } from "react-router-dom";
 import firebase from "../../../firebase";
 import A from "../../Shared/A";
@@ -9,7 +9,7 @@ import { DiscordContext } from "../../../contexts/DiscordContext";
 import PluginHome from "./Plugins/PluginHome";
 import StyledSelect from "../../../styled-components/StyledSelect";
 
-const DiscordPage = React.memo(({ history, match }) => {
+const DiscordPage = memo(({ history, match }) => {
 	const [displayGuild, setDisplayGuild] = useState();
 	const [refreshed, setRefreshed] = useState(false);
 	const { id: guildId } = useParams();
@@ -172,4 +172,4 @@ const DiscordPage = React.memo(({ history, match }) => {
 	);
 });
 
-export default withRouter(React.memo(DiscordPage));
+export default withRouter(memo(DiscordPage));

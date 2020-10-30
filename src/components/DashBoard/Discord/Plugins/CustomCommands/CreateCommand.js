@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import RoleItem from "../../../../Shared/RoleItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel";

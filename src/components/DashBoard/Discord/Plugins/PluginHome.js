@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import firebase from "../../../../firebase";
 import PluginCard from "./PluginCard";

@@ -1,7 +1,7 @@
-import React from "react";
+import { memo } from "react";
 import "./Feature.scss";
 
-const Feature = React.memo(props => {
+const Feature = memo(props => {
 	const innerBody = [
 		<>
 			<h1>{props.title}</h1>

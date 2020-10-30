@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import { memo, useEffect, useState, useCallback, useContext } from "react";
 import firebase from "../../../../firebase";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import { Link } from "react-router-dom";
@@ -243,4 +243,4 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	);
 };
 
-export default React.memo(Leveling);
+export default memo(Leveling);

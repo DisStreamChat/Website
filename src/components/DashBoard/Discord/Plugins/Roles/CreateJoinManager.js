@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import RoleItem from "../../../../Shared/RoleItem";
 import firebase from "../../../../../firebase";

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import RoleItem from "../../../../Shared/RoleItem";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 import StyledSelect from "../../../../../styled-components/StyledSelect";

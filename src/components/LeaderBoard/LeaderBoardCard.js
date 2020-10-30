@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const radius = 36;
 const circ = 2 * Math.PI * radius;

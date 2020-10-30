@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import styled from "styled-components";
 import RoleItem from "../../../../Shared/RoleItem";
 import Twemoji from "react-twemoji";

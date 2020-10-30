@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import { memo, useCallback, useContext } from "react";
 import firebase from "../../../../firebase";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import StyledSelect from "../../../../styled-components/StyledSelect";
@@ -86,4 +86,4 @@ const App = () => {
 	);
 };
 
-export default React.memo(App);
+export default memo(App);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import firebase from "../../firebase";
 import { useParams } from "react-router";
 import SmallLoader from "../Shared/SmallLoader";

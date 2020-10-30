@@ -1,4 +1,4 @@
-import React, { useEffect, useState,  useContext } from "react";
+import { memo, useEffect, useState, useContext } from "react";
 import firebase from "../../../../../firebase";
 import Modal from "react-modal";
 import CreateTextCommand from "./CreateTextCommand";
@@ -123,4 +123,4 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 	);
 };
 
-export default React.memo(CustomCommands);
+export default memo(CustomCommands);

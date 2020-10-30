@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Switch, NavLink, Route, Redirect, useParams } from "react-router-dom";
 import SettingAccordion from "./SettingAccordion";
 import Setting from "./Setting";

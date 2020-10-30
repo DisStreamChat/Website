@@ -1,4 +1,3 @@
-import React from "react";
 import "./Community.scss";
 import A from "../Shared/A"
 
