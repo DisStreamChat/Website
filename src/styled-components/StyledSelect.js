@@ -6,13 +6,7 @@ const StyledSelect = props => {
 	return (
 		<Select
 			{...props}
-			styles={{
-				...colorStyles,
-				container: styles => ({
-					...styles,
-					...colorStyles.container,
-				}),
-			}}
+			styles={colorStyles}
 		/>
 	);
 };
