@@ -3,7 +3,7 @@ import "./CommandItem.scss";
 import firebase from "../../../../../firebase";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
 import { CommandContext } from "../../../../../contexts/CommandContext";
-import RoleItem from "../../../../Shared/RoleItem";
+import RoleItem from "../../../../../styled-components/RoleItem";
 
 const CommandItem = ({
 	name,

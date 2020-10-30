@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import styled from "styled-components";
-import RoleItem from "../../../../Shared/RoleItem";
+import RoleItem from "../../../../../styled-components/RoleItem";
 import Twemoji from "react-twemoji";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import { Picker } from "emoji-mart";

@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
-import RoleItem from "../../../../Shared/RoleItem";
+import RoleItem from "../../../../../styled-components/RoleItem";
 import firebase from "../../../../../firebase";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import StyledSelect from "../../../../../styled-components/StyledSelect";

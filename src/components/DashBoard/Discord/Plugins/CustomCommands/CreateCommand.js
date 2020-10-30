@@ -1,6 +1,6 @@
 import { useEffect, useContext } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
-import RoleItem from "../../../../Shared/RoleItem";
+import RoleItem from "../../../../../styled-components/RoleItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 import firebase from "../../../../../firebase";

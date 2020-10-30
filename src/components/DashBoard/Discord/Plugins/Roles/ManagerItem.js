@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from "react";
 import styled from "styled-components";
-import RoleItem from "../../../../Shared/RoleItem";
+import RoleItem from "../../../../../styled-components/RoleItem";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
 import Twemoji from "react-twemoji";
 import AddCircleTwoToneIcon from "@material-ui/icons/AddCircleTwoTone";
