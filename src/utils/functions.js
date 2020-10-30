@@ -56,3 +56,5 @@ export const parseSelectValue = value => {
 		}
 	}
 };
+
+export const defined = item => ((item ?? false) !== false) || !!item === item
