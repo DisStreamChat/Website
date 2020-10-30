@@ -5,7 +5,7 @@ import { useState, useContext } from "react";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import firebase from "../../../../../firebase";
 import CreateAction from "./CreateAction";
-import { ActionItem } from "./ManagerItem";
+import ActionItem  from "./ActionItem";
 
 const CreateManager = ({ guild: userConnectedGuildInfo }) => {
 	const { state, update, error, setup } = useContext(RoleContext);
