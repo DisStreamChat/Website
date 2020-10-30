@@ -12,7 +12,7 @@
 		"no-return-assign": 0,
 		"camelcase": 0,
 		"quotes": [1, "double", { "avoidEscape": true }],
-		"indent": ["warn", "tab", { "ignoredNodes": ["TemplateLiteral"] }],
+		"indent": [1, "tab", { "ignoredNodes": ["TemplateLiteral"] }],
 		// TODO: Remove when is https://github.com/babel/babel-eslint/issues/530 fixed
 		"template-curly-spacing": "off"
 	}
