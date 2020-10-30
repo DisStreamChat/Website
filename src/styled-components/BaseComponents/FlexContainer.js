@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-export const FlexContainer = styled.span`
+const FlexContainer = styled.span`
 	display: flex;
 	align-items: center;
 `;
+
+export default FlexContainer
