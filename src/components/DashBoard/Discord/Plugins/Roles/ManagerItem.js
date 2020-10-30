@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import RoleItem from "../../../../Shared/RoleItem";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
@@ -8,6 +8,8 @@ import "emoji-mart/css/emoji-mart.css";
 import firebase from "../../../../../firebase";
 import {  useMediaQuery } from "@material-ui/core";
 import {REACTION_ROLE_ACTION_TYPES} from "../../../../../utils/constants"
+
+
 const ChannelParent = styled.span`
 	color: #aaa;
 	font-size: 14px;

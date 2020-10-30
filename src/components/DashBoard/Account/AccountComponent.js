@@ -22,20 +22,21 @@ const DiscordComponent = ({ main, profilePicture, platform, name }) => {
 			.delete();
 	};
 
-	const deleteAccount = async () => {
-		await firebase.db
-			.collection("Streamers")
-			.doc(currentUser?.uid || " ")
-			.delete();
-		try {
-			await currentUser.delete();
-		} catch (err) {
-			// re-sign in and delete
-		}
-	};
+	// TODO finish implementing this
+	// const deleteAccount = async () => {
+	// 	await firebase.db
+	// 		.collection("Streamers")
+	// 		.doc(currentUser?.uid || " ")
+	// 		.delete();
+	// 	try {
+	// 		await currentUser.delete();
+	// 	} catch (err) {
+	// 		// re-sign in and delete
+	// 	}
+	// };
 
 	return (
-		<div className={`account discord`}>
+		<div className="account discord">
 			<div className={`account-header ${platform}`}>
 				<img src={logos[platform]} alt="" />
 				<img src={profilePicture} alt="" />

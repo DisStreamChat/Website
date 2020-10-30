@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import "./CommandItem.scss";
 import firebase from "../../../../../firebase";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
-import { DiscordContext } from "../../../../../contexts/DiscordContext";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 import RoleItem from "../../../../Shared/RoleItem";
 
@@ -106,7 +105,7 @@ const CommandItem = ({
 	const [displayRole, setDisplayRole] = useState();
 	useEffect(() => {
 		setDisplayRole(userConnectedGuildInfo.roles.find(r => r.id === role));
-	}, []);
+	}, [setDisplayRole]);
 
 	return (
 		<div className="command-item">
