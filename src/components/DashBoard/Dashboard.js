@@ -16,7 +16,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import { useDocument } from "react-firebase-hooks/firestore";
 
 const Dashboard = props => {
-	const [overlaySettings, setOverlaySettings] = useState();
+	// const [overlaySettings, setOverlaySettings] = useState();
 	const [appSettings, setAppSettings] = useState();
 	const [defaultSettings, setDefaultSettings] = useState();
 	const { currentUser, dropDownOpen: open } = useContext(AppContext);
@@ -77,7 +77,7 @@ const Dashboard = props => {
 	useEffect(() => {
 		(async () => {
 			if (currentUser) {
-				setOverlaySettings(currentUser.overlaySettings);
+				// setOverlaySettings(currentUser.overlaySettings);
 				setAppSettings(currentUser.appSettings);
 			}
 		})();
@@ -95,7 +95,8 @@ const Dashboard = props => {
 
 	const showDropdown = useMediaQuery("(min-width: 900px)");
 
-	const [rawDiscordData, discordDataLoading, DiscordDataError] = useDocument(firebase.db.doc(`Streamers/${id}/discord/data`));
+	// TODO: handle error with third item in this array
+	const [rawDiscordData, discordDataLoading] = useDocument(firebase.db.doc(`Streamers/${id}/discord/data`));
 
 	useEffect(() => {
 		if (discordDataLoading) return;

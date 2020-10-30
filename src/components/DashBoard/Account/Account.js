@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../../contexts/Appcontext";
+import { useEffect, useState } from "react";
 import "./Accounts.scss";
 import AccountComponent from "./AccountComponent";
 import firebase from "../../../firebase";
@@ -20,7 +19,7 @@ const Account = () => {
 			if (!userData) return;
 			const twitchData = (await twitchRef.get()).data();
 			discordRef.onSnapshot(snapshot => {
-				const discordData = snapshot.data()
+				const discordData = snapshot.data();
 				if (discordData) {
 					const { name, profilePicture } = discordData;
 					setDiscordAccount({ name, profilePicture });
@@ -32,15 +31,19 @@ const Account = () => {
 				const { name, profilePicture } = userData;
 				setTwitchAccount({ name, profilePicture });
 			}
-			if(userData.discordLinked) setMainAccount("discord")
-			else if(userData.twitchAuthenticated) setMainAccount("twitch")
+			if (userData.discordLinked) setMainAccount("discord");
+			else if (userData.twitchAuthenticated) setMainAccount("twitch");
 		})();
 	}, [currentUser]);
 
 	return (
 		<div classname="accounts" style={{ width: "100%" }}>
-			{twitchAccount && <AccountComponent main={mainAccount} {...twitchAccount} platform="twitch" />}
-			{discordAccount && <AccountComponent main={mainAccount} {...discordAccount} platform="discord" />}
+			{twitchAccount && (
+				<AccountComponent main={mainAccount} {...twitchAccount} platform="twitch" />
+			)}
+			{discordAccount && (
+				<AccountComponent main={mainAccount} {...discordAccount} platform="discord" />
+			)}
 		</div>
 	);
 };

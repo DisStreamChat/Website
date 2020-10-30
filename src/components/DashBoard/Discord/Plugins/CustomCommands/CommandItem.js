@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import "./CommandItem.scss";
 import firebase from "../../../../../firebase";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
@@ -33,6 +33,7 @@ const CommandItem = ({
 		setError,
 		setEditing,
 	} = useContext(CommandContext);
+	const [displayRole, setDisplayRole] = useState();
 	const [allowedRoles, setPermittedRoles] = useState([]);
 	const guildId = userConnectedGuildInfo.id;
 	const deleteMe = useCallback(async () => {
@@ -102,10 +103,9 @@ const CommandItem = ({
 		setCreatingCommand(type || "text");
 	};
 
-	const [displayRole, setDisplayRole] = useState();
 	useEffect(() => {
 		setDisplayRole(userConnectedGuildInfo.roles.find(r => r.id === role));
-	}, [setDisplayRole]);
+	}, [role, setDisplayRole, userConnectedGuildInfo.roles]);
 
 	return (
 		<div className="command-item">

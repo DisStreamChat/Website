@@ -7,8 +7,8 @@ import firebase from "../../../../../firebase";
 import CreateAction from "./CreateAction";
 import { ActionItem } from "./ManagerItem";
 
-const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) => {
-	const { state, update, error, setup, addReaction } = useContext(RoleContext);
+const CreateManager = ({ guild: userConnectedGuildInfo }) => {
+	const { state, update, error, setup } = useContext(RoleContext);
 	const [addingAction, setAddingAction] = useState(false);
 
 	return (
@@ -35,7 +35,12 @@ const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) =>
 				<h4 className="plugin-section-title">Reactions</h4>
 				<div className="plugin-section">
 					{Object.entries(state?.manager?.actions || {})?.map(([key, action]) => (
-						<ActionItem {...action} emoji={key} guild={userConnectedGuildInfo} deleteAble={false}></ActionItem>
+						<ActionItem
+							{...action}
+							emoji={key}
+							guild={userConnectedGuildInfo}
+							deleteAble={false}
+						></ActionItem>
 					))}
 					{addingAction && (
 						<CreateAction
@@ -56,12 +61,17 @@ const CreateManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) =>
 				</div>
 			</div>
 			<div className={`command-footer ${state.error?.message ? "error" : ""}`}>
-				{state.error?.message && <span className="error-message">{state.error?.message}</span>}
+				{state.error?.message && (
+					<span className="error-message">{state.error?.message}</span>
+				)}
 				<button
 					onClick={async () => {
 						error(null);
-						if (!state?.manager?.message?.length) return error("The Manager have a message id");
-						const commandRef = firebase.db.collection("reactions").doc(userConnectedGuildInfo.id);
+						if (!state?.manager?.message?.length)
+							return error("The Manager have a message id");
+						const commandRef = firebase.db
+							.collection("reactions")
+							.doc(userConnectedGuildInfo.id);
 						const manager = { ...state.manager };
 						console.log(manager);
 						// manager.actions = manager.actions.map(action => ({...action, DMuser: !!action.DMuser}))

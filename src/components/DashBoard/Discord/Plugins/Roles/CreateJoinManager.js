@@ -23,7 +23,7 @@ const CreateJoinManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }
 						isMulti
 						closeMenuOnSelect={false}
 						onChange={e => {
-							update(`manager.actions["user-join"]`, e);
+							update("manager.actions['user-join']", e);
 						}}
 						placeholder="Select Reaction Role"
 						value={state?.manager?.actions?.["user-join"] || ""}
@@ -38,14 +38,22 @@ const CreateJoinManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }
 				</div>
 			</div>
 			<div className={`command-footer ${state.error?.message ? "error" : ""}`}>
-				{state.error?.message && <span className="error-message">{state.error?.message}</span>}
+				{state.error?.message && (
+					<span className="error-message">{state.error?.message}</span>
+				)}
 				<button
 					onClick={async () => {
 						error(null);
-						if (!state?.manager?.message?.length) return error("The Manager have a message id");
-						const commandRef = firebase.db.collection("reactions").doc(userConnectedGuildInfo.id);
+						if (!state?.manager?.message?.length)
+							return error("The Manager have a message id");
+						const commandRef = firebase.db
+							.collection("reactions")
+							.doc(userConnectedGuildInfo.id);
 						const manager = { ...state.manager };
-						manager.actions["user-join"] = { role: JSON.parse(state.manager.actions["user-join"].value.split("=")[1]).id };
+						manager.actions["user-join"] = {
+							role: JSON.parse(state.manager.actions["user-join"].value.split("=")[1])
+								.id,
+						};
 						commandRef.update({ [state.manager.message]: manager });
 
 						setup();
