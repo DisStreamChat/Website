@@ -57,3 +57,9 @@ export const parseSelectValue = value => {
 };
 
 export const defined = item => ((item ?? false) !== false) || !!item === item
+
+export const getXp = level => (5 / 6) * level * (2 * level * level + 27 * level + 91);
+
+export const map = (n, start1, stop1, start2, stop2) => ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+
+export const getLevel = xp => Math.max(0, Math.floor(Math.log(xp - 100)));

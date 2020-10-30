@@ -1,13 +1,8 @@
 import { useState, useEffect } from "react";
+import {getXp, map} from "../../utils/functions"
 
 const radius = 36;
 const circ = 2 * Math.PI * radius;
-
-// const getLevel = xp => Math.max(0, Math.floor(Math.log(xp - 100)));
-
-const getXp = level => (5 / 6) * level * (2 * level * level + 27 * level + 91);
-
-const map = (n, start1, stop1, start2, stop2) => ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
 
 const LeaderBoardCard = ({ place, level, xp, name, avatar }) => {
 	const [progression, setProgression] = useState(0);
