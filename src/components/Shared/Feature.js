@@ -10,7 +10,7 @@ const Feature = memo(props => {
 		</>,
 		<>
 			{props.images.map((image, idx) => (
-				<img src={image} alt="" className={props.imageClassNames?.[idx]} />
+				<img key={image} src={image} alt="" className={props.imageClassNames?.[idx]} />
 			))}
 		</>,
 	];
