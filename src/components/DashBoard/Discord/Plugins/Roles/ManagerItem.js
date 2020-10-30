@@ -35,11 +35,12 @@ const ManagerItem = memo(({ guild, channel, actions, channelOveride, message, jo
 				.sort()
 				.map(([key, value]) => (
 					<ActionItem
+						key={key}
 						deleteAble={!channelOveride}
 						message={message}
-						{...value}
 						emoji={key}
 						guild={guild}
+						{...value}
 					/>
 				))}
 			{addingAction && (
