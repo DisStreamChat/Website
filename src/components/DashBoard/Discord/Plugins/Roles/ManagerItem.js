@@ -4,47 +4,10 @@ import RoleItem from "../../../../Shared/RoleItem";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
 import Twemoji from "react-twemoji";
 import AddCircleTwoToneIcon from "@material-ui/icons/AddCircleTwoTone";
-import { RoleContext } from "../../../../../contexts/RoleContext";
-import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
-import Select from "react-select";
-import { colorStyles } from "../../../../Shared/userUtils";
-import CloseIcon from "@material-ui/icons/Close";
-import CheckIcon from "@material-ui/icons/Check";
 import firebase from "../../../../../firebase";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { Switch, useMediaQuery } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import { blueGrey } from "@material-ui/core/colors";
-
-const FancySwitch = withStyles({
-	root: {
-		padding: 7,
-	},
-	thumb: {
-		width: 24,
-		height: 24,
-		backgroundColor: "#fff",
-		boxShadow: "0 0 12px 0 rgba(0,0,0,0.08), 0 0 8px 0 rgba(0,0,0,0.12), 0 0 4px 0 rgba(0,0,0,0.38)",
-	},
-	switchBase: {
-		color: "rgba(0,0,0,0.38)",
-		padding: 7,
-	},
-	track: {
-		borderRadius: 20,
-		backgroundColor: blueGrey[300],
-	},
-	checked: {
-		"& $thumb": {
-			backgroundColor: "#fff",
-		},
-		"& + $track": {
-			opacity: "1 !important",
-		},
-	},
-})(Switch);
-
+import {  useMediaQuery } from "@material-ui/core";
+import {REACTION_ROLE_ACTION_TYPES} from "../../../../../utils/constants"
 const ChannelParent = styled.span`
 	color: #aaa;
 	font-size: 14px;
@@ -54,14 +17,11 @@ const ChannelParent = styled.span`
 const ManagerBody = styled.div`
 	margin: 1rem 0;
 	display: flex;
-	// align-items: center;
-	// justify-content: space-between;
 	position: relative;
 	padding: 0.5rem 1rem;
 	border: 1px solid black;
 	background: #1f1f1f;
     flex-direction: column;
-    // width: 100%;
 `;
 
 const ActionBody = styled.div`
@@ -90,23 +50,10 @@ const ActionBody = styled.div`
 	}
 `;
 
-const ActionButton = styled.div`
-	cursor: pointer;
-`;
-
 const FlexContainer = styled.span`
 	display: flex;
 	align-items: center;
 `;
-
-const types = {
-	ADD_ON_ADD: "Add",
-	REMOVE_ON_REMOVE: "Remove",
-	ADD_ON_REMOVE: "Add (reversed)",
-	REMOVE_ON_ADD: "Remove (reversed)",
-	TOGGLE: "Toggle",
-	TOGGLE_REVERSED: "Toggle (reversed)",
-};
 
 export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, adding, emoji, type, deleteAble, add, onClick, close }) => {
 	const [displayRole, setDisplayRole] = useState();
@@ -156,7 +103,7 @@ export const ActionItem = React.memo(({ message, onSubmit, DMuser, role, guild, 
 					</FlexContainer>
 					{!smallScreen && (
 						<FlexContainer>
-							<h4>Type: {types[type]}</h4>
+							<h4>Type: {REACTION_ROLE_ACTION_TYPES[type]}</h4>
 							<h4 style={{ marginLeft: "2rem", textTransform: "capitalize" }}>DM: {(!!DMuser).toString()}</h4>
 						</FlexContainer>
 					)}

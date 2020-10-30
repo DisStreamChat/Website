@@ -1,4 +1,3 @@
-// production
 import React, { useEffect, useState, useRef } from "react";
 import firebase from "./firebase";
 import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
@@ -26,13 +25,13 @@ import useSnapshot from "./hooks/useSnapshot";
 import LeaderBoard from "./components/LeaderBoard/LeaderBoard";
 import { v4 as uuidv4 } from "uuid";
 
-function App(props) {
+function App() {
 	const [userId, setUserId] = useState("");
 	const [dropDownOpen, setDropDownOpen] = useState(false);
 	const [currentUser, setCurrentUser] = useState();
 	const [firebaseInit, setFirebaseInit] = useState(false);
 	const user = firebase.auth.currentUser;
-
+	const setOTC = useRef(false);
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(userId || " "),
 		async snapshot => {
@@ -52,7 +51,7 @@ function App(props) {
 		})();
 	}, []);
 
-	const setOTC = useRef(false);
+	
 	useEffect(() => {
 		(async () => {
 			if (setOTC.current) return;

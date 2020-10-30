@@ -118,7 +118,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				});
 		}
 		setDashboardOpen(true);
-	});
+	}, []);
 
 	const handleAnnoucmentSelect = useCallback(
 		async e => {

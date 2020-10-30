@@ -1,11 +1,9 @@
+import React, { useContext } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
-import { DiscordContext } from "../../../../../contexts/DiscordContext";
-import React, { useEffect, useState, useCallback, useContext } from "react";
-import Select from "react-select";
 import RoleItem from "../../../../Shared/RoleItem";
-
-import { RoleContext } from "../../../../../contexts/RoleContext";
 import firebase from "../../../../../firebase";
+import { RoleContext } from "../../../../../contexts/RoleContext";
+import StyledSelect from "../../../../../styled-components/StyledSelect";
 
 const CreateJoinManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }) => {
 	const { state, update, error, setup } = useContext(RoleContext);
@@ -21,7 +19,7 @@ const CreateJoinManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }
 			<div className="command-body">
 				<h4 className="plugin-section-title">Member Join Roles</h4>
 				<div className="plugin-section">
-					<Select
+					<StyledSelect
 						isMulti
 						closeMenuOnSelect={false}
 						onChange={e => {
@@ -36,13 +34,6 @@ const CreateJoinManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }
 								value: `${role.name}=${JSON.stringify(role)}`,
 								label: <RoleItem {...role}>{role.name}</RoleItem>,
 							}))}
-						styles={{
-							...colorStyles,
-							container: styles => ({
-								...styles,
-								...colorStyles.container,
-							}),
-						}}
 					/>
 				</div>
 			</div>

@@ -4,7 +4,7 @@ import { DiscordContext } from "../../../../contexts/DiscordContext";
 import { Link } from "react-router-dom";
 import StyledSelect from "../../../../styled-components/StyledSelect";
 
-const marks = [...Array(7)].map((item, index) => ({ value: index / 2, label: `x${index / 2}` }));
+// const marks = [...Array(7)].map((item, index) => ({ value: index / 2, label: `x${index / 2}` }));
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
@@ -24,7 +24,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			}
 			setDashboardOpen(true);
 		},
-		[guildId]
+		[guildId, setDashboardOpen]
 	);
 
 	const handleMessageChange = useCallback(
@@ -39,7 +39,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			}
 			saveOnType();
 		},
-		[guildId]
+		[guildId, saveOnType]
 	);
 
 	const handleAnnoucmentSelect = useCallback(
@@ -53,7 +53,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			}
 			setDashboardOpen(true);
 		},
-		[guildId]
+		[guildId, setDashboardOpen]
 	);
 
 	useEffect(() => {
