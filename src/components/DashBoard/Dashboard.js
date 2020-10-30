@@ -91,9 +91,11 @@ const Dashboard = props => {
 		[activePlugins]
 	);
 
-    const showDropdown = useMediaQuery("(min-width: 900px)");
-    
-    const [rawDiscordData, discordDataLoading, DiscordDataError] = useDocument(firebase.db.doc(`Streamers/${id}/discord/data`));
+	
+
+	const showDropdown = useMediaQuery("(min-width: 900px)");
+
+	const [rawDiscordData, discordDataLoading, DiscordDataError] = useDocument(firebase.db.doc(`Streamers/${id}/discord/data`));
 
 	useEffect(() => {
 		if (discordDataLoading) return;
@@ -115,8 +117,8 @@ const Dashboard = props => {
 				{showDropdown && !!displayPlugins.length && window?.location?.pathname?.includes?.("discord") && (
 					<ul>
 						{displayPlugins.map(key => {
-                            const plugin = plugins.find(plugin => plugin.id === key);
-                            if(!plugin) return null;
+							const plugin = plugins.find(plugin => plugin.id === key);
+							if (!plugin) return null;
 							return (
 								<NavLink
 									key={plugin?.id}
