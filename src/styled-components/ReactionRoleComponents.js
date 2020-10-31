@@ -1,6 +1,7 @@
 import styled from "styled-components";
 export const ActionButton = styled.div`
 	cursor: pointer;
+	display: flex;
 	&:first-child {
 		transform: scale(1.5);
 	}
@@ -54,14 +55,16 @@ export const ActionHead = styled.div`
 			display: flex;
 			justify-content: space-between;
 			margin-left: 1.5rem;
+			max-width: 100px;
 		}
 	}
 `;
 
 export const ActionFooter = styled.div`
 	overflow: ${props => (props.open ? "visible" : "hidden")};
-	height: ${props => (props.open ? "100px" : "0px")};
-	margin-top: 0.5rem;
+	height: ${props => (props.open ? "60px" : "0px")};
+	margin-top: ${props => (props.open ? ".5rem" : "0px")};
+	// margin-top: 0.5rem;
 	display: flex;
 	padding-left: 0.5rem;
 	align-items: center;
