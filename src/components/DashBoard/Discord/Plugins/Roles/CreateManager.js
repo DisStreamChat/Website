@@ -5,7 +5,8 @@ import { useState, useContext } from "react";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import firebase from "../../../../../firebase";
 import CreateAction from "./CreateAction";
-import ActionItem  from "./ActionItem";
+import ActionItem from "./ActionItem";
+import AddActionButton from "./AddActionButton";
 
 const CreateManager = ({ guild: userConnectedGuildInfo }) => {
 	const { state, update, error, setup } = useContext(RoleContext);
@@ -51,13 +52,15 @@ const CreateManager = ({ guild: userConnectedGuildInfo }) => {
 							deleteAble={false}
 						/>
 					)}
-					<ActionItem
-						onClick={() => {
-							setAddingAction(true);
-						}}
-						add
-						deleteAble={false}
-					/>
+					{!addingAction && (
+						<AddActionButton
+							onClick={() => {
+								setAddingAction(true);
+							}}
+							add
+							deleteAble={false}
+						/>
+					)}
 				</div>
 			</div>
 			<div className={`command-footer ${state.error?.message ? "error" : ""}`}>
