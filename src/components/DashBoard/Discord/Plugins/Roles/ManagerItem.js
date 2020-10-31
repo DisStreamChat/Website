@@ -5,7 +5,9 @@ import {
 	ManagerBody,
 	ChannelParent,
 } from "../../../../../styled-components/ReactionRoleComponents";
+import AddActionButton from "./AddActionButton"
 import ActionItem from "./ActionItem"
+import CreateAction from "./CreateAction";
 
 const ManagerItem = memo(({ guild, channel, actions, channelOveride, message, join }) => {
 	const [displayChannel, setDisplayChannel] = useState();
@@ -44,7 +46,7 @@ const ManagerItem = memo(({ guild, channel, actions, channelOveride, message, jo
 					/>
 				))}
 			{addingAction && (
-				<ActionItem
+				<CreateAction
 					onSubmit={async (emoji, action) => {
 						await firebase.db
 							.collection("reactions")
@@ -62,14 +64,14 @@ const ManagerItem = memo(({ guild, channel, actions, channelOveride, message, jo
 					deleteAble={false}
 				/>
 			)}
-			{!join && (
-				<ActionItem
+			{!join && !addingAction && (
+				<AddActionButton
 					onClick={() => {
 						setAddingAction(true);
 					}}
 					deleteAble={false}
 					add
-				></ActionItem>
+				></AddActionButton>
 			)}
 		</ManagerBody>
 	);
