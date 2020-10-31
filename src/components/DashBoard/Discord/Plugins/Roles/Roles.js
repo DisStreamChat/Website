@@ -40,7 +40,12 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 
 	return (
 		<div>
-			<Modal isOpen={state.type} className="command-modal Modal" overlayClassName="command-overlay Modal-Overlay" onRequestClose={setup}>
+			<Modal
+				isOpen={state.type}
+				className="command-modal Modal"
+				overlayClassName="command-overlay Modal-Overlay"
+				onRequestClose={setup}
+			>
 				{state.type === "message" ? (
 					<CreateManager guild={userConnectedGuildInfo}></CreateManager>
 				) : (
@@ -55,7 +60,10 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 			</div>
 			<hr />
 			<div className="plugin-item-subheader">
-				<h4>Different ways to have the bot manage user roles. Give a role on join, toggle roles with reactions, etc.</h4>
+				<h4>
+					Different ways to have the bot manage user roles. Give a role on join, toggle
+					roles with reactions, etc.
+				</h4>
 			</div>
 			<div className="plugin-item-body">
 				<h4 className="plugin-section-title">Create Role Manager</h4>
@@ -67,7 +75,10 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 						}}
 					>
 						<h1>Reaction Role</h1>
-						<p>allow users to give/remove roles from themselves by reacting to a message</p>
+						<p>
+							allow users to give/remove roles from themselves by reacting to a
+							message
+						</p>
 					</div>
 					<div
 						className="create-command"
@@ -93,14 +104,21 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 				{!state.type && JoinManager && (
 					<>
 						<h4 className="plugin-section-title bigger">Join Roles</h4>
-						<ManagerItem guild={userConnectedGuildInfo} {...JoinManager} join channelOveride="Member Join" />
+						<ManagerItem
+							guild={userConnectedGuildInfo}
+							{...JoinManager}
+							join
+							channelOveride="Member Join"
+						/>
 					</>
 				)}
 				<h4 className="plugin-section-title bigger">
 					Reaction Roles<span> — {MessageManagers.length}</span>
 				</h4>
 				{!state.type &&
-					MessageManagers.sort((a, b) => a.message.localeCompare(b.message)).map((manager, i) => (
+					MessageManagers.sort((a, b) =>
+						a.message.localeCompare(b.message)
+					).map((manager, i) => (
 						<ManagerItem key={i} {...manager} guild={userConnectedGuildInfo} />
 					))}
 			</div>

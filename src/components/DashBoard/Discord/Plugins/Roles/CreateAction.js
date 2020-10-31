@@ -35,7 +35,7 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 	};
 
 	return (
-		<ActionBody>
+		<ActionBody style={{zIndex: 1000}}>
 			<ActionHead>
 				<div>
 					{action.emoji ? (
