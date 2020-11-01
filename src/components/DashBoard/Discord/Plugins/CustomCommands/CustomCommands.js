@@ -28,7 +28,7 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 	useEffect(() => {
 		const unsub = firebase.db
 			.collection("customCommands")
-			.doc(guildId)
+			.doc(guildId || " ")
 			.onSnapshot(snapshot => {
 				const data = snapshot.data();
 				if (data) {
