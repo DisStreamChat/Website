@@ -1,4 +1,4 @@
-import { memo, useEffect, useState, useContext } from "react";
+import { memo, useEffect, useState, useContext, useLayoutEffect } from "react";
 import firebase from "../../../../../firebase";
 import Modal from "react-modal";
 import CreateTextCommand from "./CreateTextCommand";
@@ -53,7 +53,7 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 		setEditing(false);
 	};
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		document.body.style.overflow = creatingCommand ? "hidden" : "initial";
 		return () => {
 			document.body.style.overflow = "initial";
@@ -98,7 +98,7 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 						<h1>Text Command</h1>
 						<p>A simple command that responds with a custom message in DM or public</p>
 					</div>
-					<div
+					{/* <div
 						className="create-command"
 						onClick={() => {
 							setupCommand();
@@ -107,14 +107,14 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 					>
 						<h1>Role Command</h1>
 						<p>A simple command that toggles a role for the user</p>
-					</div>
+					</div> */}
 				</div>
 				<h4 className="plugin-section-title bigger">
 					Your Commands<span> — {Object.keys(commands).length}</span>
 				</h4>
 				{Object.entries(commands)
 					.sort((a, b) => a[0].localeCompare(b[0]))
-					.sort((a, b) => (a[1].type === "role" ? -1 : 1))
+					.filter((a, b) => (a[1].type !== "role"))
 					.map(([key, value]) => (
 						<CommandItem guild={userConnectedGuildInfo} setCommands={setCommands} setCreatingCommand={setCreatingCommand} allowedRoles={value.permittedRoles} {...value} name={key} key={key} />
 					))}

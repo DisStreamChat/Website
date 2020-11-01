@@ -1,15 +1,18 @@
-import { memo, useEffect, useState, useContext } from "react";
+import { memo, useEffect, useState, useContext, useLayoutEffect } from "react";
 import firebase from "../../../../../firebase";
 import { RoleContext } from "../../../../../contexts/RoleContext";
 import ManagerItem from "./ManagerItem";
 import Modal from "react-modal";
 import CreateManager from "./CreateManager";
 import CreateJoinManager from "./CreateJoinManager";
+import CommandItem from "../CustomCommands/CommandItem";
 
 const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	const [MessageManagers, setMessageManagers] = useState([]);
 	const [JoinManager, setJoinManager] = useState();
 	const { state, create, setup } = useContext(RoleContext);
+	const [creatingCommand, setCreatingCommand] = useState(false);
+	const [commands, setCommands] = useState([]);
 	const guildId = userConnectedGuildInfo?.id;
 
 	useEffect(() => {
@@ -32,6 +35,25 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	}, [location, guildId]);
 
 	useEffect(() => {
+		const unsub = firebase.db
+			.collection("customCommands")
+			.doc(guildId || " ")
+			.onSnapshot(snapshot => {
+				const data = snapshot.data();
+				if (data) {
+					const roleCommands = Object.entries(data).filter(
+						command => command[1].type === "role"
+					);
+					console.log(roleCommands);
+					if (roleCommands.length) {
+						setCommands(roleCommands);
+					}
+				}
+			});
+		return unsub;
+	}, [location, guildId]);
+
+	useLayoutEffect(() => {
 		document.body.style.overflow = state.type ? "hidden" : "initial";
 		return () => {
 			document.body.style.overflow = "initial";
@@ -103,7 +125,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 				</div>
 				{!state.type && JoinManager && (
 					<>
-						<h4 className="plugin-section-title bigger">Join Roles</h4>
+						<h4 className="plugin-section-title bigger">Join Role</h4>
 						<ManagerItem
 							guild={userConnectedGuildInfo}
 							{...JoinManager}
@@ -120,6 +142,22 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 						a.message.localeCompare(b.message)
 					).map((manager, i) => (
 						<ManagerItem key={i} {...manager} guild={userConnectedGuildInfo} />
+					))}
+				<h4 className="plugin-section-title bigger">
+					Role Commands<span> — {commands.length}</span>
+				</h4>
+				{commands
+					.sort((a, b) => a[0].localeCompare(b[0]))
+					.map(([key, value]) => (
+						<CommandItem
+							guild={userConnectedGuildInfo}
+							setCommands={setCommands}
+							setCreatingCommand={setCreatingCommand}
+							allowedRoles={value.permittedRoles}
+							{...value}
+							name={key}
+							key={key}
+						/>
 					))}
 			</div>
 		</div>
