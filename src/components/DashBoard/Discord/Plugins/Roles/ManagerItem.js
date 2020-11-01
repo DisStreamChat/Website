@@ -33,6 +33,7 @@ const ManagerItem = memo(({ guild, channel, actions, channelOveride, message, jo
 				{displayChannel?.name || channelOveride}{" "}
 				<ChannelParent> {displayChannel?.parent}</ChannelParent>
 			</h4>
+			{!join && <h5>Reactions</h5>}
 			{Object.entries(actions || {})
 				.sort()
 				.map(([key, value]) => (
