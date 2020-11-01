@@ -163,7 +163,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 						const bMessage = b?.message?.content ? b?.message.content : b?.message;
 						return aMessage.localeCompare(bMessage);
 					}).map((manager, i) => (
-						<ManagerItem key={i} {...manager} guild={userConnectedGuildInfo} />
+						<ManagerItem key={i} {...manager} channel={manager.message.channel} guild={userConnectedGuildInfo} />
 					))}
 				<h4 className="plugin-section-title bigger">
 					Role Commands<span> — {commands.length}</span>

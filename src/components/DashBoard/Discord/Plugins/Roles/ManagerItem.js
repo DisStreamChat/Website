@@ -29,7 +29,7 @@ const ManagerItem = memo(({ guild, channel, actions, channelOveride, message, jo
 			<div className="delete-button" onClick={deleteMe}>
 				<CancelTwoToneIcon />
 			</div>
-			<h4>
+			<h4 style={{marginBottom: "0px"}}>
 				{displayChannel?.name || channelOveride}{" "}
 				<ChannelParent> {displayChannel?.parent}</ChannelParent>
 			</h4>
