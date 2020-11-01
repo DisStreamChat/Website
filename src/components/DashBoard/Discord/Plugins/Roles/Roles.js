@@ -125,7 +125,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 							// create("message");
 						}}
 					>
-						<h1>Command Role</h1>
+						<h1>Role Command</h1>
 						<p>allow users to give/remove roles from themselves by sending a command</p>
 					</div>
 					{!JoinManager && (
@@ -136,7 +136,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 							}}
 						>
 							<h1>Join Role</h1>
-							<p>Automatically give a user a role when they join your server</p>
+							<p>Automatically give a user one or more roles when they join your server</p>
 						</div>
 					)}
 				</div>

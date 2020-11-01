@@ -70,8 +70,8 @@ hr {
 
 .twemoji {
 	width: 25px;
-	@media screen {
-		width: 15px;
+	@media screen and (max-width: 400px) {
+		width: 18px !important;
 	}
 }
 
@@ -81,4 +81,8 @@ hr {
 	& * {
 		z-index: 1000000000;
 	}
+}
+
+.twemoji__big{
+	width: 25px;
 }

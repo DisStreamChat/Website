@@ -9,7 +9,7 @@ const AddActionButton = ({onClick}) => {
 				style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
 			>
 				<AddCircleTwoToneIcon />
-				<h4 style={{ marginLeft: ".5rem" }}>Add Action</h4>
+				<h4 style={{ marginLeft: ".5rem" }}>Add Reaction</h4>
 			</span>
 		</ActionBody>
 	);

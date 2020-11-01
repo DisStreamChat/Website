@@ -43,12 +43,12 @@ const ActionItem = memo(({ message, DMuser, role, guild, emoji, type, deleteAble
 				</div>
 			)}
 			<FlexContainer>
-				<Twemoji options={{ className: "twemoji" }}>
+				<Twemoji options={{ className: "twemoji twemoji__big" }}>
 					<span style={{ marginRight: ".5rem", textTransform: "capitalize" }}>
 						{emoji?.replace("catch-all", "All").replace("-", " ")}
 					</span>
 				</Twemoji>
-				-{" "}
+				
 				{displayRole &&
 					displayRole.map(role => (
 						<RoleItem style={{ marginLeft: ".5rem" }} {...role}>
