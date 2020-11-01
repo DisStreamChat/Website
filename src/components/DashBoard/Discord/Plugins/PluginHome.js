@@ -73,10 +73,18 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 			<div className="discord-prefix">
 				<label htmlFor="discord-prefix">
 					<h2 className="prefix-header">Command Prefix</h2>
-					<h3 className="prefix-subheader">Set the prefix used to run DisStreamBot commands in this discord server</h3>
+					<h3 className="prefix-subheader">
+						Set the prefix used to run DisStreamBot commands in this discord server
+					</h3>
 				</label>
 				<div className="prefix-body">
-					<input value={prefix} onChange={prefixChange} type="text" className="prefix-input" id="discord-prefix" />
+					<input
+						value={prefix}
+						onChange={prefixChange}
+						type="text"
+						className="prefix-input"
+						id="discord-prefix"
+					/>
 					<span className="ping-info">
 						or <span className="ping">@DisStreamBot</span>
 					</span>
@@ -88,12 +96,20 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 					<Route exact path={`${match.url}`}>
 						<div className="plugin-header">
 							<h2>Plugins</h2>
-							<h3>Add extra functionality to the bot in your server with plugins like leveling, custom commands, and logging</h3>
+							<h3>
+								Add extra functionality to the bot in your server with plugins like
+								leveling, custom commands, and logging
+							</h3>
 						</div>
 
 						<div className="plugin-list">
 							{plugins.map(plugin => (
-								<PluginCard guild={guildId} key={plugin.id} {...plugin} active={activePlugins[plugin.id]} />
+								<PluginCard
+									guild={guildId}
+									key={plugin.id}
+									{...plugin}
+									active={activePlugins[plugin.id]}
+								/>
 							))}
 						</div>
 					</Route>
@@ -116,9 +132,11 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 					)}
 					{(activePlugins["roles"] || loading) && (
 						<Route path={`${match.url}/roles`}>
-							<RoleContextProvider>
-								<Roles guild={connectedGuild} />
-							</RoleContextProvider>
+							<CommandContextProvider>
+								<RoleContextProvider>
+									<Roles guild={connectedGuild} />
+								</RoleContextProvider>
+							</CommandContextProvider>
 						</Route>
 					)}
 					<Redirect to={`${match.url}`} />

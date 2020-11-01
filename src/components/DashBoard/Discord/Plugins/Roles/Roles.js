@@ -6,6 +6,8 @@ import Modal from "react-modal";
 import CreateManager from "./CreateManager";
 import CreateJoinManager from "./CreateJoinManager";
 import CommandItem from "../CustomCommands/CommandItem";
+import CreateCommand from "../CustomCommands/CreateCommand";
+import CreateRoleCommand from "../CustomCommands/CreateRoleCommand";
 
 const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	const [MessageManagers, setMessageManagers] = useState([]);
@@ -54,14 +56,28 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	}, [location, guildId]);
 
 	useLayoutEffect(() => {
-		document.body.style.overflow = state.type ? "hidden" : "initial";
+		document.body.style.overflow = state.type || creatingCommand ? "hidden" : "initial";
 		return () => {
 			document.body.style.overflow = "initial";
 		};
-	}, [state]);
+	}, [state, creatingCommand]);
 
 	return (
 		<div>
+			<Modal
+				isOpen={creatingCommand}
+				className="command-modal Modal"
+				overlayClassName="command-overlay Modal-Overlay"
+				onRequestClose={() => setCreatingCommand(false)}
+			>
+				<CreateCommand
+					guild={userConnectedGuildInfo}
+					role
+					setCreatingCommand={setCreatingCommand}
+				>
+					<CreateRoleCommand guild={userConnectedGuildInfo} />
+				</CreateCommand>
+			</Modal>
 			<Modal
 				isOpen={state.type}
 				className="command-modal Modal"
@@ -105,6 +121,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 					<div
 						className="create-command"
 						onClick={() => {
+							setCreatingCommand(true)
 							// create("message");
 						}}
 					>
