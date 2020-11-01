@@ -34,7 +34,7 @@ const ActionItem = memo(({ message, DMuser, role, guild, emoji, type, deleteAble
 	const smallScreen = useMediaQuery("(max-width: 500px)");
 
 	return editing ? (
-		<EditAction initial={{DMuser, role, guild}} close={() => setEditing(false)} guild={guild}/>
+		<EditAction initial={{DMuser, role, emoji}} close={() => setEditing(false)} guild={guild}/>
 	) : (
 		<ActionBody style={{ display: "flex" }}>
 			{deleteAble && (
