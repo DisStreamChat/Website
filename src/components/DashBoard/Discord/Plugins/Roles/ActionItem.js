@@ -4,13 +4,16 @@ import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
 import Twemoji from "react-twemoji";
 import "emoji-mart/css/emoji-mart.css";
 import firebase from "../../../../../firebase";
-import { styled, useMediaQuery } from "@material-ui/core";
-import { REACTION_ROLE_ACTION_TYPES } from "../../../../../utils/constants";
+import { useMediaQuery } from "@material-ui/core";
+// import { REACTION_ROLE_ACTION_TYPES } from "../../../../../utils/constants";
+import EditButton from "../../../../../styled-components/EditButton";
 import { ActionBody } from "../../../../../styled-components/ReactionRoleComponents";
 import FlexContainer from "../../../../../styled-components/BaseComponents/FlexContainer";
+import EditAction from "./EditAction";
 
 const ActionItem = memo(({ message, DMuser, role, guild, emoji, type, deleteAble }) => {
 	const [displayRole, setDisplayRole] = useState();
+	const [editing, setEditing] = useState(false);
 
 	useEffect(() => {
 		if (!Array.isArray(role)) {
@@ -30,7 +33,9 @@ const ActionItem = memo(({ message, DMuser, role, guild, emoji, type, deleteAble
 
 	const smallScreen = useMediaQuery("(max-width: 500px)");
 
-	return (
+	return editing ? (
+		<EditAction initial={{DMuser, role, guild}} close={() => setEditing(false)} guild={guild}/>
+	) : (
 		<ActionBody style={{ display: "flex" }}>
 			{deleteAble && (
 				<div className="delete-button" onClick={deleteMe}>
@@ -53,10 +58,11 @@ const ActionItem = memo(({ message, DMuser, role, guild, emoji, type, deleteAble
 			</FlexContainer>
 			{!smallScreen && (
 				<FlexContainer>
-					<h4>Type: {REACTION_ROLE_ACTION_TYPES[type]}</h4>
+					<EditButton onClick={() => setEditing(true)}>Edit</EditButton>
+					{/* <h4>Type: {REACTION_ROLE_ACTION_TYPES[type]}</h4>
 					<h4 style={{ marginLeft: "2rem", textTransform: "capitalize" }}>
 						DM: {(!!DMuser).toString()}
-					</h4>
+					</h4> */}
 				</FlexContainer>
 			)}
 		</ActionBody>
