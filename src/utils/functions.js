@@ -43,6 +43,12 @@ export const guildOption = guild => {
 	};
 };
 
+export const channelLabel = channel => {
+	return <span>
+		{channel.name} <span  className="channel-category">{channel.parent}</span>
+	</span>
+} 
+
 export const parseSelectValue = value => {
 	if (value instanceof Array) {
 		if (value.length === 0) return value;

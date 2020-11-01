@@ -102,7 +102,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<h2>Leveling Up</h2>
 					<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
 				</span>
-				<Link className="leader-board-link" to={`/leaderboard/${userConnectedGuildInfo.id}`}>
+				<Link className="leader-board-link" to={`/leaderboard/${userConnectedGuildInfo?.id}`}>
 					Leaderboard
 				</Link>
 			</div>

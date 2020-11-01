@@ -11,10 +11,18 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import FancySwitch from "../../../../../styled-components/FancySwitch";
 import { REACTION_ROLE_ACTION_TYPES } from "../../../../../utils/constants";
 import StyledSelect from "../../../../../styled-components/StyledSelect";
-import {ActionBody, ActionFooter, ActionButton, ActionHead} from "../../../../../styled-components/ReactionRoleComponents"
+import {
+	ActionBody,
+	ActionFooter,
+	ActionButton,
+	ActionHead,
+} from "../../../../../styled-components/ReactionRoleComponents";
 
 const CreateAction = ({ guild, onSubmit, close }) => {
-	const [action, setAction] = useState({});
+	const [action, setAction] = useState({
+		type: "TOGGLE",
+	});
+	console.log(action);
 	const { update } = useContext(RoleContext);
 	const [open, setOpen] = useState(false);
 
@@ -35,12 +43,14 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 	};
 
 	return (
-		<ActionBody style={{zIndex: 1000}}>
+		<ActionBody style={{ zIndex: 1000 }}>
 			<ActionHead>
 				<div>
 					{action.emoji ? (
 						<span style={{ marginRight: ".5rem", textTransform: "capitalize" }}>
-							<Twemoji options={{ className: "twemoji" }}>{action.emoji?.replace("catch-all", "All").replace("-", " ")}</Twemoji>
+							<Twemoji options={{ className: "twemoji" }}>
+								{action.emoji?.replace("catch-all", "All").replace("-", " ")}
+							</Twemoji>
 						</span>
 					) : (
 						<Picker
@@ -49,7 +59,9 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 							set="twitter"
 							title="Pick your emoji…"
 							emoji="point_up"
-							onSelect={emoji => setAction(prev => ({ ...action, emoji: emoji.native }))}
+							onSelect={emoji =>
+								setAction(prev => ({ ...action, emoji: emoji.native }))
+							}
 						/>
 					)}
 				</div>
@@ -114,11 +126,20 @@ const CreateAction = ({ guild, onSubmit, close }) => {
 							setAction(prev => ({ ...prev, type: e.value }));
 						}}
 						placeholder="Select Action Type"
-						value={action?.type ? { value: action?.type, label: REACTION_ROLE_ACTION_TYPES[action?.type] } : ""}
-						options={Object.entries(REACTION_ROLE_ACTION_TYPES || {})?.map(([key, value]) => ({
-							value: key,
-							label: value,
-						}))}
+						value={
+							action?.type
+								? {
+										value: action?.type,
+										label: `Action Type: ${REACTION_ROLE_ACTION_TYPES[action?.type]}`,
+								  }
+								: ""
+						}
+						options={Object.entries(REACTION_ROLE_ACTION_TYPES || {})?.map(
+							([key, value]) => ({
+								value: key,
+								label: value,
+							})
+						)}
 					/>
 				</div>
 				<div style={{ paddingLeft: ".75rem" }}>

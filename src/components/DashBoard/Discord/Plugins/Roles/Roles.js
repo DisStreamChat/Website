@@ -121,7 +121,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 					<div
 						className="create-command"
 						onClick={() => {
-							setCreatingCommand(true)
+							setCreatingCommand(true);
 							// create("message");
 						}}
 					>
@@ -136,7 +136,10 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 							}}
 						>
 							<h1>Join Role</h1>
-							<p>Automatically give a user one or more roles when they join your server</p>
+							<p>
+								Automatically give a user one or more roles when they join your
+								server
+							</p>
 						</div>
 					)}
 				</div>
@@ -155,9 +158,11 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 					Reaction Roles<span> — {MessageManagers.length}</span>
 				</h4>
 				{!state.type &&
-					MessageManagers.sort((a, b) =>
-						a.message.localeCompare(b.message)
-					).map((manager, i) => (
+					MessageManagers.sort((a, b) => {
+						const aMessage = a?.message?.content ? a?.message.content : a?.message;
+						const bMessage = b?.message?.content ? b?.message.content : b?.message;
+						return aMessage.localeCompare(bMessage);
+					}).map((manager, i) => (
 						<ManagerItem key={i} {...manager} guild={userConnectedGuildInfo} />
 					))}
 				<h4 className="plugin-section-title bigger">
