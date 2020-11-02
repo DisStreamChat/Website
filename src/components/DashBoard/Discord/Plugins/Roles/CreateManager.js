@@ -59,6 +59,9 @@ const CreateManager = ({ guild: userConnectedGuildInfo }) => {
 					<div className="plugin-section">
 						{Object.entries(state?.manager?.actions || {})?.map(([key, action]) => (
 							<ActionItem
+								edit={(action, emoji) => {
+									update(`manager.actions[${emoji}]`, action);
+								}}
 								{...action}
 								emoji={key}
 								guild={userConnectedGuildInfo}
@@ -108,7 +111,7 @@ const CreateManager = ({ guild: userConnectedGuildInfo }) => {
 								.collection("reactions")
 								.doc(userConnectedGuildInfo.id);
 							const manager = { ...state.manager };
-							manager.message.channel = parseSelectValue(manager.message.channel)
+							manager.message.channel = parseSelectValue(manager.message.channel);
 
 							const otcData = (
 								await firebase.db.collection("Secret").doc(userId).get()
@@ -118,7 +121,7 @@ const CreateManager = ({ guild: userConnectedGuildInfo }) => {
 							const apiUrl = `https://api.disstreamchat.com/discord/reactionmessage?otc=${otc}&id=${userId}`;
 							const body = {
 								message: manager.message.content,
-								channel: (manager.message.channel),
+								channel: manager.message.channel,
 								reactions: Object.keys(manager.actions),
 								server: userConnectedGuildInfo.id,
 							};
@@ -136,8 +139,8 @@ const CreateManager = ({ guild: userConnectedGuildInfo }) => {
 								throw new Error(json.message);
 							}
 
-							const update = { [json.messageId]: manager }
-							console.log(update)
+							const update = { [json.messageId]: manager };
+							console.log(update);
 
 							commandRef.update(update);
 

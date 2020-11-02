@@ -12,7 +12,7 @@ import FlexContainer from "../../../../../styled-components/BaseComponents/FlexC
 import EditAction from "./EditAction";
 
 const ActionItem = memo(
-	({ message, DMuser, role, guild, emoji, delete: deleteFunc, type, deleteAble }) => {
+	({ message, DMuser, role, guild, emoji, delete: deleteFunc, type, deleteAble, edit }) => {
 		const [displayRole, setDisplayRole] = useState();
 		const [editing, setEditing] = useState(false);
 
@@ -40,7 +40,9 @@ const ActionItem = memo(
 
 		return editing ? (
 			<EditAction
-				initial={{ DMuser, role, emoji }}
+				message={message}
+				initial={{ DMuser, role, emoji, type }}
+				update={edit ? (action, emoji) => edit(action, emoji) : null}
 				close={() => setEditing(false)}
 				guild={guild}
 			/>

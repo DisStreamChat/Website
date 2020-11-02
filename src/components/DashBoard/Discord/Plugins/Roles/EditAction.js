@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RoleItem from "../../../../../styled-components/RoleItem";
 import Twemoji from "react-twemoji";
 import { Picker } from "emoji-mart";
@@ -10,11 +10,31 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import FancySwitch from "../../../../../styled-components/FancySwitch";
 import { REACTION_ROLE_ACTION_TYPES } from "../../../../../utils/constants";
 import StyledSelect from "../../../../../styled-components/StyledSelect";
-import {ActionBody, ActionFooter, ActionButton, ActionHead} from "../../../../../styled-components/ReactionRoleComponents"
+import firebase from "../../../../../firebase";
+import {
+	ActionBody,
+	ActionFooter,
+	ActionButton,
+	ActionHead,
+} from "../../../../../styled-components/ReactionRoleComponents";
+import { TransformObjectToSelectValue } from "../../../../../utils/functions";
 
-const EditAction = ({initial, close, guild}) => {
+const EditAction = ({ initial, close, guild, message, update }) => {
 	const [action, setAction] = useState(initial);
 	const [open, setOpen] = useState(false);
+
+	useEffect(() => {
+		(async () => {
+			const displayRoles = initial.role.map(role => guild.roles.find(r => r.id === role));
+			setAction({
+				...initial,
+				role: displayRoles.map(role => ({
+					label: <RoleItem {...role}>{role.name}</RoleItem>,
+					value: TransformObjectToSelectValue(role),
+				})),
+			});
+		})();
+	}, [initial, guild]);
 
 	const submit = () => {
 		const roleIDs = action.role.map(role => JSON.parse(role.value.split("=")[1]).id);
@@ -24,17 +44,26 @@ const EditAction = ({initial, close, guild}) => {
 			type: action.type,
 			DMuser: !!action.DMuser,
 		};
-		
+		if (update) {
+			update(actionObj, action.emoji);
+		} else {
+			firebase.db
+				.collection("reactions")
+				.doc(guild.id)
+				.update({ [`${message}.actions.${action.emoji}`]: actionObj });
+		}
 		return close?.();
 	};
 
 	return (
-		<ActionBody style={{zIndex: 1000}}>
+		<ActionBody style={{ zIndex: 1000 }}>
 			<ActionHead>
 				<div>
 					{action.emoji ? (
 						<span style={{ marginRight: ".5rem", textTransform: "capitalize" }}>
-							<Twemoji options={{ className: "twemoji" }}>{action.emoji?.replace("catch-all", "All").replace("-", " ")}</Twemoji>
+							<Twemoji options={{ className: "twemoji" }}>
+								{action.emoji?.replace("catch-all", "All").replace("-", " ")}
+							</Twemoji>
 						</span>
 					) : (
 						<Picker
@@ -108,11 +137,20 @@ const EditAction = ({initial, close, guild}) => {
 							setAction(prev => ({ ...prev, type: e.value }));
 						}}
 						placeholder="Select Action Type"
-						value={action?.type ? { value: action?.type, label: REACTION_ROLE_ACTION_TYPES[action?.type] } : ""}
-						options={Object.entries(REACTION_ROLE_ACTION_TYPES || {})?.map(([key, value]) => ({
-							value: key,
-							label: value,
-						}))}
+						value={
+							action?.type
+								? {
+										value: action?.type,
+										label: REACTION_ROLE_ACTION_TYPES[action?.type],
+								  }
+								: ""
+						}
+						options={Object.entries(REACTION_ROLE_ACTION_TYPES || {})?.map(
+							([key, value]) => ({
+								value: key,
+								label: value,
+							})
+						)}
 					/>
 				</div>
 				<div style={{ paddingLeft: ".75rem" }}>
@@ -132,7 +170,7 @@ const EditAction = ({initial, close, guild}) => {
 				</div>
 			</ActionFooter>
 		</ActionBody>
-	)
-}
+	);
+};
 
-export default EditAction
+export default EditAction;
