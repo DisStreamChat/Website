@@ -50,7 +50,7 @@ const CommandItem = ({
 
 	useEffect(() => {
 		setPermittedRoles(
-			permittedRoles.map(id => {
+			permittedRoles?.map(id => {
 				const role = userConnectedGuildInfo?.roles?.find?.(r => r.id === id);
 				return {
 					value: `${role.name}=${JSON.stringify(role)}`,
