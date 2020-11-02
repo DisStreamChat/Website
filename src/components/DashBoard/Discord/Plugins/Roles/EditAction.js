@@ -140,8 +140,8 @@ const EditAction = ({ initial, close, guild, message, update, join }) => {
 						value={
 							action?.type
 								? {
-										value: action?.type,
-										label: REACTION_ROLE_ACTION_TYPES[action?.type],
+									value: action?.type,
+									label: REACTION_ROLE_ACTION_TYPES[action?.type],
 								  }
 								: ""
 						}
