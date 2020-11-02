@@ -3,6 +3,7 @@ $height: 65px;
 $purple: #462b45;
 
 .banner {
+	z-index: 100000;
 	box-sizing: border-box !important;
 	position: fixed;
 	bottom: 0;

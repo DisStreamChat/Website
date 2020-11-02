@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext, useMemo } from "react";
+import { Fragment, useEffect, useState, useCallback, useContext, useMemo } from "react";
 import { NavLink, Route, Redirect, Switch } from "react-router-dom";
 import firebase from "../../firebase";
 import "./Dashboard.scss";
@@ -16,13 +16,15 @@ import CloseIcon from "@material-ui/icons/Close";
 import { useDocument } from "react-firebase-hooks/firestore";
 
 const Dashboard = props => {
-	const [overlaySettings, setOverlaySettings] = useState();
+	// const [overlaySettings, setOverlaySettings] = useState();
 	const [appSettings, setAppSettings] = useState();
 	const [defaultSettings, setDefaultSettings] = useState();
 	const { currentUser, dropDownOpen: open } = useContext(AppContext);
 	const id = firebase.auth.currentUser.uid;
 	const [discordId, setDiscordId] = useState("");
-	const { activePlugins, dashboardOpen, setDashboardOpen, setUserDiscordInfo } = useContext(DiscordContext);
+	const { activePlugins, dashboardOpen, setDashboardOpen, setUserDiscordInfo } = useContext(
+		DiscordContext
+	);
 
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
@@ -77,7 +79,7 @@ const Dashboard = props => {
 	useEffect(() => {
 		(async () => {
 			if (currentUser) {
-				setOverlaySettings(currentUser.overlaySettings);
+				// setOverlaySettings(currentUser.overlaySettings);
 				setAppSettings(currentUser.appSettings);
 			}
 		})();
@@ -91,9 +93,12 @@ const Dashboard = props => {
 		[activePlugins]
 	);
 
-    const showDropdown = useMediaQuery("(min-width: 900px)");
-    
-    const [rawDiscordData, discordDataLoading, DiscordDataError] = useDocument(firebase.db.doc(`Streamers/${id}/discord/data`));
+	const showDropdown = useMediaQuery("(min-width: 900px)");
+
+	// TODO: handle error with third item in this array
+	const [rawDiscordData, discordDataLoading] = useDocument(
+		firebase.db.doc(`Streamers/${id}/discord/data`)
+	);
 
 	useEffect(() => {
 		if (discordDataLoading) return;
@@ -103,20 +108,30 @@ const Dashboard = props => {
 	return (
 		<div className="settings-container">
 			<div className={`${open ? "dashboard-open" : ""} setting-options`}>
-				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/appsettings`}>
+				<NavLink
+					className="setting-link"
+					activeClassName="active"
+					to={`${props.match.url}/appsettings`}
+				>
 					App Settings
 				</NavLink>
 				{/* <NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/overlaysettings`}>
 					overlay Settings
 				</NavLink> */}
-				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/discord${discordId ? `/${discordId}` : ""}`}>
+				<NavLink
+					className="setting-link"
+					activeClassName="active"
+					to={`${props.match.url}/discord${discordId ? `/${discordId}` : ""}`}
+				>
 					Discord Settings
 				</NavLink>
-				{showDropdown && !!displayPlugins.length && window?.location?.pathname?.includes?.("discord") && (
+				{showDropdown &&
+					!!displayPlugins.length &&
+					window?.location?.pathname?.includes?.("discord") && (
 					<ul>
 						{displayPlugins.map(key => {
-                            const plugin = plugins.find(plugin => plugin.id === key);
-                            if(!plugin) return null;
+							const plugin = plugins.find(plugin => plugin.id === key);
+							if (!plugin) return null;
 							return (
 								<NavLink
 									key={plugin?.id}
@@ -130,7 +145,11 @@ const Dashboard = props => {
 						})}
 					</ul>
 				)}
-				<NavLink className="setting-link" activeClassName="active" to={`${props.match.url}/account`}>
+				<NavLink
+					className="setting-link"
+					activeClassName="active"
+					to={`${props.match.url}/account`}
+				>
 					Account Settings
 				</NavLink>
 			</div>
@@ -162,7 +181,8 @@ const Dashboard = props => {
 							title="App Settings"
 							subtitle={
 								<>
-									Adjust the settings of your app. if you don't use the app but want to you can start using it{" "}
+									Adjust the settings of your app. if you don't use the app but
+									want to you can start using it{" "}
 									<A className="ul bld" href="/apps" newTab local>
 										here
 									</A>
@@ -188,11 +208,16 @@ const Dashboard = props => {
 					onClose={handleClose}
 					message="Saved"
 					action={
-						<React.Fragment>
-							<IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+						<Fragment>
+							<IconButton
+								size="small"
+								aria-label="close"
+								color="inherit"
+								onClick={handleClose}
+							>
 								<CloseIcon fontSize="small" />
 							</IconButton>
-						</React.Fragment>
+						</Fragment>
 					}
 				/>
 			</div>

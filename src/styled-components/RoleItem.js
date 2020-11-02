@@ -3,9 +3,7 @@ import styled from "styled-components";
 const colorify = number => `#${number === 0 ? "99aab5" : number?.toString?.(16)?.padStart?.(6, "0") || "black"}`;
 
 const RoleItem = styled.div`
-	height: 12px;
 	border-radius: 22px;
-	height: 12px;
 	padding: 0.25rem 0.5rem;
 	font-size: 12px;
 	width: max-content;

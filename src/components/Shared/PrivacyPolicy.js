@@ -1,4 +1,3 @@
-import React from "react";
 import A from "./A";
 import "./PrivacyPolicy.scss"
 
@@ -70,8 +69,8 @@ const PrivacyPolicy = () => {
 				addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of
 				clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing
 				trends, administering the site, tracking users' movement on the website, and gathering demographic information. Our Privacy Policy was
-				created with the help of the <a href="https://www.privacypolicygenerator.info">Privacy Policy Generator</a> and the{" "}
-				<a href="https://www.privacypolicyonline.com/privacy-policy-generator/">Online Privacy Policy Generator</a>.
+				created with the help of the <A newTab href="https://www.privacypolicygenerator.info">Privacy Policy Generator</A> and the{" "}
+				<A newTab href="https://www.privacypolicyonline.com/privacy-policy-generator/">Online Privacy Policy Generator</A>.
 			</p>
 
 			{/* <h2>Cookies and Web Beacons</h2>

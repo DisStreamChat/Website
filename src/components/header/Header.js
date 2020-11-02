@@ -1,16 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./Header.scss";
 import { Link, withRouter } from "react-router-dom";
 import { AppContext } from "../../contexts/Appcontext";
 import { CSSTransition } from "react-transition-group";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import { useCallback } from "react";
 import Modal from "react-modal";
 import A from "../Shared/A";
 import ClearIcon from "@material-ui/icons/Clear";
 import firebase from "../../firebase";
 import HamburgerMenu from "react-hamburger-menu";
-import { Checkbox } from "@material-ui/core";
 
 Modal.setAppElement("#root");
 

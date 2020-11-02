@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useCallback, useContext, useMemo } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import firebase from "../../../../firebase";
-import A from "../../../Shared/A";
 import PluginCard from "./PluginCard";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import Leveling from "./Leveling";
@@ -10,13 +9,12 @@ import plugins from "./plugins.json";
 import CustomCommands from "./CustomCommands/CustomCommands";
 import { CommandContextProvider } from "../../../../contexts/CommandContext";
 import { RoleContextProvider } from "../../../../contexts/RoleContext";
-import App from "./App";
 import Roles from "./Roles/Roles";
-import _ from "lodash";
 
 const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 	const [prefix, setPrefix] = useState("!");
-	const { userDiscordInfo, activePlugins, setActivePlugins, saveOnType } = useContext(DiscordContext);
+	const { activePlugins, setActivePlugins, saveOnType } = useContext(DiscordContext);
+	const connectedGuildId = connectedGuild?.id || " ";
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -40,9 +38,9 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 			}
 			setTimeout(() => {
 				setLoading(false);
-			}, 100);
+			}, 300);
 		})();
-	}, [connectedGuild]);
+	}, [connectedGuild, setActivePlugins]);
 
 	const prefixChange = useCallback(
 		async e => {
@@ -51,14 +49,14 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 			try {
 				await firebase.db
 					.collection("DiscordSettings")
-					.doc(connectedGuild?.id || " ")
+					.doc(connectedGuildId || " ")
 					.update({
 						prefix: value,
 					});
 			} catch (err) {
 				await firebase.db
 					.collection("DiscordSettings")
-					.doc(connectedGuild?.id || " ")
+					.doc(connectedGuildId || " ")
 					.set({
 						activePlugins: {},
 						prefix: value,
@@ -66,7 +64,7 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 			}
 			saveOnType();
 		},
-		[connectedGuild?.id]
+		[connectedGuildId, saveOnType]
 	);
 
 	return (
@@ -75,10 +73,18 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 			<div className="discord-prefix">
 				<label htmlFor="discord-prefix">
 					<h2 className="prefix-header">Command Prefix</h2>
-					<h3 className="prefix-subheader">Set the prefix used to run DisStreamBot commands in this discord server</h3>
+					<h3 className="prefix-subheader">
+						Set the prefix used to run DisStreamBot commands in this discord server
+					</h3>
 				</label>
 				<div className="prefix-body">
-					<input value={prefix} onChange={prefixChange} type="text" className="prefix-input" id="discord-prefix" />
+					<input
+						value={prefix}
+						onChange={prefixChange}
+						type="text"
+						className="prefix-input"
+						id="discord-prefix"
+					/>
 					<span className="ping-info">
 						or <span className="ping">@DisStreamBot</span>
 					</span>
@@ -90,12 +96,20 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 					<Route exact path={`${match.url}`}>
 						<div className="plugin-header">
 							<h2>Plugins</h2>
-							<h3>Add extra functionality to the bot in your server with plugins like leveling, custom commands, and logging</h3>
+							<h3>
+								Add extra functionality to the bot in your server with plugins like
+								leveling, custom commands, and logging
+							</h3>
 						</div>
 
 						<div className="plugin-list">
 							{plugins.map(plugin => (
-								<PluginCard guild={guildId} key={plugin.id} {...plugin} active={activePlugins[plugin.id]} />
+								<PluginCard
+									guild={guildId}
+									key={plugin.id}
+									{...plugin}
+									active={activePlugins[plugin.id]}
+								/>
 							))}
 						</div>
 					</Route>
@@ -118,9 +132,11 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 					)}
 					{(activePlugins["roles"] || loading) && (
 						<Route path={`${match.url}/roles`}>
-							<RoleContextProvider>
-								<Roles guild={connectedGuild} />
-							</RoleContextProvider>
+							<CommandContextProvider>
+								<RoleContextProvider>
+									<Roles guild={connectedGuild} />
+								</RoleContextProvider>
+							</CommandContextProvider>
 						</Route>
 					)}
 					<Redirect to={`${match.url}`} />

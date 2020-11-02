@@ -1,38 +1,26 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
-import { Route, Redirect, Switch, withRouter, useParams } from "react-router-dom";
+import { memo, useEffect, useState, useCallback, useContext } from "react";
+import { withRouter, useParams } from "react-router-dom";
 import firebase from "../../../firebase";
-import Select from "react-select";
-import useFetch from "../../../hooks/useFetch";
-import SmallLoader from "../../Shared/SmallLoader";
 import A from "../../Shared/A";
 import useSnapshot from "../../../hooks/useSnapshot";
-
-import { colorStyles, guildOption } from "../../Shared/userUtils";
+import { guildOption } from "../../../utils/functions";
 import { AppContext } from "../../../contexts/Appcontext";
-import { DiscordContextProvider, DiscordContext } from "../../../contexts/DiscordContext";
+import { DiscordContext } from "../../../contexts/DiscordContext";
 import PluginHome from "./Plugins/PluginHome";
+import StyledSelect from "../../../styled-components/StyledSelect";
 
-const DiscordPage = React.memo(({ location, history, match }) => {
+const DiscordPage = memo(({ history, match }) => {
 	const [displayGuild, setDisplayGuild] = useState();
 	const [refreshed, setRefreshed] = useState(false);
-	const { isLoading, sendRequest: sendLoadingRequest } = useFetch();
-	const id = firebase.auth.currentUser.uid;
 	const { id: guildId } = useParams();
-	const { sendRequest } = useFetch();
-	const { currentUser, setCurrentUser } = useContext(AppContext);
-	const {
-		userDiscordInfo,
-		setUserDiscordInfo,
-		userConnectedChannels,
-		userConnectedGuildInfo,
-		setUserConnectedChannels,
-		setUserConnectedGuildInfo,
-	} = useContext(DiscordContext);
+	const { userDiscordInfo, userConnectedGuildInfo, setUserConnectedGuildInfo } = useContext(DiscordContext);
 	const [connectedGuild, setConnectedGuild] = useState();
+	const { userId } = useContext(AppContext);
+	const guilds = userDiscordInfo?.guilds
 
 	useEffect(() => {
 		(async () => {
-			const guild = userDiscordInfo?.guilds?.find?.(guild => guild.id === guildId);
+			const guild = guilds?.find?.(guild => guild.id === guildId);
 			if (guild) {
 				const response = await fetch(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
 				const memberResponse = await fetch(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
@@ -40,7 +28,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 				const memberJson = await memberResponse.json();
 				const roles = json.roles;
 				const channels = json.channels;
-				const userData = (await firebase.db.collection("Streamers").doc(id).get()).data();
+				const userData = (await firebase.db.collection("Streamers").doc(userId).get()).data();
 				setConnectedGuild({ ...guild, roles, channels, isMember: memberJson?.result });
 				setUserConnectedGuildInfo({
 					...guild,
@@ -51,7 +39,7 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 				});
 			}
 		})();
-	}, [guildId, userDiscordInfo?.guilds, setUserConnectedGuildInfo]);
+	}, [guildId, setUserConnectedGuildInfo, guilds, userId]);
 
 	useEffect(() => {
 		(async () => {
@@ -65,110 +53,51 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	const refreshToken = userDiscordInfo?.refreshToken;
 	useEffect(() => {
 		(async () => {
-			if (!refreshToken || !id) return;
+			if (!refreshToken || !userId) return;
 			if (refreshed) return console.log("already refreshed");
 			console.log("refreshing");
-			const otcData = (await firebase.db.collection("Secret").doc(id).get()).data();
+			const otcData = (await firebase.db.collection("Secret").doc(userId).get()).data();
 			const otc = otcData?.value;
 			setRefreshed(true);
-			const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${refreshToken}&id=${id}&otc=${otc}`);
+			const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token/refresh?token=${refreshToken}&id=${userId}&otc=${otc}`);
 			if (!response.ok) return;
 
 			const json = await response.json();
-			console.log({ json });
+
 			if (!json) return;
 			await firebase.db
 				.collection("Streamers")
-				.doc(id || " ")
+				.doc(userId || " ")
 				.collection("discord")
 				.doc("data")
 				.update(json.userData);
 		})();
-	}, [id, refreshed, refreshToken]);
-
-	const disconnect = useCallback(
-		async fullDisconnet => {
-			// if (!fullDisconnet) {
-			setUserConnectedGuildInfo(prev => ({ ...prev, connected: false }));
-			// } else {
-			// 	setUserConnectedGuildInfo(null);
-			// }
-			firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
-				connectedGuild: "",
-				liveChatId: [],
-			});
-			firebase.db.collection("Streamers").doc(id).update({
-				liveChatId: [],
-			});
-		},
-		[id]
-	);
-
-	const disconnectAccount = useCallback(async () => {
-		disconnect();
-		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").set({});
-		setCurrentUser(prev => ({ ...prev, discordData: {} }));
-	}, [id, disconnect, setCurrentUser]);
-
-	const guilds = userDiscordInfo?.guilds;
-
-	// useSnapshot(
-	// 	firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
-	// 	async snapshot => {
-	// 		const data = snapshot.data();
-	// 		if (data) {
-	// 			const userData = (await firebase.db.collection("Streamers").doc(id).get()).data();
-	// 			const connectedGuildId = data.connectedGuild;
-	// 			const guildByName = guilds?.find?.(guild => guild.id === connectedGuildId);
-	// 			if (guildByName) {
-	// 				const guildId = guildByName.id;
-	// 				const value = await sendRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
-	// 				const response = await sendRequest(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
-	// 				const channelReponse = response.channels;
-	// 				console.log(response.roles);
-	// 				setUserConnectedGuildInfo({
-	// 					name: guildByName.name,
-	// 					isMember: value?.result,
-	// 					icon: guildByName.icon,
-	// 					id: guildByName.id,
-	// 					channels: channelReponse,
-	// 					roles: response.roles,
-	// 					connectedChannels: channelReponse?.filter(channel => userData.liveChatId?.includes(channel.id)),
-	// 					connected: true,
-	// 				});
-	// 			}
-	// 		}
-	// 	},
-	// 	[id, guilds]
-	// );
+	}, [userId, refreshed, refreshToken]);
 
 	useSnapshot(
-		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data"),
+		firebase.db
+			.collection("Streamers")
+			.doc(userId || " ")
+			.collection("discord")
+			.doc("data"),
 		async snapshot => {
 			const data = snapshot.data();
 			if (data) {
 				firebase.db
 					.collection("Streamers")
-					.doc(id || " ")
+					.doc(userId || " ")
 					.update({
 						guildId: data.connectedGuild || "",
 					});
 			}
 		},
-		[id]
+		[userId]
 	);
-
-	const Connectguild = useCallback(async () => {
-		setUserConnectedGuildInfo(prev => ({ ...prev, connected: true }));
-		firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({
-			connectedGuild: userConnectedGuildInfo.id,
-		});
-	}, [userConnectedGuildInfo, id, setUserConnectedGuildInfo]);
 
 	const onGuildSelect = useCallback(
 		async e => {
 			const name = e.value;
-			const guildByName = userDiscordInfo.guilds.find(guild => guild.name === name);
+			const guildByName = guilds?.find(guild => guild.name === name);
 			const selectedGuildId = guildByName.id;
 			try {
 				if (guildId) {
@@ -182,18 +111,8 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 					history.push(`${match.url}/${selectedGuildId}`);
 				}
 			} catch (err) {}
-			const { result: isMember } = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/ismember?guild=` + selectedGuildId);
-			// const channelReponse = await sendLoadingRequest(`${process.env.REACT_APP_API_URL}/getchannels?guild=` + selectedGuildId);
-
-			// setUserConnectedGuildInfo({
-			// 	name,
-			// 	isMember,
-			// 	icon: guildByName.icon,
-			// 	id: guildByName.id,
-			// 	channels: channelReponse,
-			// });
 		},
-		[userDiscordInfo, sendLoadingRequest]
+		[guilds, guildId, match.url, history]
 	);
 
 	return (
@@ -208,38 +127,29 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 				{Object.keys(userDiscordInfo || {}).length ? (
 					<>
 						<div className="discord-header">
-							<Select
+							<StyledSelect
 								value={displayGuild}
 								onChange={onGuildSelect}
 								placeholder="Select Guild"
 								options={userDiscordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
-								styles={colorStyles}
 							/>
-							{/* <span>
-								<img className="discord-profile" src={userDiscordInfo?.profilePicture} alt="" />
-								<span className="discord-name">{currentUser?.displayName}</span>
-							</span> */}
 						</div>
 						<div className="discord-body">
-							{isLoading ? (
-								<SmallLoader />
-							) : userConnectedGuildInfo ? (
-								<>
-									{!userConnectedGuildInfo.isMember ? (
-										<div className="not-member">
-											<span className="error-color">DisStreamBot is not a member of this server</span>
-											<a
-												href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${userConnectedGuildInfo?.id}`}
-											>
-												<button className="invite-link discord-settings-button">Invite it</button>
-											</a>
-										</div>
-									) : guildId ? (
-										<PluginHome connectedGuild={connectedGuild} guildId={guildId} match={match} />
-									) : (
-										<></>
-									)}
-								</>
+							{userConnectedGuildInfo ? (
+								!userConnectedGuildInfo.isMember ? (
+									<div className="not-member">
+										<span className="error-color">DisStreamBot is not a member of this server</span>
+										<A
+											href={`https://discord.com/api/oauth2/authorize?client_id=702929032601403482&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F%3Fdiscord%3Dtrue&scope=bot&guild_id=${userConnectedGuildInfo?.id}`}
+										>
+											<button className="invite-link discord-settings-button">Invite it</button>
+										</A>
+									</div>
+								) : guildId ? (
+									<PluginHome connectedGuild={connectedGuild} guildId={guildId} match={match} />
+								) : (
+									<></>
+								)
 							) : (
 								<PluginHome connectedGuild={connectedGuild} guildId={guildId} match={match} blank />
 							)}
@@ -262,4 +172,4 @@ const DiscordPage = React.memo(({ location, history, match }) => {
 	);
 });
 
-export default withRouter(React.memo(DiscordPage));
+export default withRouter(memo(DiscordPage));

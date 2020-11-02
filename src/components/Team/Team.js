@@ -1,5 +1,3 @@
-import React from "react";
-
 import "./Team.scss";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import TwitterIcon from "@material-ui/icons/Twitter";
@@ -31,23 +29,42 @@ const Team = () => {
 						{ link: "https://github.com/KobeLiesenborgs", icon: <GitHubIcon /> },
 						{
 							link: "https://www.twitch.tv/saintplaysthings/",
-							icon: <img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="24"></img>,
-						},{
+							icon: (
+								<img
+									src={`${process.env.PUBLIC_URL}/social-media.svg`}
+									alt=""
+									width="24"
+								></img>
+							),
+						},
+						{
 							link: "https://discord.gg/f6HrvvF",
-							icon: <img src="https://cdn.iconscout.com/icon/free/png-512/discord-3-569463.png" alt="" width="24" />,
+							icon: (
+								<img
+									src="https://cdn.iconscout.com/icon/free/png-512/discord-3-569463.png"
+									alt=""
+									width="24"
+								/>
+							),
 						},
 					]}
 				></Member>
 				<Member
 					imgUrl="https://turnergames.net"
-					img={`https://static-cdn.jtvnw.net/jtv_user_pictures/murdocturner-profile_image-c5e3ba3322f8e24a-300x300.png`}
+					img="https://static-cdn.jtvnw.net/jtv_user_pictures/murdocturner-profile_image-c5e3ba3322f8e24a-300x300.png"
 					name="Murdoc"
 					title="Twitch/Discord bot expert"
 					socials={[
 						{ link: "https://github.com/murdocturner", icon: <GitHubIcon /> },
 						{
 							link: "https://twitch.tv/murdocturner",
-							icon: <img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="24"></img>,
+							icon: (
+								<img
+									src={`${process.env.PUBLIC_URL}/social-media.svg`}
+									alt=""
+									width="24"
+								></img>
+							),
 						},
 						{
 							link: "https://twitter.com/jamesrturner88",
@@ -55,7 +72,13 @@ const Team = () => {
 						},
 						{
 							link: "https://discord.turnergames.net",
-							icon: <img src="https://cdn.iconscout.com/icon/free/png-512/discord-3-569463.png" alt="" width="24" />,
+							icon: (
+								<img
+									src="https://cdn.iconscout.com/icon/free/png-512/discord-3-569463.png"
+									alt=""
+									width="24"
+								/>
+							),
 						},
 					]}
 				></Member>
@@ -67,7 +90,13 @@ const Team = () => {
 					socials={[
 						{
 							link: "https://twitch.tv/twidget99",
-							icon: <img src={`${process.env.PUBLIC_URL}/social-media.svg`} alt="" width="24"></img>,
+							icon: (
+								<img
+									src={`${process.env.PUBLIC_URL}/social-media.svg`}
+									alt=""
+									width="24"
+								></img>
+							),
 						},
 						{
 							link: "https://twitter.com/patriotsar",
@@ -75,7 +104,13 @@ const Team = () => {
 						},
 						{
 							link: "https://discord.gg/d6HGhqv",
-							icon: <img src="https://cdn.iconscout.com/icon/free/png-512/discord-3-569463.png" alt="" width="24" />,
+							icon: (
+								<img
+									src="https://cdn.iconscout.com/icon/free/png-512/discord-3-569463.png"
+									alt=""
+									width="24"
+								/>
+							),
 						},
 					]}
 				></Member>

@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import {getXp, map} from "../../utils/functions"
 
 const radius = 36;
-const circ = 2 * Math.PI * radius
-
-const getLevel = xp => Math.max(0, Math.floor(Math.log(xp - 100)));
-
-const getXp = level => (5 / 6) * level * (2 * level * level + 27 * level + 91);
-
-const map = (n, start1, stop1, start2, stop2) => ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+const circ = 2 * Math.PI * radius;
 
 const LeaderBoardCard = ({ place, level, xp, name, avatar }) => {
 	const [progression, setProgression] = useState(0);
 
 	useEffect(() => {
 		const xpThisLevel = getXp(level);
-        const xpToNextLevel = getXp(level + 1);
+		const xpToNextLevel = getXp(level + 1);
 		const bigDif = Math.abs(xpThisLevel - xpToNextLevel);
 		const dif = Math.abs(xpToNextLevel - xp);
 		setProgression(map(dif, 0, bigDif, 0, circ));
@@ -23,7 +18,7 @@ const LeaderBoardCard = ({ place, level, xp, name, avatar }) => {
 	return (
 		<div className="leaderboard-item" id={`place-${place}`}>
 			<div className="user-info">
-				<span className={`place-card`}>{place}</span>
+				<span className="place-card">{place}</span>
 				<img src={avatar} alt="" />
 				{name}
 			</div>
@@ -35,8 +30,8 @@ const LeaderBoardCard = ({ place, level, xp, name, avatar }) => {
 				<div className="level-data">
 					<svg className="progress-ring" width="120" height="120">
 						<circle
-                            strokeDashoffset={progression}
-                            strokeDasharray={`${circ} ${circ}`}
+							strokeDashoffset={progression}
+							strokeDasharray={`${circ} ${circ}`}
 							className="progress-ring__circle"
 							stroke="#347aa5"
 							strokeWidth="4"
@@ -48,7 +43,7 @@ const LeaderBoardCard = ({ place, level, xp, name, avatar }) => {
 					</svg>
 					<span className="level data">
 						<span>Level</span>
-						{level+1}
+						{level + 1}
 					</span>
 				</div>
 			</div>
