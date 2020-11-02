@@ -1,5 +1,5 @@
+import React from "react";
 import "./Community.scss";
-import A from "../Shared/A"
 
 const Community = () => {
 	return (
@@ -9,10 +9,10 @@ const Community = () => {
 				<h3 className="body-subheader">Come Say Hi in the discord!</h3>
 			</div>
 			<div className="community buttons">
-				<A href="https://api.disstreamchat.com/discord" newTab className="discord-button">
+				<a href="https://api.disstreamchat.com/discord" target="_blank" rel="noreferrer noopener" className="discord-button">
 					<img src={`${process.env.PUBLIC_URL}/discord.png`} alt="custom discord logo"></img>
 					Join The Discord
-				</A>
+				</a>
 			</div>
 		</>
 	);

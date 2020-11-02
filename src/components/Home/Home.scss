@@ -5,17 +5,17 @@
 }
 
 .body-header {
-	margin-left: 1rem;
-    margin-right: 1rem;
 	font-family: Montserrat;
+	font-style: normal;
 	font-weight: bold;
 	font-size: 38px;
-	line-height: 101%;
-	
+	line-height: 46px;
 	text-align: center;
 	word-wrap: break-word;
 	color: #ffffff;
-	
+	@media screen and (max-width: 350px) {
+		margin-bottom: -1rem;
+	}
 	@media screen and (max-width: 550px) {
 		font-size: 25px;
 	}
@@ -26,10 +26,9 @@
 	font-style: normal;
 	font-weight: normal;
 	font-size: 30px;
-	line-height: 170%;
+	line-height: 37px;
 	margin-left: 1rem;
 	margin-right: 1rem;
-	margin-top: 1rem;
 	/* identical to box height */
 
 	text-align: center;
@@ -156,7 +155,7 @@
 		color: white;
 	}
 	h3 {
-		line-height: 170%;
+		line-height: 30px;
 	}
 	& > * {
 		flex: 0.5;

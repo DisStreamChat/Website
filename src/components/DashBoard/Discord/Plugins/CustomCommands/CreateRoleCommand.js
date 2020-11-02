@@ -1,15 +1,18 @@
-import { useContext } from "react";
-import RoleItem from "../../../../../styled-components/RoleItem";
+import ClearIcon from "@material-ui/icons/Clear";
+import { DiscordContext } from "../../../../../contexts/DiscordContext";
+import React, { useEffect, useState, useCallback, useContext } from "react";
+import Select from "react-select";
+import { colorStyles } from "../../../../Shared/userUtils";
+import RoleItem from "../../../../Shared/RoleItem";
 import { CommandContext } from "../../../../../contexts/CommandContext";
-import StyledSelect from "../../../../../styled-components/StyledSelect";
 
 const CreateRoleCommand = ({ setCreatingCommand, guild: userConnectedGuildInfo }) => {
-	const { roleToGive, setRoleToGive } = useContext(CommandContext);
+    const { roleToGive, setRoleToGive } = useContext(CommandContext);
 	return (
 		<>
 			<h4 className="plugin-section-title">Role To give</h4>
 			<div className="plugin-section">
-				<StyledSelect
+				<Select
 					closeMenuOnSelect
 					onChange={e => {
 						setRoleToGive(e);
@@ -24,6 +27,13 @@ const CreateRoleCommand = ({ setCreatingCommand, guild: userConnectedGuildInfo }
 							value: `${role.name}=${JSON.stringify(role)}`,
 							label: <RoleItem {...role}>{role.name}</RoleItem>,
 						}))}
+					styles={{
+						...colorStyles,
+						container: styles => ({
+							...styles,
+							...colorStyles.container,
+						}),
+					}}
 				/>
 			</div>
 		</>

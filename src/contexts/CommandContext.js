@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import React, { createContext } from "react";
 import { useState } from "react";
 
 export const CommandContext = createContext({});
@@ -16,24 +16,9 @@ export const CommandContextProvider = props => {
 	const [editing, setEditing] = useState(false);
 	const [error, setError] = useState({});
 
-	const setup = () => {
-		setName("");
-		setResponse("");
-		setRoleToGive("");
-		setDescription("");
-		setAllowedChannels([]);
-		setAllowedRoles([]);
-		setBannedRoles([]);
-		setCooldown(0);
-		setDeleteUsage(false);
-		setEditing(false);
-		setError({});
-	};
-
 	return (
 		<CommandContext.Provider
 			value={{
-				setup,
 				editing,
 				setEditing,
 				name,

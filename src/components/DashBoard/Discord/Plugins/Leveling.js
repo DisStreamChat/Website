@@ -1,15 +1,68 @@
-import { memo, useEffect, useState, useCallback, useContext } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import firebase from "../../../../firebase";
+import { colorStyles } from "../../../Shared/userUtils";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
+import Select from "react-select";
 import { Link } from "react-router-dom";
-import StyledSelect from "../../../../styled-components/StyledSelect";
+import Slider from "@material-ui/core/Slider";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import RoleItem from "../../../Shared/RoleItem";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import styled from "styled-components";
+import { useMediaQuery } from "@material-ui/core";
 
+const ToggleChevron = styled.span`
+	& > * {
+		transition: 0.25s;
+		transform: rotate(${props => (!props.closed ? "180deg" : "0deg")});
+	}
+`;
+
+const useStyles = makeStyles({
+	root: {
+		width: 300,
+	},
+});
+
+const PrettoSlider = withStyles({
+	root: {
+		color: "#2d688d",
+		height: 8,
+	},
+	thumb: {
+		height: 24,
+		width: 24,
+		backgroundColor: "#fff",
+		border: "2px solid currentColor",
+		marginTop: -8,
+		marginLeft: -12,
+		"&:focus, &:hover, &$active": {
+			boxShadow: "inherit",
+		},
+	},
+	active: {},
+	valueLabel: {
+		left: "calc(-50% + 4px)",
+	},
+	track: {
+		height: 8,
+		borderRadius: 4,
+	},
+	rail: {
+		height: 8,
+		borderRadius: 4,
+	},
+})(Slider);
+
+const marks = [...Array(7)].map((item, index) => ({ value: index / 2, label: `x${index / 2}` }));
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
 	const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
-	const {  setDashboardOpen, saveOnType } = useContext(DiscordContext);
+	const { setActivePlugins, setDashboardOpen, saveOnType } = useContext(DiscordContext);
+	const [ranksClosed, setRanksClosed] = useState(false);
 	const guildId = userConnectedGuildInfo?.id;
 
 	const handleTypeSelect = useCallback(
@@ -23,7 +76,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			}
 			setDashboardOpen(true);
 		},
-		[guildId, setDashboardOpen]
+		[guildId]
 	);
 
 	const handleMessageChange = useCallback(
@@ -38,7 +91,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			}
 			saveOnType();
 		},
-		[guildId, saveOnType]
+		[guildId]
 	);
 
 	const handleAnnoucmentSelect = useCallback(
@@ -52,7 +105,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			}
 			setDashboardOpen(true);
 		},
-		[guildId, setDashboardOpen]
+		[guildId]
 	);
 
 	useEffect(() => {
@@ -87,6 +140,8 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 		})();
 	}, [location, guildId]);
 
+	const smallScreen = useMediaQuery("(max-width: 500px)");
+
 	return (
 		<div>
 			<div className="plugin-item-header">
@@ -101,7 +156,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<h2>Leveling Up</h2>
 					<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
 				</span>
-				<Link className="leader-board-link" to={`/leaderboard/${userConnectedGuildInfo?.id}`}>
+				<Link className="leader-board-link" to={`/leaderboard/${userConnectedGuildInfo.id}`}>
 					Leaderboard
 				</Link>
 			</div>
@@ -110,7 +165,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<div className="channels">
 						<div id="announcement-type">
 							<h5 className="bold uppercase">Level up announcement</h5>
-							<StyledSelect
+							<Select
 								closeMenuOnSelect
 								onChange={handleTypeSelect}
 								placeholder="Select Annoucement type"
@@ -120,12 +175,16 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									{ value: 2, label: "Current Channel" },
 									{ value: 3, label: "Custom Channel" },
 								].map(type => type)}
+								styles={{
+									...colorStyles,
+									container: styles => ({ ...styles, ...colorStyles.container }),
+								}}
 							/>
 						</div>
 						{levelUpAnnouncement?.value === 3 && (
 							<div id="announcement-channel">
 								<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
-								<StyledSelect
+								<Select
 									closeMenuOnSelect
 									onChange={handleAnnoucmentSelect}
 									placeholder="Select Annoucement Channel"
@@ -141,6 +200,13 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 												</>
 											),
 										}))}
+									styles={{
+										...colorStyles,
+										container: styles => ({
+											...styles,
+											...colorStyles.container,
+										}),
+									}}
 								/>
 							</div>
 						)}
@@ -199,7 +265,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				<h4 className="plugin-section-title">No Rank Items</h4>
 				<div className="no-rank-items">
 					<div>
-						<StyledSelect
+						<Select
 							closeMenuOnSelect
 							onChange={() => {}}
 							placeholder="No XP Roles"
@@ -215,10 +281,17 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 										</>
 									),
 								}))}
+							styles={{
+								...colorStyles,
+								container: styles => ({
+									...styles,
+									...colorStyles.container,
+								}),
+							}}
 						/>
 					</div>
 					<div>
-						<StyledSelect
+						<Select
 							closeMenuOnSelect
 							onChange={() => {}}
 							placeholder="No XP Channels"
@@ -234,6 +307,13 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 										</>
 									),
 								}))}
+							styles={{
+								...colorStyles,
+								container: styles => ({
+									...styles,
+									...colorStyles.container,
+								}),
+							}}
 						/>
 					</div>
 				</div> */}
@@ -242,4 +322,4 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	);
 };
 
-export default memo(Leveling);
+export default React.memo(Leveling);

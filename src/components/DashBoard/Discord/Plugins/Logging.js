@@ -1,17 +1,47 @@
-import { memo, Fragment, useEffect, useState, useCallback, useContext } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import firebase from "../../../../firebase";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
-import { Tooltip } from "@material-ui/core";
+import { colorStyles } from "../../../Shared/userUtils";
+import Select from "react-select";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { Switch, Tooltip } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import { blueGrey } from "@material-ui/core/colors";
 import InfoTwoToneIcon from "@material-ui/icons/InfoTwoTone";
-import StyledSelect from "../../../../styled-components/StyledSelect";
-import FancySwitch from "../../../../styled-components/FancySwitch";
+
+const FancySwitch = withStyles({
+	root: {
+		padding: 7,
+	},
+	thumb: {
+		width: 24,
+		height: 24,
+		backgroundColor: "#fff",
+		boxShadow: "0 0 12px 0 rgba(0,0,0,0.08), 0 0 8px 0 rgba(0,0,0,0.12), 0 0 4px 0 rgba(0,0,0,0.38)",
+	},
+	switchBase: {
+		color: "rgba(0,0,0,0.38)",
+		padding: 7,
+	},
+	track: {
+		borderRadius: 20,
+		backgroundColor: blueGrey[300],
+	},
+	checked: {
+		"& $thumb": {
+			backgroundColor: "#fff",
+		},
+		"& + $track": {
+			opacity: "1 !important",
+		},
+	},
+})(Switch);
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
 	const [activeEvents, setActiveEvents] = useState({});
 	const [allEvents, setAllEvents] = useState({});
-	const { setDashboardOpen } = useContext(DiscordContext);
+	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
 	const [channelOverrides, setChannelOverrides] = useState({});
 	const guildId = userConnectedGuildInfo?.id;
 
@@ -65,9 +95,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			}
 		})();
 		(async () => {
-			const defaultEvents = (
-				await firebase.db.collection("defaults").doc("loggingEvents").get()
-			).data();
+			const defaultEvents = (await firebase.db.collection("defaults").doc("loggingEvents").get()).data();
 			console.log(defaultEvents);
 			setAllEvents(defaultEvents);
 		})();
@@ -96,7 +124,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			}
 			setDashboardOpen(true);
 		},
-		[guildId, setDashboardOpen]
+		[guildId]
 	);
 
 	const handleEventToggle = useCallback(async (e, id) => {
@@ -120,7 +148,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				});
 		}
 		setDashboardOpen(true);
-	}, [guildId, setDashboardOpen]);
+	});
 
 	const handleAnnoucmentSelect = useCallback(
 		async e => {
@@ -133,7 +161,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			}
 			setDashboardOpen(true);
 		},
-		[guildId, setDashboardOpen]
+		[guildId]
 	);
 
 	return (
@@ -147,14 +175,14 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			<hr />
 			<div className="plugin-item-subheader">
 				<h4>
-					You can set a channel and events that will be sent to that particular channel.
-					Don't miss anything happening in your server when you are not around!
+					You can set a channel and events that will be sent to that particular channel. Don't miss anything happening in your server when
+					you are not around!
 				</h4>
 			</div>
 			<div className="plugin-item-body">
 				<h4 className="plugin-section-title">Logging Channel</h4>
 				<div className="plugin-section">
-					<StyledSelect
+					<Select
 						closeMenuOnSelect
 						onChange={handleAnnoucmentSelect}
 						placeholder="Select Logging Channel"
@@ -170,83 +198,85 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									</>
 								),
 							}))}
+						styles={{
+							...colorStyles,
+							container: styles => ({
+								...styles,
+								...colorStyles.container,
+							}),
+						}}
 					/>
 				</div>
-				{[...new Set(Object.values(allEvents || {}).map(val => val.category))]
-					.sort()
-					.map(category => (
-						<Fragment key={category}>
-							<h4 className="plugin-section-title">{category}</h4>
-							<div className="plugin-section">
-								<h4 className="plugin-section-title">
-									Category Logging Channel Override{" "}
-									<Tooltip
-										placement="top"
-										arrow
-										title="If set, events in this category will be logged in this channel instead of the default"
-									>
-										<InfoTwoToneIcon />
-									</Tooltip>
-								</h4>
-								<div className="plugin-section subtitle" style={{ width: "100%" }}>
-									<StyledSelect
-										closeMenuOnSelect
-										onChange={e => {
-											handleOverrideSelect(e, category);
-										}}
-										placeholder="Logging Channel Override"
-										value={channelOverrides[category] || ""}
-										options={userConnectedGuildInfo?.channels
-											?.sort((a, b) => a.parent.localeCompare(b.parent))
-											?.map(channel => ({
-												value: channel.id,
-												label: (
-													<>
-														<span>{channel.name}</span>
-														<span className="channel-category">
-															{channel.parent}
-														</span>
-													</>
-												),
-											}))}
-									/>
-									<span className="toggle-button">
-										<button
-											onClick={() => handleOverrideSelect(null, category)}
-										>
-											Clear Category Override
-										</button>
-									</span>
-								</div>
-								<h4 className="plugin-section-title" style={{ width: "100%" }}>
-									Events
-								</h4>
-
-								{Object.entries(allEvents || {})
-									.filter(([key, event]) => event.category === category)
-									.sort()
-									.map(([key, event]) => (
-										<FormControlLabel
-											key={key}
-											control={
-												<FancySwitch
-													color="primary"
-													checked={!!activeEvents[key]}
-													onChange={e => {
-														handleEventToggle(e, key);
-													}}
-													name={event.displayName}
-												/>
-											}
-											label={event.displayName}
-										/>
-									))}
+				{[...new Set(Object.values(allEvents || {}).map(val => val.category))].sort().map(category => (
+					<React.Fragment key={category}>
+						<h4 className="plugin-section-title">{category}</h4>
+						<div className="plugin-section">
+							<h4 className="plugin-section-title">
+								Category Logging Channel Override{" "}
+								<Tooltip placement="top" arrow title="If set, events in this category will be logged in this channel instead of the default">
+									<InfoTwoToneIcon />
+								</Tooltip>
+							</h4>
+							<div className="plugin-section subtitle" style={{ width: "100%" }}>
+								<Select
+									closeMenuOnSelect
+									onChange={e => {
+										handleOverrideSelect(e, category);
+									}}
+									placeholder="Logging Channel Override"
+									value={channelOverrides[category] || ""}
+									options={userConnectedGuildInfo?.channels
+										?.sort((a, b) => a.parent.localeCompare(b.parent))
+										?.map(channel => ({
+											value: channel.id,
+											label: (
+												<>
+													<span>{channel.name}</span>
+													<span className="channel-category">{channel.parent}</span>
+												</>
+											),
+										}))}
+									styles={{
+										...colorStyles,
+										container: styles => ({
+											...styles,
+											...colorStyles.container,
+										}),
+									}}
+								/>
+								<span className="toggle-button">
+									<button onClick={() => handleOverrideSelect(null, category)}>Clear Category Override</button>
+								</span>
 							</div>
-						</Fragment>
-					))}
+							<h4 className="plugin-section-title" style={{ width: "100%" }}>
+								Events
+							</h4>
+
+							{Object.entries(allEvents || {})
+								.filter(([key, event]) => event.category === category)
+								.sort()
+								.map(([key, event]) => (
+									<FormControlLabel
+										key={key}
+										control={
+											<FancySwitch
+												color="primary"
+												checked={!!activeEvents[key]}
+												onChange={e => {
+													handleEventToggle(e, key);
+												}}
+												name={event.displayName}
+											/>
+										}
+										label={event.displayName}
+									/>
+								))}
+						</div>
+					</React.Fragment>
+				))}
 			</div>
 		</div>
 	);
 };
 
-export default memo(Leveling);
+export default React.memo(Leveling);
