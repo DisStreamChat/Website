@@ -9,7 +9,7 @@ import AddActionButton from "./AddActionButton"
 import ActionItem from "./ActionItem"
 import CreateAction from "./CreateAction";
 
-const ManagerItem = memo(({ guild, channel, actions, channelOveride, message, join }) => {
+const ManagerItem = memo(({ guild, channel, actions, channelOveride, message, join, id }) => {
 	const [displayChannel, setDisplayChannel] = useState();
 	const [addingAction, setAddingAction] = useState(false);
 
@@ -21,7 +21,7 @@ const ManagerItem = memo(({ guild, channel, actions, channelOveride, message, jo
 		await firebase.db
 			.collection("reactions")
 			.doc(guild.id)
-			.update({ [`${message}`]: firebase.delete() });
+			.update({ [`${id}`]: firebase.delete() });
 	};
 
 	return (
@@ -40,6 +40,7 @@ const ManagerItem = memo(({ guild, channel, actions, channelOveride, message, jo
 					<ActionItem
 						key={key}
 						deleteAble={!channelOveride}
+						join={!channelOveride}
 						message={message}
 						emoji={key}
 						guild={guild}

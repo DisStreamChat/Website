@@ -19,17 +19,17 @@ import {
 } from "../../../../../styled-components/ReactionRoleComponents";
 import { TransformObjectToSelectValue } from "../../../../../utils/functions";
 
-const EditAction = ({ initial, close, guild, message, update }) => {
+const EditAction = ({ initial, close, guild, message, update, join }) => {
 	const [action, setAction] = useState(initial);
 	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
 		(async () => {
-			const displayRoles = initial.role.map(role => guild.roles.find(r => r.id === role));
+			const displayRoles = initial?.role?.map?.(role => guild.roles.find(r => r.id === role));
 			setAction({
 				...initial,
-				role: displayRoles.map(role => ({
-					label: <RoleItem {...role}>{role.name}</RoleItem>,
+				role: displayRoles?.map?.(role => ({
+					label: <RoleItem {...role}>{role?.name}</RoleItem>,
 					value: TransformObjectToSelectValue(role),
 				})),
 			});
@@ -101,7 +101,7 @@ const EditAction = ({ initial, close, guild, message, update }) => {
 					<ActionButton onClick={() => setOpen(prev => !prev)}>
 						<KeyboardArrowDownIcon />
 					</ActionButton>
-					{action.role && action.type && action.emoji && (
+					{!join && action.role && action.type && action.emoji && (
 						<ActionButton onClick={submit}>
 							<CheckIcon />
 						</ActionButton>

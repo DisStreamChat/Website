@@ -25,9 +25,9 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 				const data = snapshot.data();
 				if (data) {
 					const managerKeys = Object.keys(data).filter(key => key !== "member-join");
-					setMessageManagers(managerKeys.map(key => ({ message: key, ...data[key] })));
+					setMessageManagers(managerKeys.map(key => ({ id: key, ...data[key] })));
 					if (data["member-join"]) {
-						setJoinManager({ message: "member-join", ...data["member-join"] });
+						setJoinManager({ id: "member-join", ...data["member-join"] });
 					} else {
 						setJoinManager(null);
 					}
@@ -150,6 +150,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 							guild={userConnectedGuildInfo}
 							{...JoinManager}
 							join
+							message="member-join"
 							channelOveride="Member Join"
 						/>
 					</>
@@ -163,7 +164,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 						const bMessage = b?.message?.content ? b?.message.content : b?.message;
 						return aMessage.localeCompare(bMessage);
 					}).map((manager, i) => (
-						<ManagerItem key={i} {...manager} channel={manager.message.channel} guild={userConnectedGuildInfo} />
+						<ManagerItem key={i} {...manager} channel={manager?.message?.channel} guild={userConnectedGuildInfo} />
 					))}
 				<h4 className="plugin-section-title bigger">
 					Role Commands<span> — {commands.length}</span>
