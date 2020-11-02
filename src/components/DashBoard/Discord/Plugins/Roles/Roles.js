@@ -8,11 +8,13 @@ import CreateJoinManager from "./CreateJoinManager";
 import CommandItem from "../CustomCommands/CommandItem";
 import CreateCommand from "../CustomCommands/CreateCommand";
 import CreateRoleCommand from "../CustomCommands/CreateRoleCommand";
+import { CommandContext } from "../../../../../contexts/CommandContext";
 
 const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	const [MessageManagers, setMessageManagers] = useState([]);
 	const [JoinManager, setJoinManager] = useState();
 	const { state, create, setup } = useContext(RoleContext);
+	const {setup: setupRole} = useContext(CommandContext)
 	const [creatingCommand, setCreatingCommand] = useState(false);
 	const [commands, setCommands] = useState([]);
 	const guildId = userConnectedGuildInfo?.id;
@@ -122,6 +124,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 						className="create-command"
 						onClick={() => {
 							setCreatingCommand(true);
+							setupRole();
 							// create("message");
 						}}
 					>

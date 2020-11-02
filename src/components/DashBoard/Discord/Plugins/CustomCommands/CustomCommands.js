@@ -12,6 +12,7 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 	const [commands, setCommands] = useState({});
 	const guildId = userConnectedGuildInfo?.id;
 	const {
+		setup: setupCommand,
 		setName,
 		setResponse,
 		setRoleToGive,
@@ -38,21 +39,6 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 		return unsub;
 	}, [location, guildId]);
 
-	const setupCommand = () => {
-	    console.log(setName)
-		setName("");
-		setResponse("");
-		setRoleToGive("");
-		setDescription("");
-		setAllowedRoles([]);
-		setBannedRoles([]);
-		setAllowedChannels([]);
-		setCooldown(0);
-		setDeleteUsage(false);
-		setError({});
-		setEditing(false);
-	};
-
 	useLayoutEffect(() => {
 		document.body.style.overflow = creatingCommand ? "hidden" : "initial";
 		return () => {
@@ -68,8 +54,16 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 				overlayClassName="command-overlay Modal-Overlay"
 				onRequestClose={() => setCreatingCommand(false)}
 			>
-				<CreateCommand guild={userConnectedGuildInfo}  role={creatingCommand === "role"} setCreatingCommand={setCreatingCommand}>
-					{creatingCommand === "text" ? <CreateTextCommand guild={userConnectedGuildInfo} /> : <CreateRoleCommand guild={userConnectedGuildInfo} />}
+				<CreateCommand
+					guild={userConnectedGuildInfo}
+					role={creatingCommand === "role"}
+					setCreatingCommand={setCreatingCommand}
+				>
+					{creatingCommand === "text" ? (
+						<CreateTextCommand guild={userConnectedGuildInfo} />
+					) : (
+						<CreateRoleCommand guild={userConnectedGuildInfo} />
+					)}
 				</CreateCommand>
 			</Modal>
 			<div className="plugin-item-header">
@@ -114,9 +108,17 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 				</h4>
 				{Object.entries(commands)
 					.sort((a, b) => a[0].localeCompare(b[0]))
-					.filter((a, b) => (a[1].type !== "role"))
+					.filter((a, b) => a[1].type !== "role")
 					.map(([key, value]) => (
-						<CommandItem guild={userConnectedGuildInfo} setCommands={setCommands} setCreatingCommand={setCreatingCommand} allowedRoles={value.permittedRoles} {...value} name={key} key={key} />
+						<CommandItem
+							guild={userConnectedGuildInfo}
+							setCommands={setCommands}
+							setCreatingCommand={setCreatingCommand}
+							allowedRoles={value.permittedRoles}
+							{...value}
+							name={key}
+							key={key}
+						/>
 					))}
 			</div>
 		</div>
