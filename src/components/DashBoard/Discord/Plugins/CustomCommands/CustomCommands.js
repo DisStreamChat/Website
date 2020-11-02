@@ -11,10 +11,7 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 	const [creatingCommand, setCreatingCommand] = useState(false);
 	const [commands, setCommands] = useState({});
 	const guildId = userConnectedGuildInfo?.id;
-	const {
-		setup: setupCommand,
-		
-	} = useContext(CommandContext);
+	const { setup: setupCommand } = useContext(CommandContext);
 
 	useEffect(() => {
 		const unsub = firebase.db
@@ -23,7 +20,11 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 			.onSnapshot(snapshot => {
 				const data = snapshot.data();
 				if (data) {
-					setCommands(data);
+					const textCommands = Object.entries(data).filter(
+						command => command[1].type !== "role"
+					);
+					console.log(textCommands);
+					setCommands(textCommands);
 				}
 			});
 		return unsub;
