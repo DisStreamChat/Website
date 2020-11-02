@@ -9,7 +9,7 @@ import { CommandContext } from "../../../../../contexts/CommandContext";
 
 const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 	const [creatingCommand, setCreatingCommand] = useState(false);
-	const [commands, setCommands] = useState({});
+	const [commands, setCommands] = useState([]);
 	const guildId = userConnectedGuildInfo?.id;
 	const { setup: setupCommand } = useContext(CommandContext);
 
@@ -95,12 +95,12 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 					</div> */}
 				</div>
 				<h4 className="plugin-section-title bigger">
-					Your Commands<span> — {Object.keys(commands).length}</span>
+					Your Commands<span> — {commands.length}</span>
 				</h4>
-				{Object.entries(commands)
-					.sort((a, b) => a[0].localeCompare(b[0]))
-					.filter((a, b) => a[1].type !== "role")
-					.map(([key, value]) => (
+				{commands
+					?.sort((a, b) => a[0].localeCompare(b[0]))
+					?.filter((a, b) => a[1].type !== "role")
+					?.map(([key, value]) => (
 						<CommandItem
 							guild={userConnectedGuildInfo}
 							setCommands={setCommands}
