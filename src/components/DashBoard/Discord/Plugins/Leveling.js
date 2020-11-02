@@ -4,7 +4,6 @@ import { DiscordContext } from "../../../../contexts/DiscordContext";
 import { Link } from "react-router-dom";
 import StyledSelect from "../../../../styled-components/StyledSelect";
 
-// const marks = [...Array(7)].map((item, index) => ({ value: index / 2, label: `x${index / 2}` }));
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
