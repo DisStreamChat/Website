@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import { DiscordContext } from "../../../../../contexts/DiscordContext";
+import React, { useContext } from "react";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 
 const CreateTextCommand = () => {
@@ -17,25 +18,18 @@ const CreateTextCommand = () => {
 				<div className="variables">
 					<h4 className="plugin-section-title">Available variables</h4>
 					<ul>
-						<li className="variable">
-							{"{author} - The user who sent the command (mentions the user)"}
+						<li className="variable">{"{author} - The user who sent the command (mentions the user)"}
 							<ul>
 								<li>{"{author.name} - the users name"}</li>
 								<li>{"{author.nickname} - the users nickname"}</li>
 								<li>{"{author.color} - the users color based on roles"}</li>
 							</ul>
 						</li>
-						<li className="variable">
-							{"{n} - get the 'nth' argument passed to the command"}
-						</li>
+						<li className="variable">{"{n} - get the 'nth' argument passed to the command"}</li>
 					</ul>
 					<h4 className="plugin-section-title">Available functions</h4>
 					<ul>
-						<li className="variable">
-							{
-								"(time {timezone}) - returns the current time in specified timezone code"
-							}
-						</li>
+						<li className="variable">{"(time {timezone}) - returns the current time in specified timezone code"}</li>
 					</ul>
 				</div>
 			</div>

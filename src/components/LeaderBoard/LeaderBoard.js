@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import firebase from "../../firebase";
 import { useParams } from "react-router";
 import SmallLoader from "../Shared/SmallLoader";
 import LeaderBoardCard from "./LeaderBoardCard";
 import "./LeaderBoard.scss";
-import { useQueryParam, NumberParam } from "use-query-params";
+import { useQueryParam, NumberParam, StringParam } from "use-query-params";
+import { useLocation } from "react-router-dom";
 import { usePagination } from "use-pagination-firestore";
 
 const defaultPageSize = 50;
@@ -15,7 +16,7 @@ const LeaderBoard = ({ history }) => {
 	const { id } = useParams();
 	const [fullLoading, setFullLoading] = useState(true);
 	const [page, setPage] = useState(1);
-	const [pageSize, ] = useQueryParam("page-size", NumberParam);
+	const [pageSize, setPageSize] = useQueryParam("page-size", NumberParam);
 
 	const { items, isLoading: loading, isStart, isEnd, getPrev, getNext } = usePagination(
 		firebase.db.collection("Leveling").doc(id).collection("users").orderBy("xp", "desc"),

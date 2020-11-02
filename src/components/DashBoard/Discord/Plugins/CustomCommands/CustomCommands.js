@@ -1,36 +1,62 @@
-import { memo, useEffect, useState, useContext, useLayoutEffect } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import firebase from "../../../../../firebase";
+import { DiscordContext } from "../../../../../contexts/DiscordContext";
 import Modal from "react-modal";
 import CreateTextCommand from "./CreateTextCommand";
 import CreateRoleCommand from "./CreateRoleCommand";
 import CreateCommand from "./CreateCommand";
+import { CommandContextProvider } from "../../../../../contexts/CommandContext";
 import CommandItem from "./CommandItem";
 import { CommandContext } from "../../../../../contexts/CommandContext";
 
 const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 	const [creatingCommand, setCreatingCommand] = useState(false);
 	const [commands, setCommands] = useState({});
+	const { setActivePlugins, setDashboardOpen } = useContext(DiscordContext);
 	const guildId = userConnectedGuildInfo?.id;
-	const { setup: setupCommand } = useContext(CommandContext);
+	const {
+		setName,
+		setResponse,
+		setRoleToGive,
+		setDescription,
+		setAllowedRoles,
+		setBannedRoles,
+		setAllowedChannels,
+		setCooldown,
+		setDeleteUsage,
+		setError,
+		setEditing,
+	} = useContext(CommandContext);
 
 	useEffect(() => {
 		const unsub = firebase.db
 			.collection("customCommands")
-			.doc(guildId || " ")
+			.doc(guildId)
 			.onSnapshot(snapshot => {
 				const data = snapshot.data();
 				if (data) {
-					const textCommands = Object.entries(data).filter(
-						command => command[1].type !== "role"
-					);
-					console.log(textCommands);
-					setCommands(textCommands);
+					setCommands(data);
 				}
 			});
 		return unsub;
 	}, [location, guildId]);
 
-	useLayoutEffect(() => {
+	const setupCommand = () => {
+		console.log(setName);
+		setName("");
+		setResponse("");
+		setRoleToGive("");
+		setDescription("");
+		setAllowedRoles([]);
+		setBannedRoles([]);
+		setAllowedChannels([]);
+		setCooldown(0);
+		setDeleteUsage(false);
+		setError({});
+		setEditing(false);
+	};
+
+	useEffect(() => {
 		document.body.style.overflow = creatingCommand ? "hidden" : "initial";
 		return () => {
 			document.body.style.overflow = "initial";
@@ -45,16 +71,8 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 				overlayClassName="command-overlay Modal-Overlay"
 				onRequestClose={() => setCreatingCommand(false)}
 			>
-				<CreateCommand
-					guild={userConnectedGuildInfo}
-					role={creatingCommand === "role"}
-					setCreatingCommand={setCreatingCommand}
-				>
-					{creatingCommand === "text" ? (
-						<CreateTextCommand guild={userConnectedGuildInfo} />
-					) : (
-						<CreateRoleCommand guild={userConnectedGuildInfo} />
-					)}
+				<CreateCommand guild={userConnectedGuildInfo}  role={creatingCommand === "role"} setCreatingCommand={setCreatingCommand}>
+					{creatingCommand === "text" ? <CreateTextCommand guild={userConnectedGuildInfo} /> : <CreateRoleCommand guild={userConnectedGuildInfo} />}
 				</CreateCommand>
 			</Modal>
 			<div className="plugin-item-header">
@@ -83,7 +101,7 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 						<h1>Text Command</h1>
 						<p>A simple command that responds with a custom message in DM or public</p>
 					</div>
-					{/* <div
+					<div
 						className="create-command"
 						onClick={() => {
 							setupCommand();
@@ -92,28 +110,20 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 					>
 						<h1>Role Command</h1>
 						<p>A simple command that toggles a role for the user</p>
-					</div> */}
+					</div>
 				</div>
 				<h4 className="plugin-section-title bigger">
 					Your Commands<span> — {Object.keys(commands).length}</span>
 				</h4>
 				{Object.entries(commands)
 					.sort((a, b) => a[0].localeCompare(b[0]))
-					.filter((a, b) => a[1].type !== "role")
+					.sort((a, b) => (a[1].type === "role" ? -1 : 1))
 					.map(([key, value]) => (
-						<CommandItem
-							guild={userConnectedGuildInfo}
-							setCommands={setCommands}
-							setCreatingCommand={setCreatingCommand}
-							allowedRoles={value.permittedRoles}
-							{...value}
-							name={key}
-							key={key}
-						/>
+						<CommandItem guild={userConnectedGuildInfo} setCommands={setCommands} setCreatingCommand={setCreatingCommand} allowedRoles={value.permittedRoles} {...value} name={key} key={key} />
 					))}
 			</div>
 		</div>
 	);
 };
 
-export default memo(CustomCommands);
+export default React.memo(CustomCommands);

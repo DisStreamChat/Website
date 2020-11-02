@@ -1,3 +1,4 @@
+import React from "react";
 import "./Home.scss";
 
 import { Link } from "react-router-dom";
@@ -16,23 +17,17 @@ const Home = () => {
 			<div className="main-view">
 				<div className="header-area">
 					<h1 className="body-header">Integrate your Discord server with Twitch</h1>
-					<h3 className="body-subheader">
-						Chat, moderation, interactivity, and much more easily Integrated with Twitch
-						and Discord!
-					</h3>
+					<h3 className="body-subheader">Chat, moderation, interactivity, and much more easily Integrated with Twitch and Discord!</h3>
 				</div>
 				<div className="buttons">
 					<A href="#features" className="main-button dashboard-button">
 						See Features
 					</A>
-					<A
-						href="https://api.disstreamchat.com/invite"
-						className="main-button dashboard-button"
-					>
+					<A href="https://api.disstreamchat.com/invite" className="main-button dashboard-button">
 						Add to Discord
 					</A>
 					{currentUser && (
-						<Link to="/dashboard" className="dashboard-button">
+						<Link to={`/dashboard`} className="dashboard-button">
 							My DashBoard
 						</Link>
 					)}
@@ -51,10 +46,7 @@ const Home = () => {
 						title="Customize just about anything"
 						body="You have the option to customize an abundance of different settings both within the app and on the website. Updating a
                 setting anywhere will apply them on the client immediately so you could change those secret settings off screen."
-						images={[
-							`${process.env.PUBLIC_URL}/appsettings.png`,
-							`${process.env.PUBLIC_URL}/settings.png`,
-						]}
+						images={[`${process.env.PUBLIC_URL}/appsettings.png`, `${process.env.PUBLIC_URL}/settings.png`]}
 						reversed
 					></Feature>
 					<Feature
@@ -68,10 +60,7 @@ const Home = () => {
 						body="DisStreamChat provides an easy to use searchbar that you can access through ctrl+f, not only does it allow you to search
                 for that amazing cat gif you just missed, it also allows you to use tags to search for things like follows, links,
                 usernames and plenty more."
-						images={[
-							`${process.env.PUBLIC_URL}/search2.png`,
-							`${process.env.PUBLIC_URL}/search1.png`,
-						]}
+						images={[`${process.env.PUBLIC_URL}/search2.png`, `${process.env.PUBLIC_URL}/search1.png`]}
 						imageClassNames={["", "small-image"]}
 						reversed
 					></Feature>

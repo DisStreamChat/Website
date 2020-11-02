@@ -1,11 +1,25 @@
-import { useState, useCallback, useEffect, useContext } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
+import { ChromePicker } from "react-color";
+import { Switch } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import { blueGrey } from "@material-ui/core/colors";
+import AddIcon from "@material-ui/icons/Add";
+import CheckIcon from "@material-ui/icons/Check";
+import ClearIcon from "@material-ui/icons/Clear";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import Button from "@material-ui/core/Button";
+import chroma from "chroma-js";
+import InputSlider from "../../Shared/InputSlider";
+import lodash from "lodash";
+import uid from "uid";
+import Select from "react-select";
 import AnimateHeight from "react-animate-height";
-import styled from "styled-components";
+import { colorStyles, guildOption } from "../../Shared/userUtils";
 import firebase from "../../../firebase";
-import StyledSelect from "../../../styled-components/StyledSelect";
-import { guildOption } from "../../../utils/functions";
 import { DiscordContext } from "../../../contexts/DiscordContext";
+import styled from "styled-components";
+import { useMemo } from "react";
 import { useAsyncMemo } from "use-async-memo";
 
 const SettingBody = styled.div`
@@ -13,7 +27,7 @@ const SettingBody = styled.div`
 `;
 
 const DiscordSetting = props => {
-	const { userDiscordInfo } = useContext(DiscordContext);
+	const { userDiscordInfo, setUserConnectedGuildInfo } = useContext(DiscordContext);
 
 	const [connectedGuild, setConnectedGuild] = useState();
 
@@ -79,7 +93,7 @@ const DiscordSetting = props => {
 
 	const onChannelSelect = useCallback(
 		async e => {
-			console.log(e);
+            console.log(e)
 			setConnectedGuild(s => ({
 				...s,
 				connectedChannels:
@@ -119,16 +133,20 @@ const DiscordSetting = props => {
 				<SettingBody className="plugin-item-body">
 					<AnimateHeight>
 						<h3>select Server to listen to</h3>
-						<StyledSelect
+						<Select
 							onChange={onGuildSelect}
 							placeholder="Select Connected Server"
 							value={guildOption(connectedGuild)}
 							options={AvailableServers?.map(guildOption)}
+							styles={{
+								...colorStyles,
+								container: styles => ({ ...styles, ...colorStyles.container }),
+							}}
 						/>
 						{connectedGuild && (
 							<>
 								<h3>select Channels to listen to in {connectedGuild?.name}</h3>
-								<StyledSelect
+								<Select
 									closeMenuOnSelect={false}
 									isMulti
 									onChange={onChannelSelect}
@@ -155,6 +173,10 @@ const DiscordSetting = props => {
 												</>
 											),
 										}))}
+									styles={{
+										...colorStyles,
+										container: styles => ({ ...styles, ...colorStyles.container }),
+									}}
 								/>
 							</>
 						)}

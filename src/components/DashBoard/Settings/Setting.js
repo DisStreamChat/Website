@@ -1,5 +1,8 @@
-import { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import { ChromePicker } from "react-color";
+import { Switch } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import { blueGrey } from "@material-ui/core/colors";
 import AddIcon from "@material-ui/icons/Add";
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -10,18 +13,49 @@ import chroma from "chroma-js";
 import InputSlider from "../../Shared/InputSlider";
 import lodash from "lodash";
 import uid from "uid";
+import Select from "react-select";
 import AnimateHeight from "react-animate-height";
+import { colorStyles, guildOption } from "../../Shared/userUtils";
+import firebase from "../../../firebase";
+import { DiscordContext } from "../../../contexts/DiscordContext";
 import DiscordSetting from "./DiscordSetting";
-import FancySwitch from "../../../styled-components/FancySwitch";
-import { defined } from "../../../utils/functions";
+
+const FancySwitch = withStyles({
+	root: {
+		padding: 7,
+	},
+	thumb: {
+		width: 24,
+		height: 24,
+		backgroundColor: "#fff",
+		boxShadow: "0 0 12px 0 rgba(0,0,0,0.08), 0 0 8px 0 rgba(0,0,0,0.12), 0 0 4px 0 rgba(0,0,0,0.38)",
+	},
+	switchBase: {
+		color: "rgba(0,0,0,0.38)",
+		padding: 7,
+	},
+	track: {
+		borderRadius: 20,
+		backgroundColor: blueGrey[300],
+	},
+	checked: {
+		"& $thumb": {
+			backgroundColor: "#fff",
+		},
+		"& + $track": {
+			opacity: "1 !important",
+		},
+	},
+})(Switch);
 
 const Setting = props => {
+	const id = firebase.auth.currentUser.uid;
 	const [value, setValue] = useState(props.value);
+	const [open, setOpen] = useState(props.open);
 	const [displayName, setDisplayName] = useState();
 	const [addingItem, setAddingItem] = useState(false);
 	const [valueToBeAdded, setValueToBeAdded] = useState();
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const changeHandler = useCallback(
 		lodash.debounce(v => {
 			props.onChange(props.name, v);
@@ -37,7 +71,9 @@ const Setting = props => {
 		if (props.type === "color") {
 			setValue(props.value || props.default);
 		} else {
-			setValue(!defined(props.value) ? props.default : props.value);
+			setValue(prev => {
+				return props.value == undefined ? props.default : props.value;
+			});
 		}
 	}, [props]);
 
@@ -91,7 +127,7 @@ const Setting = props => {
 						control={
 							<FancySwitch
 								color="primary"
-								checked={!!value}
+								checked={value}
 								onChange={e => {
 									setValue(e.target.checked);
 									changeHandler(e.target.checked);
@@ -224,7 +260,7 @@ const Setting = props => {
 					</AnimateHeight>
 				</>
 			) : (
-				<DiscordSetting {...props} />
+				<DiscordSetting {...props}/>
 			)}
 		</div>
 	);

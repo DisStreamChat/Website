@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef, useContext } from "react";
+// production
+import React, { useEffect, useState, useRef } from "react";
 import firebase from "./firebase";
 import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import Home from "./components/Home/Home";
@@ -16,25 +17,22 @@ import DownloadPage from "./components/Apps/DownloadPage";
 import PrivacyPolicy from "./components/Shared/PrivacyPolicy";
 import Terms from "./components/Shared/Terms";
 import { QueryParamProvider } from "use-query-params";
+import "./App.scss";
+import { AppContext } from "./contexts/Appcontext";
 import Banner from "./components/Shared/Banner";
 import { Button } from "@material-ui/core";
 import A from "./components/Shared/A";
 import useSnapshot from "./hooks/useSnapshot";
 import LeaderBoard from "./components/LeaderBoard/LeaderBoard";
 import { v4 as uuidv4 } from "uuid";
-import { AppContext } from "./contexts/Appcontext";
-import "./App.scss";
 
-function App() {
+function App(props) {
+	const [userId, setUserId] = useState("");
+	const [dropDownOpen, setDropDownOpen] = useState(false);
+	const [currentUser, setCurrentUser] = useState();
 	const [firebaseInit, setFirebaseInit] = useState(false);
-	const firebaseUser = firebase.auth.currentUser
-	const firebaseUserId = firebaseUser?.uid
-	const { userId, setUserId, dropDownOpen, setCurrentUser } = useContext(AppContext);
+	const user = firebase.auth.currentUser;
 
-	const setOTC = useRef(false);
-	const codeArray = new URLSearchParams(window.location.search);
-
-	// TODO: replace with react-firebase-hooks
 	useSnapshot(
 		firebase.db.collection("Streamers").doc(userId || " "),
 		async snapshot => {
@@ -54,18 +52,20 @@ function App() {
 		})();
 	}, []);
 
+	const setOTC = useRef(false);
 	useEffect(() => {
 		(async () => {
 			if (setOTC.current) return;
-			if (firebaseInit !== false && userId) {
-				await firebase.db.collection("Secret").doc(userId).set({ value: uuidv4() });
+			if (firebaseInit !== false && user?.uid) {
+				await firebase.db.collection("Secret").doc(user.uid).set({ value: uuidv4() });
 				setOTC.current = true;
 			}
 		})();
-	}, [firebaseInit, setOTC, userId]);
+	}, [firebaseInit, user, setOTC]);
 
 	useEffect(() => {
 		if (firebaseInit === false) return;
+		const codeArray = new URLSearchParams(window.location.search);
 		if (codeArray.has("code")) {
 			(async () => {
 				const code = codeArray.get("code");
@@ -87,7 +87,7 @@ function App() {
 							console.log(await response.json());
 							console.log("fail");
 						} else {
-							console.log(userId);
+							console.log(user?.uid);
 							const json = await response.json();
 							let discordUser;
 							if (!isSignedIn) {
@@ -96,7 +96,7 @@ function App() {
 
 							await firebase.db
 								.collection("Streamers")
-								.doc(userId || discordUser?.uid || " ")
+								.doc(user?.uid || discordUser?.uid || " ")
 								.collection("discord")
 								.doc("data")
 								.set(json);
@@ -109,64 +109,68 @@ function App() {
 				window.location = "/#/dashboard/discord";
 			})();
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [firebaseInit]);
 
 	useEffect(() => {
 		(async () => {
-			console.log(firebaseUser)
-			if (firebaseInit !== false && firebaseUserId) {
-				setUserId(firebaseUserId);
-				try {
-					const userData = (await firebase.db.collection("Streamers").doc(firebaseUserId).get()).data();
-					console.log({ userData });
-					let profilePictureResponse;
-					if (!userData.twitchAuthenticated) {
-						profilePictureResponse = await fetch(
-							`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.discordId}&platform=discord`
-						);
-					} else {
-						profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
-					}
-					const profilePicture = await profilePictureResponse.json();
-					firebase.db.collection("Streamers").doc(firebaseUserId).update({
-						profilePicture,
-					});
-				} catch (err) {
-					console.log(err.message);
+			if (firebaseInit !== false && user) {
+				setUserId(user.uid);
+				const userData = (await firebase.db.collection("Streamers").doc(user.uid).get()).data();
+				let profilePictureResponse;
+				if (!userData.twitchAuthenticated) {
+					profilePictureResponse = await fetch(
+						`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.discordId}&platform=discord`
+					);
+				} else {
+					profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
 				}
+				const profilePicture = await profilePictureResponse.json();
+				firebase.db.collection("Streamers").doc(user.uid).update({
+					profilePicture,
+				});
 			}
 		})();
-	}, [firebaseInit, setUserId, firebaseUserId, firebaseUser]);
+	}, [firebaseInit, user]);
 
-	return firebaseInit !== false && !codeArray.has("code") ? (
+	return firebaseInit !== false && !new URLSearchParams(window.location.search).has("code") ? (
 		<Router>
 			<QueryParamProvider ReactRouterRoute={Route}>
-				<div className="App">
-					<Header />
-					<main className={`main ${dropDownOpen && "open"}`}>
-						<Switch>
-							<Route exact path="/" component={Home} />
-							<Route path="/bot" component={Bot} />
-							<Route exact path="/apps" component={Apps} />
-							<Route path="/community" component={Community} />
-							<Route path="/about" component={About} />
-							<Route path="/members" component={Team} />
-							<Route path="/privacy" component={PrivacyPolicy} />
-							<Route path="/terms" component={Terms} />
-							<Route path="/apps/download" component={DownloadPage} />
-							<Route path="/leaderboard/:id" component={LeaderBoard} />
-							<ProtectedRoute path="/dashboard" component={Dashboard} />
-							<Redirect to="/" />
-						</Switch>
-					</main>
-					<Footer />
-				</div>
-				<Banner message="DisStreamChat is in early alpha and we would like your help to test it">
-					<A newTab href="https://api.disstreamchat.com/discord">
-						<Button className="banner-button">Join the Discord</Button>
-					</A>
-				</Banner>
+				<AppContext.Provider
+					value={{
+						userId,
+						setUserId,
+						dropDownOpen,
+						setDropDownOpen,
+						currentUser,
+						setCurrentUser,
+					}}
+				>
+					<div className="App">
+						<Header />
+						<main className={`main ${dropDownOpen && "open"}`}>
+							<Switch>
+								<Route exact path="/" component={Home} />
+								<Route path="/bot" component={Bot} />
+								<Route exact path="/apps" component={Apps} />
+								<Route path="/community" component={Community} />
+								<Route path="/about" component={About} />
+								<Route path="/members" component={Team} />
+								<Route path="/privacy" component={PrivacyPolicy} />
+								<Route path="/terms" component={Terms} />
+								<Route path="/apps/download" component={DownloadPage} />
+								<Route path="/leaderboard/:id" component={LeaderBoard} />
+								<ProtectedRoute path="/dashboard" component={Dashboard} />
+								<Redirect to="/" />
+							</Switch>
+						</main>
+						<Footer />
+					</div>{" "}
+					<Banner message="DisStreamChat is in early alpha and we would like your help to test it">
+						<A newTab href="https://api.disstreamchat.com/discord">
+							<Button className="banner-button">Join the Discord</Button>
+						</A>
+					</Banner>
+				</AppContext.Provider>
 			</QueryParamProvider>
 		</Router>
 	) : (

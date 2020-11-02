@@ -6,11 +6,7 @@
 	--background-light-gray: #24252a;
 	--header-height: 182px;
 	--youtube-background: linear-gradient(320.75deg, rgb(255, 0, 0) 8.4%, rgb(182, 0, 52) 100.11%);
-	--twitch-background: linear-gradient(
-		198.87deg,
-		rgb(162, 58, 195) -17.84%,
-		rgb(106, 69, 173) 114.96%
-	);
+	--twitch-background: linear-gradient(198.87deg, rgb(162, 58, 195) -17.84%, rgb(106, 69, 173) 114.96%);
 }
 
 html,
@@ -68,21 +64,10 @@ hr {
 	}
 }
 
-.twemoji {
-	width: 25px;
-	@media screen and (max-width: 400px) {
-		width: 18px !important;
-	}
-}
 
-[data-react-modal-body-trap],
-.ReactModalPortal {
-	&,
-	& > * {
-		z-index: 1000000000 !important;
-	}
-}
-
-.twemoji__big{
-	width: 25px;
+.twemoji{
+    width: 25px;
+    @media screen {
+        width: 15px;
+    }
 }

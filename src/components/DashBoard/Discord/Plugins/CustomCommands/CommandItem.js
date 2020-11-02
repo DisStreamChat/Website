@@ -1,9 +1,10 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import "./CommandItem.scss";
 import firebase from "../../../../../firebase";
 import CancelTwoToneIcon from "@material-ui/icons/CancelTwoTone";
+import { DiscordContext } from "../../../../../contexts/DiscordContext";
 import { CommandContext } from "../../../../../contexts/CommandContext";
-import RoleItem from "../../../../../styled-components/RoleItem";
+import RoleItem from "../../../../Shared/RoleItem";
 
 const CommandItem = ({
 	name,
@@ -33,7 +34,6 @@ const CommandItem = ({
 		setError,
 		setEditing,
 	} = useContext(CommandContext);
-	const [displayRole, setDisplayRole] = useState();
 	const [allowedRoles, setPermittedRoles] = useState([]);
 	const guildId = userConnectedGuildInfo.id;
 	const deleteMe = useCallback(async () => {
@@ -103,9 +103,10 @@ const CommandItem = ({
 		setCreatingCommand(type || "text");
 	};
 
+	const [displayRole, setDisplayRole] = useState();
 	useEffect(() => {
 		setDisplayRole(userConnectedGuildInfo.roles.find(r => r.id === role));
-	}, [role, setDisplayRole, userConnectedGuildInfo.roles]);
+	}, []);
 
 	return (
 		<div className="command-item">
