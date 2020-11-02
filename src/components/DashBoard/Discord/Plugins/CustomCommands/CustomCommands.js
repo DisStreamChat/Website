@@ -13,17 +13,7 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 	const guildId = userConnectedGuildInfo?.id;
 	const {
 		setup: setupCommand,
-		setName,
-		setResponse,
-		setRoleToGive,
-		setDescription,
-		setAllowedRoles,
-		setBannedRoles,
-		setAllowedChannels,
-		setCooldown,
-		setDeleteUsage,
-		setError,
-		setEditing,
+		
 	} = useContext(CommandContext);
 
 	useEffect(() => {
