@@ -85,15 +85,12 @@ function App() {
 						// const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
 							console.log(await response.json());
-							console.log("fail");
 						} else {
-							console.log(userId);
 							const json = await response.json();
 							let discordUser;
 							if (!isSignedIn) {
-								discordUser = await firebase.auth.signInWithCustomToken(json.token);
+								discordUser = (await firebase.auth.signInWithCustomToken(json.token))?.user;
 							}
-
 							await firebase.db
 								.collection("Streamers")
 								.doc(userId || discordUser?.uid || " ")
@@ -106,7 +103,7 @@ function App() {
 						console.log(err.message);
 					}
 				}
-				window.location = "/#/dashboard/discord";
+				window.location = "/dashboard/discord";
 			})();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
