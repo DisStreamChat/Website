@@ -14,7 +14,7 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 	const [MessageManagers, setMessageManagers] = useState([]);
 	const [JoinManager, setJoinManager] = useState();
 	const { state, create, setup } = useContext(RoleContext);
-	const {setup: setupRole} = useContext(CommandContext)
+	const { setup: setupRole } = useContext(CommandContext);
 	const [creatingCommand, setCreatingCommand] = useState(false);
 	const [commands, setCommands] = useState([]);
 	const guildId = userConnectedGuildInfo?.id;
@@ -162,19 +162,24 @@ const Roles = ({ location, guild: userConnectedGuildInfo }) => {
 					Reaction Roles<span> — {MessageManagers.length}</span>
 				</h4>
 				{!state.type &&
-					MessageManagers.sort((a, b) => {
+					MessageManagers?.sort?.((a, b) => {
 						const aMessage = a?.message?.content ? a?.message.content : a?.message;
 						const bMessage = b?.message?.content ? b?.message.content : b?.message;
 						return aMessage.localeCompare(bMessage);
-					}).map((manager, i) => (
-						<ManagerItem key={i} {...manager} channel={manager?.message?.channel} guild={userConnectedGuildInfo} />
+					})?.map?.((manager, i) => (
+						<ManagerItem
+							key={i}
+							{...manager}
+							channel={manager?.message?.channel}
+							guild={userConnectedGuildInfo}
+						/>
 					))}
 				<h4 className="plugin-section-title bigger">
 					Role Commands<span> — {commands.length}</span>
 				</h4>
 				{commands
-					.sort((a, b) => a[0].localeCompare(b[0]))
-					.map(([key, value]) => (
+					?.sort?.((a, b) => a[0].localeCompare(b[0]))
+					?.map?.(([key, value]) => (
 						<CommandItem
 							guild={userConnectedGuildInfo}
 							setCommands={setCommands}
