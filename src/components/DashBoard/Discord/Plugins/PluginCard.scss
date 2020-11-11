@@ -2,52 +2,51 @@
 	$background-color: #212121;
 	background: $background-color;
 	transition: 0.25s;
-    margin: 0.5rem;
-    cursor: pointer;
-    position: relative;
-    &.disabled{
-        background: lighten($background-color, 2);
-        opacity: .45;
-        &:after {
+	margin: 0.5rem;
+	cursor: pointer;
+	position: relative;
+	&.disabled {
+		background: lighten($background-color, 2);
+		opacity: 0.45;
+		&:after {
 			content: "Click to Enable";
 			background: #b92838;
-            width: fit-content;
-            position: absolute;
-            top: 0;
-            right: 0;
-            transform: translate(10%, -25%);
-            padding: .25rem .4rem;
-            border-radius: 5rem;
+			width: fit-content;
+			position: absolute;
+			top: 0;
+			right: 0;
+			transform: translate(10%, -25%);
+			padding: 0.25rem 0.4rem;
+			border-radius: 5rem;
 		}
-    }
+	}
 	&.coming-soon {
-        cursor: initial;
-        position: relative;
-        opacity: .8;
+		cursor: initial;
+		position: relative;
+		opacity: 0.8;
 		&:after {
 			content: "Coming Soon";
 			background: var(--disstreamchat-blue);
-            width: fit-content;
-            position: absolute;
-            top: 0;
-            right: 0;
-            transform: translate(10%, -25%);
-            padding: .25rem .4rem;
-            border-radius: 5rem;
+			width: fit-content;
+			position: absolute;
+			top: 0;
+			right: 0;
+			transform: translate(10%, -25%);
+			padding: 0.25rem 0.4rem;
+			border-radius: 5rem;
 		}
 	}
 	&:not(.coming-soon):hover {
 		background: lighten($color: $background-color, $amount: 3);
-    }
-    a{
-
-        display: flex;
-        width: 300px;
-        height: 100px;
-    }
-    display: flex;
-    width: 300px;
-    height: 100px;
+	}
+	a {
+		display: flex;
+		width: 300px;
+		height: 100px;
+	}
+	display: flex;
+	width: 300px;
+	height: 100px;
 	padding: 20px;
 	align-items: center;
 	box-sizing: content-box !important;
@@ -73,121 +72,134 @@
 		color: #aaa;
 		margin-top: 0.25rem;
 		line-height: 1.5rem;
-    }
-    @media screen and (max-width: 440px) {
-        width: 200px;
-        h4{
-            font-size: .75rem;
-            line-height: 1rem;;
-        }
-    }
+	}
+	@media screen and (max-width: 440px) {
+		width: 200px;
+		h4 {
+			font-size: 0.75rem;
+			line-height: 1rem;
+		}
+	}
 }
 
-.plugin-overlay{
-    background: lighten(#21212133, 10) !important;
+.plugin-overlay {
+	background: lighten(#21212133, 10) !important;
 }
 
-.plugin-modal{
-    // display: flex;
-    padding: 0 !important;
-    overflow: hidden;
-    min-width: fit-content;
-    button{
-        outline: none !important
-    }
-    .top-portion{
-        width: 580px;
-        height: 75px;
-        background: #2e3235;
-        display: flex;
-        align-items: center;
-        padding: 0 1rem;
-        box-sizing: border-box !important;
-        justify-content: space-between;
-        h2{
-            font-size: 1.25rem;
-            text-transform: uppercase;
-        }
-        button{
-            background: #212121;
-            border: none;
-            color: white;
-            border-radius: .125rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: .25rem;
-        }
-    };
-    .bottom-buttons{
-        padding: 0 1rem;
-        box-sizing: border-box !important;
-        justify-content: space-between;
-        width: 580px;
-        height: 75px;
-        background: #212121;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        button{
-            $blue: #2d688d;
-            padding: .5rem 1rem;
-            background: $blue;
-            color: white;
-            border: none;
-            border-radius: .125rem;
-            &:hover{
-                background: darken($blue, 5)
-            }
-        }
-    }
+.plugin-modal {
+	// display: flex;
+	padding: 0 !important;
+	overflow: hidden;
+	min-width: fit-content;
+	button {
+		outline: none !important;
+	}
+	.top-portion {
+		width: 580px;
+		height: 75px;
+		background: #2e3235;
+		display: flex;
+		align-items: center;
+		padding: 0 1rem;
+		box-sizing: border-box !important;
+		justify-content: space-between;
+		h2 {
+			font-size: 1.25rem;
+			text-transform: uppercase;
+		}
+		button {
+			background: #212121;
+			border: none;
+			color: white;
+			border-radius: 0.125rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0.25rem;
+		}
+	}
+	.bottom-buttons {
+		padding: 0 1rem;
+		box-sizing: border-box !important;
+		justify-content: space-between;
+		width: 580px;
+		height: 75px;
+		background: #212121;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		button {
+			$blue: #2d688d;
+			padding: 0.5rem 1rem;
+			background: $blue;
+			color: white;
+			border: none;
+			border-radius: 0.125rem;
+			&:hover {
+				background: darken($blue, 5);
+			}
+		}
+	}
 }
 
-.scaling-div{
-    padding: 0 1.5rem
+.scaling-div {
+	padding: 0 1.5rem;
 }
 
 #root {
-    .MuiSlider-markLabelActive, .MuiSlider-markLabel{
-        color: white;
-    }
-    .MuiSlider-markActive, .MuiSlider-mark{
-        opacity: 0;
-
-    }
+	.MuiSlider-markLabelActive,
+	.MuiSlider-markLabel {
+		color: white;
+	}
+	.MuiSlider-markActive,
+	.MuiSlider-mark {
+		opacity: 0;
+	}
 }
 
-.no-rank-items{
-    display: flex;
-    justify-content: space-between;
-    width: 100% !important;
-    & > div{
-        margin: 0 1rem;
-        &:first-child{
-            margin-left: 0;
-        }
-        &:last-child{
-            margin-right: 0;
-        }
-        width: 100%
-    }
-    @media screen and (max-width: 700px) {
-        flex-direction: column;
-        align-items: center;
-        & > div{
-            margin: .5rem 0;
-        }
-    }
+.no-rank-items {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: column;
+	width: 100% !important;
+	& > div {
+		flex: 1;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		&:first-child {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+	& > div > div {
+		// margin: 0 1rem;
+		&:first-child {
+			margin-left: 0;
+		}
+		&:last-child {
+			margin-right: 0;
+		}
+		width: 100%;
+		flex: 1;
+	}
+	@media screen and (max-width: 700px) {
+		flex-direction: column;
+		align-items: center;
+		& > div {
+			margin: 0.5rem 0;
+		}
+	}
 }
 
-.MuiSvgIcon-root{
-    font-size: inherit !important
+.MuiSvgIcon-root {
+	font-size: inherit !important
     ;
 }
 
-.plugin-switch{
-    position: absolute;
-    top: -16px;
-    right: -25px;
+.plugin-switch {
+	position: absolute;
+	top: -16px;
+	right: -25px;
 }
-
