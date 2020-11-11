@@ -1,7 +1,11 @@
 @media screen and (max-width: 700px) {
-	.discord-header {
+	.discord-header, .plugin-section {
 		.css-jtuip8-container {
-			width: 100%;
+			width: 100% !important;
+			& *{
+
+				font-size: .75rem;
+			}
 		}
 	}
 }
@@ -858,6 +862,15 @@
 }
 
 .plugin-section {
+	label{
+		flex: 1 1 33%;
+		display: block;
+		width: max-content;
+		background: lighten($color: #121212aa, $amount: 2);
+		border-radius: .5rem;
+		padding: .25rem;
+		padding-right: .75rem;
+	}
 	display: flex;
 	background: lighten($color: #121212, $amount: 10);
 	padding: 0.5rem;

@@ -17,7 +17,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 
 	useEffect(() => {
 		(async () => {
-			const guildLogRef = firebase.db.collection("loggingChannel").doc(guildId);
+			const guildLogRef = firebase.db.collection("loggingChannel").doc(guildId || " ");
 			const data = (await guildLogRef.get()).data();
 			if (data) {
 				const id = data.server;
@@ -58,9 +58,9 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				setActiveEvents(active || {});
 			} else {
 				try {
-					await firebase.db.collection("loggingChannel").doc(guildId).update({});
+					await firebase.db.collection("loggingChannel").doc(guildId || " ").update({});
 				} catch (err) {
-					await firebase.db.collection("loggingChannel").doc(guildId).set({});
+					await firebase.db.collection("loggingChannel").doc(guildId || " ").set({});
 				}
 			}
 		})();
@@ -155,6 +155,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				<h4 className="plugin-section-title">Logging Channel</h4>
 				<div className="plugin-section">
 					<StyledSelect
+						isClearable
 						closeMenuOnSelect
 						onChange={handleAnnoucmentSelect}
 						placeholder="Select Logging Channel"
@@ -190,6 +191,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 								</h4>
 								<div className="plugin-section subtitle" style={{ width: "100%" }}>
 									<StyledSelect
+										isClearable
 										closeMenuOnSelect
 										onChange={e => {
 											handleOverrideSelect(e, category);
@@ -210,13 +212,7 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 												),
 											}))}
 									/>
-									<span className="toggle-button">
-										<button
-											onClick={() => handleOverrideSelect(null, category)}
-										>
-											Clear Category Override
-										</button>
-									</span>
+									
 								</div>
 								<h4 className="plugin-section-title" style={{ width: "100%" }}>
 									Events
