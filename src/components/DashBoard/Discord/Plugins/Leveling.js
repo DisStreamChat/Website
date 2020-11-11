@@ -4,25 +4,34 @@ import { DiscordContext } from "../../../../contexts/DiscordContext";
 import { Link } from "react-router-dom";
 import StyledSelect from "../../../../styled-components/StyledSelect";
 import { Typography } from "@material-ui/core";
-import PrettoSlider from "../../../../styled-components/PrettoSlider"
+import PrettoSlider from "../../../../styled-components/PrettoSlider";
+import FancySwitch from "../../../../styled-components/FancySwitch";
+import {
+	parseSelectValue,
+	TransformObjectToSelectValue,
+	channelLabel,
+} from "../../../../utils/functions";
 
-const marks = [...Array(7)].map((item, index) => ({ value: (index / 2), label: `x${(index / 2)}` }));
+const marks = [...Array(7)].map((item, index) => ({ value: index / 2, label: `x${index / 2}` }));
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
-	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
+	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState(false);
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
-	const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
-	const {  setDashboardOpen, saveOnType } = useContext(DiscordContext);
+	const [levelUpMessage, setLevelUpMessage] = useState(
+		"Congrats {player}, you leveled up to level {level}!"
+	);
+	const { setDashboardOpen, saveOnType } = useContext(DiscordContext);
 	const guildId = userConnectedGuildInfo?.id;
 
 	const handleTypeSelect = useCallback(
 		async e => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
-			setLevelUpAnnouncement(e);
+			let value = e.target.checked ? 3 : 1;
+			setLevelUpAnnouncement(e.target.checked);
 			try {
-				await guildLevelRef.update({ type: e.value });
+				await guildLevelRef.update({ type: value });
 			} catch (err) {
-				await guildLevelRef.set({ type: e.value });
+				await guildLevelRef.set({ type: value });
 			}
 			setDashboardOpen(true);
 		},
@@ -48,10 +57,12 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 		async e => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
 			setAnnouncementChannel(e);
+			const notifications = parseSelectValue(e);
+			console.log(notifications);
 			try {
-				guildLevelRef.update({ notifications: e.value });
+				guildLevelRef.update({ notifications });
 			} catch (err) {
-				guildLevelRef.set({ notifications: e.value });
+				guildLevelRef.set({ notifications });
 			}
 			setDashboardOpen(true);
 		},
@@ -60,32 +71,31 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 
 	useEffect(() => {
 		(async () => {
-			const guild = await firebase.db
-				.collection("Leveling")
-				.doc(guildId || " ")
-				.get();
-			const data = guild.data();
-			if (data) {
-				const id = data.notifications;
-				if (id) {
-					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
-					const response = await fetch(apiUrl);
-					const channel = await response.json();
-					setAnnouncementChannel({
-						value: id,
-						label: (
-							<>
-								<span>{channel.name}</span>
-								<span className="channel-category">{channel.parent}</span>
-							</>
-						),
-					});
-					setLevelUpAnnouncement({
-						value: data.type,
-						label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
-					});
-					setLevelUpMessage(data.message);
+			try {
+				const guild = await firebase.db
+					.collection("Leveling")
+					.doc(guildId || " ")
+					.get();
+				const data = guild.data();
+				if (data) {
+					const id = data.notifications;
+					if (id) {
+						const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
+						const response = await fetch(apiUrl);
+						const channel = await response.json();
+						setAnnouncementChannel({
+							value: id,
+							label: channelLabel(channel),
+						});
+						setLevelUpAnnouncement({
+							value: data.type,
+							label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
+						});
+						setLevelUpMessage(data.message);
+					}
 				}
+			} catch (err) {
+				console.log(err.message);
 			}
 		})();
 	}, [location, guildId]);
@@ -102,9 +112,14 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			<div className="plugin-item-subheader flex">
 				<span>
 					<h2>Leveling Up</h2>
-					<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
+					<h4>
+						Whenever a user gains a level, DisStreamBot can send a personalized message.
+					</h4>
 				</span>
-				<Link className="leader-board-link" to={`/leaderboard/${userConnectedGuildInfo?.id}`}>
+				<Link
+					className="leader-board-link"
+					to={`/leaderboard/${userConnectedGuildInfo?.id}`}
+				>
 					Leaderboard
 				</Link>
 			</div>
@@ -113,7 +128,12 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<div className="channels">
 						<div id="announcement-type">
 							<h5 className="bold uppercase">Level up announcement</h5>
-							<StyledSelect
+							<FancySwitch
+								checked={levelUpAnnouncement}
+								onChange={handleTypeSelect}
+								name="enable-message"
+							/>
+							{/* <StyledSelect
 								closeMenuOnSelect
 								onChange={handleTypeSelect}
 								placeholder="Select Annoucement type"
@@ -122,12 +142,13 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									{ value: 1, label: "Disabled" },
 									{ value: 3, label: "Custom Channel" },
 								].map(type => type)}
-							/>
+							/> */}
 						</div>
-						{levelUpAnnouncement?.value === 3 && (
+						{
 							<div id="announcement-channel">
 								<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
 								<StyledSelect
+									isDisabled={!levelUpAnnouncement}
 									closeMenuOnSelect
 									onChange={handleAnnoucmentSelect}
 									placeholder="Select Annoucement Channel"
@@ -135,21 +156,20 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									options={userConnectedGuildInfo?.channels
 										?.sort((a, b) => a.parent.localeCompare(b.parent))
 										?.map(channel => ({
-											value: channel.id,
-											label: (
-												<>
-													<span>{channel.name}</span>
-													<span className="channel-category">{channel.parent}</span>
-												</>
-											),
+											value: TransformObjectToSelectValue(channel),
+											label: channelLabel(channel),
 										}))}
 								/>
 							</div>
-						)}
+						}
 					</div>
 					<div className="message">
 						<h5>LEVEL UP ANNOUNCEMENT MESSAGE</h5>
-						<textarea disabled={levelUpAnnouncement.value===1} value={levelUpMessage} onChange={handleMessageChange}></textarea>
+						<textarea
+							disabled={!levelUpAnnouncement}
+							value={levelUpMessage}
+							onChange={handleMessageChange}
+						></textarea>
 					</div>
 				</div>
 			</div>
@@ -162,17 +182,16 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<PrettoSlider
 						defaultValue={1}
 						getAriaValueText={value => `${value}xp`}
-						aria-labelledby="discrete-slider"
+						aria-labelledby="xp scaling"
 						valueLabelDisplay="auto"
 						step={0.5}
-						// marks
 						min={0}
 						max={3}
 						marks={marks}
 					/>
 				</div>
 				<hr />
-				
+
 				<h4 className="plugin-section-title">No Rank Items</h4>
 				<div className="no-rank-items">
 					<div>
@@ -188,7 +207,9 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									label: (
 										<>
 											<span>{channel.name}</span>
-											<span className="channel-category">{channel.parent}</span>
+											<span className="channel-category">
+												{channel.parent}
+											</span>
 										</>
 									),
 								}))}
@@ -207,7 +228,9 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 									label: (
 										<>
 											<span>{channel.name}</span>
-											<span className="channel-category">{channel.parent}</span>
+											<span className="channel-category">
+												{channel.parent}
+											</span>
 										</>
 									),
 								}))}
