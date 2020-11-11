@@ -58,7 +58,6 @@ const CreateCommand = ({ setCreatingCommand, children, role, guild: userConnecte
 					<h4 className="plugin-section-title">Command Name</h4>
 					<div className="plugin-section">
 						<input
-							disabled={editing}
 							value={name}
 							onChange={e => setName(e.target.value.replace(/\s/, "-"))}
 							placeholder="Command Name (Don't include prefix)"
