@@ -181,6 +181,10 @@
 		width: 100%;
 		font-size: 1rem;
 		// border: none;
+		&:disabled{
+			background: lighten($color: #121212, $amount: 5);
+			color: #555;
+		}
 		&:focus {
 			outline: none !important;
 			box-shadow: 0 0 0 1px #137cbd, 0 0 0 1px #137cbd, 0 0 0 3px rgba(19, 124, 189, 0.3),

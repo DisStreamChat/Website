@@ -3,7 +3,10 @@ import firebase from "../../../../firebase";
 import { DiscordContext } from "../../../../contexts/DiscordContext";
 import { Link } from "react-router-dom";
 import StyledSelect from "../../../../styled-components/StyledSelect";
+import { Typography } from "@material-ui/core";
+import PrettoSlider from "../../../../styled-components/PrettoSlider"
 
+const marks = [...Array(7)].map((item, index) => ({ value: (index / 2), label: `x${(index / 2)}` }));
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
@@ -117,7 +120,6 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 								value={levelUpAnnouncement}
 								options={[
 									{ value: 1, label: "Disabled" },
-									{ value: 2, label: "Current Channel" },
 									{ value: 3, label: "Custom Channel" },
 								].map(type => type)}
 							/>
@@ -147,11 +149,11 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					</div>
 					<div className="message">
 						<h5>LEVEL UP ANNOUNCEMENT MESSAGE</h5>
-						<textarea value={levelUpMessage} onChange={handleMessageChange}></textarea>
+						<textarea disabled={levelUpAnnouncement.value===1} value={levelUpMessage} onChange={handleMessageChange}></textarea>
 					</div>
 				</div>
 			</div>
-			{/* <h4 className="plugin-section-title">Other Settings</h4>
+			<h4 className="plugin-section-title">Other Settings</h4>
 			<div className="plugin-section no-flex" style={{ color: "white" }}>
 				<div className="scaling-div" style={{ width: "100%" }}>
 					<Typography id="scaling-slider" gutterBottom>
@@ -163,39 +165,14 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 						aria-labelledby="discrete-slider"
 						valueLabelDisplay="auto"
 						step={0.5}
-						marks
+						// marks
 						min={0}
 						max={3}
 						marks={marks}
 					/>
 				</div>
 				<hr />
-				<h4 className="plugin-section-title flex">
-					Role XP Scaling{" "}
-					<ToggleChevron closed={ranksClosed} onClick={() => setRanksClosed(prev => !prev)}>
-						<KeyboardArrowDownIcon />
-					</ToggleChevron>
-				</h4>
-				<ul className={ranksClosed ? "closed" : ""}>
-					{userConnectedGuildInfo.roles.map(role => (
-						<li>
-							<RoleItem {...role}>{role.name}</RoleItem>
-
-							<PrettoSlider
-								defaultValue={1}
-								getAriaValueText={value => `${value}xp`}
-								aria-labelledby="discrete-slider"
-								valueLabelDisplay="auto"
-								step={0.5}
-								min={0}
-								max={3}
-								marks={marks}
-							/>
-                            {smallScreen && <hr/>}
-						</li>
-					))}
-				</ul>
-				<hr />
+				
 				<h4 className="plugin-section-title">No Rank Items</h4>
 				<div className="no-rank-items">
 					<div>
@@ -236,8 +213,8 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 								}))}
 						/>
 					</div>
-				</div> */}
-			{/* </div> */}
+				</div>
+			</div>
 		</div>
 	);
 };
