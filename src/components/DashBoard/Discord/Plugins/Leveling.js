@@ -11,12 +11,16 @@ import {
 	TransformObjectToSelectValue,
 	channelLabel,
 } from "../../../../utils/functions";
+import RoleItem from "../../../../styled-components/RoleItem";
 
 const marks = [...Array(7)].map((item, index) => ({ value: index / 2, label: `x${index / 2}` }));
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState(false);
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
+	const [noXpRoles, setNoXpRoles] = useState([]);
+	const [noXpChannels, setNoXpChannels] = useState([]);
+	const [generalScaling, setGeneralScaling] = useState(1);
 	const [levelUpMessage, setLevelUpMessage] = useState(
 		"Congrats {player}, you leveled up to level {level}!"
 	);
@@ -60,9 +64,9 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			const notifications = parseSelectValue(e);
 			console.log(notifications);
 			try {
-				guildLevelRef.update({ notifications });
+				await guildLevelRef.update({ notifications });
 			} catch (err) {
-				guildLevelRef.set({ notifications });
+				await guildLevelRef.set({ notifications });
 			}
 			setDashboardOpen(true);
 		},
@@ -72,11 +76,34 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	useEffect(() => {
 		(async () => {
 			try {
-				const guild = await firebase.db
-					.collection("Leveling")
-					.doc(guildId || " ")
-					.get();
+				const guildRef = await firebase.db.collection("Leveling").doc(guildId || " ");
+				const guild = await guildRef.get();
+				const settings = await guildRef.collection("settings").get();
 				const data = guild.data();
+				const settingsData = settings.docs
+					.map(doc => ({ id: doc.id, ...doc.data() }))
+					.reduce((acc, cur) => ({ [cur.id]: cur, ...acc }), {});
+				if (settingsData) {
+					setGeneralScaling(settingsData.scaling.general || 1);
+					setNoXpRoles(
+						settingsData.bannedItems?.roles
+							?.map(id => userConnectedGuildInfo.roles.find(role => role.id === id))
+							?.map(role => ({
+								value: TransformObjectToSelectValue(role),
+								label: <RoleItem {...role}>{role.name}</RoleItem>,
+							})) || []
+					);
+					setNoXpChannels(
+						settingsData.bannedItems?.channels
+							?.map(id =>
+								userConnectedGuildInfo.channels.find(channel => channel.id === id)
+							)
+							.map(channel => ({
+								value: TransformObjectToSelectValue(channel),
+								label: channelLabel(channel),
+							})) || []
+					);
+				}
 				if (data) {
 					const id = data.notifications;
 					if (id) {
@@ -99,6 +126,53 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			}
 		})();
 	}, [location, guildId]);
+
+	const handleGeneralScaling = async (e, value) => {
+		const guildLevelRef = firebase.db
+			.collection("Leveling")
+			.doc(guildId)
+			.collection("settings")
+			.doc("scaling");
+		setGeneralScaling(value);
+		try {
+			await guildLevelRef.update({ general: value });
+		} catch (err) {
+			await guildLevelRef.set({ general: value });
+		}
+		setDashboardOpen(true);
+	};
+
+	const handleNoXpRoleSelect = async e => {
+		const guildLevelRef = firebase.db
+			.collection("Leveling")
+			.doc(guildId)
+			.collection("settings")
+			.doc("bannedItems");
+		setNoXpRoles(e);
+		const value = parseSelectValue(e);
+		try {
+			await guildLevelRef.update({ roles: value });
+		} catch (err) {
+			await guildLevelRef.set({ roles: value });
+		}
+		setDashboardOpen(true);
+	};
+
+	const handleNoXpChannelSelect = async e => {
+		const guildLevelRef = firebase.db
+			.collection("Leveling")
+			.doc(guildId)
+			.collection("settings")
+			.doc("bannedItems");
+		setNoXpChannels(e);
+		const value = parseSelectValue(e);
+		try {
+			await guildLevelRef.update({ channels: value });
+		} catch (err) {
+			await guildLevelRef.set({ channels: value });
+		}
+		setDashboardOpen(true);
+	};
 
 	return (
 		<div>
@@ -133,35 +207,23 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 								onChange={handleTypeSelect}
 								name="enable-message"
 							/>
-							{/* <StyledSelect
-								closeMenuOnSelect
-								onChange={handleTypeSelect}
-								placeholder="Select Annoucement type"
-								value={levelUpAnnouncement}
-								options={[
-									{ value: 1, label: "Disabled" },
-									{ value: 3, label: "Custom Channel" },
-								].map(type => type)}
-							/> */}
 						</div>
-						{
-							<div id="announcement-channel">
-								<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
-								<StyledSelect
-									isDisabled={!levelUpAnnouncement}
-									closeMenuOnSelect
-									onChange={handleAnnoucmentSelect}
-									placeholder="Select Annoucement Channel"
-									value={announcementChannel}
-									options={userConnectedGuildInfo?.channels
-										?.sort((a, b) => a.parent.localeCompare(b.parent))
-										?.map(channel => ({
-											value: TransformObjectToSelectValue(channel),
-											label: channelLabel(channel),
-										}))}
-								/>
-							</div>
-						}
+						<div id="announcement-channel">
+							<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
+							<StyledSelect
+								isDisabled={!levelUpAnnouncement}
+								closeMenuOnSelect
+								onChange={handleAnnoucmentSelect}
+								placeholder="Select Annoucement Channel"
+								value={announcementChannel}
+								options={userConnectedGuildInfo?.channels
+									?.sort((a, b) => a.parent.localeCompare(b.parent))
+									?.map(channel => ({
+										value: TransformObjectToSelectValue(channel),
+										label: channelLabel(channel),
+									}))}
+							/>
+						</div>
 					</div>
 					<div className="message">
 						<h5>LEVEL UP ANNOUNCEMENT MESSAGE</h5>
@@ -180,6 +242,8 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 						General XP Scaling
 					</Typography>
 					<PrettoSlider
+						value={generalScaling}
+						onChange={handleGeneralScaling}
 						defaultValue={1}
 						getAriaValueText={value => `${value}xp`}
 						aria-labelledby="xp scaling"
@@ -193,48 +257,44 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				<hr />
 
 				<h4 className="plugin-section-title">No Rank Items</h4>
+
 				<div className="no-rank-items">
 					<div>
-						<StyledSelect
-							closeMenuOnSelect
-							onChange={() => {}}
-							placeholder="No XP Roles"
-							value={""}
-							options={userConnectedGuildInfo?.channels
-								?.sort((a, b) => a.parent.localeCompare(b.parent))
-								?.map(channel => ({
-									value: channel.id,
-									label: (
-										<>
-											<span>{channel.name}</span>
-											<span className="channel-category">
-												{channel.parent}
-											</span>
-										</>
-									),
-								}))}
-						/>
+						<h4 className="plugin-section-title">No XP Roles</h4>
+						<h4 className="plugin-section-title">No XP Channels</h4>
 					</div>
 					<div>
-						<StyledSelect
-							closeMenuOnSelect
-							onChange={() => {}}
-							placeholder="No XP Channels"
-							value={""}
-							options={userConnectedGuildInfo?.channels
-								?.sort((a, b) => a.parent.localeCompare(b.parent))
-								?.map(channel => ({
-									value: channel.id,
-									label: (
-										<>
-											<span>{channel.name}</span>
-											<span className="channel-category">
-												{channel.parent}
-											</span>
-										</>
-									),
-								}))}
-						/>
+						<div>
+							<StyledSelect
+								isMulti
+								closeMenuOnSelect={false}
+								onChange={handleNoXpRoleSelect}
+								placeholder="No XP Roles"
+								value={noXpRoles}
+								options={userConnectedGuildInfo?.roles
+									?.sort((a, b) => b.rawPosition - a.rawPosition)
+									?.map(role => ({
+										value: TransformObjectToSelectValue(role),
+										label: <RoleItem {...role}>{role.name}</RoleItem>,
+									}))}
+							/>
+						</div>
+
+						<div>
+							<StyledSelect
+								isMulti
+								closeMenuOnSelect={false}
+								onChange={handleNoXpChannelSelect}
+								placeholder="No XP Channels"
+								value={noXpChannels}
+								options={userConnectedGuildInfo?.channels
+									?.sort((a, b) => a.parent.localeCompare(b.parent))
+									?.map(channel => ({
+										value: TransformObjectToSelectValue(channel),
+										label: channelLabel(channel),
+									}))}
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
