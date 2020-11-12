@@ -99,24 +99,24 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 		[guildId, setDashboardOpen]
 	);
 
-	const handleEventToggle = useCallback(async (e, id) => {
+	const handleEventToggle = useCallback(async (value, id) => {
 		setActiveEvents(prev => ({
 			...prev,
-			[id]: e.target.checked,
+			[id]: value,
 		}));
 		try {
 			await firebase.db
 				.collection("loggingChannel")
 				.doc(guildId)
 				.update({
-					[`activeEvents.${id}`]: e.target.checked,
+					[`activeEvents.${id}`]: value,
 				});
 		} catch (err) {
 			await firebase.db
 				.collection("loggingChannel")
 				.doc(guildId)
 				.set({
-					[`activeEvents.${id}`]: e.target.checked,
+					[`activeEvents.${id}`]: value,
 				});
 		}
 		setDashboardOpen(true);
@@ -228,8 +228,8 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 												<FancySwitch
 													color="primary"
 													checked={!!activeEvents[key]}
-													onChange={e => {
-														handleEventToggle(e, key);
+													onChange={(e, value) => {
+														handleEventToggle(value, key);
 													}}
 													name={event.displayName}
 												/>
