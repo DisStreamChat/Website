@@ -31,7 +31,7 @@ const LeaderBoard = ({ history }) => {
 			if (loading) return;
 			const leaderBoardDashBoard = items;
 			setFullLoading(loading);
-			setLeaderBoardInfo(leaderBoardDashBoard);
+			setLeaderBoardInfo(items.filter(item => item.name));
 			try {
 				const guildResponse = await fetch(`${process.env.REACT_APP_API_URL}/resolveguild?guild=${id}`);
 				const guildJson = await guildResponse.json();
