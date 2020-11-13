@@ -103,7 +103,7 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 						</div>
 
 						<div className="plugin-list">
-							{plugins.map(plugin => (
+							{plugins.filter(plugin => !plugin.comingSoon).map(plugin => (
 								<PluginCard
 									guild={guildId}
 									key={plugin.id}
