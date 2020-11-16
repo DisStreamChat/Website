@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import {getXp, map} from "../../utils/functions"
+import { getXp, map } from "../../utils/functions";
+import firebase from "../../firebase";
 
 const radius = 36;
 const circ = 2 * Math.PI * radius;
 
-const LeaderBoardCard = ({ place, level, xp, name, avatar }) => {
+const LeaderBoardCard = ({ place, level, xp, name, avatar, guild, ...props }) => {
 	const [progression, setProgression] = useState(0);
 
 	useEffect(() => {
@@ -15,11 +16,16 @@ const LeaderBoardCard = ({ place, level, xp, name, avatar }) => {
 		setProgression(map(dif, 0, bigDif, 0, circ));
 	}, [level, xp]);
 
+	const errorHandler = async e => {
+		e.target.src =
+			"https://im-share.herokuapp.com/uploads/images/photo-1af6bdb376e6-3022c35bb0d4.png";
+	};
+
 	return (
 		<div className="leaderboard-item" id={`place-${place}`}>
 			<div className="user-info">
 				<span className="place-card">{place}</span>
-				<img src={avatar} alt="" />
+				<img src={avatar} alt="" onError={errorHandler} />
 				{name}
 			</div>
 			<div className="level-info">

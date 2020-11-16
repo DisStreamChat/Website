@@ -51,7 +51,7 @@ const LeaderBoard = ({ history }) => {
 				<div className="leaderboard-body">
 					<ul>
 						{leaderBoardInfo.map((user, idx) => (
-							<LeaderBoardCard key={user.id} place={idx + 1 + ((page || 1) - 1) * (pageSize || defaultPageSize)} {...user} />
+							<LeaderBoardCard guild={id} key={user.name} place={idx + 1 + ((page || 1) - 1) * (pageSize || defaultPageSize)} {...user} />
 						))}
 					</ul>
 					<div className="leaderboard-footer">
