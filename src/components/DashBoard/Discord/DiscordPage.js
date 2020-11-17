@@ -125,6 +125,7 @@ const DiscordPage = memo(({ history, match }) => {
 				server at a time but you can connect as many channels in that server
 			</h3>
 			<hr />
+			
 			<div className="settings-body">
 				{Object.keys(userDiscordInfo || {}).length ? (
 					<>
