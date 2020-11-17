@@ -10,6 +10,8 @@ import CustomCommands from "./CustomCommands/CustomCommands";
 import { CommandContextProvider } from "../../../../contexts/CommandContext";
 import { RoleContextProvider } from "../../../../contexts/RoleContext";
 import Roles from "./Roles/Roles";
+import InfoTwoToneIcon from "@material-ui/icons/InfoTwoTone";
+import { Tooltip } from "@material-ui/core";
 
 const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 	const [prefix, setPrefix] = useState("!");
@@ -72,7 +74,7 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 			<hr />
 			<div className="discord-prefix">
 				<label htmlFor="discord-prefix">
-					<h2 className="prefix-header">Command Prefix</h2>
+					<h2 className="prefix-header">Command Prefix </h2>
 					<h3 className="prefix-subheader">
 						Set the prefix used to run DisStreamBot commands in this discord server
 					</h3>
@@ -95,7 +97,38 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 				<Switch>
 					<Route exact path={`${match.url}`}>
 						<div className="plugin-header">
-							<h2>Plugins</h2>
+							<h2>
+								Plugins
+								<Tooltip
+									placement="right"
+									arrow
+									title={
+										<>
+											<h3 style={{lineHeight: "170%",margin: 0}}>
+												DisStreamBot plugins allow you customize the bots
+												functionality on your server. You can enable and
+												disable plugins with toggles in the corner of each
+												one. If you disable a plugin all settings will
+												remain saved but the bot will ignore them until the
+												plugin is re-enabled. You can see your active
+												plugins in the sidebar under the Discord Setting
+												tab.
+											</h3>
+										</>
+									}
+								>
+									<span
+										style={{
+											fontSize: "1rem",
+											position: "relative",
+											top: "-.25rem",
+											marginLeft: ".25rem",
+										}}
+									>
+										<InfoTwoToneIcon />
+									</span>
+								</Tooltip>
+							</h2>
 							<h3>
 								Add extra functionality to the bot in your server with plugins like
 								leveling, custom commands, and logging
@@ -103,14 +136,16 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 						</div>
 
 						<div className="plugin-list">
-							{plugins.filter(plugin => !plugin.comingSoon).map(plugin => (
-								<PluginCard
-									guild={guildId}
-									key={plugin.id}
-									{...plugin}
-									active={activePlugins[plugin.id]}
-								/>
-							))}
+							{plugins
+								.filter(plugin => !plugin.comingSoon)
+								.map(plugin => (
+									<PluginCard
+										guild={guildId}
+										key={plugin.id}
+										{...plugin}
+										active={activePlugins[plugin.id]}
+									/>
+								))}
 						</div>
 					</Route>
 					{(activePlugins["leveling"] || loading) && (
