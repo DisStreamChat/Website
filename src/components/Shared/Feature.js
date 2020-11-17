@@ -6,7 +6,7 @@ const Feature = memo(props => {
 		<>
 			<h1>{props.title}</h1>
 			{props.subtitle && <h2>{props.subtitle}</h2>}
-			<h3>{props.body}</h3>
+			<p>{props.body}</p>
 		</>,
 		<>
 			{props.images.map((image, idx) => (

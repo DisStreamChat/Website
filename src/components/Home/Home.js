@@ -90,13 +90,13 @@ const Home = () => {
 						images={[`${process.env.PUBLIC_URL}/discordmessage.png`]}
 						reversed
 					></Feature>
-					{/* <Feature
-					title="Integrate your super-secret exclusive discord chat channel"
-					body="Set up the discord bot to listen to any channels you want and integrate any chat going on in those chats into your chat
+					<Feature
+						title="Integrate your super-secret exclusive discord chat channel"
+						body="Set up the discord bot to listen to any channels you want and integrate any chat going on in those chats into your chat
 							client. At least now you can see your moderators talking about your messed up audio right from your own chat."
-                    images={[`${process.env.PUBLIC_URL}/discordmessage.png`]}
-                    reversed
-				></Feature> */}
+						images={[`${process.env.PUBLIC_URL}/discordmessage.png`]}
+						reversed
+					></Feature>
 				</div>
 			</div>
 			<img id="bottom-img" src={`${process.env.PUBLIC_URL}/wave_invert.svg`} alt="" />
