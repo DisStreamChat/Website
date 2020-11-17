@@ -9,6 +9,8 @@ import { DiscordContext } from "../../../contexts/DiscordContext";
 import PluginHome from "./Plugins/PluginHome";
 import StyledSelect from "../../../styled-components/StyledSelect";
 
+
+
 const DiscordPage = memo(({ history, match }) => {
 	const [displayGuild, setDisplayGuild] = useState();
 	const [refreshed, setRefreshed] = useState(false);
@@ -126,11 +128,12 @@ const DiscordPage = memo(({ history, match }) => {
 			<div className="settings-body">
 				{Object.keys(userDiscordInfo || {}).length ? (
 					<>
+						<div className="plugin-section-title" style={{paddingLeft: ".5rem"}}>Server</div>
 						<div className="discord-header">
 							<StyledSelect
 								value={displayGuild}
 								onChange={onGuildSelect}
-								placeholder="Select Guild"
+								placeholder="Select Server"
 								options={userDiscordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
 							/>
 						</div>
