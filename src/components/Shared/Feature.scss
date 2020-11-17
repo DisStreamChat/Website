@@ -42,6 +42,9 @@
 		height: auto;
 		box-shadow: 5px 5px 25px -5px #111;
 	}
+	img.small-image {
+		width: 300px;
+	}
 	&:nth-child(odd) .right {
 		text-align: right;
 	}
