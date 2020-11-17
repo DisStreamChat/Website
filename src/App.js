@@ -93,7 +93,7 @@ function App() {
 							}
 							await firebase.db
 								.collection("Streamers")
-								.doc(userId || discordUser?.uid || " ")
+								.doc(userId || discordUser?.uid || firebaseUserId || " ")
 								.collection("discord")
 								.doc("data")
 								.set(json);
