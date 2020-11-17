@@ -18,7 +18,7 @@ const Footer = () => {
 					<A href="https://github.com/DisStreamChat" newTab>
 						<GitHubIcon />
 					</A>
-					<A href="https://twitter.com/twitchDis" newTab>
+					<A href="https://twitter.com/DisStreamChat" newTab>
 						<TwitterIcon />
 					</A>
 				</section>
