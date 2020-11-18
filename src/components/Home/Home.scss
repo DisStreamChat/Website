@@ -1,21 +1,25 @@
 .header-area {
-	@media screen and (max-width: 700px) {
-		margin-bottom: 3rem;
+	@media screen and (max-width: 650px) {
+		margin-bottom: 1rem;
+	}
+
+	@media screen and (max-height: 600px) {
+		margin-bottom: 0rem;
 	}
 }
 
 .body-header {
 	margin-left: 1rem;
-    margin-right: 1rem;
+	margin-right: 1rem;
 	font-family: Montserrat;
 	font-weight: bold;
 	font-size: 38px;
 	line-height: 101%;
-	
+
 	text-align: center;
 	word-wrap: break-word;
 	color: #ffffff;
-	
+
 	@media screen and (max-width: 550px) {
 		font-size: 25px;
 	}
@@ -34,6 +38,9 @@
 
 	text-align: center;
 	color: #aaaaaa;
+	@media screen and (max-width: 750px) {
+		margin-bottom: 0;
+	}
 	@media screen and (max-width: 550px) {
 		font-size: 20px;
 	}
@@ -41,9 +48,6 @@
 
 .main-view {
 	margin-top: 5rem;
-	@media screen and (max-width: 550px) {
-		margin-top: -2rem;
-	}
 	display: flex;
 	align-items: center;
 	flex-direction: column;
@@ -55,10 +59,13 @@
 	width: 800px;
 	max-width: 100%;
 	display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+	justify-content: center;
+	flex-wrap: wrap;
+	@media screen and (max-width: 750px) {
+		margin-bottom: 2rem;
+	}
 	@media screen and (max-width: 350px) {
-		margin-top: -3rem;
+		// margin-top: -3rem;
 	}
 	a {
 		display: flex;
@@ -129,11 +136,9 @@
 	}
 }
 
-
-
-.drop-shadow{
+.drop-shadow {
 	box-shadow: none !important;
-	filter: drop-shadow(5px 5px 10px #111)
+	filter: drop-shadow(5px 5px 10px #111);
 }
 
 .on-top {

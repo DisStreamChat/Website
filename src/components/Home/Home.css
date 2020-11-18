@@ -1,0 +1,5 @@
+@media screen and (max-width: 650px) {
+	.main-view {
+		margin-top: min(1vh, 3rem) !important;
+	}
+}
