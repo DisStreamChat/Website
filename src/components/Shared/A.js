@@ -12,6 +12,7 @@ const A = props => {
 		target: props.newTab && "_blank",
 		rel: props.newTab && "noopener noreferrer",
 		disabled: props.disabled,
+		...props
 	};
 
 	const Element = props.local ? Link : Anchor;

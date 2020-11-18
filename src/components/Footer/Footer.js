@@ -15,10 +15,10 @@ const Footer = () => {
 				<section className="left">
 					<h3>The best Stream/Discord chat Integration</h3>
 					<h4>DisStreamChat is the easiest way to link your Discord with your Stream chat</h4>
-					<A href="https://github.com/DisStreamChat" newTab>
+					<A aria-label="Github" href="https://github.com/DisStreamChat" newTab>
 						<GitHubIcon />
 					</A>
-					<A href="https://twitter.com/DisStreamChat" newTab>
+					<A aria-label="Twitter" href="https://twitter.com/DisStreamChat" newTab>
 						<TwitterIcon />
 					</A>
 				</section>
