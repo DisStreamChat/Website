@@ -12,7 +12,7 @@ const Feature = memo(props => {
 		</>,
 		<>
 			{props.images.map((image, idx) => (
-				<LazyLoad offsetVertical={700} offsetTop={700}>
+				<LazyLoad debounce={false} offsetVertical={700} offsetTop={700}>
 					<img key={image} src={image} alt="" className={props.imageClassNames?.[idx]} />
 				</LazyLoad>
 			))}
