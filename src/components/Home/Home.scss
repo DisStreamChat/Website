@@ -1,5 +1,4 @@
 .header-area {
-	
 	@media screen and (max-width: 650px) {
 		margin-bottom: 1rem;
 	}
@@ -49,7 +48,9 @@
 
 .main-view {
 	margin-top: 5rem;
-	height: 45vh;
+	@media screen and (min-height: 850px) {
+		height: 45vh;
+	}
 	display: flex;
 	flex-direction: column;
 	align-items: center;
