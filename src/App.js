@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useContext } from "react";
+import { useEffect, useState, useRef, useContext, lazy, Suspense } from "react";
 import firebase from "./firebase";
 import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import Home from "./components/Home/Home";
@@ -24,11 +24,12 @@ import LeaderBoard from "./components/LeaderBoard/LeaderBoard";
 import { v4 as uuidv4 } from "uuid";
 import { AppContext } from "./contexts/Appcontext";
 import "./App.scss";
+// const Dashboard = lazy(() => import("./components/DashBoard/Dashboard"));
 
 function App() {
 	const [firebaseInit, setFirebaseInit] = useState(false);
-	const firebaseUser = firebase.auth.currentUser
-	const firebaseUserId = firebaseUser?.uid
+	const firebaseUser = firebase.auth.currentUser;
+	const firebaseUserId = firebaseUser?.uid;
 	const { userId, setUserId, dropDownOpen, setCurrentUser } = useContext(AppContext);
 
 	const setOTC = useRef(false);
@@ -71,7 +72,9 @@ function App() {
 				const code = codeArray.get("code");
 				if (!codeArray.has("discord")) {
 					try {
-						const response = await fetch("https://api.disstreamchat.com/token?code=" + code);
+						const response = await fetch(
+							"https://api.disstreamchat.com/token?code=" + code
+						);
 						const json = await response.json();
 						if (response.ok) {
 							await firebase.auth.signInWithCustomToken(json.token);
@@ -81,7 +84,11 @@ function App() {
 					try {
 						console.log(code);
 						const isSignedIn = !!firebase.auth.currentUser;
-						const response = await fetch(`${process.env.REACT_APP_API_URL}/discord/token?code=${code}&create=${!isSignedIn}`);
+						const response = await fetch(
+							`${
+								process.env.REACT_APP_API_URL
+							}/discord/token?code=${code}&create=${!isSignedIn}`
+						);
 						// const response = await fetch("http://localhost:3200/discord/token?code="+code)
 						if (!response.ok) {
 							console.log(await response.json());
@@ -89,7 +96,9 @@ function App() {
 							const json = await response.json();
 							let discordUser;
 							if (!isSignedIn) {
-								discordUser = (await firebase.auth.signInWithCustomToken(json.token))?.user;
+								discordUser = (
+									await firebase.auth.signInWithCustomToken(json.token)
+								)?.user;
 							}
 							await firebase.db
 								.collection("Streamers")
@@ -111,11 +120,13 @@ function App() {
 
 	useEffect(() => {
 		(async () => {
-			console.log(firebaseUser)
+			console.log(firebaseUser);
 			if (firebaseInit !== false && firebaseUserId) {
 				setUserId(firebaseUserId);
 				try {
-					const userData = (await firebase.db.collection("Streamers").doc(firebaseUserId).get()).data();
+					const userData = (
+						await firebase.db.collection("Streamers").doc(firebaseUserId).get()
+					).data();
 					console.log({ userData });
 					let profilePictureResponse;
 					if (!userData.twitchAuthenticated) {
@@ -123,7 +134,9 @@ function App() {
 							`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.discordId}&platform=discord`
 						);
 					} else {
-						profilePictureResponse = await fetch(`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`);
+						profilePictureResponse = await fetch(
+							`${process.env.REACT_APP_API_URL}/profilepicture?user=${userData?.TwitchName}`
+						);
 					}
 					const profilePicture = await profilePictureResponse.json();
 					firebase.db.collection("Streamers").doc(firebaseUserId).update({
@@ -141,21 +154,48 @@ function App() {
 			<QueryParamProvider ReactRouterRoute={Route}>
 				<div className="App">
 					<Header />
+
 					<main className={`main ${dropDownOpen && "open"}`}>
-						<Switch>
-							<Route exact path="/" component={Home} />
-							<Route path="/bot" component={Bot} />
-							<Route exact path="/apps" component={Apps} />
-							<Route path="/community" component={Community} />
-							<Route path="/about" component={About} />
-							<Route path="/members" component={Team} />
-							<Route path="/privacy" component={PrivacyPolicy} />
-							<Route path="/terms" component={Terms} />
-							<Route path="/apps/download" component={DownloadPage} />
-							<Route path="/leaderboard/:id" component={LeaderBoard} />
-							<ProtectedRoute path="/dashboard" component={Dashboard} />
-							<Redirect to="/" />
-						</Switch>
+						<Suspense
+							fallback={
+								<Loader
+									loaded={false}
+									lines={15}
+									length={0}
+									width={15}
+									radius={35}
+									corners={1}
+									rotate={0}
+									direction={1}
+									color={"#fff"}
+									speed={1}
+									trail={60}
+									shadow={true}
+									hwaccel={true}
+									className="spinner"
+									zIndex={2e9}
+									top="50%"
+									left="50%"
+									scale={3.0}
+									loadedClassName="loadedContent"
+								/>
+							}
+						>
+							<Switch>
+								<Route exact path="/" component={Home} />
+								<Route path="/bot" component={Bot} />
+								<Route exact path="/apps" component={Apps} />
+								<Route path="/community" component={Community} />
+								<Route path="/about" component={About} />
+								<Route path="/members" component={Team} />
+								<Route path="/privacy" component={PrivacyPolicy} />
+								<Route path="/terms" component={Terms} />
+								<Route path="/apps/download" component={DownloadPage} />
+								<Route path="/leaderboard/:id" component={LeaderBoard} />
+								<ProtectedRoute path="/dashboard" component={Dashboard} />
+								<Redirect to="/" />
+							</Switch>
+						</Suspense>
 					</main>
 					<Footer />
 				</div>
