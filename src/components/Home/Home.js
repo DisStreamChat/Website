@@ -52,9 +52,9 @@ const Home = () => {
 						body="You have the option to customize an abundance of different settings both within the app and on the website. Updating a
                 setting anywhere will apply them on the client immediately so you could change those secret settings off screen."
 						images={[
-							`${process.env.PUBLIC_URL}/appsettings.png`,
-							`${process.env.PUBLIC_URL}/settings.png`,
+							`${process.env.PUBLIC_URL}/merged2.png`,
 						]}
+						imageClassNames={["drop-shadow"]}
 						reversed
 					></Feature>
 					<Feature
@@ -68,11 +68,8 @@ const Home = () => {
 						body="DisStreamChat provides an easy to use searchbar that you can access through ctrl+f, not only does it allow you to search
                 for that amazing cat gif you just missed, it also allows you to use tags to search for things like follows, links,
                 usernames and plenty more."
-						images={[
-							`${process.env.PUBLIC_URL}/search2.png`,
-							`${process.env.PUBLIC_URL}/search1.png`,
-						]}
-						imageClassNames={["", "small-image"]}
+						images={[`${process.env.PUBLIC_URL}/merged1.png`]}
+						imageClassNames={["drop-shadow"]}
 						reversed
 					></Feature>
 					<Feature

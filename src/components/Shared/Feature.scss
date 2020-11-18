@@ -48,7 +48,7 @@
 	&:nth-child(odd) .right {
 		text-align: right;
 	}
-	@media screen and (max-width: 500px) {
+	@media screen and (max-width: 760px) {
 		flex-direction: column;
 		&:nth-child(odd) {
 			flex-direction: column-reverse;
@@ -74,7 +74,8 @@
 			}
 		}
 		#root .landing & img {
-			max-width: 150px !important;
+			// max-width: 150px !important;
+			margin-bottom: 1rem;
 		}
 	}
 }

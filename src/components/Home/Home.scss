@@ -131,7 +131,10 @@
 
 
 
-
+.drop-shadow{
+	box-shadow: none !important;
+	filter: drop-shadow(5px 5px 10px #111)
+}
 
 .on-top {
 	position: relative;
