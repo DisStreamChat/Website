@@ -7,7 +7,10 @@
 }
 
 .community{
-    width: 750px;
+	width: 750px;
+	.discord-button{
+		padding: .5rem 1rem;
+	}
 }
 
 #root .github-button{
