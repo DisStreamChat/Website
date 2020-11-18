@@ -1,10 +1,10 @@
 @media screen and (max-width: 700px) {
-	.discord-header, .plugin-section {
+	.discord-header,
+	.plugin-section {
 		.css-jtuip8-container {
 			width: 100% !important;
-			& *{
-
-				font-size: .75rem;
+			& * {
+				font-size: 0.75rem;
 			}
 		}
 	}
@@ -185,7 +185,7 @@
 		width: 100%;
 		font-size: 1rem;
 		// border: none;
-		&:disabled{
+		&:disabled {
 			background: lighten($color: #121212, $amount: 5);
 			color: #555;
 		}
@@ -704,26 +704,25 @@
 }
 
 @media screen and (max-width: 900px) {
-	// .main {
-	// 	padding-top: 100px;
-	// }
-
 	.setting-link {
 		text-align: center;
 	}
 
-	.settings-container .setting-options {
-		position: absolute;
-		flex-direction: row;
-		justify-content: space-around;
-		transition: 0.25s;
-		&:not(.dashboard-open) {
-			top: 150px;
+	.settings-container {
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		.setting-options {
+			flex-direction: row;
+			justify-content: space-around;
+			transition: 0.25s;
+			width: 90vw;
+			max-width: 90vw;
+			margin-bottom: 1rem;
+			background: #17181b;
+			z-index: 110;
+			// position: initial;
 		}
-		left: 50%;
-		width: 90vw;
-		max-width: 90vw;
-		transform: translateX(-50%);
 	}
 
 	.settings {
@@ -862,14 +861,14 @@
 }
 
 .plugin-section {
-	label{
+	label {
 		flex: 1 1 33%;
 		display: block;
 		width: max-content;
 		background: lighten($color: #121212aa, $amount: 2);
-		border-radius: .5rem;
-		padding: .25rem;
-		padding-right: .75rem;
+		border-radius: 0.5rem;
+		padding: 0.25rem;
+		padding-right: 0.75rem;
 	}
 	display: flex;
 	background: lighten($color: #121212, $amount: 10);
