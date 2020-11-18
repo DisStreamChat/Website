@@ -1,6 +1,8 @@
 import { memo } from "react";
 import "./Feature.scss";
 
+import LazyLoad from "react-lazy-load";
+
 const Feature = memo(props => {
 	const innerBody = [
 		<>
@@ -10,7 +12,9 @@ const Feature = memo(props => {
 		</>,
 		<>
 			{props.images.map((image, idx) => (
-				<img key={image} src={image} alt="" className={props.imageClassNames?.[idx]} />
+				<LazyLoad offsetVertical={700} offsetTop={700}>
+					<img key={image} src={image} alt="" className={props.imageClassNames?.[idx]} />
+				</LazyLoad>
 			))}
 		</>,
 	];
