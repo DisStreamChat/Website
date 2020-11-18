@@ -128,8 +128,8 @@ const Header = props => {
 				/>
 			</div>
 			<span className="header--left">
-				<Link to="/" className="logo">
-					<img src={`${process.env.PUBLIC_URL}/logo.png`} width="100" alt="" />
+				<Link to="/" className="logo" aria-label="disstreamchat logo">
+					<img alt="Home" src={`${process.env.PUBLIC_URL}/logo.png`} width="100" />
 				</Link>
 				<nav className={`nav-bar ${open && "open"}`}>
 					<Link to="/apps/download">Chat Manager</Link>
