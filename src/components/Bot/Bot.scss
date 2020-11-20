@@ -1,9 +1,62 @@
-.bot-page{
-    min-height: calc(100vh - var(--header-height))
+.bot-page {
+	min-height: calc(100vh - var(--header-height));
 }
 
-.invite{
-    padding: .5rem 1rem;
-    background: var(--disstreamchat-blue);
-    border-radius: .5rem;
+.hero {
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 50vh;
+	display: flex;
+	padding: 1rem 8rem;
+	justify-content: space-around;
+	& > * {
+		max-width: 45%;
+	}
+	p {
+		line-height: 170%;
+		font-weight: 500;
+		color: #aaa;
+	}
+}
+
+.hero-buttons {
+	justify-content: initial !important;
+	a {
+		margin-left: 0;
+	}
+}
+
+.hover {
+	animation: hover infinite ease-in-out 1s alternate;
+}
+
+.image {
+	position: relative;
+	&:before {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		transform: scale(1.5) translateY(8%);
+		content: "";
+
+		filter: grayscale(1);
+		background-image: url("https://im-share.herokuapp.com/uploads/images/photo-bded739a5b88-f566b7fffde9.png");
+		background-size: 100%;
+		background-repeat: no-repeat;
+	}
+}
+
+@keyframes hover {
+	from {
+		transform: translateY(-25px);
+	}
+	to {
+		transform: translateY(25px);
+	}
+}
+
+.invite {
+	padding: 0.5rem 1rem;
+	background: var(--disstreamchat-blue);
+	border-radius: 0.5rem;
 }

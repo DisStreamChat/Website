@@ -4,25 +4,31 @@ import Feature from "../Shared/Feature";
 
 const Bot = () => {
 	return (
-		<div className="landing">
-			<Feature
-				title="Use our discord bot to handle moderation, leveling users up and so much more."
-				body={
-					<>
-						<A className="invite" href="https://api.disstreamchat.com/invite" newTab>
-							Invite
-						</A>{" "}
-						our bot to unlock your server's full potential and allow people to level up,
-						moderate the chat, get info about users and so much more. Disclaimer: The
-						discord bot is a WIP and not every feature is publicly released yet.
-					</>
-				}
-				images={[
-					`${process.env.PUBLIC_URL}/invite.png`,
-					`${process.env.PUBLIC_URL}/rank.png`,
-				]}
-				imageClassNames={["on-top nudge-up see-through"]}
-			></Feature>
+		<div className="hero">
+			<div className="description">
+				<div className="text">
+					<h1>The best utility bot for Discord</h1>
+					<p>
+						Keep your members engaged and entertained with a top-notch leveling system.
+						Reward them with XP points and keep track of the most active members on your
+						customizable leaderboard.
+					</p>
+				</div>
+				<div className="buttons hero-buttons">
+					<A href="/dashboard/discord" local className="main-button dashboard-button">
+						Get Started
+					</A>
+					<A
+						href="https://api.disstreamchat.com/invite"
+						className="main-button dashboard-button"
+					>
+						Add to Discord
+					</A>
+				</div>
+			</div>
+			<div className="image">
+				<img className="hover" src="/bot-hero.gif" alt="" />
+			</div>
 		</div>
 	);
 };
