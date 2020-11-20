@@ -9,9 +9,7 @@ const Bot = () => {
 				<div className="text">
 					<h1>The best utility bot for Discord</h1>
 					<p>
-						Keep your members engaged and entertained with a top-notch leveling system.
-						Reward them with XP points and keep track of the most active members on your
-						customizable leaderboard.
+						Manage your server and keep members engaged with an auto moderator, a high quality leveling system, Versatile custom commands, a robust role management system, and much more!
 					</p>
 				</div>
 				<div className="buttons hero-buttons">
