@@ -14,7 +14,7 @@ export const DiscordContextProvider = props => {
 	const [dashboardOpen, setDashboardOpen] = useState(false);
 	const saveOnType = _.debounce(() => {
 		setDashboardOpen(true);
-	}, 100)
+	}, 500)
 
 	return (
 		<DiscordContext.Provider

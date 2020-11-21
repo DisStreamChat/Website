@@ -6,6 +6,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import InfoTwoToneIcon from "@material-ui/icons/InfoTwoTone";
 import StyledSelect from "../../../../styled-components/StyledSelect";
 import FancySwitch from "../../../../styled-components/FancySwitch";
+import { channelLabel, TransformObjectToSelectValue } from "../../../../utils/functions";
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 	const [loggingChannel, setLoggingChannel] = useState("");
@@ -58,9 +59,15 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				setActiveEvents(active || {});
 			} else {
 				try {
-					await firebase.db.collection("loggingChannel").doc(guildId || " ").update({});
+					await firebase.db
+						.collection("loggingChannel")
+						.doc(guildId || " ")
+						.update({});
 				} catch (err) {
-					await firebase.db.collection("loggingChannel").doc(guildId || " ").set({});
+					await firebase.db
+						.collection("loggingChannel")
+						.doc(guildId || " ")
+						.set({});
 				}
 			}
 		})();
@@ -99,28 +106,31 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 		[guildId, setDashboardOpen]
 	);
 
-	const handleEventToggle = useCallback(async (value, id) => {
-		setActiveEvents(prev => ({
-			...prev,
-			[id]: value,
-		}));
-		try {
-			await firebase.db
-				.collection("loggingChannel")
-				.doc(guildId)
-				.update({
-					[`activeEvents.${id}`]: value,
-				});
-		} catch (err) {
-			await firebase.db
-				.collection("loggingChannel")
-				.doc(guildId)
-				.set({
-					[`activeEvents.${id}`]: value,
-				});
-		}
-		setDashboardOpen(true);
-	}, [guildId, setDashboardOpen]);
+	const handleEventToggle = useCallback(
+		async (value, id) => {
+			setActiveEvents(prev => ({
+				...prev,
+				[id]: value,
+			}));
+			try {
+				await firebase.db
+					.collection("loggingChannel")
+					.doc(guildId)
+					.update({
+						[`activeEvents.${id}`]: value,
+					});
+			} catch (err) {
+				await firebase.db
+					.collection("loggingChannel")
+					.doc(guildId)
+					.set({
+						[`activeEvents.${id}`]: value,
+					});
+			}
+			setDashboardOpen(true);
+		},
+		[guildId, setDashboardOpen]
+	);
 
 	const handleAnnoucmentSelect = useCallback(
 		async e => {
@@ -163,13 +173,8 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 						options={userConnectedGuildInfo?.channels
 							?.sort((a, b) => a.parent.localeCompare(b.parent))
 							?.map(channel => ({
-								value: channel.id,
-								label: (
-									<>
-										<span>{channel.name}</span>
-										<span className="channel-category">{channel.parent}</span>
-									</>
-								),
+								value: TransformObjectToSelectValue(channel),
+								label: channelLabel(channel),
 							}))}
 					/>
 				</div>
@@ -212,7 +217,6 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 												),
 											}))}
 									/>
-									
 								</div>
 								<h4 className="plugin-section-title" style={{ width: "100%" }}>
 									Events

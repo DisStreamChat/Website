@@ -12,6 +12,7 @@ import { RoleContextProvider } from "../../../../contexts/RoleContext";
 import Roles from "./Roles/Roles";
 import InfoTwoToneIcon from "@material-ui/icons/InfoTwoTone";
 import { Tooltip } from "@material-ui/core";
+import WelcomeMessage from "./WelcomeMessage"
 
 const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 	const [prefix, setPrefix] = useState("!");
@@ -170,6 +171,15 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 							<CommandContextProvider>
 								<RoleContextProvider>
 									<Roles guild={connectedGuild} />
+								</RoleContextProvider>
+							</CommandContextProvider>
+						</Route>
+					)}
+					{(activePlugins["welcome-message"] || loading) && (
+						<Route path={`${match.url}/welcome-message`}>
+							<CommandContextProvider>
+								<RoleContextProvider>
+									<WelcomeMessage guild={connectedGuild} />
 								</RoleContextProvider>
 							</CommandContextProvider>
 						</Route>
