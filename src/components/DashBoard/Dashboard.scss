@@ -72,6 +72,7 @@
 		justify-content: space-between;
 		span:first-child {
 			display: flex;
+			width: 100%;
 		}
 		span button {
 			padding: 0.75rem 1.25rem;
@@ -968,6 +969,10 @@ textarea.message {
 	color: white;
 	border-radius: 0.5rem;
 	padding: 0.5rem;
+}
+
+.welcome-message textarea{
+	min-height: 150px;
 }
 
 .variables {

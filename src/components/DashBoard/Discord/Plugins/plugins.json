@@ -27,11 +27,11 @@
 		"description": "Let the bot manage members roles in different ways like reaction roles"
 	},
 	{
-		"id": "welcome",
+		"id": "welcome-message",
 		"title": "Welcome",
 		"image": "wave.svg",
 		"description": "Send a welcome message to new users",
-		"comingSoon": true
+		"comingSoon": false
 	},
 	{
 		"id": "streamislive",
