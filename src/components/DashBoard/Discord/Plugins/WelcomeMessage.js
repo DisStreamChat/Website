@@ -13,7 +13,11 @@ import Roles from "./Roles/Roles";
 import InfoTwoToneIcon from "@material-ui/icons/InfoTwoTone";
 import { Tooltip } from "@material-ui/core";
 import StyledSelect from "../../../../styled-components/StyledSelect";
-import { channelLabel, TransformObjectToSelectValue } from "../../../../utils/functions";
+import {
+	channelLabel,
+	parseSelectValue,
+	TransformObjectToSelectValue,
+} from "../../../../utils/functions";
 
 const WelcomeMessage = ({ guild }) => {
 	const { saveOnType, setDashboardOpen } = useContext(DiscordContext);
@@ -29,12 +33,14 @@ const WelcomeMessage = ({ guild }) => {
 			if (DiscordSettings) {
 				const WelcomeMessageData = DiscordSettings.welcomeMessage;
 				const channel = guild?.channels?.find(
-					channel => channel.id === WelcomeMessageData.channel
+					channel => channel?.id === WelcomeMessageData.channel
 				);
-				setWelcomeChannel({
-					value: TransformObjectToSelectValue(channel),
-					label: channelLabel(channel),
-				});
+				if (channel) {
+					setWelcomeChannel({
+						value: TransformObjectToSelectValue(channel),
+						label: channelLabel(channel),
+					});
+				}
 				setWelcomeMessage(WelcomeMessageData.message);
 				console.log(WelcomeMessageData);
 			}
@@ -47,18 +53,30 @@ const WelcomeMessage = ({ guild }) => {
 			await firebase.db
 				.collection("DiscordSettings")
 				.doc(guildId)
-				.update({ welcomeMessage: { message: e.target.value } });
+				.update({ welcomeMessage: { message: e.target.value } }, { merge: true });
 		} catch (err) {
 			await firebase.db
 				.collection("DiscordSettings")
 				.doc(guildId)
-				.set({ welcomeMessage: { message: e.target.value } });
+				.set({ welcomeMessage: { message: e.target.value } }, { merge: true });
 		}
 		saveOnType();
 	};
 
-	const handleChannelChange = e => {
+	const handleChannelChange = async e => {
 		setWelcomeChannel(e);
+		const channel = parseSelectValue(e);
+		try {
+			await firebase.db
+				.collection("DiscordSettings")
+				.doc(guildId)
+				.update({ welcomeMessage: { channel: channel } }, { merge: true });
+		} catch (err) {
+			await firebase.db
+				.collection("DiscordSettings")
+				.doc(guildId)
+				.set({ welcomeMessage: { channel: channel } }, { merge: true });
+		}
 		setDashboardOpen(true);
 	};
 
