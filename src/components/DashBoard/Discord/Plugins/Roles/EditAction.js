@@ -36,7 +36,7 @@ const EditAction = ({ initial, close, guild, message, update, join }) => {
 		})();
 	}, [initial, guild]);
 
-	const submit = () => {
+	const submit = async () => {
 		const roleIDs = action.role.map(role => JSON.parse(role.value.split("=")[1]).id);
 		console.log(roleIDs);
 		const actionObj = {
@@ -47,10 +47,12 @@ const EditAction = ({ initial, close, guild, message, update, join }) => {
 		if (update) {
 			update(actionObj, action.emoji);
 		} else {
-			firebase.db
-				.collection("reactions")
-				.doc(guild.id)
-				.update({ [`${message}.actions.${action.emoji}`]: actionObj });
+			const docRef = firebase.db.collection("reactions").doc(guild.id);
+			try {
+				await docRef.update({ [`${message}.actions.${action.emoji}`]: actionObj });
+			} catch (err) {
+				await docRef.set({ [`${message}.actions.${action.emoji}`]: actionObj });
+			}
 		}
 		return close?.();
 	};
@@ -140,8 +142,8 @@ const EditAction = ({ initial, close, guild, message, update, join }) => {
 						value={
 							action?.type
 								? {
-									value: action?.type,
-									label: REACTION_ROLE_ACTION_TYPES[action?.type],
+										value: action?.type,
+										label: REACTION_ROLE_ACTION_TYPES[action?.type],
 								  }
 								: ""
 						}

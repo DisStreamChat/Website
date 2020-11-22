@@ -29,10 +29,14 @@ const ActionItem = memo(
 			if (deleteFunc) {
 				deleteFunc();
 			} else {
-				await firebase.db
-					.collection("reactions")
-					.doc(guild.id)
-					.update({ [`${message}.actions.${emoji}`]: firebase.delete() });
+				const docRef = firebase.db.collection("reactions").doc(guild.id);
+				try {
+					await docRef.update({ [`${message}.actions.${emoji}`]: firebase.delete() });
+				} catch (err) {
+					docRef
+						.set({ [`${message}.actions.${emoji}`]: firebase.delete() })
+						.catch(err => console.log("error"));
+				}
 			}
 		};
 

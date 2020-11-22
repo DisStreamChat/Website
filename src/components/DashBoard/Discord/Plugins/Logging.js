@@ -58,16 +58,11 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				const active = data.activeEvents;
 				setActiveEvents(active || {});
 			} else {
+				const docRef = firebase.db.collection("loggingChannel").doc(guildId || " ");
 				try {
-					await firebase.db
-						.collection("loggingChannel")
-						.doc(guildId || " ")
-						.update({});
+					await docRef.update({});
 				} catch (err) {
-					await firebase.db
-						.collection("loggingChannel")
-						.doc(guildId || " ")
-						.set({});
+					await docRef.set({});
 				}
 			}
 		})();
@@ -86,20 +81,15 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				...prev,
 				[category]: e,
 			}));
+			const docRef = firebase.db.collection("loggingChannel").doc(guildId);
 			try {
-				await firebase.db
-					.collection("loggingChannel")
-					.doc(guildId)
-					.update({
-						[`channelOverrides.${category}`]: e?.value || false,
-					});
+				await docRef.update({
+					[`channelOverrides.${category}`]: e?.value || false,
+				});
 			} catch (err) {
-				await firebase.db
-					.collection("loggingChannel")
-					.doc(guildId)
-					.set({
-						[`channelOverrides.${category}`]: e?.value || false,
-					});
+				await docRef.set({
+					[`channelOverrides.${category}`]: e?.value || false,
+				});
 			}
 			setDashboardOpen(true);
 		},
@@ -112,20 +102,15 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 				...prev,
 				[id]: value,
 			}));
+			const docRef = firebase.db.collection("loggingChannel").doc(guildId);
 			try {
-				await firebase.db
-					.collection("loggingChannel")
-					.doc(guildId)
-					.update({
-						[`activeEvents.${id}`]: value,
-					});
+				await docRef.update({
+					[`activeEvents.${id}`]: value,
+				});
 			} catch (err) {
-				await firebase.db
-					.collection("loggingChannel")
-					.doc(guildId)
-					.set({
-						[`activeEvents.${id}`]: value,
-					});
+				await docRef.set({
+					[`activeEvents.${id}`]: value,
+				});
 			}
 			setDashboardOpen(true);
 		},

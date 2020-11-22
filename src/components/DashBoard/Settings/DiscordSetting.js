@@ -21,11 +21,22 @@ const DiscordSetting = props => {
 
 	useEffect(() => {
 		(async () => {
-			const discordData = (await firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").get()).data();
+			const discordData = (
+				await firebase.db
+					.collection("Streamers")
+					.doc(id)
+					.collection("discord")
+					.doc("data")
+					.get()
+			).data();
 			const guildId = discordData.connectedGuild;
 			const guild = discordData?.guilds?.find?.(guild => guild.id === guildId);
-			const response = await fetch(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
-			const memberResponse = await fetch(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
+			const response = await fetch(
+				`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId
+			);
+			const memberResponse = await fetch(
+				`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId
+			);
 			const json = await response.json();
 			const memberJson = await memberResponse.json();
 			const roles = json.roles;
@@ -36,7 +47,9 @@ const DiscordSetting = props => {
 				roles,
 				channels,
 				isMember: memberJson?.result,
-				connectedChannels: channels?.filter(channel => userData.liveChatId?.includes(channel.id)),
+				connectedChannels: channels?.filter(channel =>
+					userData.liveChatId?.includes(channel.id)
+				),
 			});
 		})();
 	}, [id]);
@@ -44,8 +57,12 @@ const DiscordSetting = props => {
 	const onGuildSelect = async ({ value, label }) => {
 		const selectedGuild = userDiscordInfo?.guilds?.find(guild => guild.name === value);
 		const guildId = selectedGuild.id;
-		const response = await fetch(`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId);
-		const memberResponse = await fetch(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId);
+		const response = await fetch(
+			`${process.env.REACT_APP_API_URL}/getchannels?new=true&guild=` + guildId
+		);
+		const memberResponse = await fetch(
+			`${process.env.REACT_APP_API_URL}/ismember?guild=` + guildId
+		);
 		const json = await response.json();
 		const memberJson = await memberResponse.json();
 		const roles = json.roles;
@@ -56,16 +73,31 @@ const DiscordSetting = props => {
 			roles,
 			channels,
 			isMember: memberJson?.result,
-			connectedChannels: channels?.filter(channel => userData.liveChatId?.includes(channel.id)),
+			connectedChannels: channels?.filter(channel =>
+				userData.liveChatId?.includes(channel.id)
+			),
 		});
-		await firebase.db.collection("Streamers").doc(id).collection("discord").doc("data").update({ connectedGuild: guildId });
+		const docRef = firebase.db
+			.collection("Streamers")
+			.doc(id)
+			.collection("discord")
+			.doc("data");
+		try {
+			await docRef.update({ connectedGuild: guildId });
+		} catch (err) {
+			await docRef.set({ connectedGuild: guildId });
+		}
 	};
 
 	const AvailableServers = useAsyncMemo(async () => {
-		const allServers = userDiscordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD"));
+		const allServers = userDiscordInfo?.guilds?.filter(guild =>
+			guild.permissions.includes("MANAGE_GUILD")
+		);
 		const results = await Promise.all(
 			allServers?.map(async guild => {
-				const memberResponse = await fetch(`${process.env.REACT_APP_API_URL}/ismember?guild=` + guild.id);
+				const memberResponse = await fetch(
+					`${process.env.REACT_APP_API_URL}/ismember?guild=` + guild.id
+				);
 				const memberJson = await memberResponse.json();
 				return memberJson?.result;
 			}) || []
@@ -111,7 +143,9 @@ const DiscordSetting = props => {
 		<>
 			<span className="color-header flex" onClick={() => props.onClick(props.name)}>
 				<span>
-					<KeyboardArrowDownIcon className={`${props.open ? "open" : "closed"} mr-quarter`} />
+					<KeyboardArrowDownIcon
+						className={`${props.open ? "open" : "closed"} mr-quarter`}
+					/>
 					<h3>{"Disord Connection"}</h3>
 				</span>
 			</span>
@@ -140,7 +174,9 @@ const DiscordSetting = props => {
 											label: (
 												<>
 													<span>{channel.name}</span>
-													<span className="channel-category">{channel.parent}</span>
+													<span className="channel-category">
+														{channel.parent}
+													</span>
 												</>
 											),
 										}))}
@@ -151,7 +187,9 @@ const DiscordSetting = props => {
 											label: (
 												<>
 													<span>{channel.name}</span>
-													<span className="channel-category">{channel.parent}</span>
+													<span className="channel-category">
+														{channel.parent}
+													</span>
 												</>
 											),
 										}))}

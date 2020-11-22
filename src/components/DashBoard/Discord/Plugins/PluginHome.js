@@ -12,7 +12,7 @@ import { RoleContextProvider } from "../../../../contexts/RoleContext";
 import Roles from "./Roles/Roles";
 import InfoTwoToneIcon from "@material-ui/icons/InfoTwoTone";
 import { Tooltip } from "@material-ui/core";
-import WelcomeMessage from "./WelcomeMessage"
+import WelcomeMessage from "./WelcomeMessage";
 
 const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 	const [prefix, setPrefix] = useState("!");
@@ -49,21 +49,16 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 		async e => {
 			const value = e?.target?.value || "!";
 			setPrefix(value);
+			const docRef = firebase.db.collection("DiscordSettings").doc(connectedGuildId || " ");
 			try {
-				await firebase.db
-					.collection("DiscordSettings")
-					.doc(connectedGuildId || " ")
-					.update({
-						prefix: value,
-					});
+				await docRef.update({
+					prefix: value,
+				});
 			} catch (err) {
-				await firebase.db
-					.collection("DiscordSettings")
-					.doc(connectedGuildId || " ")
-					.set({
-						activePlugins: {},
-						prefix: value,
-					});
+				await docRef.set({
+					activePlugins: {},
+					prefix: value,
+				});
 			}
 			saveOnType();
 		},
@@ -105,7 +100,7 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 									arrow
 									title={
 										<>
-											<h3 style={{lineHeight: "170%",margin: 0}}>
+											<h3 style={{ lineHeight: "170%", margin: 0 }}>
 												DisStreamBot plugins allow you customize the bots
 												functionality on your server. You can enable and
 												disable plugins with toggles in the corner of each

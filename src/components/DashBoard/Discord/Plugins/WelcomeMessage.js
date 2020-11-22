@@ -49,16 +49,11 @@ const WelcomeMessage = ({ guild }) => {
 
 	const handleMessageChange = async e => {
 		setWelcomeMessage(e.target.value);
+		const docRef = firebase.db.collection("DiscordSettings").doc(guildId);
 		try {
-			await firebase.db
-				.collection("DiscordSettings")
-				.doc(guildId)
-				.update({ welcomeMessage: { message: e.target.value } }, { merge: true });
+			await docRef.update({ welcomeMessage: { message: e.target.value } }, { merge: true });
 		} catch (err) {
-			await firebase.db
-				.collection("DiscordSettings")
-				.doc(guildId)
-				.set({ welcomeMessage: { message: e.target.value } }, { merge: true });
+			await docRef.set({ welcomeMessage: { message: e.target.value } }, { merge: true });
 		}
 		saveOnType();
 	};
@@ -66,16 +61,11 @@ const WelcomeMessage = ({ guild }) => {
 	const handleChannelChange = async e => {
 		setWelcomeChannel(e);
 		const channel = parseSelectValue(e);
+		const docRef = firebase.db.collection("DiscordSettings").doc(guildId);
 		try {
-			await firebase.db
-				.collection("DiscordSettings")
-				.doc(guildId)
-				.update({ welcomeMessage: { channel: channel } }, { merge: true });
+			await docRef.update({ welcomeMessage: { channel: channel } }, { merge: true });
 		} catch (err) {
-			await firebase.db
-				.collection("DiscordSettings")
-				.doc(guildId)
-				.set({ welcomeMessage: { channel: channel } }, { merge: true });
+			await docRef.set({ welcomeMessage: { channel: channel } }, { merge: true });
 		}
 		setDashboardOpen(true);
 	};

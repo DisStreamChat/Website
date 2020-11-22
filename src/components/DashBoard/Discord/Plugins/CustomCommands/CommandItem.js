@@ -43,9 +43,17 @@ const CommandItem = ({
 			return copy;
 		});
 		const commandRef = await firebase.db.collection("customCommands").doc(guildId);
-		commandRef.update({
-			[name]: firebase.app.firestore.FieldValue.delete(),
-		});
+		try {
+			await commandRef.update({
+				[name]: firebase.app.firestore.FieldValue.delete(),
+			});
+		} catch (err) {
+			commandRef
+				.set({
+					[name]: firebase.app.firestore.FieldValue.delete(),
+				})
+				.catch(err => console.log("error"));
+		}
 	}, [guildId, name, setCommands]);
 
 	useEffect(() => {

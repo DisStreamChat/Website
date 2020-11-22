@@ -141,8 +141,11 @@ const CreateManager = ({ guild: userConnectedGuildInfo }) => {
 
 							const update = { [json.messageId]: manager };
 							console.log(update);
-
-							commandRef.update(update);
+							try {
+								await commandRef.update(update);
+							} catch (err) {
+								await commandRef.set(update);
+							}
 
 							setup();
 						} catch (err) {

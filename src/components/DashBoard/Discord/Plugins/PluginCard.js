@@ -20,20 +20,16 @@ const PluginCard = memo(({ guild: guildId, id, active, ...props }) => {
 
 		setActivePlugins(prev => {
 			const newPlugs = { ...prev, [id]: checked };
-			firebase.db
-				.collection("DiscordSettings")
-				.doc(guildId || " ")
+			const docRef = firebase.db.collection("DiscordSettings").doc(guildId || " ");
+			docRef
 				.update({
 					activePlugins: newPlugs,
 				})
 				.then(() => setDashboardOpen(true))
 				.catch(err => {
-					firebase.db
-						.collection("DiscordSettings")
-						.doc(guildId || " ")
-						.set({
-							activePlugins: newPlugs,
-						});
+					docRef.set({
+						activePlugins: newPlugs,
+					});
 				});
 			return newPlugs;
 		});
@@ -42,7 +38,13 @@ const PluginCard = memo(({ guild: guildId, id, active, ...props }) => {
 	return (
 		<div className={`plugin-card ${props.comingSoon ? "coming-soon" : ""}`}>
 			<span className="plugin-switch">
-				<BlueSwitch checked={enabled} onChange={handleChange} color="primary" name={id} inputProps={{ "aria-label": "primary checkbox" }} />
+				<BlueSwitch
+					checked={enabled}
+					onChange={handleChange}
+					color="primary"
+					name={id}
+					inputProps={{ "aria-label": "primary checkbox" }}
+				/>
 			</span>
 			<A className="plugin-card-a" href={active ? `${props.match.url}/${id}` : "#"} local>
 				<div className="image">
