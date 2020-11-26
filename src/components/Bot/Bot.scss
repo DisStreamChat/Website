@@ -5,10 +5,11 @@
 .hero {
 	box-sizing: border-box;
 	width: 100%;
-	min-height: 50vh;
+	min-height: 60vh;
 	display: flex;
 	padding: 1rem 8rem;
 	justify-content: space-around;
+	margin-top: 10rem;
 	& > * {
 		max-width: 45%;
 	}
@@ -37,7 +38,7 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		transform: scale(1.5) translateY(8%);
+		transform: scale(1.5) translateY(9%);
 		content: "";
 
 		filter: grayscale(1);

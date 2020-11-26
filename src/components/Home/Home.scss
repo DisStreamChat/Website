@@ -126,9 +126,15 @@
 }
 
 .landing {
+	&#bot{
+		img{
+			transform: scale(1.5);
+		}
+	}
 	// outline: solid;
 	width: 65%;
-	min-height: 2000px;
+	// min-height: 2000px;
+	padding-bottom: 2rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
