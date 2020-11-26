@@ -68,7 +68,7 @@ const LeaderBoard = ({ history }) => {
 					<img src={guildInfo.iconURL} alt="" />
 					<h1>{guildInfo.name}</h1>
 				</div>
-				<span className="search-container">
+				{/* <span className="search-container">
 					<input
 						value={search}
 						onChange={e => setSearch(e.target.value)}
@@ -79,7 +79,7 @@ const LeaderBoard = ({ history }) => {
 						className="settings--searchbox"
 					/>
 					<ClearRoundedIcon className="clear-button" onClick={() => {}} />
-				</span>
+				</span> */}
 			</div>
 			{!fullLoading && (
 				<div className="leaderboard-body">
