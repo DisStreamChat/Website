@@ -18,7 +18,7 @@ const LeaderBoardCard = ({ place, level, xp, name, avatar, guild, ...props }) =>
 
 	const errorHandler = async e => {
 		e.target.src =
-			"https://im-share.herokuapp.com/uploads/images/photo-1af6bdb376e6-3022c35bb0d4.png";
+			"https://support.discord.com/hc/user_images/l12c7vKVRCd-XLIdDkLUDg.png";
 	};
 
 	return (
