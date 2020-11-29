@@ -98,9 +98,9 @@ const CustomCommands = ({ location, guild: userConnectedGuildInfo }) => {
 					Your Commands<span> — {commands.length}</span>
 				</h4>
 				{commands
-					?.sort((a, b) => a[0].localeCompare(b[0]))
-					?.filter((a, b) => a[1].type !== "role")
-					?.map(([key, value]) => (
+					?.sort?.((a, b) => a[0].localeCompare(b[0]))
+					?.filter?.((a, b) => a[1].type !== "role")
+					?.map?.(([key, value]) => (
 						<CommandItem
 							guild={userConnectedGuildInfo}
 							setCommands={setCommands}
