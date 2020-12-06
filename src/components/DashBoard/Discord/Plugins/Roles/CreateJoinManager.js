@@ -55,7 +55,11 @@ const CreateJoinManager = ({ setCreatingCommand, guild: userConnectedGuildInfo }
 						manager.actions["user-join"] = {
 							role: state.manager.actions["user-join"].map(parseSelectValue),
 						};
-						commandRef.update({ "member-join": manager });
+						try {
+							await commandRef.update({ "member-join": manager });
+						} catch (err) {
+							await commandRef.set({ "member-join": manager });
+						}
 
 						setup();
 					}}
