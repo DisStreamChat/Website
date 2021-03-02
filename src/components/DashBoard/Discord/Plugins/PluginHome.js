@@ -28,9 +28,9 @@ const PluginHome = ({ match, guildId, connectedGuild, blank }) => {
 				.doc(connectedGuild?.id || " ")
 				.get();
 			const data = guild.data();
-			if (data) {
+			if (data.prefix && data.activePlugins) {
 				setPrefix(data.prefix || "!");
-				setActivePlugins(data.activePlugins);
+				setActivePlugins(data.activePlugins || {});
 			} else {
 				await firebase.db
 					.collection("DiscordSettings")
