@@ -117,6 +117,8 @@ const DiscordPage = memo(({ history, match }) => {
 		[guilds, guildId, match.url, history]
 	);
 
+	console.log(userDiscordInfo)
+
 	return (
 		<div>
 			<h1>Discord Settings</h1>
@@ -135,7 +137,7 @@ const DiscordPage = memo(({ history, match }) => {
 								value={displayGuild}
 								onChange={onGuildSelect}
 								placeholder="Select Server"
-								options={userDiscordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
+								options={userDiscordInfo.id === "193826355266191372" ?  userDiscordInfo?.guilds?.map(guildOption)  :  userDiscordInfo?.guilds?.filter(guild => guild.permissions.includes("MANAGE_GUILD")).map(guildOption)}
 							/>
 						</div>
 						<div className="discord-body">

@@ -112,7 +112,7 @@ const DiscordSetting = props => {
 			<span className="color-header flex" onClick={() => props.onClick(props.name)}>
 				<span>
 					<KeyboardArrowDownIcon className={`${props.open ? "open" : "closed"} mr-quarter`} />
-					<h3>{"Disord Connection"}</h3>
+					<h3>{"Discord Connection"}</h3>
 				</span>
 			</span>
 			<AnimateHeight duration={250} height={!props.open ? 0 : 500}>
