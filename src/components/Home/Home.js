@@ -27,7 +27,7 @@ const Home = () => {
 						See Features
 					</A>
 					<A
-						href="https://api.disstreamchat.com/invite"
+						href="https://invite.disstreamchat.com"
 						className="main-button dashboard-button"
 					>
 						Add to Discord
