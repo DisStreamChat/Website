@@ -28,6 +28,6 @@ const FancySwitch = withStyles({
 			opacity: "1 !important",
 		},
 	},
-})(props => <Switch color="primary" {...props}/>);
+})(Switch);
 
 export default FancySwitch

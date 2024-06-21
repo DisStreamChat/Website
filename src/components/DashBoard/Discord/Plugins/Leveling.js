@@ -4,38 +4,25 @@ import { DiscordContext } from "../../../../contexts/DiscordContext";
 import { Link } from "react-router-dom";
 import StyledSelect from "../../../../styled-components/StyledSelect";
 import { Typography } from "@material-ui/core";
-import PrettoSlider from "../../../../styled-components/PrettoSlider";
-import FancySwitch from "../../../../styled-components/FancySwitch";
-import {
-	parseSelectValue,
-	TransformObjectToSelectValue,
-	channelLabel,
-} from "../../../../utils/functions";
-import RoleItem from "../../../../styled-components/RoleItem";
+import PrettoSlider from "../../../../styled-components/PrettoSlider"
 
-const marks = [...Array(7)].map((item, index) => ({ value: index / 2, label: `x${index / 2}` }));
+const marks = [...Array(7)].map((item, index) => ({ value: (index / 2), label: `x${(index / 2)}` }));
 
 const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
-	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState(false);
+	const [levelUpAnnouncement, setLevelUpAnnouncement] = useState();
 	const [announcementChannel, setAnnouncementChannel] = useState(false);
-	const [noXpRoles, setNoXpRoles] = useState([]);
-	const [noXpChannels, setNoXpChannels] = useState([]);
-	const [generalScaling, setGeneralScaling] = useState(1);
-	const [levelUpMessage, setLevelUpMessage] = useState(
-		"Congrats {player}, you leveled up to level {level}!"
-	);
-	const { setDashboardOpen, saveOnType } = useContext(DiscordContext);
+	const [levelUpMessage, setLevelUpMessage] = useState("Congrats {player}, you leveled up to level {level}!");
+	const {  setDashboardOpen, saveOnType } = useContext(DiscordContext);
 	const guildId = userConnectedGuildInfo?.id;
 
 	const handleTypeSelect = useCallback(
 		async e => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
-			let value = e.target.checked ? 3 : 1;
-			setLevelUpAnnouncement(e.target.checked);
+			setLevelUpAnnouncement(e);
 			try {
-				await guildLevelRef.update({ type: value });
+				await guildLevelRef.update({ type: e.value });
 			} catch (err) {
-				await guildLevelRef.set({ type: value });
+				await guildLevelRef.set({ type: e.value });
 			}
 			setDashboardOpen(true);
 		},
@@ -61,12 +48,10 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 		async e => {
 			const guildLevelRef = firebase.db.collection("Leveling").doc(guildId);
 			setAnnouncementChannel(e);
-			const notifications = parseSelectValue(e);
-			console.log(notifications);
 			try {
-				await guildLevelRef.update({ notifications });
+				guildLevelRef.update({ notifications: e.value });
 			} catch (err) {
-				await guildLevelRef.set({ notifications });
+				guildLevelRef.set({ notifications: e.value });
 			}
 			setDashboardOpen(true);
 		},
@@ -75,104 +60,35 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 
 	useEffect(() => {
 		(async () => {
-			try {
-				const guildRef = await firebase.db.collection("Leveling").doc(guildId || " ");
-				const guild = await guildRef.get();
-				const settings = await guildRef.collection("settings").get();
-				const data = guild.data();
-				const settingsData = settings.docs
-					.map(doc => ({ id: doc.id, ...doc.data() }))
-					.reduce((acc, cur) => ({ [cur.id]: cur, ...acc }), {});
-				if (settingsData) {
-					setGeneralScaling(settingsData.scaling.general || 1);
-					setNoXpRoles(
-						settingsData.bannedItems?.roles
-							?.map(id => userConnectedGuildInfo.roles.find(role => role.id === id))
-							?.map(role => ({
-								value: TransformObjectToSelectValue(role),
-								label: <RoleItem {...role}>{role.name}</RoleItem>,
-							})) || []
-					);
-					setNoXpChannels(
-						settingsData.bannedItems?.channels
-							?.map(id =>
-								userConnectedGuildInfo.channels.find(channel => channel.id === id)
-							)
-							.map(channel => ({
-								value: TransformObjectToSelectValue(channel),
-								label: channelLabel(channel),
-							})) || []
-					);
+			const guild = await firebase.db
+				.collection("Leveling")
+				.doc(guildId || " ")
+				.get();
+			const data = guild.data();
+			if (data) {
+				const id = data.notifications;
+				if (id) {
+					const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
+					const response = await fetch(apiUrl);
+					const channel = await response.json();
+					setAnnouncementChannel({
+						value: id,
+						label: (
+							<>
+								<span>{channel.name}</span>
+								<span className="channel-category">{channel.parent}</span>
+							</>
+						),
+					});
+					setLevelUpAnnouncement({
+						value: data.type,
+						label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
+					});
+					setLevelUpMessage(data.message);
 				}
-				if (data) {
-					const id = data.notifications;
-					if (id) {
-						const apiUrl = `${process.env.REACT_APP_API_URL}/resolvechannel?guild=${guildId}&channel=${id}`;
-						const response = await fetch(apiUrl);
-						const channel = await response.json();
-						setAnnouncementChannel({
-							value: id,
-							label: channelLabel(channel),
-						});
-						setLevelUpAnnouncement({
-							value: data.type,
-							label: ["Disabled", "Current Channel", "Custom Channel"][data.type - 1],
-						});
-						setLevelUpMessage(data.message);
-					}
-				}
-			} catch (err) {
-				console.log(err.message);
 			}
 		})();
 	}, [location, guildId]);
-
-	const handleGeneralScaling = async (e, value) => {
-		const guildLevelRef = firebase.db
-			.collection("Leveling")
-			.doc(guildId)
-			.collection("settings")
-			.doc("scaling");
-		setGeneralScaling(value);
-		try {
-			await guildLevelRef.update({ general: value });
-		} catch (err) {
-			await guildLevelRef.set({ general: value });
-		}
-		setDashboardOpen(true);
-	};
-
-	const handleNoXpRoleSelect = async e => {
-		const guildLevelRef = firebase.db
-			.collection("Leveling")
-			.doc(guildId)
-			.collection("settings")
-			.doc("bannedItems");
-		setNoXpRoles(e);
-		const value = parseSelectValue(e);
-		try {
-			await guildLevelRef.update({ roles: value });
-		} catch (err) {
-			await guildLevelRef.set({ roles: value });
-		}
-		setDashboardOpen(true);
-	};
-
-	const handleNoXpChannelSelect = async e => {
-		const guildLevelRef = firebase.db
-			.collection("Leveling")
-			.doc(guildId)
-			.collection("settings")
-			.doc("bannedItems");
-		setNoXpChannels(e);
-		const value = parseSelectValue(e);
-		try {
-			await guildLevelRef.update({ channels: value });
-		} catch (err) {
-			await guildLevelRef.set({ channels: value });
-		}
-		setDashboardOpen(true);
-	};
 
 	return (
 		<div>
@@ -186,14 +102,9 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 			<div className="plugin-item-subheader flex">
 				<span>
 					<h2>Leveling Up</h2>
-					<h4>
-						Whenever a user gains a level, DisStreamBot can send a personalized message.
-					</h4>
+					<h4>Whenever a user gains a level, DisStreamBot can send a personalized message.</h4>
 				</span>
-				<Link
-					className="leader-board-link"
-					to={`/leaderboard/${userConnectedGuildInfo?.id}`}
-				>
+				<Link className="leader-board-link" to={`/leaderboard/${userConnectedGuildInfo?.id}`}>
 					Leaderboard
 				</Link>
 			</div>
@@ -202,36 +113,43 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 					<div className="channels">
 						<div id="announcement-type">
 							<h5 className="bold uppercase">Level up announcement</h5>
-							<FancySwitch
-								checked={levelUpAnnouncement}
-								onChange={handleTypeSelect}
-								name="enable-message"
-							/>
-						</div>
-						<div id="announcement-channel">
-							<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
 							<StyledSelect
-								isDisabled={!levelUpAnnouncement}
 								closeMenuOnSelect
-								onChange={handleAnnoucmentSelect}
-								placeholder="Select Annoucement Channel"
-								value={announcementChannel}
-								options={userConnectedGuildInfo?.channels
-									?.sort((a, b) => a.parent.localeCompare(b.parent))
-									?.map(channel => ({
-										value: TransformObjectToSelectValue(channel),
-										label: channelLabel(channel),
-									}))}
+								onChange={handleTypeSelect}
+								placeholder="Select Annoucement type"
+								value={levelUpAnnouncement}
+								options={[
+									{ value: 1, label: "Disabled" },
+									{ value: 3, label: "Custom Channel" },
+								].map(type => type)}
 							/>
 						</div>
+						{levelUpAnnouncement?.value === 3 && (
+							<div id="announcement-channel">
+								<h5 className="bold uppercase">ANNOUNCEMENT CHANNEL</h5>
+								<StyledSelect
+									closeMenuOnSelect
+									onChange={handleAnnoucmentSelect}
+									placeholder="Select Annoucement Channel"
+									value={announcementChannel}
+									options={userConnectedGuildInfo?.channels
+										?.sort((a, b) => a.parent.localeCompare(b.parent))
+										?.map(channel => ({
+											value: channel.id,
+											label: (
+												<>
+													<span>{channel.name}</span>
+													<span className="channel-category">{channel.parent}</span>
+												</>
+											),
+										}))}
+								/>
+							</div>
+						)}
 					</div>
 					<div className="message">
 						<h5>LEVEL UP ANNOUNCEMENT MESSAGE</h5>
-						<textarea
-							disabled={!levelUpAnnouncement}
-							value={levelUpMessage}
-							onChange={handleMessageChange}
-						></textarea>
+						<textarea disabled={levelUpAnnouncement.value===1} value={levelUpMessage} onChange={handleMessageChange}></textarea>
 					</div>
 				</div>
 			</div>
@@ -242,59 +160,58 @@ const Leveling = ({ location, guild: userConnectedGuildInfo }) => {
 						General XP Scaling
 					</Typography>
 					<PrettoSlider
-						value={generalScaling}
-						onChange={handleGeneralScaling}
 						defaultValue={1}
 						getAriaValueText={value => `${value}xp`}
-						aria-labelledby="xp scaling"
+						aria-labelledby="discrete-slider"
 						valueLabelDisplay="auto"
 						step={0.5}
+						// marks
 						min={0}
 						max={3}
 						marks={marks}
 					/>
 				</div>
 				<hr />
-
+				
 				<h4 className="plugin-section-title">No Rank Items</h4>
-
 				<div className="no-rank-items">
 					<div>
-						<h4 className="plugin-section-title">No XP Roles</h4>
-						<h4 className="plugin-section-title">No XP Channels</h4>
+						<StyledSelect
+							closeMenuOnSelect
+							onChange={() => {}}
+							placeholder="No XP Roles"
+							value={""}
+							options={userConnectedGuildInfo?.channels
+								?.sort((a, b) => a.parent.localeCompare(b.parent))
+								?.map(channel => ({
+									value: channel.id,
+									label: (
+										<>
+											<span>{channel.name}</span>
+											<span className="channel-category">{channel.parent}</span>
+										</>
+									),
+								}))}
+						/>
 					</div>
 					<div>
-						<div>
-							<StyledSelect
-								isMulti
-								closeMenuOnSelect={false}
-								onChange={handleNoXpRoleSelect}
-								placeholder="No XP Roles"
-								value={noXpRoles}
-								options={userConnectedGuildInfo?.roles
-									?.sort((a, b) => b.rawPosition - a.rawPosition)
-									?.map(role => ({
-										value: TransformObjectToSelectValue(role),
-										label: <RoleItem {...role}>{role.name}</RoleItem>,
-									}))}
-							/>
-						</div>
-
-						<div>
-							<StyledSelect
-								isMulti
-								closeMenuOnSelect={false}
-								onChange={handleNoXpChannelSelect}
-								placeholder="No XP Channels"
-								value={noXpChannels}
-								options={userConnectedGuildInfo?.channels
-									?.sort((a, b) => a.parent.localeCompare(b.parent))
-									?.map(channel => ({
-										value: TransformObjectToSelectValue(channel),
-										label: channelLabel(channel),
-									}))}
-							/>
-						</div>
+						<StyledSelect
+							closeMenuOnSelect
+							onChange={() => {}}
+							placeholder="No XP Channels"
+							value={""}
+							options={userConnectedGuildInfo?.channels
+								?.sort((a, b) => a.parent.localeCompare(b.parent))
+								?.map(channel => ({
+									value: channel.id,
+									label: (
+										<>
+											<span>{channel.name}</span>
+											<span className="channel-category">{channel.parent}</span>
+										</>
+									),
+								}))}
+						/>
 					</div>
 				</div>
 			</div>
